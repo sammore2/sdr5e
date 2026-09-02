@@ -1,0 +1,178 @@
+// THE-CODEX: Grimório & Energy System Styles
+.slots-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 8px;
+    background: @papiro-bg;
+    border: 1px solid @codex-gold-muted;
+    border-radius: 4px;
+    margin-top: 5px;
+
+    .slot-indicator {
+        width: 12px;
+        height: 12px;
+        border: 1px solid @codex-gold;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &.active {
+            background: @codex-gold;
+            box-shadow: 0 0 5px @codex-gold;
+        }
+
+        &:hover {
+            border-color: @codex-gold-bright;
+            transform: scale(1.1);
+        }
+    }
+}
+
+/* Glassmorphism Utility */
+.glass-panel {
+    background: rgba(15, 15, 20, 0.75) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+.energy-bar {
+    height: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid @codex-gold-muted;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    margin: 4px 0;
+
+    .energy-fill {
+        height: 100%;
+        background: linear-gradient(90deg, @spell-purple, lighten(@spell-purple, 20%));
+        box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    &.mana .energy-fill {
+        background: linear-gradient(90deg, @healing-blue, lighten(@healing-blue, 20%));
+    }
+}
+
+/* Slots Section */
+.slots-section {
+    margin-bottom: 15px;
+}
+
+/* Slots Grid */
+.slots-grid-v13 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Slot Box (character-spells.hbs) */
+.slot-box {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid #7a6a4a;
+    border-radius: 4px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    input {
+        width: 28px;
+        height: 22px;
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(0,0,0,0.5);
+        color: #fff;
+        font-size: 0.9em;
+    }
+}
+
+.slot-lvl {
+    font-family: 'Fondamento', serif;
+    font-weight: bold;
+    color: #c1a064;
+}
+
+.slot-max {
+    font-size: 0.9em;
+    padding-left: 2px;
+}
+
+.sep {
+    color: rgba(255,255,255,0.4);
+    padding: 0 2px;
+}
+
+/* Energy Bar Container */
+.energy-bar-container {
+    position: relative;
+    height: 24px;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid #7a6a4a;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.energy-inputs {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+
+    input {
+        width: 40px;
+        height: 18px;
+        text-align: right;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 1.1em;
+    }
+}
+
+/* Pact Section */
+.pact-section-v13 {
+    .pact-slots-display {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .pact-usage {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        input {
+            width: 35px;
+            height: 24px;
+            text-align: center;
+        }
+    }
+
+    .pact-level-badge {
+        background: @codex-gold-muted;
+        padding: 2px 8px;
+        border-radius: 10px;
+        color: #000;
+        font-weight: bold;
+        font-size: 0.8rem;
+    }
+}

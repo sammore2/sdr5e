@@ -1,0 +1,466 @@
+<div class="sdrn-root">
+
+  <nav class="sdrn-side-tabs">
+    <button type="button" class="sdrn-tab-btn active" data-action="tab" data-tab="main" title="Attributes &amp; Skills"><i class="fas fa-fist-raised"></i></button>
+    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="inventory" title="Inventory"><i class="fas fa-briefcase"></i></button>
+    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="features" title="Features"><i class="fas fa-star"></i></button>
+    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="spells" title="Spells"><i class="fas fa-wand-sparkles"></i></button>
+    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="effects" title="Effects"><i class="fas fa-hat-wizard"></i></button>
+    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="details" title="Biography"><i class="fas fa-scroll"></i></button>
+  </nav>
+
+  <div class="sdrn-body">
+
+    <header class="sdrn-header">
+      <div class="sdrn-header-top">
+        <div class="sdrn-identity">
+          <input type="text" class="sdrn-name-input" name="name" value="{{name}}" placeholder="Character Name" />
+          <div class="sdrn-subtitle">{{#if _classLabel}}{{_classLabel}} {{_level}}{{else}}Level {{_level}}{{/if}}</div>
+        </div>
+        <div class="sdrn-rest-btns">
+          <button type="button" class="sdrn-rest-btn" data-action="new-character-wizard" title="New Character (Wizard)"><i class="fas fa-hat-wizard"></i></button>
+          <button type="button" class="sdrn-rest-btn" data-action="short-rest" title="Short Rest"><i class="fas fa-utensils"></i></button>
+          <button type="button" class="sdrn-rest-btn" data-action="long-rest" title="Long Rest"><i class="fas fa-campground"></i></button>
+        </div>
+        <div class="sdrn-prof-circle" title="Proficiency Bonus">{{_prof}}</div>
+      </div>
+      <div class="sdrn-xp-bar"><div class="sdrn-xp-fill" style="width:0%"></div></div>
+    </header>
+
+    <!-- Persistent across every tab (portrait/AC/HP/ability scores) — real
+         dnd5e-Foundry keeps its `.sidebar` and `<section class="ability-scores">`
+         outside the tab system entirely, always visible while only the
+         right-hand content swaps. This used to be nested inside the "main"
+         tab's own panel, so switching to Inventory/Features/Spells made the
+         whole portrait/HP/hit-dice block vanish along with it — a real,
+         reported regression, not just a style complaint. -->
+    <div class="sdrn-persistent">
+
+        <!-- Coluna do portrait: alta, da altura toda (nome até Hit Dice) -->
+        <div class="sdrn-col sdrn-col-portrait">
+          <button type="button" class="sdrn-portrait" data-action="pick-portrait" title="Click to change portrait">
+            {{#if avatarUrl}}<img src="{{avatarUrl}}" alt="" />{{else}}<div class="sdrn-portrait-placeholder">?</div>{{/if}}
+          </button>
+
+          <div class="sdrn-ac-row">
+            <div class="sdrn-exhaustion-side">
+              {{#each _exhaustionLeft}}
+              <button type="button" class="sdrn-exhaustion-pip {{#if filled}}filled{{/if}}" data-action="set-exhaustion" data-level="{{level}}" title="Exhaustion Level {{level}}"></button>
+              {{/each}}
+            </div>
+            <input class="sdrn-ac-circle" type="number" name="sd:attributes.da.base" value="{{_acBase}}" title="Base Armor Class ({{_ac}} com bônus)" />
+            <div class="sdrn-exhaustion-side">
+              {{#each _exhaustionRight}}
+              <button type="button" class="sdrn-exhaustion-pip {{#if filled}}filled{{/if}}" data-action="set-exhaustion" data-level="{{level}}" title="Exhaustion Level {{level}}"></button>
+              {{/each}}
+            </div>
+          </div>
+
+          <div class="sdrn-mini-stat-row">
+            <button type="button" class="sdrn-mini-stat sdrn-mini-stat-btn" data-action="roll-initiative" title="Roll Initiative">
+              <div class="sdrn-mini-stat-num">{{_initiative}}</div>
+              <div class="sdrn-mini-stat-label">Init</div>
+            </button>
+            <div class="sdrn-mini-stat">
+              <div class="sdrn-mini-stat-num">{{_speed}}</div>
+              <div class="sdrn-mini-stat-label">Walk</div>
+            </div>
+            <div class="sdrn-mini-stat">
+              <div class="sdrn-mini-stat-num">{{_prof}}</div>
+              <div class="sdrn-mini-stat-label">Prof</div>
+            </div>
+            <button type="button" class="sdrn-inspiration-btn {{#if _inspiration}}active{{/if}}" data-action="toggle-inspiration" title="Inspiration" aria-pressed="{{_inspiration}}">
+              <i class="fas fa-star"></i>
+            </button>
+          </div>
+
+          <div class="sdrn-box sdrn-hp-block">
+            <div class="sdrn-box-title">Hit Points</div>
+            <div class="sdrn-hp-embed">
+              <div class="sdrn-hp-bar-embed">
+                <div class="sdrn-hp-fill" style="width:{{_health.pct}}%"></div>
+                <div class="sdrn-hp-text">
+                  <input class="sdrn-hp-input" type="number" name="sd:resources.health.value" value="{{_health.value}}" />
+                  <span>/</span>
+                  <input class="sdrn-hp-input" type="number" name="sd:resources.health.max" value="{{_health.max}}" />
+                </div>
+              </div>
+              <div class="sdrn-tmp-chip">
+                <input class="sdrn-hp-input" type="number" name="sd:resources.health.temp" value="{{_health.temp}}" title="Temporary HP" />
+                <span>TMP</span>
+              </div>
+            </div>
+          </div>
+
+          {{#if _showDeathSaves}}
+          <div class="sdrn-box sdrn-death-saves-block">
+            <div class="sdrn-box-title">Death Saves</div>
+            <div class="sdrn-death-saves-row">
+              <div class="sdrn-death-saves-group">
+                {{#each _deathSaves.successPips}}
+                <span class="sdrn-death-pip success {{#if filled}}filled{{/if}}"></span>
+                {{/each}}
+              </div>
+              <button type="button" class="sdrn-death-roll-btn" data-action="roll-death-save" title="Roll Death Saving Throw"><i class="fas fa-skull"></i></button>
+              <div class="sdrn-death-saves-group">
+                {{#each _deathSaves.failurePips}}
+                <span class="sdrn-death-pip failure {{#if filled}}filled{{/if}}"></span>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+          {{/if}}
+
+          <div class="sdrn-box sdrn-hitdice-block">
+            <div class="sdrn-box-title">
+              Hit Dice
+              <button type="button" class="sdrn-hitdice-spend-btn" data-action="spend-hit-die" title="Spend a Hit Die to heal (roll + CON, short rest)">Spend</button>
+            </div>
+            <div class="sdrn-hp-bar-embed sdrn-hitdice-bar">
+              <div class="sdrn-hp-fill sdrn-hitdice-fill" style="width:{{_hitDice.pct}}%"></div>
+              <div class="sdrn-hp-text">
+                <input class="sdrn-hp-input" type="number" name="sd:resources.hitDice.value" value="{{_hitDice.value}}" />
+                <span>/</span>
+                <input class="sdrn-hp-input" type="number" name="sd:resources.hitDice.max" value="{{_hitDice.max}}" />
+                <span class="sdrn-hitdice-die">{{_hitDice.die}}</span>
+              </div>
+            </div>
+          </div>
+
+          {{#if _classResource.max}}
+          <div class="sdrn-box sdrn-hitdice-block">
+            <div class="sdrn-box-title">
+              <input class="sdrn-resource-label-input" type="text" name="sd:resources.primary.label" value="{{_classResource.label}}" title="Resource name (e.g. Rage, Ki, Sorcery Points)" />
+            </div>
+            <div class="sdrn-hp-bar-embed sdrn-hitdice-bar">
+              <div class="sdrn-hp-fill sdrn-hitdice-fill" style="width:{{_classResource.pct}}%"></div>
+              <div class="sdrn-hp-text">
+                <input class="sdrn-hp-input" type="number" name="sd:resources.primary.value" value="{{_classResource.value}}" />
+                <span>/</span>
+                <input class="sdrn-hp-input" type="number" name="sd:resources.primary.max" value="{{_classResource.max}}" />
+              </div>
+            </div>
+          </div>
+          {{else}}
+          <button type="button" class="sdrn-add-btn" data-action="add-class-resource" title="Set up a class resource (Rage, Ki, Sorcery Points, Lay on Hands...)">+ Add Class Resource</button>
+          {{/if}}
+        </div>
+
+      <!-- Everything from here down swaps per tab — only the portrait
+           column above is shared across all of them. -->
+      <div class="sdrn-content-col">
+
+    <div data-tab-content="main" class="sdrn-tab-panel">
+      <div class="sdrn-columns">
+
+        <!-- Faixa de ability pills, largura total do espaço restante -->
+        <div class="sdrn-header-abilities">
+          {{#each _abilities}}
+          <div class="sdrn-mini-ability">
+            <button type="button" class="sdrn-mini-mod" data-action="roll-ability" data-key="{{key}}" data-mode="test" title="Roll {{label}} (hold Shift: advantage, Ctrl: disadvantage)">{{mod}}</button>
+            <span class="sdrn-mini-abbr">{{abbr}}</span>
+            <input class="sdrn-mini-score" type="number" name="sd:abilities.{{key}}.value" value="{{score}}" min="1" max="30" />
+          </div>
+          {{/each}}
+        </div>
+
+        <!-- Sub-colunas: skills | saves+tags -->
+        <div class="sdrn-col sdrn-col-mid">
+          <div class="sdrn-box sdrn-skills">
+            <div class="sdrn-box-title">Skills</div>
+            {{#each _skills}}
+            <div class="sdrn-skill-row">
+              <button type="button" class="sdrn-dot-btn" data-action="toggle-skill-prof" data-key="{{key}}" title="Toggle proficiency">
+                <span class="sdrn-dot {{#if proficient}}filled{{/if}}"></span>
+              </button>
+              <span class="sdrn-skill-ability">{{ability}}</span>
+              <span class="sdrn-skill-label">{{label}}</span>
+              <button type="button" class="sdrn-skill-btn" data-action="roll-skill" data-key="{{key}}">{{total}}</button>
+              <span class="sdrn-skill-passive" title="Passive">{{passive}}</span>
+              <i class="fas fa-cog sdrn-row-gear"></i>
+            </div>
+            {{/each}}
+          </div>
+        </div>
+
+        <div class="sdrn-col sdrn-col-right">
+          <div class="sdrn-box sdrn-saves">
+            <div class="sdrn-box-title"><i class="fas fa-shield-halved"></i> Saving Throws</div>
+            <div class="sdrn-saves-grid">
+              {{#each _saves}}
+              <div class="sdrn-save-row">
+                <button type="button" class="sdrn-dot-btn" data-action="toggle-save-prof" data-key="{{key}}" title="Toggle proficiency">
+                  <span class="sdrn-dot {{#if proficient}}filled{{/if}}"></span>
+                </button>
+                <button type="button" class="sdrn-save-btn" data-action="roll-save" data-key="{{key}}">
+                  <span class="sdrn-save-label">{{label}}</span>
+                  <span class="sdrn-save-total">{{total}}</span>
+                </button>
+                <i class="fas fa-cog sdrn-row-gear"></i>
+              </div>
+              {{/each}}
+            </div>
+            <div class="sdrn-concentration-row">
+              <button type="button" class="sdrn-conc-toggle {{#if _concentrating}}active{{/if}}" data-action="toggle-concentration" title="Toggle Concentrating (auto-prompts a save on damage while active)">
+                <i class="fas fa-brain"></i>
+              </button>
+              <button type="button" class="sdrn-save-btn sdrn-conc-btn" data-action="roll-save" data-key="con" title="Concentration check (rola CON save)">
+                <span class="sdrn-save-label">Concentration</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="sdrn-identity-cards">
+            {{#if _identity.race}}
+            <button type="button" class="sdrn-id-card" data-action="open-item" data-id="{{_identity.race.id}}" title="Open Race"><i class="fas fa-paw"></i><div><div class="sdrn-id-title">{{_identity.race.name}}</div><div class="sdrn-id-sub">{{_identity.race.subtitle}}</div></div></button>
+            {{else}}
+            <button type="button" class="sdrn-add-btn" data-action="create-item" data-item-type="race">+ Add Race</button>
+            {{/if}}
+            {{#if _identity.background}}
+            <button type="button" class="sdrn-id-card" data-action="open-item" data-id="{{_identity.background.id}}" title="Open Background"><i class="fas fa-scroll"></i><div><div class="sdrn-id-title">{{_identity.background.name}}</div></div></button>
+            {{else}}
+            <button type="button" class="sdrn-add-btn" data-action="create-item" data-item-type="background">+ Add Background</button>
+            {{/if}}
+          </div>
+
+          <div class="sdrn-box">
+            <div class="sdrn-box-title">Senses</div>
+            <div class="sdrn-tag-list">
+              {{#each _senses}}<span class="sdrn-tag">{{this}}</span>{{else}}<span class="sdrn-empty">&mdash;</span>{{/each}}
+            </div>
+          </div>
+          <div class="sdrn-box">
+            <div class="sdrn-box-title">Resistances</div>
+            <div class="sdrn-tag-list">
+              {{#each _traits.dr}}<span class="sdrn-tag sdrn-tag-good">{{this}}</span>{{else}}<span class="sdrn-empty">&mdash;</span>{{/each}}
+            </div>
+          </div>
+          <div class="sdrn-box">
+            <div class="sdrn-box-title">Immunities</div>
+            <div class="sdrn-tag-list">
+              {{#each _traits.di}}<span class="sdrn-tag sdrn-tag-good">{{this}}</span>{{else}}<span class="sdrn-empty">&mdash;</span>{{/each}}
+            </div>
+          </div>
+          <div class="sdrn-box">
+            <div class="sdrn-box-title">Armor</div>
+            <div class="sdrn-tag-list">
+              {{#each _proficiencies.armor}}<span class="sdrn-tag">{{this}}</span>{{else}}<span class="sdrn-empty">&mdash;</span>{{/each}}
+            </div>
+          </div>
+          <div class="sdrn-box">
+            <div class="sdrn-box-title">Weapons</div>
+            <div class="sdrn-tag-list">
+              {{#each _weaponCategories}}
+              <button type="button" class="sdrn-tag sdrn-tag-toggle {{#if active}}active{{/if}}" data-action="toggle-weapon-prof" data-code="{{code}}">{{label}}</button>
+              {{/each}}
+            </div>
+            {{#if _namedWeaponProfs.length}}
+            <div class="sdrn-tag-list" style="margin-top:4px">
+              {{#each _namedWeaponProfs}}<span class="sdrn-tag">{{this}}</span>{{/each}}
+            </div>
+            {{/if}}
+          </div>
+          <div class="sdrn-box">
+            <div class="sdrn-box-title">Tools</div>
+            <div class="sdrn-tag-list">
+              {{#each _proficiencies.tools}}<span class="sdrn-tag">{{this}}</span>{{else}}<span class="sdrn-empty">&mdash;</span>{{/each}}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div data-tab-content="inventory" class="sdrn-tab-panel" style="display:none">
+      <div class="sdrn-box sdrn-carrying-box">
+        <div class="sdrn-carrying-row">
+          <span class="sdrn-carrying-weight">{{_carrying.weight}} / {{_carrying.capacity}}</span>
+          <span class="sdrn-carrying-stat"><b>{{_carrying.str}}</b> STR</span>
+          <span class="sdrn-carrying-stat"><b>{{_carrying.sizeLabel}}</b> Size</span>
+          <span class="sdrn-carrying-stat"><b>&times;{{_carrying.multiplier}}</b> Mult.</span>
+        </div>
+      </div>
+      <div class="sdrn-box sdrn-currency-box">
+        <div class="sdrn-box-title">Currency</div>
+        <div class="sdrn-currency-row">
+          <label class="sdrn-currency-field"><span>PP</span><input type="number" min="0" name="sd:details.pp.value" value="{{_currency.pp}}" /></label>
+          <label class="sdrn-currency-field"><span>GP</span><input type="number" min="0" name="sd:details.gp.value" value="{{_currency.gp}}" /></label>
+          <label class="sdrn-currency-field"><span>EP</span><input type="number" min="0" name="sd:details.ep.value" value="{{_currency.ep}}" /></label>
+          <label class="sdrn-currency-field"><span>SP</span><input type="number" min="0" name="sd:details.sp.value" value="{{_currency.sp}}" /></label>
+          <label class="sdrn-currency-field"><span>CP</span><input type="number" min="0" name="sd:details.cp.value" value="{{_currency.cp}}" /></label>
+        </div>
+      </div>
+      {{#each _inventory}}
+      <div class="sdrn-box">
+        <div class="sdrn-box-title">{{icon}} {{label}}</div>
+        {{#each items}}
+        <div class="sdrn-item-row">
+          <button type="button" class="sdrn-item-icon sdrn-item-icon-btn" data-action="post-item-chat" data-id="{{id}}" title="Post to Chat">{{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}{{icon}}{{/if}}</button>
+          <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
+          {{#if isWeapon}}
+          <button type="button" class="sdrn-item-roll-btn" data-action="roll-attack" data-id="{{id}}" title="Roll Attack"><i class="fas fa-sword"></i> Atk</button>
+          <button type="button" class="sdrn-item-roll-btn" data-action="roll-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
+          {{/if}}
+          {{#if hasQuantity}}<input type="number" min="0" class="sdrn-item-qty" data-action="set-quantity" data-id="{{id}}" value="{{quantity}}" title="Quantity" />{{/if}}
+          {{#if attunementRequired}}
+          <button type="button" class="sdrn-item-attune {{#if attuned}}active{{/if}}" data-action="toggle-attune" data-id="{{id}}" title="Requires Attunement">
+            <i class="fas fa-sun"></i>
+          </button>
+          {{/if}}
+          <button type="button" class="sdrn-item-equip {{#if equipped}}active{{/if}}" data-action="toggle-equip" data-id="{{id}}">
+            {{#if equipped}}Equipped{{else}}Equip{{/if}}
+          </button>
+          <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}" title="Delete">&times;</button>
+        </div>
+        {{else}}
+        <div class="sdrn-empty-row">No {{label}} yet.</div>
+        {{/each}}
+        <button type="button" class="sdrn-add-btn" data-action="create-item" data-item-type="{{type}}">+ Add {{label}}</button>
+      </div>
+      {{/each}}
+    </div>
+
+    <div data-tab-content="features" class="sdrn-tab-panel" style="display:none">
+      {{#if _identity.class}}
+      <div class="sdrn-feature-class-card">
+        <button type="button" class="sdrn-feature-class-icons" data-action="open-item" data-id="{{_identity.class.id}}" title="Open Class">
+          <i class="fas fa-shield-halved"></i>
+          {{#if _identity.class.subclassId}}<i class="fas fa-fire"></i>{{/if}}
+        </button>
+        <button type="button" class="sdrn-feature-class-name" data-action="open-item" data-id="{{_identity.class.id}}">
+          <div class="sdrn-id-title">{{_identity.class.name}}</div>
+          <div class="sdrn-id-sub">{{#if _identity.class.subclassName}}{{_identity.class.subclassName}}{{else}}{{_identity.class.subtitle}}{{/if}}</div>
+        </button>
+        <div class="sdrn-feature-class-level">{{_identity.class.level}}</div>
+      </div>
+      {{else}}
+      <button type="button" class="sdrn-add-btn" data-action="create-item" data-item-type="class">+ Add Class</button>
+      {{/if}}
+      {{#each _featureGroups}}
+      <div class="sdrn-box sdrn-feature-group">
+        <div class="sdrn-box-title sdrn-feature-group-title">{{source}} Features</div>
+        <div class="sdrn-feature-header-row">
+          <span class="sdrn-feature-col-name">Name</span>
+          <span class="sdrn-feature-col-uses">Uses</span>
+          <span class="sdrn-feature-col-recovery">Recovery</span>
+        </div>
+        {{#each items}}
+        <div class="sdrn-item-row sdrn-feature-row">
+          <button type="button" class="sdrn-item-icon sdrn-item-icon-btn" data-action="post-item-chat" data-id="{{id}}" title="Post to Chat">{{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}{{icon}}{{/if}}</button>
+          <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
+          {{#if resourceCost}}
+          <button type="button" class="sdrn-item-roll-btn" data-action="activate-feature" data-id="{{id}}" title="Spend {{resourceCost}} from the class resource pool">Activate ({{resourceCost}})</button>
+          {{/if}}
+          <span class="sdrn-feature-col-uses">{{usesLabel}}</span>
+          <span class="sdrn-feature-col-recovery">{{recoveryLabel}}</span>
+          <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}" title="Delete">&times;</button>
+        </div>
+        {{/each}}
+      </div>
+      {{else}}
+      <div class="sdrn-box"><div class="sdrn-empty-row">No Features yet.</div></div>
+      {{/each}}
+      <button type="button" class="sdrn-add-btn" data-action="create-item" data-item-type="feature">+ Add Feature</button>
+    </div>
+
+    <div data-tab-content="spells" class="sdrn-tab-panel" style="display:none">
+      <div class="sdrn-spellcasting-header">
+        <div class="sdrn-spell-stat"><div class="sdrn-spell-stat-num">{{_spellcasting.ability}}</div><div class="sdrn-spell-stat-label">Ability</div></div>
+        <div class="sdrn-spell-stat"><div class="sdrn-spell-stat-num">{{_spellcasting.dc}}</div><div class="sdrn-spell-stat-label">Spell DC</div></div>
+        <div class="sdrn-spell-stat"><div class="sdrn-spell-stat-num">{{_spellcasting.attackBonus}}</div><div class="sdrn-spell-stat-label">Attack</div></div>
+        <div class="sdrn-spell-stat"><div class="sdrn-spell-stat-num">{{_spellcasting.prepared}}/{{_spellcasting.preparedMax}}</div><div class="sdrn-spell-stat-label">Prepared</div></div>
+      </div>
+      {{#each _spellsByLevel}}
+      <div class="sdrn-box">
+        <div class="sdrn-box-title">
+          {{label}}
+          {{#if slots}}<span class="sdrn-empty">&nbsp;— {{slots.value}}/{{slots.max}} slots</span>{{/if}}
+        </div>
+        {{#each spells}}
+        <div class="sdrn-item-row">
+          <span class="sdrn-item-icon">{{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}{{icon}}{{/if}}</span>
+          <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
+          <button type="button" class="sdrn-item-roll-btn" data-action="cast-spell" data-id="{{id}}" title="Cast (consumes a slot)">Cast</button>
+          <button type="button" class="sdrn-item-roll-btn" data-action="roll-spell-attack" data-id="{{id}}" title="Roll Spell Attack">Atk</button>
+          {{#if hasDamage}}<button type="button" class="sdrn-item-roll-btn" data-action="roll-spell-damage" data-id="{{id}}" title="Roll Spell Damage">Dmg</button>{{/if}}
+          {{#unless isCantrip}}
+          <button type="button" class="sdrn-item-prepared {{#if prepared}}active{{/if}}" data-action="toggle-prepared" data-id="{{id}}" title="Prepared">
+            <i class="fas fa-book"></i>
+          </button>
+          {{/unless}}
+          <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}" title="Delete">&times;</button>
+        </div>
+        {{/each}}
+      </div>
+      {{/each}}
+      <button type="button" class="sdrn-add-btn" data-action="create-item" data-item-type="spell">+ Add Spell</button>
+    </div>
+
+    <div data-tab-content="effects" class="sdrn-tab-panel" style="display:none">
+      <div class="sdrn-box">
+        <div class="sdrn-box-title">🪄 Active Effects</div>
+        {{#each _effects}}
+        <div class="sdrn-item-row">
+          <span class="sdrn-item-icon">{{#if disabled}}⏸️{{else}}✨{{/if}}</span>
+          <span class="sdrn-item-name">{{name}}</span>
+          <span class="sdrn-empty">{{durationLabel}}</span>
+          <button type="button" class="sdrn-item-del" data-action="delete-effect" data-id="{{id}}" title="Delete">&times;</button>
+        </div>
+        {{else}}
+        <div class="sdrn-empty-row">No active effects. Equip a weapon/armor with bonuses to see one here.</div>
+        {{/each}}
+      </div>
+    </div>
+
+    <div data-tab-content="details" class="sdrn-tab-panel" style="display:none">
+      <!-- Background stays free text until it becomes a compendium item -->
+      <div class="sdrn-bio-grid">
+        <div class="sdrn-bio-field"><label>Alignment</label><input type="text" name="sd:details.alignment" value="{{_bio.alignment}}" /></div>
+        <div class="sdrn-bio-field"><label>Eyes</label><input type="text" name="sd:details.eyes" value="{{_bio.eyes}}" /></div>
+        <div class="sdrn-bio-field"><label>Height</label><input type="text" name="sd:details.height" value="{{_bio.height}}" /></div>
+        <div class="sdrn-bio-field"><label>Faith</label><input type="text" name="sd:details.deity" value="{{_bio.faith}}" /></div>
+        <div class="sdrn-bio-field"><label>Hair</label><input type="text" name="sd:details.hair" value="{{_bio.hair}}" /></div>
+        <div class="sdrn-bio-field"><label>Weight</label><input type="text" name="sd:details.weight" value="{{_bio.weight}}" /></div>
+        <div class="sdrn-bio-field"><label>Gender</label><input type="text" name="sd:details.gender" value="{{_bio.gender}}" /></div>
+        <div class="sdrn-bio-field"><label>Skin</label><input type="text" name="sd:details.skin" value="{{_bio.skin}}" /></div>
+        <div class="sdrn-bio-field"><label>Age</label><input type="text" name="sd:details.age" value="{{_bio.age}}" /></div>
+        <div class="sdrn-bio-field"><label>Background</label><input type="text" name="sd:details.background" value="{{_background}}" /></div>
+        <div class="sdrn-bio-field"><label>Level</label><input type="number" name="sd:details.level" value="{{_level}}" min="1" max="20" /></div>
+      </div>
+
+      <div class="sdrn-bio-pair">
+        <div class="sdrn-box"><div class="sdrn-box-title"><i class="fas fa-flag"></i> Ideals</div><textarea name="sd:details.ideals" rows="4">{{_bio.ideals}}</textarea></div>
+        <div class="sdrn-box"><div class="sdrn-box-title"><i class="fas fa-masks-theater"></i> Personality Traits</div><textarea name="sd:details.personalityTraits" rows="4">{{_bio.personalityTraits}}</textarea></div>
+      </div>
+      <div class="sdrn-bio-pair">
+        <div class="sdrn-box"><div class="sdrn-box-title"><i class="fas fa-link"></i> Bonds</div><textarea name="sd:details.bonds" rows="4">{{_bio.bonds}}</textarea></div>
+        <div class="sdrn-box"><div class="sdrn-box-title"><i class="fas fa-user"></i> Appearance</div><textarea name="sd:details.appearance" rows="4">{{_bio.appearance}}</textarea></div>
+      </div>
+      <div class="sdrn-bio-pair">
+        <div class="sdrn-box"><div class="sdrn-box-title"><i class="fas fa-heart-crack"></i> Flaws</div><textarea name="sd:details.flaws" rows="4">{{_bio.flaws}}</textarea></div>
+        <div class="sdrn-box"></div>
+      </div>
+
+      <div class="sdrn-box">
+        <div class="sdrn-box-title"><i class="fas fa-shield-halved"></i> Damage Resistances</div>
+        {{#each _damageTraits}}
+        <div class="sdrn-box-title" style="margin-top:8px;font-size:0.8em">{{label}}</div>
+        <div class="sdrn-tag-list">
+          {{#each types}}
+          <button type="button" class="sdrn-tag sdrn-tag-toggle {{#if active}}active{{/if}}" data-action="toggle-damage-trait" data-cat="{{../cat}}" data-type="{{type}}">{{label}}</button>
+          {{/each}}
+        </div>
+        {{/each}}
+      </div>
+
+      <div class="sdrn-box">
+        <div class="sdrn-box-title"><i class="fas fa-feather"></i> Biography</div>
+        <textarea name="sd:details.biography" rows="10">{{_biography}}</textarea>
+      </div>
+    </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

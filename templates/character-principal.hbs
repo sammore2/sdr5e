@@ -1,0 +1,205 @@
+<div class="principal-layout-v13">
+
+    {{!-- Perícias Original --}}
+    <div class="skills-list-box papiro-bg">
+        <h3 class="box-title">{{localize 'THE-CODEX.Sheet.SkillsLabel'}}</h3>
+        <div class="skills-header">
+            <span class="sk-col-pts">{{#if isModern}}{{localize
+                'THE-CODEX.Sheet.ProficiencyAbbr'}}{{else}}Pts{{/if}}</span>
+            <span class="sk-col-atr">{{localize 'THE-CODEX.Sheet.AbilityAbbr'}}</span>
+            <span class="sk-col-ext">{{localize 'THE-CODEX.Sheet.BonusAbbr'}}</span>
+            <span class="sk-col-tot">{{localize 'THE-CODEX.Sheet.TotalAbbr'}}</span>
+            <span class="sk-col-name">{{localize 'THE-CODEX.Sheet.SkillsLabel'}}</span>
+        </div>
+        <ul class="skills-list">
+            {{#each skillsData as |skill id|}}
+            <li class="skill-item" data-skill="{{id}}">
+                <div class="sk-col-pts">
+                    {{#if ../isModern}}
+                    <i class="proficiency-toggle {{skill.profClass}} {{#if skill.isBonusActive}}is-bonus{{/if}}" 
+                       data-action="toggleProficiency" 
+                       data-skill="{{id}}" 
+                       data-multiplier="{{skill.multiplier}}" 
+                       data-tooltip="{{skill.profLabel}}"></i>
+                    {{else}}
+                    <input type="number" name="system.skills.{{id}}.value" value="{{skill.value}}" class="sk-input">
+                    {{/if}}
+                </div>
+                <div class="sk-atr sk-col-atr">{{numberFormat skill.abilityMod sign=true}}</div>
+                <div class="sk-col-ext"><input type="number" name="system.skills.{{id}}.bonus" value="{{skill.bonus}}"
+                        class="sk-input"></div>
+                <div class="sk-tot sk-col-tot">{{numberFormat skill.total sign=true}}</div>
+                <span class="sk-col-name rollable" data-action="rollSkill" data-skill="{{id}}">
+                    <i class="fas fa-dice-d20"></i> {{skill.label}}
+                </span>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+
+    {{!-- Ataques e Resistências --}}
+    <div class="combat-saves-container-v13 papiro-bg">
+        <div class="attack-section-v13">
+            <h3 class="box-title">{{localize 'THE-CODEX.Sheet.QuickAttacks'}}</h3>
+            {{!-- Arsenal Equipado Dinâmico (Removido Grid 3.5 Antigo) --}}
+            <div class="equipped-arsenal-v13">
+                {{!-- Fallback Permanente: Ataque Desarmado --}}
+                <div class="weapon-tactical-row" data-tooltip="{{localize 'THE-CODEX.Sheet.Melee'}}">
+                    <div class="weapon-id flexrow" data-action="rollAttack" data-type="melee"
+                        data-label="{{localize 'THE-CODEX.Combat.UnarmedAttack'}}">
+                        <i class="fas fa-hand-fist"
+                            style="font-size: 20px; color: var(--codex-gold); padding: 0 4px; margin-right: 5px;"></i>
+                        <span class="weapon-name">{{localize 'THE-CODEX.Combat.UnarmedAttack'}}</span>
+                    </div>
+                    <div class="weapon-actions">
+                        <button type="button" class="action-btn atk-btn rollable" data-action="rollAttack"
+                            data-type="melee" data-label="{{localize 'THE-CODEX.Combat.UnarmedAttack'}}">
+                            <i class="fas fa-dice-d20"></i> {{numberFormat meleeAttackBonus sign=true}}
+                        </button>
+                    </div>
+                </div>
+
+                {{#each weapons as |weapon|}}
+                {{#if weapon.system.equipped}}
+                <div class="weapon-tactical-row"
+                    data-tooltip="{{localize 'THE-CODEX.Sheet.RollAttack'}}: {{weapon.name}}">
+
+                    {{!-- Esquerda: Identidade da Arma --}}
+                    <div class="weapon-id flexrow rollable" data-action="rollWeaponAttack" data-item-id="{{weapon.id}}"
+                        data-bonus="{{getProperty weapon 'system.iterative.0.bonus'}}">
+                        {{#if weapon.img}}<img class="weapon-img" src="{{weapon.img}}" />{{/if}}
+                        <span class="weapon-name">{{weapon.name}}</span>
+                    </div>
+
+                    {{!-- Direita: Botões Pílula Quentes --}}
+                    <div class="weapon-actions">
+                        {{#each weapon.system.iterative as |atk|}}
+                        <button type="button" class="action-btn atk-btn rollable" data-action="rollWeaponAttack"
+                            data-item-id="{{weapon.id}}" data-bonus="{{atk.bonus}}"
+                            data-is-offhand="{{weapon.system.isOffHand}}">
+                            <i class="fas fa-dice-d20"></i> {{atk.label}}
+                        </button>
+                        {{/each}}
+                    </div>
+                </div>
+                {{/if}}
+                {{/each}}
+            </div>
+        </div>
+
+        {{!-- RACE AND SUBCLASS (CHARACTER ORIGIN) --}}
+        <div class="character-origin-container" style="display: flex; flex-direction: column; gap: 10px; margin: 15px 0;">
+            {{!-- RACE --}}
+            <div class="race-identity-container">
+                {{#if race}}
+                <div class="race-badge clickable" data-tooltip="{{race.uuid}}" data-item-id="{{race.id}}"
+                    data-action="openItem">
+                    <img src="{{race.img}}" class="mini-icon-v13" />
+                    <span>{{race.name}}</span>
+                    <i class="fas fa-times delete-btn-v13" data-action="deleteItem" data-item-id="{{race.id}}"></i>
+                </div>
+                {{else}}
+                <div class="race-badge empty clickable" data-step="race" data-action="openWizard">
+                    <span>{{localize 'THE-CODEX.Sheet.AddRace'}}</span>
+                </div>
+                {{/if}}
+            </div>
+
+            {{!-- SUBCLASS / PATH (BELOW RACE - UNLOCKS AT LEVEL 3) --}}
+            <div class="path-identity-container">
+                {{#if talentTree.hasPath}}
+                <div class="path-badge clickable" data-tooltip="{{talentTree.uuid}}" data-item-id="{{talentTree.id}}"
+                    data-action="openItem" style="display: flex; align-items: center; justify-content: space-between; background: var(--codex-inset-bg, rgba(0,0,0,0.4)); border: 1px solid var(--codex-gold, #c1a064); border-radius: 4px; padding: 6px 12px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        {{#if talentTree.img}}<img src="{{talentTree.img}}" class="mini-icon-v13" style="width: 24px; height: 24px; border-radius: 4px;" />{{/if}}
+                        <span style="color: var(--codex-gold, #d4af37); font-weight: bold; font-size: 0.9rem;">{{talentTree.name}}</span>
+                    </div>
+                    <i class="fas fa-trash delete-btn-v13" data-action="deleteItem" data-item-id="{{talentTree.id}}" data-is-path="true" data-tooltip="{{localize 'THE-CODEX.Powers.ResetPath'}}" style="cursor: pointer; opacity: 0.7; font-size: 0.85rem;"></i>
+                </div>
+                {{else}}
+                    {{#if (gte system.details.level 3)}}
+                    <div class="path-badge empty clickable" data-action="choosePath" style="display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border: 1px dashed var(--codex-gold, #d4af37); border-radius: 4px; padding: 8px; cursor: pointer;">
+                        <span style="color: var(--codex-gold, #d4af37); font-size: 0.85rem; font-weight: bold;"><i class="fas fa-route"></i> {{localize 'THE-CODEX.Powers.ChoosePath'}}</span>
+                    </div>
+                    {{else}}
+                    <div class="path-badge locked" data-tooltip="{{localize 'THE-CODEX.Powers.PathLockedTooltip'}}" style="display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); border: 1px solid rgba(193, 160, 100, 0.2); border-radius: 4px; padding: 8px; cursor: not-allowed; opacity: 0.6;">
+                        <span style="color: #999; font-size: 0.85rem;"><i class="fas fa-lock"></i> {{localize 'THE-CODEX.Powers.PathLockedBadge'}}</span>
+                    </div>
+                    {{/if}}
+                {{/if}}
+            </div>
+        </div>
+
+        {{!-- PAINEL DE TRAITS REATIVO (RM, IMUNIDADES, ETC) --}}
+        <div class="special-traits-sidebar">
+            {{#if system.attributes.rm}}
+            <div class="trait-badge magic-res" data-tooltip="{{localize 'THE-CODEX.Sheet.MagicResistTooltip'}}">
+                <i class="fas fa-magic"></i> {{localize 'THE-CODEX.Sheet.MagicResistAbbr'}}
+                {{system.attributes.rm}}
+            </div>
+            {{/if}}
+
+            {{#each system.traits.di.value as |id|}}
+            {{#if id}}
+            <div class="trait-badge immunity" data-tooltip="{{localize 'THE-CODEX.Sheet.Immunity'}}: {{id}}">
+                <i class="fas fa-shield-heart color-red"></i> {{localize (lookup
+                @root.config.damageTypes id)}}
+            </div>
+            {{/if}}
+            {{/each}}
+
+            {{#each system.traits.dr.value as |id|}}
+            {{#if id}}
+            <div class="trait-badge resistance" data-tooltip="{{localize 'THE-CODEX.Sheet.Resistance'}}: {{id}}">
+                <i class="fas fa-shield color-blue"></i> {{localize (lookup @root.config.damageTypes
+                id)}}
+            </div>
+            {{/if}}
+            {{/each}}
+
+            {{#each system.traits.dv.value as |id|}}
+            {{#if id}}
+            <div class="trait-badge vulnerability" data-tooltip="{{localize 'THE-CODEX.Sheet.Vulnerability'}}: {{id}}">
+                <i class="fas fa-biohazard color-orange"></i> {{localize (lookup
+                @root.config.damageTypes id)}}
+            </div>
+            {{/if}}
+            {{/each}}
+            {{#if system.attributes.armor.penalty}}
+            <div class="trait-badge armor-penalty" data-tooltip="{{localize 'THE-CODEX.Messages.ArmorPenaltyTooltip'}}">
+                <i class="fas fa-weight-hanging"></i> {{localize 'THE-CODEX.Messages.ArmorPenaltyAbbr'}}
+            </div>
+            {{/if}}
+
+            {{!-- Proficiências de Armaduras --}}
+            {{#if system.proficiencies.armor.length}}
+            <div class="trait-group-label">{{localize 'THE-CODEX.UI.ArmorProficiencies'}}</div>
+            <div class="prof-badges-container">
+                {{#each system.proficiencies.armor as |p|}}
+                <div class="trait-badge armor-prof" data-tooltip="{{localize 'THE-CODEX.UI.ArmorProficiency'}}: {{p}}">
+                    {{localize (lookup @root.config.armorTypes p)}}
+                </div>
+                {{/each}}
+            </div>
+            {{/if}}
+
+            {{!-- Proficiências de Armas --}}
+            {{#if system.proficiencies.weapons.length}}
+            <div class="trait-group-label">{{localize 'THE-CODEX.UI.WeaponProficiencies'}}</div>
+            <div class="prof-badges-container">
+                {{#each system.proficiencies.weapons as |p|}}
+                <div class="trait-badge weapon-prof" data-tooltip="{{localize 'THE-CODEX.UI.WeaponProficiency'}}: {{p}}">
+                    {{#if (lookup @root.config.weaponGroups p)}}
+                        {{localize (lookup @root.config.weaponGroups p)}}
+                    {{else}}
+                        {{p}}
+                    {{/if}}
+                </div>
+                {{/each}}
+            </div>
+            {{/if}}
+        </div>
+
+
+    </div> {{!-- Fim do combat-saves-container-v13 --}}
+</div> {{!-- Fim do principal-layout-v13 --}}

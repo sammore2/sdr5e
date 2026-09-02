@@ -1,0 +1,235 @@
+<div class="grimorio-layout-v13">
+    <div class="grimorio-header papiro-bg">
+        <div class="spell-config-row-v13">
+            <div class="config-item">
+                <label>{{localize 'THE-CODEX.Sheet.CastingAttribute'}}</label>
+                <select name="system.details.spellcastingAbility">
+                    <option value="int" {{#if (eq system.details.spellcastingAbility "int" )}}selected{{/if}}>{{localize
+                        'THE-CODEX.Abilities.int'}}</option>
+                    <option value="wis" {{#if (eq system.details.spellcastingAbility "wis" )}}selected{{/if}}>{{localize
+                        'THE-CODEX.Abilities.wis'}}</option>
+                    <option value="cha" {{#if (eq system.details.spellcastingAbility "cha" )}}selected{{/if}}>{{localize
+                        'THE-CODEX.Abilities.cha'}}</option>
+                </select>
+            </div>
+            <div class="dc-display-v13" data-tooltip="{{system.details.spellDCBreakdown}}">
+                <label>{{localize 'THE-CODEX.Sheet.SpellDC'}}</label>
+                <span class="dc-value">{{system.details.spellSaveDC}}</span>
+            </div>
+            <div class="caster-info">
+                {{#if system.details.isInvoker}}
+                <div class="invoker-status">
+                    <span class="label"><i class="fas fa-eye"></i> {{localize 'THE-CODEX.Combat.ProfileInvoker'}}</span>
+                    <span class="badge rajada-badge">{{localize 'THE-CODEX.Combat.RajadaMistica'}}:
+                        {{system.details.rajadaDmg}}</span>
+                </div>
+                {{else}}
+                <span class="label"><i class="fas fa-magic"></i> {{localize 'THE-CODEX.Combat.ProfileCaster'}}</span>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    {{#if system.details.isSpellcastingBlocked}}
+    <div class="spellcasting-blocked-warning papiro-bg">
+        <i class="fas fa-hand-holding-magic"></i>
+        <span>{{localize 'THE-CODEX.Messages.SpellcastingBlocked'}}</span>
+    </div>
+    {{/if}}
+
+
+    <div class="grimorio-content papiro-bg">
+        {{#if isVancian}}
+        <div class="slots-section">
+            <h3 class="box-title">{{localize 'THE-CODEX.Combat.Slots'}}</h3>
+            <div class="slots-grid-v13">
+                {{#each system.resources.spells as |slot levelKey|}}
+                {{#if (gt slot.max 0)}}
+                <div class="slot-box">
+                    <span class="slot-lvl">
+                        {{#if (eq levelKey "level0")}}T:{{else}}{{replace levelKey "level" ""}}º:{{/if}}
+                    </span>
+                    <input type="number" name="system.resources.spells.{{levelKey}}.value" value="{{slot.value}}"
+                        title="Slots Disponíveis" min="0" />
+                    <span class="sep">/</span>
+                    <span class="slot-max" title="Slots Máximos">{{slot.max}}</span>
+                </div>
+                {{/if}}
+                {{/each}}
+            </div>
+        </div>
+        {{/if}}
+
+        {{#if isPointCaster}}
+        <div class="resource-section-v13">
+            <h3 class="box-title">{{system.resources.primary.label}}</h3>
+            <div class="energy-bar-container">
+                <div class="energy-fill" style="width: {{pct system.resources.primary.value system.resources.primary.max}}%;"></div>
+                <div class="energy-inputs">
+                    <input type="number" name="system.resources.primary.value" value="{{system.resources.primary.value}}" />
+                    <span class="sep">/</span>
+                    <span>{{system.resources.primary.max}}</span>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+
+        {{#if isPactCaster}}
+        <div class="pact-section-v13">
+            <h3 class="box-title">{{localize 'THE-CODEX.UI.ArchPact'}}</h3>
+            <div class="pact-slots-display">
+                <div class="pact-usage">
+                    <label>Slots:</label>
+                    <input type="number" name="system.resources.pact.value" value="{{system.resources.pact.value}}" />
+                    <span>/ {{system.resources.pact.max}}</span>
+                </div>
+                <div class="pact-level-badge">
+                    {{localize 'THE-CODEX.Combat.Circle'}} {{system.resources.pact.level}}
+                </div>
+            </div>
+        </div>
+        {{/if}}
+
+        {{#if (gt system.resources.racial.max 0)}}
+        <div class="resource-section-v13 racial-pool" style="margin-bottom: 15px;">
+            <h3 class="box-title" style="margin-bottom: 8px;">{{localize 'THE-CODEX.Resources.RacialPoints'}}</h3>
+            <div class="energy-bar-container"
+                style="position: relative; height: 24px; background: rgba(0,0,0,0.5); border: 1px solid #7a6a4a; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                <div class="energy-fill"
+                    style="position: absolute; left: 0; top: 0; height: 100%; width: {{pct system.resources.racial.value system.resources.racial.max}}%; background: linear-gradient(90deg, #4a6a7a 0%, #64a0c1 100%); transition: width 0.4s ease; opacity: 0.6;">
+                </div>
+                <div class="energy-inputs"
+                    style="position: relative; z-index: 1; display: flex; align-items: center; gap: 5px; font-weight: bold;">
+                    <input type="number" name="system.resources.racial.value"
+                        value="{{system.resources.racial.value}}"
+                        style="width: 40px; height: 18px; text-align: right; background: none; border: none; color: #fff; font-size: 1.1em;" />
+                    <span style="color: rgba(255,255,255,0.7);">/</span>
+                    <span style="font-size: 1.1em; width: 40px;">{{system.resources.racial.max}}</span>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+
+        {{#if innateSpells.length}}
+        <div class="innate-spells-section" style="margin-bottom: 20px;">
+            <h3 class="box-title">{{localize 'THE-CODEX.Sheet.Features'}}</h3>
+            <table class="inv-table spells-table">
+                <thead>
+                    <tr>
+                        <th class="img-col"></th>
+                        <th class="name-col text-left">{{localize 'THE-CODEX.Combat.Name'}}</th>
+                        <th class="formula-col text-center">{{localize 'THE-CODEX.Combat.Damage'}}</th>
+                        <th class="usage-col text-center">{{localize 'THE-CODEX.Inventory.Qty'}}</th>
+                        <th class="controls-col text-center">{{localize 'THE-CODEX.Combat.Actions'}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each innateSpells as |item|}}
+                    <tr class="item-row" data-item-id="{{item.id}}" data-tooltip="{{item.uuid}}">
+                        <td class="img-col">
+                            <img src="{{item.img}}" title="{{item.name}}" />
+                        </td>
+                        <td class="name-col">
+                            <div class="name-col-wrapper">
+                                <i class="fas fa-dice-d20 roll-icon-v13 {{#if @root.system.details.isSpellcastingBlocked}}blocked{{else}}rollable{{/if}}"
+                                    {{#unless @root.system.details.isSpellcastingBlocked}} 
+                                        {{#if (or (gt item.system.activation.value 0) (or item.system.damage.formula item.system.uses.max))}}
+                                            data-action="rollSpell" data-item-id="{{item.id}}" 
+                                        {{/if}}
+                                    {{/unless}}
+                                    style="{{#unless (or (gt item.system.activation.value 0) (or item.system.damage.formula item.system.uses.max))}}display:none;{{/unless}}"
+                                    title="{{#if @root.system.details.isSpellcastingBlocked}}{{localize 'THE-CODEX.Messages.SpellcastingBlocked'}}{{else}}Rolar Habilidade{{/if}}"></i>
+                                <span class="inv-item-name">{{item.name}}</span>
+                            </div>
+                        </td>
+                        <td class="formula-col text-center" style="font-size: 0.85em; color: #c1a064;">
+                            {{item.system.scaledDamageFormula}}
+                        </td>
+                        <td class="usage-col text-center"
+                            style="display:flex; justify-content:center; align-items:center; gap: 4px;">
+                            {{#if (gt item.system.uses.max 0)}}
+                            <input type="number" name="items.{{item.id}}.system.uses.value"
+                                value="{{item.system.uses.value}}"
+                                style="width: 28px; height: 22px; text-align: center; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: #fff; font-size: 0.9em;"
+                                min="0" max="{{item.system.uses.max}}" />
+                            <span style="color: #666;">/</span>
+                            <span class="slot-max" style="font-size: 0.9em;">{{item.system.uses.max}}</span>
+                            {{else}}
+                            <span class="ilimitado">{{localize 'THE-CODEX.Sheet.Unlimited'}}</span>
+                            {{/if}}
+                        </td>
+                        <td class="controls-col text-center">
+                            <i class="fas fa-edit item-control item-edit" data-action="openItem"
+                                data-item-id="{{item.id}}" ></i>
+                            <i class="fas fa-trash item-control item-delete" data-action="deleteItem"
+                                data-item-id="{{item.id}}" title="Deletar"></i>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{/if}}
+
+        <div class="known-spells-section">
+            <h3 class="box-title">{{localize 'THE-CODEX.Sheet.KnownSpells'}}</h3>
+            <table class="inv-table spells-table">
+                <thead>
+                    <tr>
+                        <th class="img-col"></th>
+                        <th class="name-col text-left">{{localize 'THE-CODEX.Combat.Name'}}</th>
+                        <th class="circle-col text-center">{{localize 'THE-CODEX.Combat.Circle'}}</th>
+                        <th class="formula-col text-center">{{localize 'THE-CODEX.Combat.Damage'}}</th>
+                        {{#unless system.details.isInvoker}}<th class="usage-col text-center">{{localize
+                            'THE-CODEX.Combat.Cost'}}
+                        </th>{{/unless}}
+                        <th class="controls-col text-center">{{localize 'THE-CODEX.Combat.Actions'}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each spells as |item|}}
+                    <tr class="item-row" data-item-id="{{item.id}}" data-tooltip="{{item.uuid}}">
+                        <td class="img-col">
+                            <img src="{{item.img}}" title="{{item.name}}" />
+                        </td>
+                        <td class="name-col">
+                            <div class="name-col-wrapper">
+                                <i class="fas fa-dice-d20 roll-icon-v13 {{#if @root.system.details.isSpellcastingBlocked}}blocked{{else}}rollable{{/if}}"
+                                    {{#unless @root.system.details.isSpellcastingBlocked}} 
+                                        {{#if (or (gte item.system.level 0) (or item.system.damage.formula item.system.uses.max))}}
+                                            data-action="rollSpell" data-item-id="{{item.id}}" 
+                                        {{/if}}
+                                    {{/unless}}
+                                    style="{{#unless (or (gte item.system.level 0) (or item.system.damage.formula item.system.uses.max))}}display:none;{{/unless}}"
+                                    title="{{#if @root.system.details.isSpellcastingBlocked}}{{localize 'THE-CODEX.Messages.SpellcastingBlocked'}}{{else}}Rolar Magia{{/if}}"></i>
+                                <span class="inv-item-name">{{item.name}}</span>
+                            </div>
+                        </td>
+                        <td class="circle-col text-center">
+                            {{#if (isZero item.system.level)}}
+                            T
+                            {{else if item.system.level}}
+                            {{item.system.level}}º
+                            {{else}}
+                            1º
+                            {{/if}}
+                        </td>
+                        <td class="formula-col text-center" style="font-size: 0.85em; color: #c1a064;">
+                            {{item.system.scaledDamageFormula}}
+                        </td>
+                        <td class="usage-col text-center">
+                            {{#if item.system.usage}}{{item.system.usage}}{{else}}1{{/if}}
+                        </td>
+                        <td class="controls-col text-center">
+                            <i class="fas fa-edit item-control item-edit" data-action="openItem"
+                                data-item-id="{{item.id}}" ></i>
+                            <i class="fas fa-trash item-control item-delete" data-action="deleteItem"
+                                data-item-id="{{item.id}}" title="Deletar"></i>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+{{!-- systems/the-codex-modern/templates/items/parts/details-feature.hbs --}}
+<div class="feature-details-panel papiro-bg">
+    <div class="form-group">
+        <label>{{localize 'THE-CODEX.FeatureFields.Type'}}</label>
+        <select name="system.featureType">
+            {{selectOptions config.featTypes selected=system.featureType localize=true}}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>{{localize 'THE-CODEX.Advancement.Fields.Title'}}</label>
+        <input type="text" name="system.identifier" value="{{system.identifier}}" placeholder="ex: sopro-dragao" />
+        <p class="hint">Identificador único para automações e macros.</p>
+    </div>
+
+    {{!-- Seção de Pré-Requisitos (Consolidada aqui conforme sugestão do usuário) --}}
+    <div class="automation-section papiro-bg" style="margin-top: 15px; border: 1px solid var(--codex-gold-muted); padding: 10px; border-radius: 4px;">
+        <label class="section-title"><i class="fas fa-lock"></i> {{localize 'THE-CODEX.FeatureFields.Prerequisites'}}</label>
+        
+        <div class="form-group">
+            <label>Texto Descritivo</label>
+            <input type="text" name="system.requirements.text" value="{{system.requirements.text}}" placeholder="ex: STR 13, Nível 3..." />
+        </div>
+
+        <div class="form-group-row" style="margin-top:10px;">
+             <div style="flex:2; display:flex; flex-direction:column; gap:5px;">
+                <div style="display:flex; justify-content: space-between; align-items: center;">
+                    <label style="font-size:0.85rem; font-weight:bold;">Atributos Mínimos</label>
+                    <select name="system.requirements.abilityLogic" style="width: auto; height: 20px; font-size: 0.7rem;">
+                        <option value="and" {{#if (eq system.requirements.abilityLogic "and" )}}selected{{/if}}>TODOS (E)</option>
+                        <option value="or" {{#if (eq system.requirements.abilityLogic "or" )}}selected{{/if}}>QUALQUER (OU)</option>
+                    </select>
+                </div>
+                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:5px;">
+                    {{#each config.abilities as |label id|}}
+                    <div style="display:flex; align-items:center; gap:2px;">
+                        <span style="font-size:0.7rem; text-transform:uppercase; width: 30px;">{{id}}</span>
+                        <input type="number" name="system.requirements.minAbilities.{{id}}" value="{{lookup ../system.requirements.minAbilities id}}" min="0" style="width:40px; text-align:center; height:20px;" />
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{!-- Vínculos de Classe (Agnóstico) --}}
+    <div class="class-mapping-section papiro-bg" style="margin-top: 15px; border-top: 1px solid rgba(212,175,55,0.2); padding-top: 10px;">
+        <label class="section-title"><i class="fas fa-link"></i> {{localize 'THE-CODEX.FeatureFields.ClassMapping'}}</label>
+        <p class="hint" style="font-size: 0.75rem;">Define a qual classe este talento pertence e em qual nível ele é obtido.</p>
+
+        <div class="class-mapping-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; margin-top: 5px;">
+            {{#each spellClasses as |cls|}}
+            <div class="class-mapping-item" style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.1); padding: 5px 8px; border-radius: 3px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; flex: 1;">
+                    <input type="checkbox" data-action="toggleClassMapping" data-class-id="{{cls.id}}" {{checked cls.checked}} />
+                    <span style="font-size: 0.85rem; {{#if cls.checked}}color: var(--codex-gold); font-weight: bold;{{/if}}">{{cls.label}}</span>
+                </label>
+                {{#if cls.checked}}
+                <div class="mapping-circle" style="display: flex; align-items: center; gap: 4px;">
+                    <span style="font-size: 0.7rem;">NVL:</span>
+                    <input type="number" data-action="changeMappingLevel" data-class-id="{{cls.id}}" value="{{cls.level}}" style="width: 35px; height: 20px; text-align: center;" />
+                </div>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>

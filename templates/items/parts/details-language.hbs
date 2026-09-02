@@ -1,0 +1,14 @@
+<div class="form-group">
+  <label>Script / Automação</label>
+  <input type="text" name="system.script" value="{{system.script}}" placeholder="ex: +2 diplomacia com orcos"/>
+  <p class="hint">{{localize "THE-CODEX.UI.LanguageHint"}}</p>
+</div>
+
+<div class="form-group">
+  <label>Descrição / Lore</label>
+  <div class="editor-container-v13" style="min-height: 200px;">
+    <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}" value="{{system.description}}" toggled="true" collaborate="true" button="true">
+        {{{enrichedDescription}}}
+    </prose-mirror>
+  </div>
+</div>

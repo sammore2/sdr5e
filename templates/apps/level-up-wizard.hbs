@@ -1,0 +1,47 @@
+<div class="wizard-container">
+    <header class="wizard-header">
+        <h2 class="runic-title">{{localize 'TYPES.Wizard.LevelUpWizard.LevelUpTitle' level=changes.level}}</h2>
+        <div class="step-indicator">
+            {{#each activeSteps as |s|}}
+                <span class="step {{#if (eq ../step s)}}active{{/if}}">{{s}}</span>
+            {{/each}}
+        </div>
+    </header>
+
+    <main class="wizard-content scrollable">
+        {{#if (eq step 1)}}
+            {{> "codex-level-up-step1"}}
+        {{/if}}
+        {{#if (eq step 2)}}
+            {{> "codex-level-up-step2"}}
+        {{/if}}
+        {{#if (eq step 3)}}
+            {{> "codex-level-up-step3"}}
+        {{/if}}
+        {{#if (eq step 4)}}
+            {{> "codex-level-up-step4"}}
+        {{/if}}
+        {{#if (eq step 5)}}
+            {{> "codex-level-up-step5"}}
+        {{/if}}
+        {{#if (eq step 7)}}
+            {{> "codex-level-up-step7"}}
+        {{/if}}
+    </main>
+
+    <footer class="wizard-footer">
+        {{#if canGoBack}}
+            <button type="button" class="btn-prev codex-button"><i class="fas fa-arrow-left"></i> {{localize 'THE-CODEX.Sheet.Back'}}</button>
+        {{else}}
+            <div style="width: 100px;"></div> <!-- Spacer para manter o layout -->
+        {{/if}}
+        
+        {{#if isLastStep}}
+            <button type="button" class="btn-finish codex-button secondary"><i class="fas fa-check"></i> {{localize 'TYPES.Wizard.LevelUpWizard.FinishAscension'}}</button>
+        {{else}}
+            <button type="button" class="btn-next codex-button" {{#if canGoNext}}{{else}}disabled{{/if}}>
+                {{localize 'THE-CODEX.Sheet.Next'}} <i class="fas fa-arrow-right"></i>
+            </button>
+        {{/if}}
+    </footer>
+</div>

@@ -1,0 +1,112 @@
+{{!-- Nome da Raça / Ancestralidade --}}
+<div class="form-group">
+  <label>Nome da Ancestralidade</label>
+  <input type="text" name="system.ancestry" value="{{system.ancestry}}" placeholder="ex: Elfos, Anões..."/>
+  <p class="hint">Nome exibido no campo de Raça na ficha do personagem</p>
+</div>
+
+{{!-- Física --}}
+<h3 class="form-header">Física</h3>
+<div class="form-group-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+  <div class="form-group">
+    <label>Altura Mínima</label>
+    <input type="text" name="system.heightMin" value="{{system.heightMin}}" placeholder="ex: 1,50 m"/>
+  </div>
+  <div class="form-group">
+    <label>Altura Máxima</label>
+    <input type="text" name="system.heightMax" value="{{system.heightMax}}" placeholder="ex: 1,80 m"/>
+  </div>
+  <div class="form-group">
+    <label>Peso Mínimo</label>
+    <input type="text" name="system.weightMin" value="{{system.weightMin}}" placeholder="ex: 55 kg"/>
+  </div>
+  <div class="form-group">
+    <label>Peso Máximo</label>
+    <input type="text" name="system.weightMax" value="{{system.weightMax}}" placeholder="ex: 80 kg"/>
+  </div>
+</div>
+
+{{!-- Características --}}
+<h3 class="form-header">Características</h3>
+<div class="form-group-row" style="display:grid; grid-template-columns:1fr; gap:10px;">
+  <div class="form-group">
+    <label>Deslocamento (quadrados)</label>
+    <input type="number" name="system.speed" value="{{system.speed}}" min="0"/>
+  </div>
+</div>
+
+{{!-- Configurações Automáticas de Token --}}
+<h3 class="form-header">Automação de Token</h3>
+<div class="form-group-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+  <div class="form-group">
+    <label>Tamanho do Token</label>
+    <select name="system.size">
+      <option value="min" {{#if (eq system.size "min")}}selected{{/if}}>Minúsculo (1/2)</option>
+      <option value="sm"  {{#if (eq system.size "sm")}}selected{{/if}}>Pequeno (1x1)</option>
+      <option value="med" {{#if (eq system.size "med")}}selected{{/if}}>Médio (1x1)</option>
+      <option value="lg"  {{#if (eq system.size "lg")}}selected{{/if}}>Grande (2x2)</option>
+      <option value="en"  {{#if (eq system.size "en")}}selected{{/if}}>Enorme (3x3)</option>
+      <option value="col" {{#if (eq system.size "col")}}selected{{/if}}>Colossal (4x4)</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Visão Habilitada?</label>
+    <input type="checkbox" name="system.vision.hasVision" {{checked system.vision.hasVision}} />
+  </div>
+</div>
+
+<div class="form-group-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+  <div class="form-group">
+    <label>{{localize "THE-CODEX.UI.VisionMode"}}</label>
+    <select name="system.vision.mode">
+      {{selectOptions config.visionModes selected=system.vision.mode localize=true}}
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Alcance da Visão Especial (m)</label>
+    <input type="number" name="system.vision.range" value="{{system.vision.range}}" min="0" placeholder="0 = Infinito (Básico)" />
+  </div>
+</div>
+
+
+{{!-- Idiomas --}}
+<div class="form-group">
+  <label>Idiomas</label>
+  <input type="text" name="system.languages" value="{{system.languages}}" placeholder="ex: Comum, Élfico"/>
+</div>
+
+{{!-- Classe Favorecida --}}
+<div class="form-group">
+  <label>Classe Favorecida</label>
+  <input type="text" name="system.favoredClass" value="{{system.favoredClass}}" placeholder="ex: Mago, Guerreiro, Qualquer"/>
+  <p class="hint">Essa classe é desconsiderada ao calcular penalidades de XP por multiclasse (regra 3.5e).</p>
+</div>
+
+{{!-- Modificadores de Atributo --}}
+<h3 class="form-header">Modificadores Raciais de Atributo</h3>
+<div class="form-group-row" style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
+  <div class="form-group"><label>FOR</label><input type="number" name="system.abilities.str" value="{{system.abilities.str}}"/></div>
+  <div class="form-group"><label>DES</label><input type="number" name="system.abilities.dex" value="{{system.abilities.dex}}"/></div>
+  <div class="form-group"><label>CON</label><input type="number" name="system.abilities.con" value="{{system.abilities.con}}"/></div>
+  <div class="form-group"><label>INT</label><input type="number" name="system.abilities.int" value="{{system.abilities.int}}"/></div>
+  <div class="form-group"><label>SAB</label><input type="number" name="system.abilities.wis" value="{{system.abilities.wis}}"/></div>
+  <div class="form-group"><label>CAR</label><input type="number" name="system.abilities.cha" value="{{system.abilities.cha}}"/></div>
+</div>
+
+
+{{!-- {{localize "THE-CODEX.UI.RaceSkillsTitle"}} --}}
+<h3 class="form-header">{{localize "THE-CODEX.UI.RaceSkillsTitle"}}</h3>
+<p class="hint" style="margin-bottom:6px;">{{localize "THE-CODEX.UI.RaceSkillsHint"}}</p>
+{{#each system.bonuses.skillMultipliers as |sb idx|}}
+<div class="form-group-row" style="display:flex; gap:8px; align-items:center; margin-bottom:4px;" data-skill-index="{{idx}}">
+  <select name="system.bonuses.skillMultipliers.{{idx}}.skill" style="flex:2;">
+    {{selectOptions ../config.skills selected=sb.skill labelAttr="label" localize=true}}
+  </select>
+  <input type="number" name="system.bonuses.skillMultipliers.{{idx}}.multiplier" value="{{sb.multiplier}}" style="flex:1; width:60px;" min="0" max="2" step="1"/>
+  <a data-action="deleteSkillBonus" data-skill-index="{{idx}}" style="color:#8a3030;"><i class="fas fa-trash fa-xs"></i></a>
+</div>
+{{/each}}
+<button type="button" data-action="addSkillBonus" style="margin-top:4px; width:100%;"><i class="fas fa-plus"></i> {{localize "THE-CODEX.UI.AddSkill"}}</button>
+
+{{!-- Sistema de Advancements (Geral) --}}
+{{> "codex-item-details-advancement" this}}

@@ -1,0 +1,6139 @@
+/* =========================
+   UNSORTED (SAFE)
+========================= */
+
+
+.the-codex .section-header {
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--codex-gold) !important;
+    font-family: var(--font-primary) !important;
+    text-transform: uppercase;
+    font-variant: small-caps;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-bottom: 1px solid var(--codex-gold);
+    margin: 10px 0 5px 0;
+    letter-spacing: 1px;
+}
+
+
+/* ============================================================
+   2. COMPONENTES GLOBAIS DE FORMULÁRIO
+   ============================================================ */
+
+/* ============================================================
+   SPELL CONFIG / CLASS MAPPING (admission-spell, config-spell)
+   ============================================================ */
+
+
+/* Campos 5e: Ritual, Concentração, Unidades */
+
+
+/* --- THE CODEX: Item Sheet & Spell Re-Architecture (V13) --- */
+
+
+/* Campos 5e: Ritual, Concentração, Unidades */
+
+
+/* --- THE CODEX: Item Sheet & Spell Re-Architecture (V13) --- */
+
+
+/* Campos 5e: Ritual, Concentração, Unidades */
+
+
+/* --- THE CODEX: Item Sheet & Spell Re-Architecture (V13) --- */
+
+
+/* Campos 5e: Ritual, Concentração, Unidades */
+
+
+/* --- THE CODEX: Item Sheet & Spell Re-Architecture (V13) --- */
+
+
+/* Campos 5e: Ritual, Concentração, Unidades */
+
+
+/* --- THE CODEX: Item Sheet & Spell Re-Architecture (V13) --- */
+
+.spell-config-container {
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    border: 1px solid #7a6a4a;
+}
+
+
+.class-mapping-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+
+.class-map-item {
+    background: rgba(20, 20, 25, 0.85);
+    border: 1px solid #4a3a2a;
+    border-radius: 4px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.2s ease;
+    min-height: 50px;
+    justify-content: space-between;
+}
+
+
+.class-map-item.is-inactive {
+    opacity: 0.5;
+    filter: grayscale(0.8);
+    background: rgba(10, 10, 12, 0.95);
+}
+
+
+.class-map-item.is-active {
+    border-color: #c1a064;
+    background: linear-gradient(to bottom, rgba(40, 35, 30, 0.9), rgba(20, 15, 10, 0.95));
+    box-shadow: 0 0 8px rgba(193, 160, 100, 0.2);
+    filter: none;
+    opacity: 1;
+}
+
+
+.class-header {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid rgba(193, 160, 100, 0.1);
+    margin-bottom: 4px;
+}
+
+
+.class-name {
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: #c1a064;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+
+.circle-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+
+.circle-selector input {
+    width: 32px !important;
+    height: 22px !important;
+    font-size: 0.9rem !important;
+    border-radius: 2px !important;
+    border: 1px solid #c1a064 !important;
+    background: #000 !important;
+}
+
+
+.circle-selector.disabled {
+    color: #7a6a4a;
+    font-size: 0.7rem;
+}
+
+
+/* Campos 5e: Ritual, Concentração, Unidades */
+
+.input-with-units {
+    display: flex;
+    gap: 5px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px;
+    border-radius: 4px;
+    border: 1px solid rgba(122, 106, 74, 0.4);
+}
+
+
+.input-with-units input {
+    flex: 1;
+    border: none !important;
+    text-align: center !important;
+}
+
+
+.input-with-units select {
+    flex: 2;
+    background: transparent;
+    color: #cca460;
+    border: none;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+
+.checkbox-group.row label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: #eee;
+}
+
+
+.checkbox-group.row label:hover {
+    color: #cca460;
+}
+
+
+/* --- PROTOCOLO RIGOROSO V13: BLINDAGEM POR ID --- */
+
+
+.the-codex.actor.sheet {
+    --bg-dark: #0a0a0c;
+    --panel-bg: rgba(10, 10, 12, 0.75);
+    --panel-border: #7a6a4a;
+    --ink-black: #f0f0f0;
+    --blood-red: #9a0000;
+    --iron-gray: #7a6a4a;
+    --font-header: 'MedievalSharp', serif;
+
+    background: linear-gradient(rgba(10, 10, 12, 0.4), rgba(10, 10, 12, 0.7)),
+        url('../assets/ui/codex-bg.png') center center / cover no-repeat !important;
+    color: #f0f0f2;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+
+.the-codex.actor.sheet * {
+    backdrop-filter: none !important;
+    filter: none !important;
+    box-shadow: none;
+}
+
+
+.the-codex.sheet .codex-sheet-v2 {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+    background: transparent;
+}
+
+
+.the-codex.sheet .papiro-bg {
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5), 0 2px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+
+.the-codex.sheet .box-title {
+    font-family: 'MedievalSharp', serif;
+    color: #c1a064;
+    border-bottom: 1px solid rgba(193, 160, 100, 0.4);
+    margin: 8px 0 6px 0;
+    padding-top: 3px;
+    font-size: 1.0rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+
+.sheet-header-hobbs {
+    flex: 0 0 auto;
+    padding: 15px 25px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 3px solid #4a1a1a;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.header-upper-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.header-left {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+
+.portrait-container-hobbs {
+    width: 90px;
+    height: 90px;
+    background: #000;
+    border: 2px solid #7a6a4a;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+}
+
+
+.profile-img-hobbs {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.char-identity-row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+
+.char-identity-row .identity-item.rollable {
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+
+.char-identity-row .identity-item.rollable:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+
+.identity-divider {
+    color: #4a1a1a;
+}
+
+
+.header-metadata-row {
+    margin-bottom: -5px;
+}
+
+
+.identity-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.identity-item label {
+    font-size: 0.6em;
+    color: #7a6a4a;
+    text-transform: uppercase;
+    margin-bottom: -2px;
+}
+
+
+.ability-scores-row-hobbs {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px 10px;
+    margin-top: 10px;
+}
+
+
+.ability-box-hobbs {
+    flex: 1;
+    height: 140px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #7a6a4a;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+
+.ability-label {
+    position: absolute;
+    top: 8px;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #cca460;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+
+.ability-score-bubble-hobbs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.ability-mod-hobbs {
+    position: absolute;
+    bottom: -15px;
+    background: #4a1a1a;
+    border: 2px solid #7a6a4a;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 2px 10px;
+    border-radius: 3px;
+    font-family: var(--font-header);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+}
+
+
+.ability-mod-hobbs:hover {
+    background: #6a1a1a;
+    transform: scale(1.1);
+}
+
+
+.prof-box .ability-mod-hobbs {
+    bottom: -15px;
+    font-size: 1.4em;
+    padding: 4px 15px;
+}
+
+
+.the-codex.sheet .sheet-tabs-v2 {
+    flex: 0 0 auto;
+    display: flex;
+    border-bottom: 2px solid #4a1a1a;
+    background: rgba(10, 8, 5, 0.9);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+
+.the-codex.sheet .sheet-tabs-v2 .item {
+    flex: 1;
+    padding: 6px 4px;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: var(--font-gothic);
+    font-size: 0.85em;
+    color: var(--iron-gray);
+    border-right: 1px solid rgba(122, 106, 74, 0.1);
+    transition: all 0.2s;
+    cursor: pointer;
+    letter-spacing: 2px;
+}
+
+
+.the-codex.sheet .sheet-tabs-v2 .item:hover {
+    color: #fff;
+    background: rgba(122, 106, 74, 0.05);
+}
+
+
+.the-codex.sheet .sheet-tabs-v2 .item.active {
+    color: #cca460;
+    border-bottom: 3px solid var(--blood-red);
+    text-shadow: 0 0 8px rgba(204, 164, 96, 0.4);
+}
+
+
+/* --- CODEX PREMIUM V13: AUTOMATION GRID & CHECKBOXES --- */
+
+
+.automation-section:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(193, 160, 100, 0.05);
+}
+
+
+.section-header-v13 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(193, 160, 100, 0.2);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+
+/* Checkbox Premium Golden Solid */
+
+
+/* Lista de Bônus de Perícia */
+.skills-bonuses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+@keyframes slideIn {}
+
+
+/* --- FIM CODEX PREMIUM V13 --- */
+
+.sheet-content-v2 {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px 15px;
+}
+
+
+.the-codex.sheet .tab {
+    display: none;
+}
+
+
+.the-codex.sheet .tab.active {
+    display: block;
+}
+
+
+.grid-3col-classic {
+    display: grid;
+    grid-template-columns: minmax(280px, 320px) minmax(280px, 1fr) minmax(250px, 280px);
+    gap: 15px;
+    align-items: start;
+    width: 100%;
+}
+
+
+.col-left {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.attributes-pillar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.small-stats-box {
+    padding: 10px;
+    text-align: center;
+}
+
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+
+.stat-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    border: 2px solid var(--iron-gray);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    line-height: 38px;
+    background: var(--field-bg);
+}
+
+
+.stat-label {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.8em;
+}
+
+
+.skills-list-box {
+    padding: 10px;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+.skills-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 0.7em;
+    color: #cca460;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    gap: 4px;
+    border-bottom: 1px solid #cca460;
+    padding-bottom: 4px;
+}
+
+
+.skills-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.skill-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85em;
+    padding: 2px 0;
+    border-bottom: 1px solid rgba(193, 160, 100, 0.2);
+    transition: 0.3s;
+}
+
+
+.skill-item:nth-child(even) {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+
+.skill-item:hover {
+    background: rgba(193, 160, 100, 0.1) !important;
+}
+
+
+.sk-col-pts,
+.sk-col-atr,
+.sk-col-ext,
+.sk-col-tot {
+    flex: 0 0 32px;
+    text-align: center;
+}
+
+
+.sk-col-name {
+    flex: 1;
+    margin-left: 8px;
+}
+
+
+.sk-atr {
+    font-size: 0.9em;
+    color: var(--iron-gray);
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 3px;
+    line-height: 28px;
+    border: 1px solid #333;
+}
+
+
+.sk-tot {
+    font-size: 1.1em;
+    background: transparent !important;
+    border: none !important;
+    color: #8b0000 !important;
+    line-height: 28px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #000;
+}
+
+
+.skill-name:hover {
+    color: var(--blood-red);
+}
+
+
+.sheet-header {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 2px solid var(--blood-red);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(20, 20, 20, 0.5));
+}
+
+
+.header-main-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+
+.profile-img {
+    flex: 0 0 80px;
+    min-height: 75px;
+    object-fit: cover;
+    border: 2px solid #7a6a4a;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+
+.profile-img:hover {
+    border-color: var(--blood-red);
+}
+
+
+.header-details {
+    flex: 1;
+}
+
+
+.top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+
+.codex-logo-wrapper {
+    flex: 0 0 160px;
+}
+
+
+.codex-logo-proeminent {
+    width: 220px;
+    height: auto;
+    filter: drop-shadow(0 0 12px rgba(204, 164, 96, 0.7));
+    transition: transform 0.3s ease;
+}
+
+
+.attributes-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+
+.attribute-medal {
+    flex: 0 0 85px;
+    height: 105px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url('../assets/ui/medal-frame.png') no-repeat center center;
+    background-size: contain;
+    position: relative;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+}
+
+
+.attribute-medal:hover {
+    transform: scale(1.1) rotate(1deg);
+    filter: drop-shadow(0 0 10px rgba(204, 164, 96, 0.4));
+}
+
+
+.attr-mod {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+    line-height: 1;
+    margin-top: 5px;
+}
+
+
+.attr-val {
+    font-size: 0.85em;
+    color: #cca460;
+    font-weight: bold;
+    margin-top: -2px;
+}
+
+
+.attr-label {
+    font-size: 0.65em;
+    text-transform: uppercase;
+    color: #7a6a4a;
+    font-weight: bold;
+    position: absolute;
+    bottom: 5px;
+    letter-spacing: 1.5px;
+}
+
+
+.col-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+}
+
+
+.combat-grid-premium {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    position: relative;
+}
+
+
+.combat-medal-wrapper {
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+}
+
+
+.defense-medal {
+    width: 150px !important;
+    height: 150px !important;
+    background: url('../assets/ui/medal-frame.png') no-repeat center center;
+    background-size: contain;
+    cursor: default !important;
+}
+
+
+.combat-hobbs-cluster {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: -10px;
+}
+
+
+.combat-stat-box.side-left {
+    text-align: left;
+}
+
+
+.combat-stat-box.spells-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+.spells-table td {
+    vertical-align: middle;
+    padding: 8px 4px;
+}
+
+
+.spells-table .img-col {
+    width: 32px;
+    text-align: center;
+}
+
+
+.spells-table .img-col img {
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #4a1a1a;
+    border-radius: 3px;
+    object-fit: cover;
+}
+
+
+.spells-table .name-col {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.combat-stat-box.side-right {
+    text-align: right;
+}
+
+
+.combat-stat-box .stat-val,
+
+
+.combat-stat-box input:hover,
+.combat-stat-box input:focus,
+.hp-values input:hover,
+
+
+.ac-shield-hobbs {
+    position: relative;
+    width: 120px;
+    height: 150px;
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.8));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0;
+}
+
+
+.ac-shield-hobbs svg.shield-svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    transform: scale(1.15);
+    transform-origin: center center;
+}
+
+
+.ac-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    transform: translateY(-5px);
+}
+
+
+.ac-label-v13,
+.ac-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: #ffffff;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+    line-height: 1;
+    text-shadow: 1px 1px 2px #000;
+    opacity: 0.9;
+    text-align: center;
+    width: 90%;
+}
+
+
+.ac-value {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #ffffff !important;
+    font-family: var(--font-header);
+    text-shadow: 0 0 8px #ffffff, 2px 2px 4px #000 !important;
+}
+
+
+.ac-shield-hobbs svg path {
+    fill: #c1a064 !important;
+    stroke: #8b0000 !important;
+}
+
+
+.hp-bar-hobbs-v3 {
+    width: 80%;
+    margin: 5px auto 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+
+.hp-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #c1a064;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+
+.hp-values {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #8b0000;
+    font-size: 1.2rem;
+}
+
+
+.hp-track {
+    width: 100%;
+    height: 24px;
+    background: #1a1a1a;
+    border: 2px solid #5d1414;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+
+.hp-fill {
+    height: 100%;
+    transition: width 0.3s ease, background-color 0.4s ease;
+}
+
+
+.resonance-box-hobbs {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+
+.compass-majestic-wrapper {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid #5a1a1a;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(74, 26, 26, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.compass-labels {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+
+.compass-label-text {
+    position: absolute;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #7a6a4a;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+
+.label-fluxo {
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+.label-genesis {
+    left: -60px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+}
+
+
+.res-dot {
+    filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.8));
+}
+
+
+.resonance-ether-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 0px;
+}
+
+
+.resonance-mini {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 10px;
+    border: 2px solid #5d1414;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.6) !important;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 0 10px rgba(193, 160, 100, 0.1);
+    width: 260px;
+    max-width: 100%;
+}
+
+
+.alignment-title {
+    font-family: var(--font-header);
+    color: #c1a064;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 1px solid #c1a064;
+    padding-bottom: 3px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px #000;
+}
+
+
+.compass-svg-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, rgba(20, 20, 20, 1) 0%, rgba(5, 5, 5, 1) 100%);
+    border: 3px double #c1a064;
+    border-radius: 50%;
+    padding: 5px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
+}
+
+
+.compass-svg-wrapper svg {
+    filter: drop-shadow(0 0 3px rgba(193, 160, 100, 0.3));
+    max-width: 100%;
+    height: auto;
+}
+
+
+.ether-grid-compact {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 5px;
+    padding: 8px;
+    border: 1px solid #7a6a4a;
+    border-radius: 4px;
+}
+
+
+.ether-slot-mini {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 3px;
+    padding: 2px 4px;
+    border: 1px solid #333;
+}
+
+
+.ether-slot-mini .lvl {
+    font-size: 0.7em;
+    color: #cca460;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+
+.resonance-container {
+    padding: 15px;
+}
+
+
+.compass-layout {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+
+.small-compass {
+    flex: 0 0 120px;
+}
+
+
+.resonance-controls {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.col-right {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.ether-container {
+    padding: 15px;
+}
+
+
+.ether-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+.ether-slot-row {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+
+.ether-lvl-badge {
+    background: var(--blood-red);
+    color: white;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 0.8em;
+    margin-right: 10px;
+}
+
+
+.ether-sep {
+    margin: 0 5px;
+}
+
+
+.attacks-container {
+    padding: 15px;
+    min-height: 150px;
+}
+
+
+.attack-bonuses {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed rgba(122, 106, 74, 0.3);
+}
+
+
+.atk-bonus-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.atk-bonus-label {
+    font-size: 0.75em;
+    text-transform: uppercase;
+    color: var(--iron-gray);
+    font-family: var(--font-gothic);
+}
+
+
+.atk-bonus-val {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #cca460;
+    text-shadow: 1px 1px 2px #000;
+}
+
+
+.atk-bonus-row.rollable {
+    cursor: pointer;
+    transition: background 0.2s;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+
+.atk-bonus-row.rollable:hover {
+    background: rgba(122, 106, 74, 0.1);
+}
+
+
+.atk-bonus-row.rollable:hover .atk-bonus-label {
+    color: #fff;
+}
+
+
+.atk-bonus-row.unarmed-strike {
+    border-bottom: 1px dashed rgba(204, 164, 96, 0.2);
+    margin-bottom: 4px;
+}
+
+
+.atk-bonus-row.weapon-atk {
+    border-left: 2px solid var(--blood-red);
+    padding-left: 8px;
+    margin-top: 4px;
+}
+
+
+.the-codex.sheet.item {
+    --bg-dark: #121212;
+    --panel-bg: rgba(25, 25, 28, 0.92);
+    --ink-black: #e2e2e2;
+    --blood-red: #7a0000;
+    --iron-gray: #666666;
+    background: #14131a;
+    background-image: url('https://www.transparenttextures.com/patterns/black-paper.png');
+    color: var(--ink-black);
+    font-family: "Signika", sans-serif;
+}
+
+
+.item-type-badge {
+    font-size: 0.75em;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+.the-codex .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+
+.the-codex .form-group>label {
+    font-size: 0.8em;
+    color: #cca460;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+
+.the-codex .form-group>p.hint {
+    font-size: 0.75em;
+    color: #666;
+    margin: 0;
+}
+
+
+.the-codex .form-group-row {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+
+.the-codex .form-group-row.spellcasting-config {
+    align-items: center;
+    margin-top: 5px;
+}
+
+
+.the-codex .flex2 {
+    flex: 2;
+}
+
+
+/* ============================================================
+   AUTOMAÇÃO DE FEATURES (V13) - REFINAMENTO
+   ============================================================ */
+
+
+/* Header da Feature */
+
+
+/* Flags / Checkboxes */
+
+
+/* PerÃƒÂ­cias */
+
+
+/* Sub-seÃƒÂ§ÃƒÂµes */
+
+
+/* EspecializaÃƒÂ§ÃƒÂµes AvanÃƒÂ§adas */
+
+
+/* Aba de DescriÃƒÂ§ÃƒÂ£o / Editor ProseMirror */
+
+
+/* Ajustes de Focus no Editor */
+
+
+/* ============================================================
+   AUTOMAÇÃO DE FEATURES (V13) - REFINAMENTO
+   ============================================================ */
+.automation-grid-v13 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+
+.automation-section {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(122, 106, 74, 0.3);
+    padding: 12px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+.automation-section .section-title {
+    font-family: var(--font-cinzel, serif);
+    font-size: 0.75rem;
+    color: #cca460;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid rgba(122, 106, 74, 0.2);
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.bonus-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(122, 106, 74, 0.4);
+    border-radius: 4px;
+    padding: 8px 4px;
+    min-height: 75px;
+    /* Altura fixa para garantir alinhamento horizontal perfeito */
+    box-sizing: border-box;
+    transition: all 0.2s;
+}
+
+
+.bonus-item:hover {
+    border-color: #c1a064;
+    background: rgba(193, 160, 100, 0.05);
+}
+
+
+.bonus-item label {
+    font-size: 0.58rem !important;
+    color: #7a6a4a !important;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: auto !important;
+    /* Joga o rÃƒÂ³tulo para o topo */
+    text-align: center;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+
+.bonus-item input {
+    text-align: center !important;
+    width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    font-family: var(--font-cinzel, serif);
+    font-size: 1.2rem !important;
+    color: #fff !important;
+    font-weight: bold;
+    padding: 0 !important;
+    margin-top: 4px;
+}
+
+
+/* Header da Feature */
+.feature-header-v13 {
+    padding: 15px;
+    border-bottom: 2px solid rgba(122, 106, 74, 0.3);
+    margin-bottom: 15px;
+}
+
+
+.feature-header-v13 .form-group-row {
+    align-items: flex-end;
+    /* Alinha a base dos campos */
+}
+
+
+.bonus-item input:focus {
+    box-shadow: none !important;
+}
+
+/* Indicadores de Salvaguarda (Escudinhos) */
+.save-indicator {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0.6;
+    color: #7a6a4a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.proficient {
+        opacity: 1;
+        color: #ffcc00 !important;
+        /* Dourado Sovereign */
+        filter: drop-shadow(0 0 4px rgba(255, 204, 0, 0.6));
+
+        i {
+            transform: scale(1.1);
+        }
+    }
+
+    .save-indicator:hover {
+        opacity: 1;
+        transform: translateY(-2px);
+        color: #fff;
+    }
+}
+
+/* Resistência à Magia (RM) Moderna - Versão Refinada */
+.rm-row-v13 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px dashed rgba(122, 106, 74, 0.4);
+    padding: 4px 12px;
+    border-radius: 4px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    opacity: 0.3;
+    /* Muito discreto quando 0 */
+    min-height: 32px;
+
+    &:hover {
+        opacity: 0.8;
+        border-style: solid;
+        background: rgba(0, 0, 0, 0.4);
+
+        .rm-edit-zone {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+    }
+
+    &.active {
+        opacity: 1;
+        background: linear-gradient(90deg, #4c1d95 0%, #6d28d9 100%);
+        border: 1px solid #c4b5fd;
+        box-shadow: 0 0 15px rgba(167, 139, 250, 0.3);
+
+        i,
+        .rm-label {
+            color: #fff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .rm-label {
+            font-weight: bold;
+        }
+    }
+
+    .rm-main-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .rm-badge-advantage {
+        background: #7a6a4a;
+        color: #fff;
+        font-size: 0.65rem;
+        padding: 2px 6px;
+        border-radius: 3px;
+        text-transform: uppercase;
+        font-weight: bold;
+        border: 1px solid #ffcc00;
+        box-shadow: 0 0 8px rgba(255, 204, 0, 0.5);
+        white-space: nowrap;
+    }
+
+    .rm-edit-zone {
+        display: none;
+    }
+
+    .rm-input {
+        width: 35px;
+        height: 22px;
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid #7a6a4a;
+        color: #fff;
+        text-align: center;
+        font-size: 0.85em;
+        border-radius: 3px;
+        outline: none;
+
+        &:focus {
+            border-color: #ffcc00;
+            background: #000;
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Painel de Traits Especiais (Sidebar) */
+.special-traits-sidebar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 0 10px;
+}
+
+.trait-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(122, 106, 74, 0.5);
+    border-radius: 3px;
+    padding: 2px 8px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #d2d2d2;
+    letter-spacing: 0.5px;
+    cursor: help;
+    transition: all 0.2s ease;
+
+    i {
+        font-size: 0.75rem;
+        opacity: 0.8;
+    }
+
+    &:hover {
+        background: rgba(122, 106, 74, 0.2);
+        color: #fff;
+        border-color: #7a6a4a;
+    }
+
+    /* Variantes */
+    &.magic-res {
+        background: rgba(76, 29, 149, 0.2);
+        border-color: #a78bfa;
+        color: #ddd6fe;
+        box-shadow: 0 0 5px rgba(167, 139, 250, 0.2);
+
+        i {
+            color: #a78bfa;
+        }
+    }
+
+    &.immunity {
+        background: rgba(153, 27, 27, 0.2);
+        border-color: #f87171;
+        color: #fecaca;
+        box-shadow: 0 0 5px rgba(248, 113, 113, 0.2);
+
+        i {
+            color: #f87171;
+        }
+    }
+
+    &.resistance {
+        background: rgba(30, 58, 138, 0.2);
+        border-color: #60a5fa;
+        color: #dbeafe;
+        box-shadow: 0 0 5px rgba(96, 165, 250, 0.2);
+
+        i {
+            color: #60a5fa;
+        }
+    }
+}
+
+
+
+/* Flags / Checkboxes */
+.flags-grid-v13 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 5px;
+}
+
+
+.checkbox-v13 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #d2d2d2;
+    transition: color 0.2s;
+}
+
+
+.checkbox-v13:hover {
+    color: #fff;
+}
+
+
+.checkbox-v13 input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #7a6a4a;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer;
+}
+
+
+.checkbox-v13 input[type="checkbox"]:checked {
+    background: #7a6a4a;
+}
+
+
+.checkbox-v13 input[type="checkbox"]:checked::after {
+    display: none;
+}
+
+
+/* PerÃƒÂ­cias */
+.skill-bonus-row {
+    display: grid;
+    grid-template-columns: 1fr 60px 30px;
+    gap: 8px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(122, 106, 74, 0.1);
+}
+
+
+.skill-bonus-row select {
+    background: rgba(0, 0, 0, 0.4) !important;
+    border-color: #444 !important;
+}
+
+
+/* Sub-seÃƒÂ§ÃƒÂµes */
+
+
+/* EspecializaÃƒÂ§ÃƒÂµes AvanÃƒÂ§adas */
+.special-toggles-v13 {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 10px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    border: 1px inset rgba(255, 255, 255, 0.05);
+}
+
+
+.sub-section-v13 {
+    background: rgba(0, 0, 0, 0.15);
+    padding: 10px;
+    border-radius: 4px;
+    border-left: 2px solid #7a6a4a;
+}
+
+
+.sub-section-v13 .sub-title {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    color: #cca460;
+    margin-bottom: 8px;
+    display: block;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+
+.specialization-grid-v13 {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+/* Aba de DescriÃƒÂ§ÃƒÂ£o / Editor ProseMirror */
+
+
+.editor-container-v13::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(204, 164, 96, 0.3), transparent);
+}
+
+
+.editor-container-v13 label {
+    font-family: var(--font-cinzel, serif);
+    font-size: 0.75rem;
+    color: #cca460;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid rgba(122, 106, 74, 0.2);
+    padding-bottom: 5px;
+    margin-bottom: 8px;
+    display: block;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+
+.editor-container-v13 prose-mirror {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    font-family: var(--font-inter, sans-serif);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #e2e2e2;
+}
+
+
+.editor-container-v13 prose-mirror .editor-content {
+    min-height: 250px;
+    scrollbar-width: thin;
+    scrollbar-color: #7a6a4a transparent;
+}
+
+
+/* Ajustes de Focus no Editor */
+.editor-container-v13:focus-within {
+    border-color: rgba(204, 164, 96, 0.6);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 0 8px rgba(204, 164, 96, 0.2);
+}
+
+
+/* ======================================================= */
+/* TOOLTIP "ELITE" ESTILO MMORPG (WOW)                     */
+/* ======================================================= */
+
+/* CentralizaÃƒÂ§ÃƒÂ£o dos NÃƒÂºmeros (Aba de Talentos) */
+/* Neutraliza o container de tooltip padrÃƒÂ£o do Foundry para nÃƒÂ£o dobrar bordas/background */
+#tooltip.codex-rich-tooltip, #tooltip:has(.codex-tooltip-v13) {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+}
+
+
+.codex-tooltip-v13 {
+    min-width: 220px;
+    max-width: 350px !important;
+    padding: 10px 14px !important;
+    background: rgba(10, 8, 12, 0.98) !important;
+    border: 1px solid #3a3a40 !important;
+    border-radius: 4px !important;
+    color: #e2e2e2 !important;
+    font-family: var(--font-inter, sans-serif);
+    line-height: 1.4 !important;
+    pointer-events: none;
+    z-index: 99999 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.9) !important;
+}
+
+
+/* Bordas e Qualidade por Raridade */
+.codex-tooltip-v13.rarity-common {
+    border-color: #555 !important;
+}
+
+
+.codex-tooltip-v13.rarity-uncommon {
+    border-color: #1eff00 !important;
+    box-shadow: 0 0 20px rgba(30, 255, 0, 0.25), 0 10px 25px rgba(0, 0, 0, 0.9) !important;
+}
+
+
+.codex-tooltip-v13.rarity-rare {
+    border-color: #0070dd !important;
+    box-shadow: 0 0 20px rgba(0, 112, 221, 0.25), 0 10px 25px rgba(0, 0, 0, 0.9) !important;
+}
+
+
+.codex-tooltip-v13.rarity-epic {
+    border-color: #a335ee !important;
+    box-shadow: 0 0 20px rgba(163, 53, 238, 0.25), 0 10px 25px rgba(0, 0, 0, 0.9) !important;
+}
+
+
+.codex-tooltip-v13.rarity-legendary {
+    border-color: #ff8000 !important;
+    box-shadow: 0 0 20px rgba(255, 128, 0, 0.25), 0 10px 25px rgba(0, 0, 0, 0.9) !important;
+}
+
+
+.codex-tooltip-v13.rarity-artifact {
+    border-color: #e6cc80 !important;
+    box-shadow: 0 0 25px rgba(230, 204, 128, 0.4), 0 10px 25px rgba(0, 0, 0, 0.9) !important;
+}
+
+
+.codex-tooltip-v13 .item-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+}
+
+
+.codex-tooltip-v13 .tooltip-icon {
+    border: 1px solid #3a3a40;
+    border-radius: 3px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+
+.codex-tooltip-v13 .item-name {
+    font-family: var(--font-cinzel, serif) !important;
+    font-size: 1.35rem !important;
+    font-weight: bold;
+    line-height: 1.1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 1);
+}
+
+
+/* Modificadores Verdes na Ficha */
+.ability-score .modifier.bonus-active {
+    color: #1eff00 !important;
+    text-shadow: 0 0 8px rgba(30, 255, 0, 0.4);
+}
+
+
+.attribute-circle-v13.bonus-active .modifier-seal-bottom {
+    background: #1eff00 !important;
+    color: #000 !important;
+    box-shadow: 0 0 10px rgba(30, 255, 0, 0.6);
+    font-weight: bold;
+}
+
+
+.attribute-circle-v13.bonus-active .attribute-value-center {
+    color: #1eff00 !important;
+    text-shadow: 0 0 5px rgba(30, 255, 0, 0.3);
+}
+
+
+.codex-tooltip-v13 .bind-status {
+    color: #ffffff !important;
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+}
+
+
+.codex-tooltip-v13 .item-meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #ffffff !important;
+}
+
+
+.codex-tooltip-v13 .tooltip-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 8px 0;
+}
+
+
+.codex-tooltip-v13 .main-stat {
+    font-size: 1.1rem;
+    color: #ffffff !important;
+    font-weight: bold;
+}
+
+
+.codex-tooltip-v13 .stat-subtext {
+    font-size: 0.75rem;
+    color: #aaaaaa;
+    margin-top: -2px;
+}
+
+
+.codex-tooltip-v13 .bonus-block {
+    margin: 8px 0;
+}
+
+
+.codex-tooltip-v13 .stat-line.magic {
+    color: #1eff00 !important;
+    font-weight: bold;
+}
+
+
+.codex-tooltip-v13 .stat-line.combat {
+    color: #ffffff !important;
+}
+
+
+.codex-tooltip-v13 .stat-line.spell {
+    color: #66d9ff !important;
+}
+
+
+.codex-tooltip-v13 .rarity-common {
+    color: #ffffff !important;
+}
+
+
+.codex-tooltip-v13 .rarity-uncommon {
+    color: #1eff00 !important;
+}
+
+
+.codex-tooltip-v13 .rarity-rare {
+    color: #0070dd !important;
+}
+
+
+.codex-tooltip-v13 .rarity-epic {
+    color: #a335ee !important;
+}
+
+
+.codex-tooltip-v13 .rarity-legendary {
+    color: #ff8000 !important;
+}
+
+
+.codex-tooltip-v13 .rarity-artifact {
+    color: #e6cc80 !important;
+}
+
+
+.codex-tooltip-v13 .description {
+    font-style: italic;
+    font-size: 0.9rem !important;
+    color: #ffd100 !important;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(253, 240, 157, 0.15);
+    line-height: 1.3;
+}
+
+
+.codex-tooltip-v13 .item-level {
+    color: #ffd100;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+
+.codex-tooltip-v13 .stat-line {
+    font-size: 1rem !important;
+    color: #fff;
+}
+
+
+.codex-tooltip-v13 .stat-line.bonus {
+    color: #1eff00 !important;
+    font-weight: bold;
+}
+
+
+.codex-tooltip-v13 .item-type-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    opacity: 0.8;
+}
+
+
+.codex-tooltip-v13 .sell-price {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: #aaa;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+.codex-tooltip-v13 .coin {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+
+.codex-tooltip-v13 .coin-gold {
+    background: radial-gradient(circle, #ffe066, #b8860b);
+    border: 1px solid #7a6a4a;
+}
+
+
+.codex-tooltip-v13 .coin-silver {
+    background: radial-gradient(circle, #e0e0e0, #808080);
+    border: 1px solid #4a4a4a;
+}
+
+
+.codex-tooltip-v13 .coin-copper {
+    background: radial-gradient(circle, #ffcc99, #8b4513);
+    border: 1px solid #5a2a0a;
+}
+
+
+.effect-item:hover {
+    border-color: #7a6a4a;
+}
+
+
+.effect-item span {
+    flex: 1;
+    font-size: 0.9rem;
+    color: #e2e2e2;
+}
+
+
+.effect-controls {
+    display: flex;
+    gap: 12px;
+    color: #cca460;
+}
+
+
+.effect-controls i {
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+}
+
+
+.effect-controls i:hover {
+    color: #fff;
+    transform: scale(1.1);
+}
+
+
+.effect-controls .fa-trash:hover {
+    color: #ff4d4d;
+}
+
+
+.placeholder-text {
+    font-size: 0.85rem;
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    margin: 20px 0;
+}
+
+
+.papiro-divider {
+    border: none;
+    border-top: 1px solid rgba(122, 106, 74, 0.3);
+    margin: 10px 0;
+    width: 100%;
+}
+
+
+.header-item-field {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 24px;
+}
+
+
+.item-field-value {
+    color: #cca460;
+    font-family: var(--font-gothic, "MedievalSharp", serif);
+    font-size: 0.95em;
+    cursor: pointer;
+}
+
+
+.item-field-value:hover {
+    color: #fff;
+}
+
+
+.item-delete-btn {
+    color: #666;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: color 0.2s;
+}
+
+
+.item-delete-btn:hover {
+    color: red !important;
+}
+
+
+/* ==========================================
+   MOCHILA (GRID INVENTÃƒÂRIO ESTILO DIABLO)
+========================================== */
+
+
+.backpack-slot {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #4a3c2b;
+    border-radius: 4px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+
+.backpack-slot:hover {
+    border-color: #c1a064;
+    box-shadow: 0 0 8px rgba(193, 160, 100, 0.4);
+}
+
+
+.backpack-slot .slot-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+/* Bordas de Raridade */
+.backpack-slot.codex-rarity-uncommon {
+    border-color: var(--rarity-uncommon, #1eff00);
+}
+
+
+.backpack-slot.codex-rarity-rare {
+    border-color: var(--rarity-rare, #0070dd);
+}
+
+
+.backpack-slot.codex-rarity-epic {
+    border-color: var(--rarity-epic, #a335ee);
+}
+
+
+.backpack-slot.codex-rarity-legendary {
+    border-color: var(--rarity-legendary, #ff8000);
+}
+
+
+/* Indicador de Equipado */
+.backpack-slot .equipped-badge {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #4caf50;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+
+/* BotÃƒÂµes de AÃƒÂ§ÃƒÂ£o no Hover */
+.backpack-slot .slot-actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: space-around;
+    padding: 2px 0;
+    transform: translateY(100%);
+    transition: transform 0.2s ease;
+}
+
+
+.backpack-slot:hover .slot-actions {
+    transform: translateY(0);
+}
+
+
+.backpack-slot .slot-actions i {
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+
+.backpack-slot .slot-actions .item-equip-btn {
+    color: #c1a064;
+}
+
+
+.backpack-slot .slot-actions .item-equip-btn:hover {
+    color: #fff;
+}
+
+
+.backpack-slot .slot-actions .item-delete-btn {
+    color: #7a0000;
+}
+
+
+.backpack-slot .slot-actions .item-delete-btn:hover {
+    color: #f00;
+}
+
+
+.item-create-btn {
+    background: transparent;
+    border: 1px dashed #444;
+    color: #666;
+    border-radius: 3px;
+    padding: 2px 8px;
+    font-size: 0.75em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+
+.item-create-btn:hover {
+    border-color: #cca460;
+    color: #cca460;
+}
+
+
+.inventory-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+}
+
+
+.inv-section {
+    padding: 10px 14px;
+    border-radius: 4px;
+}
+
+
+.inv-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+
+.inv-table th {
+    text-align: left;
+    color: #7a6a4a;
+    font-size: 0.75em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-bottom: 1px solid #333;
+}
+
+
+.inv-item-name {
+    cursor: pointer;
+    color: #cca460;
+}
+
+
+.inv-item-name:hover {
+    color: #fff;
+}
+
+
+.inv-delete {
+    color: #444;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+
+.inv-delete:hover {
+    color: #c0392b;
+}
+
+
+.feature-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    margin-bottom: 5px;
+    padding: 8px 12px;
+    border-left: 3px solid var(--blood-red);
+    border-radius: 0 4px 4px 0;
+    transition: background 0.2s;
+}
+
+
+.feats-container-v13 {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 5px;
+}
+
+
+.feat-item-v13 {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+
+.feat-main-row-v13:hover {
+    background: rgba(154, 0, 0, 0.1);
+}
+
+
+/* Badge de Automação — aparece em qualquer item com aura ou mutationType */
+.automation-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65em;
+    padding: 1px 5px;
+    border-radius: 10px;
+    background: rgba(193, 160, 100, 0.15);
+    border: 1px solid rgba(193, 160, 100, 0.4);
+    color: #c1a064;
+    cursor: default;
+    transition: all 0.2s;
+    pointer-events: auto;
+}
+
+
+.automation-badge:hover {
+    background: rgba(193, 160, 100, 0.3);
+    color: #fff;
+}
+
+
+.automation-badge.mutation-badge {
+    background: rgba(138, 43, 226, 0.15);
+    border-color: rgba(138, 43, 226, 0.4);
+    color: #b57bee;
+}
+
+
+.automation-badge.mutation-badge:hover {
+    background: rgba(138, 43, 226, 0.3);
+    color: #fff;
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+
+.grimorio-tab {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+}
+
+
+.grimorio-slots {
+    padding: 12px;
+    border-radius: 4px;
+}
+
+
+.grimorio-spells {
+    padding: 12px;
+    border-radius: 4px;
+}
+
+
+.spell-circle {
+    text-align: center;
+    color: #cca460;
+    font-weight: bold;
+}
+
+
+.mini-dashed {
+    border-style: dashed;
+}
+
+
+.the-codex .skills-list-box {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+.the-codex .skills-header {
+    display: flex;
+    font-size: 0.7em;
+    color: #c1a064;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-bottom: 1px solid #c1a064;
+    padding-bottom: 4px;
+    margin-bottom: 5px;
+    gap: 0 !important;
+}
+
+
+.the-codex .skills-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.the-codex .skill-item {
+    display: flex;
+    align-items: center;
+    gap: 0 !important;
+    padding: 1px 0 !important;
+    /* Reduzido de 2px */
+    border-bottom: 1px solid rgba(193, 160, 100, 0.1);
+    transition: 0.3s;
+    font-size: 0.82em !important;
+    /* Reduzido de 0.9em (implÃƒÂ­cito) */
+}
+
+
+.the-codex .skill-item:hover {
+    background: rgba(193, 160, 100, 0.1);
+}
+
+
+.the-codex .sk-atr {
+    width: 32px;
+    text-align: center;
+    font-size: 0.85em;
+    color: #cca460;
+}
+
+
+.the-codex .sk-tot {
+    width: 32px;
+    text-align: center;
+    font-size: 1.1em !important;
+    color: #8b0000 !important;
+    background: transparent !important;
+    border: none !important;
+    text-shadow: 1px 1px 2px #000;
+}
+
+
+.the-codex .sk-col-name {
+    flex: 1;
+    margin-left: 8px;
+    font-size: 0.9em;
+    color: #e2e2e2;
+    cursor: pointer;
+}
+
+
+.the-codex .sk-col-name:hover {
+    color: #fff;
+}
+
+
+.the-codex .sk-col-name i {
+    font-size: 0.8em;
+    margin-right: 4px;
+    color: #7a6a4a;
+}
+
+
+.the-codex .sk-col-pts,
+.the-codex .sk-col-atr,
+.the-codex .sk-col-ext,
+.the-codex .sk-col-tot {
+    flex: 0 0 35px !important;
+    width: 35px !important;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.spellcasting-stats-papiro {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border: 1px solid #7a6a4a;
+    border-radius: 6px;
+    margin: 10px 0;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+.stat-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+}
+
+
+.stat-badge label {
+    font-size: 0.65em;
+    text-transform: uppercase;
+    color: #cca460;
+    margin-bottom: 2px;
+    font-family: var(--font-gothic);
+}
+
+
+.stat-badge .val {
+    font-family: var(--font-header);
+    font-size: 1.4em;
+    color: #fff;
+    text-shadow: 1px 1px 2px #000;
+}
+
+
+.inv-equip i {
+    cursor: pointer;
+    color: var(--iron-gray);
+    transition: all 0.2s;
+}
+
+
+.inv-equip i.active {
+    color: #cca460;
+    text-shadow: 0 0 8px rgba(204, 164, 96, 0.6);
+}
+
+
+.inv-equip i:hover {
+    color: #fff;
+}
+
+
+.char-basics-hobbs {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    margin-left: 20px !important;
+    flex: 1 !important;
+}
+
+
+.backpack-slot {
+    position: relative;
+
+    .slot-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Badge de Quantidade */
+    .slot-quantity-badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        font-size: 0.65rem;
+        padding: 1px 4px;
+        border-radius: 2px;
+        border: 1px solid rgba(193, 160, 100, 0.4);
+        pointer-events: none;
+        font-family: var(--font-mono);
+        z-index: 5;
+    }
+
+    /* Badge de Cargas */
+    .charges-badge {
+        position: absolute;
+        bottom: 2px;
+        left: 2px;
+        background: rgba(74, 26, 26, 0.8);
+        color: #ffcc00;
+        font-size: 0.6rem;
+        padding: 1px 3px;
+        border-radius: 2px;
+        border: 1px solid #7a6a4a;
+        pointer-events: none;
+        z-index: 5;
+    }
+
+    /* Container de Ações - Oculto por padrão, aparece no hover */
+    .slot-actions {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        padding: 4px 0;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        z-index: 10;
+
+        i {
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: transform 0.1s ease;
+
+            &:hover {
+                transform: scale(1.2);
+            }
+        }
+    }
+
+    &:hover .slot-actions {
+        opacity: 1;
+    }
+
+    /* Botão de Uso Rápido */
+    .item-use-btn {
+        color: #22c55e !important;
+        /* Verde Esmeralda para uso */
+        text-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
+
+        &:hover {
+            color: #4ade80 !important;
+            transform: scale(1.2);
+        }
+    }
+
+    .craft-icon {
+        color: #ffcc00 !important;
+        cursor: pointer;
+        margin-right: 8px;
+        transition: all 0.2s ease;
+
+        &:hover {
+            color: #fff !important;
+            filter: drop-shadow(0 0 5px #ffcc00);
+        }
+    }
+}
+
+
+.header-field-group {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+}
+
+
+.header-field-group.name-fld {
+    flex: 2 !important;
+}
+
+
+.header-field-group label {
+    font-size: 0.6rem !important;
+    text-transform: uppercase !important;
+    color: #c1a064 !important;
+    margin: 0 !important;
+    font-weight: bold !important;
+}
+
+
+.charname-hobbs {
+    font-size: 1.4rem !important;
+    font-family: var(--font-header) !important;
+    color: #fff !important;
+}
+
+
+.combat-main-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 60px !important;
+    justify-content: center !important;
+    width: 100% !important;
+    padding: 0 40px !important;
+}
+
+
+.codex-mini-wizard {
+    padding: 10px;
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--codex-gold-muted);
+        border-radius: 4px;
+        padding: 4px 10px;
+        gap: 10px;
+
+        i {
+            color: var(--codex-gold);
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            width: 100%;
+
+            &:focus {
+                box-shadow: none;
+            }
+        }
+    }
+
+    .wizard-item {
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: rgba(193, 160, 100, 0.1) !important;
+            padding-left: 10px !important;
+
+            .item-name {
+                color: var(--codex-gold);
+            }
+        }
+    }
+}
+
+.combat-stat-box label {
+    font-size: 0.65em !important;
+    text-transform: uppercase !important;
+    color: #7a6a4a !important;
+    font-weight: bold !important;
+    margin-bottom: 5px !important;
+}
+
+
+.combat-stat-box .stat-val,
+.combat-stat-box input {
+    font-size: 1.8rem !important;
+    font-weight: bold !important;
+    background: transparent !important;
+    border: none !important;
+    color: #fff !important;
+    text-align: center !important;
+    width: 60px !important;
+}
+
+
+.combat-stat-box input:hover,
+.combat-stat-box input:focus,
+.hp-values input:hover,
+.hp-values input:focus {
+    background: rgba(0, 0, 0, 0.5) !important;
+    color: #c1a064 !important;
+    border-radius: 4px;
+}
+
+
+.logo-hobbs {
+    position: absolute !important;
+    top: 15px !important;
+    right: 25px !important;
+    max-height: 120px !important;
+    width: auto !important;
+    z-index: 100 !important;
+    pointer-events: none !important;
+    filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.8)) !important;
+}
+
+
+.item-sheet-body {
+    pointer-events: auto !important;
+}
+
+
+/* --- ABA BIO EXPANSIVA V8.0 --- */
+.bio-layout-v13 {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+}
+
+
+.bio-main-col {
+    flex: 2;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(122, 106, 74, 0.4);
+    border-radius: 8px;
+}
+
+
+.bio-side-col {
+    flex: 1;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(122, 106, 74, 0.4);
+    border-radius: 8px;
+}
+
+
+.char-details-grid-v13 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    border: 1px solid rgba(193, 160, 100, 0.15);
+}
+
+
+.detail-box-v13 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+
+.detail-box-v13 label {
+    font-size: 0.6rem;
+    color: #c1a064;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+
+.the-codex-v13-root .roll-icon-v13 {
+    margin-right: 8px;
+    color: #c1a064;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+
+.the-codex-chat-card.v2 {
+    background: #f4ece1;
+    border: 2px solid #4a1a1a;
+    padding: 12px;
+    color: #1a1a1a;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+
+.the-codex-chat-card.v2 .spell-name {
+    margin: 0 0 10px 0;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #4a1a1a;
+    font-family: var(--font-header);
+    color: #4a1a1a;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+.the-codex-chat-card.v2 .spell-dc-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(74, 26, 26, 0.1);
+    padding: 8px 12px;
+    border: 1px dashed #4a1a1a;
+    border-radius: 4px;
+}
+
+
+.the-codex-chat-card.v2 .spell-dc-box .label {
+    font-weight: bold;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    color: #4a1a1a;
+}
+
+
+.the-codex-chat-card.v2 .spell-dc-box .value {
+    font-size: 1.8rem;
+    font-family: var(--font-header);
+    color: #9a0000;
+    font-weight: bold;
+}
+
+
+.spell-progression-section {
+    margin-top: 15px;
+}
+
+
+.automation-toolbar {
+    margin: 10px 0;
+    text-align: right;
+}
+
+
+.blueprint-drop-zone {
+    transition: all 0.2s ease;
+    background: rgba(0, 0, 0, 0.2) !important;
+
+    &:hover {
+        background: rgba(193, 160, 100, 0.1) !important;
+        border-color: var(--codex-gold) !important;
+    }
+
+    img {
+        border-radius: 4px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    }
+
+    input {
+        pointer-events: none;
+    }
+}
+
+.craft-execute-btn {
+    background: linear-gradient(135deg, #4a3b1a 0%, #2a200a 100%) !important;
+    border: 1px solid var(--codex-gold) !important;
+    color: var(--codex-gold) !important;
+    font-family: 'MedievalSharp', cursive;
+    text-shadow: 0 0 5px black;
+
+    &:hover {
+        box-shadow: 0 0 10px var(--codex-gold);
+        transform: translateY(-1px);
+    }
+}
+
+
+.papiro-btn {
+    background: rgba(74, 26, 26, 0.3);
+    border: 1px solid #c1a064;
+    color: #c1a064;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-family: var(--font-header);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+
+.papiro-btn:hover {
+    background: rgba(193, 160, 100, 0.2);
+    color: #fff;
+    box-shadow: 0 0 5px #c1a064;
+}
+
+
+.spell-progression-container {
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid #7a6a4a;
+    border-radius: 4px;
+    margin-top: 10px;
+    background: rgba(0, 0, 0, 0.2) !important;
+}
+
+
+.spell-progression-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+
+.spell-progression-table thead {
+    position: sticky;
+    top: 0;
+    background: #1a1a1a;
+    color: #c1a064;
+    z-index: 10;
+}
+
+
+.spell-progression-table th,
+.spell-progression-table td {
+    padding: 2px 4px;
+    text-align: center;
+    border: 1px solid rgba(193, 160, 100, 0.15);
+    min-width: 25px;
+}
+
+
+.spell-progression-table thead .sub-header th {
+    font-size: 0.6rem;
+    background: rgba(0, 0, 0, 0.4);
+    color: #888;
+    border-bottom: 2px solid #4a1a1a;
+}
+
+
+.spell-progression-table td.cell-slot {
+    background: rgba(193, 160, 100, 0.05);
+}
+
+
+.spell-progression-table td.cell-use {
+    background: rgba(74, 26, 26, 0.05);
+}
+
+
+.spell-progression-table .lvl-col {
+    background: #1a1a1a;
+    color: #c1a064;
+    font-weight: bold;
+    width: 35px;
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    border-right: 2px solid #c1a064;
+}
+
+
+.spell-progression-table tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+
+.spell-progression-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+
+.spell-progression-container::-webkit-scrollbar-thumb {
+    background: #c1a064;
+    border-radius: 3px;
+}
+
+
+.the-codex.sheet .sheet-tabs.tabs {
+    flex: 0 0 32px;
+    border-bottom: 2px solid #7a6a4a !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    font-family: var(--font-header) !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    margin-bottom: 5px !important;
+}
+
+
+.the-codex.sheet .sheet-tabs.tabs .item {
+    padding: 5px 15px;
+    cursor: pointer;
+    color: #7a6a4a;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    border-bottom: 2px solid transparent;
+}
+
+
+.the-codex.sheet .sheet-tabs.tabs .item.active {
+    color: #fff !important;
+    text-shadow: 0 0 5px #c1a064 !important;
+    border-bottom: 2px solid #c1a064 !important;
+}
+
+
+.effects-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+
+.effect-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #7a6a4a;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    gap: 10px;
+}
+
+
+.effect-item img {
+    width: 32px;
+    height: 32px;
+}
+
+
+.effect-item .effect-controls {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+
+.feature-bonuses-section {
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid rgba(193, 160, 100, 0.2);
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+
+.feature-bonuses-section .section-title {
+    display: block;
+    font-family: var(--font-primary);
+    font-size: 0.9rem;
+    color: var(--codex-gold);
+    text-transform: uppercase;
+    font-variant: small-caps;
+    border-bottom: 1px solid var(--codex-gold);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+
+.bonuses-grid-v13 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 8px;
+}
+
+
+.bonuses-grid-v13 .bonus-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 6px 4px;
+    border-radius: 4px;
+    border: 1px solid rgba(193, 160, 100, 0.2);
+    min-height: 60px;
+    transition: all 0.2s;
+}
+
+
+.bonuses-grid-v13 .bonus-item label {
+    font-size: 0.65rem;
+    font-weight: bold;
+    font-family: var(--font-primary);
+    text-transform: uppercase;
+    color: var(--codex-gold);
+    text-align: center;
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+
+.editor-container-v13 {
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid #7a6a4a;
+    padding: 10px;
+}
+
+
+.editor-container-v13 .editor {
+    flex: 1;
+    min-height: 350px;
+}
+
+
+.editor-container-v13 .prosemirror {
+    min-height: 350px;
+    padding: 10px;
+    color: #e2e2e2;
+}
+
+
+.char-identity-row-v13 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 5px 0;
+    font-family: "Cinzel", serif;
+    font-size: 0.8rem;
+    color: #c1a064;
+    width: 100%;
+}
+
+
+/* --- INDEPENDENT BADGE SYSTEM (No more shared base class) --- */
+
+/* 1. CLASS BADGE (Blue/Arcane) */
+.the-codex.actor.sheet .class-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 10px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 1px 1px 2px black;
+    white-space: nowrap;
+    font-weight: bold;
+    font-size: 0.75rem;
+    background: linear-gradient(to bottom, rgba(30, 40, 60, 0.8), rgba(15, 20, 30, 0.9));
+    border: 1px solid rgba(100, 160, 255, 0.4);
+    color: #a0c0ff;
+}
+
+.the-codex.actor.sheet .class-badge:hover {
+    background: rgba(40, 60, 100, 0.6);
+    border-color: #64a0ff;
+    color: #fff;
+}
+
+.the-codex.actor.sheet .class-badge:hover {
+    background: rgba(40, 60, 100, 0.6);
+    border-color: #64a0ff;
+    color: #fff;
+}
+
+/* 2. RACE BADGE (Ancestry Plate - Unique Design) */
+.the-codex.actor.sheet .race-identity-container {
+    margin: 15px 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.the-codex.actor.sheet .race-badge {
+    background: url('https://www.transparenttextures.com/patterns/dark-matter.png'), 
+                linear-gradient(to bottom, #2a1a0a, #150d05) !important;
+    border: 2px solid #8b5a2b !important;
+    border-left: 5px solid #8b5a2b !important; /* Destaque lateral */
+    border-radius: 4px 15px 4px 15px !important; /* Corte assimétrico premium */
+    color: #e8d5a0 !important;
+    padding: 6px 20px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(139, 90, 43, 0.2) !important;
+    font-family: 'Cinzel', serif !important;
+    font-size: 1.05rem !important;
+    letter-spacing: 1.5px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    text-transform: uppercase;
+
+    img {
+        width: 26px !important;
+        height: 26px !important;
+        border: 1px solid #8b5a2b !important;
+        background: #000;
+        margin-right: 12px !important;
+    }
+
+    span {
+        text-shadow: 0 0 8px rgba(232, 213, 160, 0.4) !important;
+    }
+
+    .delete-btn-v13 {
+        margin-left: 15px !important;
+        color: rgba(255, 77, 77, 0.4) !important;
+        
+        &:hover {
+            color: #ff4d4d !important;
+        }
+    }
+}
+
+.the-codex.actor.sheet .race-badge:hover {
+    background: linear-gradient(to bottom, #3a2510, #20150a) !important;
+    border-color: #cca460 !important;
+    box-shadow: 0 0 15px rgba(139, 90, 43, 0.4) !important;
+}
+
+
+/* 3. ARMOR BADGE (Steel/Protective) */
+.the-codex.actor.sheet .armor-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 10px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 1px 1px 2px black;
+    white-space: nowrap;
+    font-weight: bold;
+    font-size: 0.75rem;
+    background: linear-gradient(to bottom, rgba(40, 40, 45, 0.8), rgba(20, 20, 25, 0.9));
+    border: 1px solid rgba(150, 150, 160, 0.4);
+    color: #d0d0d5;
+    cursor: default;
+}
+
+.the-codex.actor.sheet .armor-badge.active-armor {
+    border-color: #fff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+
+.the-codex.actor.sheet .class-badge.empty,
+.the-codex.actor.sheet .race-badge.empty {
+    border-style: dashed;
+    opacity: 0.6;
+    background: rgba(0, 0, 0, 0.2) !important;
+    color: #666 !important;
+}
+
+
+
+.the-codex.actor.sheet .mini-icon-v13 {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    border: 1px solid rgba(193, 160, 100, 0.2);
+    object-fit: cover;
+}
+
+
+.the-codex.actor.sheet .delete-btn-v13 {
+    font-size: 0.85rem;
+    color: #ff4d4d;
+    margin-left: 6px;
+    opacity: 0.4;
+    transition: all 0.2s;
+}
+
+
+.the-codex.actor.sheet .class-badge:hover .delete-btn-v13,
+.the-codex.actor.sheet .race-badge:hover .delete-btn-v13 {
+    opacity: 1;
+}
+
+
+
+.the-codex.actor.sheet .delete-btn-v13:hover {
+    color: #ff0000;
+    transform: scale(1.3);
+    text-shadow: 0 0 5px red;
+}
+
+
+.the-codex.actor.sheet .sep-v13 {
+    color: #c1a064;
+    font-weight: bold;
+    opacity: 0.3;
+    font-size: 0.9rem;
+}
+
+
+.the-codex.actor.sheet .classes-container-v13 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+.the-codex.actor.sheet .bio-layout-v13 {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+    align-items: start;
+}
+
+
+.the-codex.actor.sheet .bio-main-col {
+    padding: 15px;
+    min-height: 500px;
+}
+
+
+.the-codex.actor.sheet .bio-side-col {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.the-codex.actor.sheet .languages-list-v13 {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+
+.the-codex.actor.sheet .language-pill-v13 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #c1a064;
+    border-radius: 20px;
+    transition: all 0.2s;
+    position: relative;
+    cursor: pointer;
+}
+
+
+.the-codex.actor.sheet .language-pill-v13:hover {
+    background: rgba(193, 160, 100, 0.15);
+    box-shadow: 0 0 10px rgba(193, 160, 100, 0.3);
+}
+
+
+.the-codex.actor.sheet .language-pill-v13 .pill-icon {
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 50%;
+}
+
+
+.the-codex.actor.sheet .language-pill-v13 .pill-name {
+    flex: 1;
+    font-family: 'MedievalSharp', serif;
+    font-size: 0.95em;
+    color: #f0f0f2;
+}
+
+
+.the-codex.actor.sheet .delete-pill-v13 {
+    color: #9a0000;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+
+.the-codex.actor.sheet .delete-pill-v13:hover {
+    opacity: 1;
+}
+
+
+.the-codex.actor.sheet .bio-readonly {
+    color: #333;
+    font-family: 'Special Elite', serif;
+    line-height: 1.6;
+    font-size: 1.1em;
+}
+
+
+.the-codex.actor.sheet .hint {
+    font-size: 0.8em;
+    color: #7a6a4a;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+
+/* ============================================================
+   13. INVENTÃƒÂ RIO & PAPER DOLL (LAYOUT DIABLO II BLINDADO)
+   ============================================================ */
+/* Layout movido para paper-doll.less */
+
+
+/* Tabela de inventÃƒÂ¡rio */
+.inv-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+
+.inv-table thead th {
+    background: rgba(30, 20, 10, 0.9);
+    color: var(--gold);
+    font-family: var(--font-cinzel);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 5px;
+    border-bottom: 1px solid rgba(193, 160, 100, 0.3);
+    text-align: center;
+}
+
+
+.inv-table thead th.text-left {
+    text-align: left;
+    padding-left: 20px;
+}
+
+
+.inv-table td {
+    padding: 4px 6px;
+    border-bottom: 1px solid #1f1f1f;
+    vertical-align: middle;
+}
+
+
+.inv-table tr:hover td {
+    background: rgba(122, 106, 74, 0.1);
+}
+
+
+/* ============================================================
+   PODERES & TALENTOS (CARDS PREMIUM V13)
+   ============================================================ */
+.poderes-tab-v13 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.feat-group-v13 {
+    margin-bottom: 15px;
+}
+
+
+.feat-group-header {
+    font-family: var(--font-cinzel, serif);
+    color: #cca460;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 1px solid rgba(193, 160, 100, 0.3);
+    padding-bottom: 5px;
+    margin-bottom: 12px;
+}
+
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.feat-card-v13 {
+    background: rgba(20, 18, 15, 0.7);
+    border: 1px solid #4a3c2b;
+    border-radius: 4px;
+    position: relative;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+
+.feat-card-v13:hover {
+    border-color: #c1a064;
+    box-shadow: 0 0 15px rgba(193, 160, 100, 0.2);
+    background: rgba(30, 25, 20, 0.85);
+}
+
+
+/* AcentuaÃƒÂ§ÃƒÂ£o de Cor por Categoria */
+.feat-card-v13::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #666;
+    opacity: 0.6;
+}
+
+
+.feat-card-v13.feat-combat::before {
+    background: #7a0000;
+    opacity: 1;
+}
+
+
+.feat-card-v13.feat-magic::before {
+    background: #004d7a;
+    opacity: 1;
+}
+
+
+.feat-card-v13.feat-skill::before {
+    background: #2a4a1a;
+    opacity: 1;
+}
+
+
+.feat-card-v13.feat-ancestry::before {
+    background: #6a4a1a;
+    opacity: 1;
+}
+
+
+.feat-main-row-v13 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 25px;
+    /* Aumentado o recuo lateral */
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+.feat-main-row-v13 .inv-item-name {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    /* Mais espaÃƒÂ§o entre ÃƒÂ­cone e texto */
+    flex: 1;
+}
+
+
+.feat-icon-v13 {
+    width: 36px;
+    /* Levemente maior */
+    height: 36px;
+    border: 1px solid #7a6a4a;
+    border-radius: 4px;
+    background: #000;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+
+.feat-name-text {
+    font-family: var(--font-cinzel, serif);
+    font-size: 1.1rem;
+    /* Nome mais imponente */
+    color: #e8d5a0;
+    letter-spacing: 0.8px;
+    transition: color 0.2s;
+}
+
+
+.feat-card-v13:hover .feat-name-text {
+    color: #fff;
+}
+
+
+.feat-controls {
+    display: flex;
+    gap: 15px;
+    opacity: 0.3;
+    transition: opacity 0.2s;
+    margin-left: 20px;
+    /* Garante distÃƒÂ¢ncia mÃƒÂ­nima do nome */
+}
+
+
+.feat-card-v13:hover .feat-controls {
+    opacity: 1;
+}
+
+
+.feat-controls i {
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #7a6a4a;
+    transition: color 0.2s;
+}
+
+
+.feat-controls i:hover {
+    color: #fff;
+}
+
+
+.feat-controls .inv-delete:hover {
+    color: #ff4d4d;
+}
+
+
+.feat-details-v13 {
+    padding: 15px;
+    border-top: 1px solid rgba(122, 106, 74, 0.2);
+    background: rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease;
+}
+
+
+.feat-details-v13.hidden {
+    display: none;
+}
+
+
+.feat-reqs-v13 {
+    font-size: 0.8rem;
+    color: #c1a064;
+    font-style: italic;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed rgba(193, 160, 100, 0.2);
+}
+
+
+.feat-description-v13 {
+    font-family: 'Signika', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #d2c2a0;
+}
+
+
+.feat-description-v13 p {
+    margin: 8px 0;
+}
+
+
+/* Bolsa do Tesouro - Redesign Premium */
+.the-codex.actor.sheet .inventory-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+.the-codex.actor.sheet .currency-panel-v13 {
+    padding: 10px 15px;
+    border: 1px solid #4a3c2b;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: inset 0 0 15px #000;
+}
+
+
+.the-codex.actor.sheet .currency-panel-v13 .box-title {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    opacity: 0.8;
+}
+
+
+.the-codex.actor.sheet .currency-grid-v13 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+
+.the-codex.actor.sheet .coin-group {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 6px 12px;
+    border: 1px solid rgba(193, 160, 100, 0.1);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+
+.the-codex.actor.sheet .coin-group:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(193, 160, 100, 0.3);
+}
+
+
+.the-codex.actor.sheet .coin-group label {
+    font-family: var(--font-cinzel, serif);
+    font-size: 0.6rem;
+    color: #c1a064;
+    text-transform: uppercase;
+    margin-bottom: 0;
+    letter-spacing: 0.5px;
+}
+
+
+.the-codex.actor.sheet .coin-group i {
+    font-size: 0.8rem;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+}
+
+
+.the-codex.actor.sheet .coin-group.platinum i {
+    color: #e5e4e2;
+}
+
+
+.the-codex.actor.sheet .coin-group.gold i {
+    color: #ffd700;
+}
+
+
+.the-codex.actor.sheet .coin-group.silver i {
+    color: #c0c0c0;
+}
+
+
+.the-codex.actor.sheet .coin-group.copper i {
+    color: #cd7f32;
+}
+
+
+/* Cores TemÃƒÂ¡ticas por Moeda */
+.coin-group.copper label {
+    color: #cd7f32;
+    border-bottom: 1px solid rgba(205, 127, 50, 0.3);
+}
+
+
+/* .paper-doll-container — definido em paper-doll.less */
+
+
+/* --- PAPER DOLL MOVIDO PARA paper-doll.less --- */
+
+
+
+/* Mochila Premium */
+.backpack-container {
+    flex: 1;
+    /* Estica para empurrar o tesouro para a base */
+    padding: 20px;
+    background: rgba(10, 8, 12, 0.4);
+    border: 2px solid #4a3c2b;
+    border-radius: 8px;
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+}
+
+
+.backpack-header-v13 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #4a1a1a;
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
+
+
+.backpack-header-v13 .box-title {
+    margin: 0;
+    border: none;
+    font-size: 1.5rem;
+}
+
+
+.backpack-controls {
+    display: flex;
+    gap: 15px;
+}
+
+
+.backpack-controls i {
+    cursor: pointer;
+    color: #c1a064;
+    font-size: 1.1rem;
+    transition: all 0.2s;
+    filter: drop-shadow(0 2px 2px #000);
+}
+
+
+.backpack-controls i:hover {
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+
+.backpack-grid-codex {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+    gap: 10px;
+    max-height: 400px;
+    /* Reduzido para caber nos 580px totais */
+    overflow-y: auto;
+    padding: 5px;
+}
+
+
+.backpack-item-row {
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid #333;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 50px;
+    transition: all var(--transition);
+}
+
+
+.backpack-item-row:hover {
+    background: rgba(193, 160, 100, 0.1);
+    border-color: var(--gold);
+}
+
+
+.item-name {
+    font-family: var(--font-title);
+    font-size: 0.9rem;
+    color: #e0e0e0;
+}
+
+
+/* ======================================================= */
+/* V10.0: DYNAMIC ROLL SYSTEM (DIALOGS & CHAT CARDS)       */
+/* ======================================================= */
+
+/* --- ROLL DIALOG --- */
+
+
+.codex-roll-dialog .form-group {
+    margin-bottom: 10px;
+}
+
+
+.codex-roll-dialog label {
+    font-weight: bold;
+    color: #4a1a1a;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+
+/* --- CHAT CARDS --- */
+.codex-roll-card-v13 {
+    background: url('https://www.transparenttextures.com/patterns/papyros.png'), #f4ece1;
+    border: 2px solid #4a1a1a;
+    border-radius: 4px;
+    padding: 0;
+    overflow: hidden;
+    color: #1a1a1a;
+    font-family: var(--font-primary);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    margin: 5px 0;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+
+.codex-roll-card-v13:active {
+    transform: scale(0.98);
+}
+
+
+.codex-roll-card-v13 .card-header {
+    background: #4a1a1a;
+    color: #f4ece1;
+    padding: 6px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-header);
+    text-transform: uppercase;
+    border-bottom: 2px solid #7a6a4a;
+}
+
+
+.codex-roll-card-v13 .card-header .status-badge {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+.codex-roll-card-v13 .roll-main {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+
+.codex-roll-card-v13 .dice-total {
+    font-size: 2.2rem;
+    font-weight: bold;
+    font-family: var(--font-header);
+    line-height: 1;
+    width: 60px;
+    text-align: center;
+}
+
+
+.codex-roll-card-v13 .roll-details {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.codex-roll-card-v13 .roll-details .formula {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+
+.codex-roll-card-v13 .roll-details .vs {
+    font-weight: bold;
+    color: #4a1a1a;
+    font-size: 0.9rem;
+}
+
+
+.codex-roll-card-v13 .roll-details .click-to-see {
+    font-size: 0.65rem;
+    color: #888;
+    font-style: italic;
+    margin-top: 2px;
+}
+
+
+.codex-roll-card-v13 .roll-details-expanded.hidden {
+    display: none;
+}
+
+
+@keyframes slideDown {}
+
+
+/* EstilizaÃƒÂ§ÃƒÂ£o do breakdown nativo do Foundry no tema papiro */
+.codex-roll-card-v13 .dice-roll .dice-formula,
+.codex-roll-card-v13 .dice-roll .dice-total {
+    background: rgba(74, 26, 26, 0.1);
+    color: #4a1a1a;
+    border: 1px solid #7a6a4a;
+}
+
+
+.codex-roll-card-v13 .dice-tooltip .dice-rolls .roll {
+    filter: sepia(1) saturate(2) hue-rotate(-30deg);
+}
+
+
+.codex-roll-card-v13 .damage-section {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 8px 12px;
+    border-top: 1px dashed #7a6a4a;
+}
+
+
+.codex-roll-card-v13 .roll-details-expanded {
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.1);
+    border-top: 1px dashed rgba(122, 106, 74, 0.3);
+    overflow: hidden;
+}
+
+
+.codex-roll-card-v13 .dice-breakdown {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.dice-breakdown {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 5px !important;
+    justify-content: center !important;
+    margin: 8px 0 !important;
+}
+
+.codex-roll-card-v13 .dice-pill,
+.codex-combat-frame .dice-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 3px 8px !important;
+    background: #e9e5dc !important;
+    border: 1px solid #7a6a4a !important;
+    border-radius: 4px !important;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2) !important;
+    font-family: 'Cinzel', serif !important;
+    font-weight: bold !important;
+    color: #2c1810 !important;
+    font-size: 0.8rem !important;
+}
+
+
+.codex-roll-card-v13 .dice-pill.die {
+    background: #fdfaf3;
+    position: relative;
+    overflow: hidden;
+}
+
+
+.codex-roll-card-v13 .dice-pill.die i {
+    font-size: 0.8rem;
+    color: #7a6a4a;
+    opacity: 0.7;
+}
+
+
+.codex-roll-card-v13 .dice-pill.die.max {
+    background: #1a331a;
+    color: #81c784;
+    border-color: #2e7d32;
+}
+
+
+.codex-roll-card-v13 .dice-pill.die.max i {
+    color: #81c784;
+}
+
+
+.codex-roll-card-v13 .dice-pill.die.min {
+    background: #331a1a;
+    color: #e57373;
+    border-color: #c62828;
+}
+
+
+.codex-roll-card-v13 .dice-pill.die.min i {
+    color: #e57373;
+}
+
+
+.codex-roll-card-v13 .dice-pill.bonus {
+    background: #d4cfc1;
+    border-style: dotted;
+}
+
+
+.codex-roll-card-v13 .dice-pill.bonus .sign {
+    font-size: 0.7rem;
+    margin-right: -2px;
+}
+
+
+.codex-roll-card-v13 .roll-damage-btn {
+    width: 100%;
+    background: #4a1a1a;
+    color: #f4ece1;
+    border: 1px solid #7a6a4a;
+    font-family: var(--font-header);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    padding: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+
+.codex-roll-card-v13 .roll-damage-btn:hover {
+    background: #7a1a1a;
+    box-shadow: 0 0 10px rgba(122, 106, 74, 0.4);
+}
+
+
+.codex-roll-card-v13 .roll-damage-btn:disabled {
+    background: #444;
+    color: #888;
+    border-color: #333;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+
+.codex-roll-card-v13 .roll-damage-btn.rolled {
+    border: 1px solid #2e7d32;
+    background: #1a331a;
+    color: #81c784;
+}
+
+
+.codex-roll-card-v13 .reroll-hint {
+    display: block;
+    text-align: center;
+    font-size: 0.6rem;
+    color: #888;
+    font-style: italic;
+    margin-top: 4px;
+}
+
+
+/* Hover de Reroll Potencial */
+.codex-roll-card-v13:hover {
+    box-shadow: 0 0 8px rgba(122, 106, 74, 0.5);
+}
+
+
+.codex-roll-card-v13 .card-header i {
+    font-size: 0.9rem;
+}
+
+
+.codex-roll-card-v13 .roll-damage-btn i {
+    font-size: 0.9rem;
+}
+
+
+/* Variante de Card de Dano */
+.codex-roll-card-v13.damage .card-header {
+    background: #9a0000;
+}
+
+
+.codex-roll-card-v13 .dice-total.damage {
+    color: #9a0000;
+}
+
+
+.codex-roll-card-v13 .dmg-total {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #9a0000;
+    font-family: var(--font-header);
+}
+
+
+.codex-roll-card-v13 .dmg-type {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #666;
+    margin-left: 5px;
+}
+
+
+.codex-roll-card-v13 .card-footer {
+    font-size: 0.65rem;
+    color: #888;
+    text-align: right;
+    padding: 4px 10px;
+    background: rgba(0, 0, 0, 0.03);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+
+/* Status Variants */
+.codex-roll-card-v13.success {
+    border-color: #2e7d32;
+}
+
+
+.codex-roll-card-v13.success .card-header {
+    background: #2e7d32;
+}
+
+
+.codex-roll-card-v13.failure {
+    border-color: #c62828;
+}
+
+
+.codex-roll-card-v13.failure .card-header {
+    background: #333;
+}
+
+
+.codex-roll-card-v13.failure .dice-total {
+    color: #c62828;
+}
+
+
+.codex-roll-card-v13.critical {
+    border-color: #fbc02d;
+    box-shadow: 0 0 15px rgba(251, 192, 45, 0.4);
+    animation: critical-pulse 2s infinite;
+}
+
+
+.codex-roll-card-v13.critical .card-header {
+    background: #fbc02d;
+    color: #000;
+}
+
+
+.codex-roll-card-v13.critical .dice-total {
+    color: #fbc02d;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+.codex-roll-card-v13.fumble {
+    border-color: #000;
+    background: #2c0000;
+    color: #f4ece1;
+}
+
+
+.codex-roll-card-v13.fumble .card-header {
+    background: #000;
+}
+
+
+.codex-roll-card-v13.fumble .dice-total {
+    color: #ff0000;
+}
+
+
+.codex-roll-card-v13.fumble .roll-details .vs {
+    color: #ff0000;
+}
+
+
+@keyframes critical-pulse {
+    0% {
+        box-shadow: 0 0 5px rgba(251, 192, 45, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(251, 192, 45, 0.7);
+    }
+
+    100% {
+        box-shadow: 0 0 5px rgba(251, 192, 45, 0.4);
+    }
+}
+
+
+/* --- Smart Spell System (V11/V12) --- */
+.codex-roll-card-v13.spell {
+    border-left: 4px solid #7d4a91 !important;
+}
+
+
+.spell-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 8px;
+    margin: 10px 0;
+    font-size: 0.9em;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    border: 1px inset rgba(255, 255, 255, 0.1);
+}
+
+
+.papiro-box {
+    background: rgba(226, 209, 180, 0.2);
+    padding: 10px;
+    border: 1px solid #8b4513;
+    margin-top: 8px;
+    border-radius: 3px;
+    position: relative;
+}
+
+
+.papiro-box p {
+    margin: 0 0 8px 0;
+    font-size: 0.85em;
+    font-style: italic;
+    color: #4a3728;
+}
+
+
+.roll-sr-btn,
+.roll-attack-btn {
+    width: 100%;
+    cursor: pointer;
+    background: #4a3728;
+    color: #e2d1b4;
+    border: 1px solid #2a1b12;
+    padding: 6px;
+    font-family: 'Signika', sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.75em;
+    transition: all 0.2s;
+    margin-top: 5px;
+}
+
+
+.roll-sr-btn:hover,
+.roll-attack-btn:hover {
+    background: #7d4a91;
+    color: #fff;
+}
+
+
+.stats-papiro-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 8px;
+    margin: 10px 0;
+}
+
+
+.stats-papiro-grid .stat-badge.highlight {
+    background: rgba(125, 74, 145, 0.1);
+    border-color: #7d4a91 !important;
+}
+
+
+.stats-papiro-grid .stat-badge.highlight label {
+    color: #7d4a91;
+}
+
+
+.section-header {
+    font-family: 'Modesto Condensed', serif;
+    font-size: 1.1em;
+    border-bottom: 1px solid #8b4513;
+    margin: 12px 0 8px 0;
+    color: #4a3728;
+}
+
+
+.checkbox-group.row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+
+.roll-icon-v13 {
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #4a3728;
+}
+
+
+.roll-icon-v13:hover {
+    color: #7d4a91;
+    transform: scale(1.2);
+    text-shadow: 0 0 5px rgba(125, 74, 145, 0.4);
+}
+
+
+
+
+
+/* EspaÃƒÂ§amento Global da Sidebar para evitar cortes */
+.sidebar-container-v13 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-bottom: 5px;
+    /* Respiro no fundo */
+}
+
+
+.sidebar-alignment-v13 {
+    margin-top: auto;
+    padding: 5px 0 10px 0;
+    min-height: 140px;
+    /* Recuperado para garantir integridade */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* EstilizaÃƒÂ§ÃƒÂ£o de Cargas para Poderes (V14) */
+.feat-uses-v13 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.2);
+    border-left: 2px solid #7a6a4a;
+    font-family: 'Fondamento', serif;
+}
+
+
+.feat-uses-v13 .label {
+    font-size: 0.65rem;
+    color: #c1a064;
+    font-weight: bold;
+}
+
+
+.uses-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(193, 160, 100, 0.2);
+}
+
+
+.uses-controls i {
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: #7a6a4a;
+    transition: all 0.2s;
+}
+
+
+.uses-controls i:hover {
+    color: #c1a064;
+    transform: scale(1.2);
+}
+
+
+.uses-value {
+    font-weight: bold;
+    color: #fff;
+    min-width: 12px;
+    text-align: center;
+}
+
+
+.uses-value.empty {
+    color: #ff4444;
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+
+.recovery-tag {
+    font-size: 0.6rem;
+    color: #666;
+    font-style: italic;
+    text-transform: uppercase;
+}
+
+
+/* --- REDESIGN CHAT CARDS V3: MOLDURA DE IDENTIDADE (COMBAT TOTEM) --- */
+
+/* Wrapper Foundry: Expande para preencher o chat sem bordas brancas */
+
+
+/* O FRAME MONOLÃƒÂTICO */
+
+
+/* Container do Foundry: Limpar para o card ser o protagonista */
+
+/* --- WIZARD NATIVO V13 (SCROLL & FLEX) --- */
+
+
+/* --- WIZARD NATIVO V13 (SCROLL & FLEX) --- */
+.wizard-runico {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+
+/* --- WIZARD SKILLS REDESIGN (COMPACTO) --- */
+
+
+.wizard-runico .box-decorative-mini {
+    background: rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(212, 175, 55, 0.2) !important;
+    padding: 4px 12px !important;
+    margin-bottom: 4px !important;
+    border-radius: 4px;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    box-sizing: border-box !important;
+}
+
+
+.skill-row .skill-name {
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    color: #d4af37;
+    font-size: 0.8rem;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.skill-row .skill-base {
+    font-size: 0.65rem;
+    color: #8b5a2b;
+    margin: 0 10px;
+}
+
+
+.source-tag {
+    font-size: 0.6rem;
+    color: #8b5a2b;
+    text-transform: uppercase;
+    font-weight: bold;
+    background: rgba(139, 90, 43, 0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid rgba(139, 90, 43, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 5px;
+}
+
+
+.feat-meta-info-v13 {
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(122, 106, 74, 0.1);
+    padding-bottom: 5px;
+}
+
+
+/* BROWSERS DE ITENS (WIZARD) */
+.wizard-runico .items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 480px;
+    overflow-y: auto;
+    padding-right: 5px;
+    margin-top: 10px;
+}
+
+
+.wizard-runico .items-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+.wizard-runico .items-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+
+.wizard-runico .items-list::-webkit-scrollbar-thumb {
+    background: #4a2f00;
+    border: 1px solid #d4af37;
+    border-radius: 5px;
+}
+
+
+.wizard-runico .item-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(10, 10, 10, 0.6);
+    border: 1px solid rgba(122, 106, 74, 0.3);
+    border-radius: 4px;
+    padding: 10px 15px;
+    transition: all 0.2s ease;
+}
+
+
+.wizard-runico .item-row:hover {
+    border-color: #d4af37;
+    background: rgba(212, 175, 55, 0.05);
+}
+
+
+.wizard-runico .item-img {
+    width: 48px !important;
+    height: 48px !important;
+    border: 1px solid #4a2f00;
+    border-radius: 4px;
+    object-fit: cover !important;
+    flex-shrink: 0;
+    background: #000;
+    box-shadow: 0 0 8px #000;
+}
+
+
+.wizard-runico .item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+
+.wizard-runico .item-info .name {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: #d4af37;
+    font-weight: 900;
+}
+
+
+.wizard-runico .item-info .req-text,
+.wizard-runico .item-info .circle-tag {
+    font-size: 0.72rem;
+    color: #8b5a2b;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+
+.wizard-runico .empty-notice {
+    text-align: center;
+    padding: 40px;
+    font-family: 'Cinzel', serif;
+    color: #555;
+    font-style: italic;
+}
+
+
+.wizard-runico .browser-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 15px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: #8b5a2b;
+    text-transform: uppercase;
+    border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+    margin-bottom: 5px;
+}
+
+
+.wizard-runico .browser-header span:first-child {
+    flex: 1;
+}
+
+
+.wizard-runico .browser-header span:last-child {
+    width: 40px;
+    text-align: right;
+}
+
+
+/* --- DIÃƒLOGOS GRIMDARK (V13) --- */
+.codex-dialog-v13.grimdark .window-content {
+    background: #0d0d0d url('https://www.transparenttextures.com/patterns/black-paper.png');
+    color: #e0d8c0;
+    font-family: 'Inter', sans-serif;
+    padding: 15px;
+}
+
+
+.codex-dialog-v13.grimdark .window-header {
+    background: linear-gradient(to bottom, #1a1a1a, #000);
+    border-bottom: 2px solid #d4af37;
+    color: #d4af37;
+    font-family: 'Cinzel', serif;
+    text-transform: uppercase;
+}
+
+
+.codex-dialog-v13.grimdark .form-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 8px 12px;
+    border: 1px solid rgba(139, 90, 43, 0.2);
+    border-radius: 4px;
+}
+
+
+.codex-dialog-v13.grimdark label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: #8b5a2b;
+    font-weight: bold;
+    flex: 1;
+}
+
+
+/* --- HP ROLL CARD (WIZARD) --- */
+.codex-combat-frame.hp-roll .frame-body {
+    background: radial-gradient(circle, #2a1512, #000);
+}
+
+
+.codex-combat-frame.hp-roll .runic-result-box {
+    border-color: #ef4444;
+    color: #f87171;
+    text-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+}
+
+
+.codex-combat-frame.hp-roll .status-badge {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: #ef4444;
+    color: #f87171;
+}
+
+
+/* WIZARD: LAYOUT REFINEMENTS & ALIGNMENT */
+.wizard-runico .step-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    color: #fdf09d;
+    text-align: center;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+
+.wizard-runico .box-decorative {
+    position: relative;
+    border: 2px solid #8b5a2b;
+    border-image: linear-gradient(to bottom, #d4af37, #4a2f00) 1;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: inset 0 0 20px #000;
+}
+
+
+/* Step 1: HP & Class */
+.wizard-runico .class-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Cinzel', serif;
+}
+
+
+.wizard-runico .level-badge {
+    background: #4a2f00;
+    padding: 5px 15px;
+    border: 1px solid #d4af37;
+    border-radius: 4px;
+    color: #fdf09d;
+    font-weight: 900;
+}
+
+
+/* Step 3: Skills Alignment */
+.wizard-runico .skills-header {
+    display: grid;
+    grid-template-columns: 1fr 100px 100px;
+    padding: 10px 15px;
+    background: rgba(212, 175, 55, 0.1);
+    border-bottom: 1px solid #d4af37;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    color: #8b5a2b;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+
+.wizard-runico .skills-scroll {
+    max-height: 480px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #d4af37 #000;
+}
+
+
+.wizard-runico .skill-row {
+    display: grid !important;
+    grid-template-columns: 1fr 100px 100px !important;
+    align-items: center;
+    height: 45px !important;
+    padding: 0 15px !important;
+}
+
+
+.wizard-runico .wizard-container {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    width: 100% !important;
+    overflow: hidden !important;
+}
+
+
+.wizard-runico .wizard-content {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    min-height: 0 !important;
+    padding: 20px !important;
+}
+
+
+.wizard-runico .wizard-footer {
+    flex: 0 0 auto !important;
+    background: #000 !important;
+    border-top: 2px solid #d4af37 !important;
+    padding: 15px 25px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 15px !important;
+    z-index: 10 !important;
+}
+
+
+/* --- WIZARD RÚNICO (CHARACTER CREATION) --- */
+.char-wizard-app {
+    --wizard-gold: #d4af37;
+    --wizard-brown: #7a6a4a;
+    --wizard-bg: rgba(0, 0, 0, 0.85);
+}
+
+
+.wizard-runico .wizard-header {
+    background: linear-gradient(to bottom, #1a1a1a, #000);
+}
+
+
+.wizard-runico .step-indicator.active .step-num {
+    box-shadow: 0 0 15px var(--wizard-gold);
+    background: var(--wizard-gold) !important;
+    color: #000;
+}
+
+
+.wizard-runico .papiro-box {
+    background: rgba(0, 0, 0, 0.4) !important;
+    background-image: none !important;
+    border: 1px solid rgba(122, 106, 74, 0.4);
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: inset 0 0 15px #000;
+}
+
+
+.wizard-runico .race-card,
+.wizard-runico .class-card {
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+
+.wizard-runico .race-card:hover,
+.wizard-runico .class-card:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--wizard-brown);
+}
+
+
+.wizard-runico .active.race-card,
+.wizard-runico .active.class-card {
+    border-color: var(--wizard-gold) !important;
+    background: rgba(212, 175, 55, 0.2) !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+
+.wizard-runico .wizard-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--wizard-brown);
+    background: #2a2a2a;
+    color: #eee;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    transition: all 0.2s;
+}
+
+
+.wizard-runico .wizard-btn.highlight {
+    background: var(--wizard-gold);
+    color: #000;
+    border-color: #7a6a4a;
+    font-weight: bold;
+}
+
+
+.wizard-runico .wizard-btn:disabled {
+    opacity: 0.1 !important;
+    pointer-events: none;
+}
+
+
+.wizard-runico .wizard-btn-small {
+    background: #444;
+    border: 1px solid #666;
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+
+.wizard-runico .wizard-btn-small:hover {
+    background: var(--wizard-gold);
+    color: #000;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* --- PAUSE OVERLAY (STABLE & NATIVE) --- */
+#pause {
+    background: none !important;
+}
+
+
+#pause img {
+    content: url("../assets/ui/codex-logo.png");
+    width: 280px !important;
+    height: 280px !important;
+    border: none !important;
+    background: none !important;
+}
+
+
+#pause figcaption {
+    font-family: 'Cinzel', serif !important;
+    font-size: 2.2rem !important;
+    color: #c1a064 !important;
+    text-shadow: 2px 2px 8px #000 !important;
+    margin-top: 20px !important;
+}
+
+
+/* THE CODEX | Wizard Styles - Runic & Papiro Aesthetic */
+
+#codex-level-up-wizard,
+
+
+/* Estilos de Perícias e Cards */
+
+
+/* Seleção de Multiclasse */
+
+
+.statblock-header {
+    display: flex;
+    gap: 15px;
+    border-bottom: 2px solid #9a0000;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+
+.statblock-header .profile-img {
+    border: 2px solid #7a6a4a;
+    background: #000;
+}
+
+
+.statblock-header h1.charname {
+    margin: 0;
+    border: none;
+}
+
+
+.npc-meta {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: #cca460;
+}
+
+
+.statblock-vitals {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #7a6a4a;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+
+.vital-item {
+    text-align: center;
+}
+
+
+.vital-item label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #7a6a4a;
+    text-transform: uppercase;
+}
+
+
+.statblock-abilities {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+
+.ability-mod-item {
+    text-align: center;
+    background: rgba(154, 0, 0, 0.1);
+    border: 1px solid rgba(122, 106, 74, 0.3);
+    padding: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+
+.ability-mod-item:hover {
+    background: rgba(154, 0, 0, 0.3);
+    border-color: #c1a064;
+}
+
+
+.ability-mod-item label {
+    display: block;
+    font-size: 0.6rem;
+    color: #c1a064;
+}
+
+
+.ability-mod-item .mod {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+
+.statblock-section {
+    margin-bottom: 12px;
+}
+
+
+.section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: #9a0000;
+    border-bottom: 1px solid #9a0000;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.items-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+
+.item-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 6px;
+    border-bottom: 1px solid rgba(122, 106, 74, 0.2);
+}
+
+
+.item-entry:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+
+.item-controls {
+    display: flex;
+    gap: 10px;
+}
+
+
+.roll-btn {
+    background: #4a1a1a;
+    border: 1px solid #7a6a4a;
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    cursor: pointer;
+}
+
+
+.roll-btn:hover {
+    background: #9a0000;
+}
+
+
+/* --- THE CODEX: NPC Statblock 2024 (Technical Dark) --- */
+
+form.npc-2024-sheet {
+    --npc-bg: #121214;
+    --npc-sidebar-bg: #0c0c0e;
+    --npc-accent: #c1a064;
+    --npc-border: rgba(193, 160, 100, 0.4);
+
+    background: var(--npc-bg) !important;
+    background-image: none !important;
+    /* Morte definitiva ao papiro */
+    border: 1px solid var(--npc-border) !important;
+    color: #eee !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+
+.npc-2024-sheet .statblock-2024-wrapper {
+    display: flex;
+    height: 100%;
+}
+
+
+/* Sidebar Técnica */
+.npc-2024-sheet .statblock-sidebar {
+    width: 240px;
+    background: var(--npc-sidebar-bg);
+    border-right: 1px solid var(--npc-border);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.npc-2024-sheet .portrait-orb {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    border-radius: 50%;
+    border: 3px double var(--npc-accent);
+}
+
+
+.npc-2024-sheet .profile-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50% !important;
+    object-fit: cover;
+}
+
+
+.npc-2024-sheet .sidebar-hp-meter {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #5d1414;
+    border: 1px solid var(--npc-accent);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 10;
+}
+
+
+/* Ability Pills */
+.npc-2024-sheet .ability-pill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 10px;
+    margin: 20px 0;
+}
+
+
+.npc-2024-sheet .ability-pill {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--npc-border);
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+
+.npc-2024-sheet .ability-pill:hover {
+    background: rgba(193, 160, 100, 0.1);
+}
+
+
+.npc-2024-sheet .ability-label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--npc-accent);
+}
+
+
+.npc-2024-sheet .ability-mod {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+
+/* Actions List */
+.npc-2024-sheet .item-entry {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(193, 160, 100, 0.1);
+    margin-bottom: 4px;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.npc-2024-sheet .item-name {
+    flex: 1;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.npc-2024-sheet .item-name:hover {
+    color: var(--npc-accent);
+}
+
+
+.npc-sheet-v2 .sheet-header-npc {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    border-bottom: 3px solid #5d1414;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.npc-sheet-v2 .header-upper-npc {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+
+.npc-sheet-v2 .portrait-container-npc {
+    width: 140px;
+    height: 140px;
+    position: relative;
+    border: 2px solid #7a6a4a;
+    border-radius: 50%;
+    overflow: visible;
+}
+
+
+.npc-sheet-v2 .profile-img-npc {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: none !important;
+}
+
+
+.npc-sheet-v2 .cr-badge-v13 {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 45px;
+    height: 45px;
+    background: #5d1414;
+    border: 2px solid #c1a064;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    z-index: 10;
+}
+
+
+.npc-sheet-v2 .char-basics-npc {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+.npc-sheet-v2 .meta-row-npc {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #7a6a4a;
+    font-family: 'MedievalSharp', serif;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+
+.npc-sheet-v2 .meta-row-npc .sep {
+    color: #5d1414;
+    font-weight: bold;
+}
+
+
+.npc-sheet-v2 .stat-pill-v13 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    background: rgba(18, 15, 12, 0.95);
+    border: 1px solid rgba(193, 160, 100, 0.4);
+    border-radius: 4px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(0, 0, 0, 0.3);
+    min-height: 55px;
+    transition: all 0.2s;
+}
+
+
+.npc-sheet-v2 .stat-pill-v13 label {
+    font-size: 0.55rem;
+    font-weight: bold;
+    font-family: 'Cinzel', serif;
+    text-transform: uppercase;
+    color: #c1a064;
+    margin-bottom: 2px;
+    opacity: 0.9;
+}
+
+
+.npc-sheet-v2 .prof-box span {
+    font-size: 1.3rem;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    color: #fff;
+}
+
+
+.npc-sheet-v2 .ability-box-v13 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(18, 15, 12, 0.95);
+    padding: 6px 4px;
+    border-radius: 4px;
+    border: 1px solid rgba(193, 160, 100, 0.4);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8), 0 2px 4px rgba(0, 0, 0, 0.3);
+    min-height: 65px;
+    transition: all 0.2s;
+    position: relative;
+}
+
+
+.npc-sheet-v2 .ability-box-v13 label {
+    font-size: 0.55rem;
+    font-weight: bold;
+    font-family: 'Cinzel', serif;
+    text-transform: uppercase;
+    color: #c1a064;
+    text-align: center;
+    letter-spacing: -0.1px;
+    margin-bottom: 2px;
+    opacity: 0.9;
+}
+
+
+.npc-sheet-v2 .prof-box-npc span {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+    font-family: 'MedievalSharp', serif;
+}
+
+
+.npc-sheet-v2 .ability-scores-npc {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+
+.npc-sheet-v2 .ability-box-npc {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #7a6a4a;
+    border-radius: 4px;
+    padding: 5px;
+    text-align: center;
+    position: relative;
+}
+
+
+.npc-sheet-v2 .ability-box-npc label {
+    font-size: 0.7rem;
+    color: #7a6a4a;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+
+.npc-sheet-v2 .mod-seal-npc {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #5d1414;
+    border: 1px solid #c1a064;
+    color: #fff;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    min-width: 25px;
+}
+
+
+.npc-sheet-v2 .sheet-body-npc {
+    padding: 0;
+    overflow: hidden;
+}
+
+
+.npc-sheet-v2 .sidebar-v13 {
+    border-right: 2px solid rgba(193, 160, 100, 0.3);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: rgba(10, 8, 6, 0.2);
+}
+
+
+.npc-sheet-v2 .sidebar-group label {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: bold;
+    font-family: 'Cinzel', serif;
+    color: #c1a064;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+
+.npc-sheet-v2 .main-content-npc {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.npc-sheet-v2 .feature-item-npc {
+    margin-bottom: 12px;
+    position: relative;
+    padding-right: 40px;
+}
+
+
+.npc-sheet-v2 .item-controls {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 0.8rem;
+    color: #7a6a4a;
+    display: flex;
+    gap: 8px;
+    opacity: 0.3;
+}
+
+
+.npc-sheet-v2 .feature-item-npc:hover .item-controls {
+    opacity: 1;
+}
+
+
+.npc-sheet-v2 .biography-npc-full {
+    padding: 25px;
+    height: 100%;
+}
+
+
+/* --- THE-CODEX: OMNIBLOCK EVOLUTION (Tactical UI) --- */
+
+.npc-omniblock .identity-row-npc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 8px 0;
+}
+
+
+.npc-omniblock .identity-pill-v13 {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    background: rgba(18, 15, 12, 0.95);
+    border: 1px solid rgba(193, 160, 100, 0.3);
+    border-radius: 16px;
+    font-size: 0.75rem;
+    color: #c1a064;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    font-family: 'Cinzel', serif;
+}
+
+
+.npc-omniblock .identity-pill-v13.filled {
+    border-color: #c1a064;
+    background: linear-gradient(to right, rgba(40, 35, 30, 0.8), rgba(20, 15, 10, 0.9));
+}
+
+
+.npc-omniblock .identity-pill-v13.empty {
+    border-style: dashed;
+    opacity: 0.7;
+}
+
+
+.npc-omniblock .identity-pill-v13:hover {
+    transform: translateY(-1px);
+    border-color: #fff;
+}
+
+
+.npc-omniblock .pill-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #c1a064;
+}
+
+
+.npc-omniblock .pill-delete {
+    color: #5d1414;
+    font-size: 0.8rem;
+    padding: 4px;
+}
+
+
+.npc-omniblock .pill-delete:hover {
+    color: #ff0000;
+}
+
+
+.npc-omniblock .omniblock-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 0;
+}
+
+
+.npc-omniblock .omniblock-section {
+    margin-bottom: 25px;
+}
+
+
+.npc-omniblock .omniblock-header {
+    font-family: 'MedievalSharp', serif;
+    color: #5d1414;
+    border-bottom: 2px solid #5d1414;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 4px;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+
+
+.npc-omniblock .browse-btn {
+    all: unset;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #c1a064;
+    opacity: 0.6;
+    transition: 0.2s;
+}
+
+
+.npc-omniblock .browse-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+
+/* Spell Circular Pills */
+.npc-omniblock .spell-circles-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.npc-omniblock .circle-label {
+    font-size: 0.65rem;
+    color: #7a6a4a;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+
+.npc-omniblock .spell-pills-v13 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+
+.npc-omniblock .spell-pill-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    background: rgba(18, 15, 12, 0.95);
+    border: 1px solid rgba(193, 160, 100, 0.35);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(0, 0, 0, 0.6);
+    transition: all 0.2s;
+}
+
+
+.npc-omniblock .spell-name {
+    cursor: pointer;
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+
+.npc-omniblock .spell-name:hover {
+    color: #c1a064;
+}
+
+
+.npc-omniblock .spell-mini-controls {
+    display: flex;
+    gap: 6px;
+    font-size: 0.7rem;
+    color: #7a6a4a;
+    opacity: 0;
+    transition: 0.2s;
+}
+
+
+.npc-omniblock .spell-pill-box:hover .spell-mini-controls {
+    opacity: 1;
+}
+
+
+/* Weapon Tactical Row */
+.npc-omniblock .weapon-row-v13 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px;
+    margin-bottom: 6px;
+    border-radius: 4px;
+}
+
+
+.npc-omniblock .item-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    border: 1px solid #c1a064;
+}
+
+
+.npc-omniblock .weapon-meta {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.npc-omniblock .weapon-name {
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+
+.npc-omniblock .weapon-props {
+    font-size: 0.7rem;
+    color: #7a6a4a;
+    font-style: italic;
+}
+
+
+.npc-omniblock .weapon-atq {
+    background: #5d1414;
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: 1px solid #c1a064;
+}
+
+
+.npc-omniblock .item-controls-v13 {
+    display: flex;
+    gap: 10px;
+    color: #7a6a4a;
+    opacity: 0.4;
+}
+
+
+.npc-omniblock .weapon-row-v13:hover .item-controls-v13 {
+    opacity: 1;
+}
+
+
+/* THE CODEX | Wizard Styles - Runic & Papiro Aesthetic */
+
+#codex-level-up-wizard,
+
+
+/* Estilos de Perícias e Cards */
+
+
+/* Seleção de Multiclasse */
+
+
+/* THE CODEX | Wizard Styles - Runic & Papiro Aesthetic */
+
+#codex-level-up-wizard,
+#codex-character-wizard {
+    //background: url('../assets/ui/codex-bg.png') center center / cover no-repeat !important;
+    border: 3px double #7a6a4a;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.9);
+}
+
+
+.wizard-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    color: #f0f0f2;
+    padding: 10px;
+}
+
+
+.wizard-header {
+    flex: 0 0 auto;
+    text-align: center;
+    border-bottom: 2px solid #5d1414;
+    padding-bottom: 15px;
+    margin-bottom: 10px;
+}
+
+
+.wizard-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: #5d1414 #1a1a1a;
+}
+
+
+.wizard-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+
+.wizard-content::-webkit-scrollbar-thumb {
+    background-color: #5d1414;
+    border-radius: 3px;
+}
+
+
+.wizard-footer {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 15px;
+    border-top: 2px solid #5d1414;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+
+/* Estilos de Perícias e Cards */
+.box-decorative {
+    background: rgba(10, 10, 12, 0.8);
+    border: 1px solid #7a6a4a;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+
+.skill-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: 4px;
+    border-radius: 3px;
+    border-left: 3px solid #5d1414;
+}
+
+
+.skill-name {
+    flex: 1;
+    font-weight: bold;
+    color: #cca460;
+}
+
+
+.skill-base {
+    font-size: 0.85em;
+    color: #999;
+    margin-right: 15px;
+}
+
+
+.skill-controls-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.skill-btn {
+    background: #1a1a1a;
+    border: 1px solid #7a6a4a;
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+
+.skill-btn:hover:not(:disabled) {
+    background: #5d1414;
+    border-color: #fff;
+}
+
+
+.allocated-display {
+    width: 30px;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'MedievalSharp', serif;
+    font-size: 1.2em;
+    color: #fff;
+}
+
+
+.points-tracker {
+    text-align: center;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+
+.points-label {
+    color: #7a6a4a;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+
+.points-value {
+    color: #fff;
+    font-family: 'MedievalSharp', serif;
+}
+
+
+.points-value.spent {
+    color: #5d1414;
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+
+/* Seleção de Multiclasse */
+.class-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+
+.class-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid #5d1414;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+
+.class-option:hover {
+    background: rgba(93, 20, 20, 0.3);
+    border-color: #cca460;
+    transform: translateY(-2px);
+}
+
+
+.class-option.selected {
+    background: rgba(93, 20, 20, 0.6);
+    border-color: #d4af37;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+
+.class-option img {
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+
+.class-option span {
+    font-size: 0.95em;
+    font-weight: bold;
+    color: #cca460;
+}
+
+
+#codex-v13-header-root .attribute-circle-v13 {
+    flex: 0 0 auto !important;
+    width: 65px !important;
+    height: 85px !important;
+    position: relative !important;
+    background: radial-gradient(circle, #2a2824 0%, #1a1814 100%) !important;
+    border: 2px solid #c1a064 !important;
+    border-radius: 50% / 30% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(193, 160, 100, 0.2) !important;
+}
+
+.the-codex.actor.sheet.character {
+
+    .portrait-module-v13 .overlapping-shield-v13 {
+        bottom: 10px !important;
+        z-index: 10 !important;
+    }
+
+    .portrait-module-v13 {
+        margin-bottom: 0 !important;
+    }
+
+    .sidebar-diamond-stats-v13 {
+        margin-top: -30px !important;
+        margin-bottom: 15px !important;
+        position: relative !important;
+        z-index: 9 !important;
+    }
+}

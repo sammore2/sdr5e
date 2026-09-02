@@ -1,0 +1,894 @@
+/* =========================
+   COMPONENTES
+========================= */
+
+.checkbox-group.row input[type="checkbox"] {
+    width: 14px !important;
+    height: 14px !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+    accent-color: var(--codex-orange) !important;
+    /* Laranja V13 Standard */
+}
+
+/* ============================================================
+   GRID DE PROFICIÊNCIAS PREMIUM (FIX: MAL FEITA)
+   ============================================================ */
+.armor-proficiency-grid, .weapon-proficiency-grid, .saves-proficiency-grid {
+    .form-group {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        border: 1px solid rgba(122, 106, 74, 0.3) !important;
+        padding: 10px !important;
+        border-radius: 4px !important;
+        background: rgba(0, 0, 0, 0.15) !important;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.2s ease;
+        
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #7a6a4a;
+            font-size: 0.8em;
+            text-align: center;
+        }
+
+        .prof-toggle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            
+            span {
+                font-size: 0.7em;
+                opacity: 0.7;
+            }
+        }
+        
+        &:hover {
+            background: rgba(193, 160, 100, 0.1) !important;
+            border-color: #c1a064 !important;
+        }
+
+        input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px !important;
+            height: 20px !important;
+            border: 1px solid #7a6a4a !important;
+            background: rgba(0, 0, 0, 0.4) !important;
+            border-radius: 2px !important;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5) !important;
+
+            &:checked {
+                background: #c1a064 !important;
+                border-color: #fdf09d !important;
+                box-shadow: 0 0 10px rgba(193, 160, 100, 0.5) !important;
+
+                &::after {
+                    content: '✔';
+                    color: #000;
+                    font-size: 14px;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-weight: bold;
+                }
+            }
+
+            &:hover {
+                border-color: #c1a064 !important;
+                background: rgba(193, 160, 100, 0.2) !important;
+            }
+        }
+    }
+}
+
+
+
+.xp-group,
+.xp-input,
+.xp-label,
+.alig-field,
+.tend-field {
+    display: none !important;
+}
+
+
+
+.identity-input {
+    background: transparent !important;
+    border: none !important;
+    color: #cca460 !important;
+    font-size: 1em !important;
+    font-weight: bold;
+    padding: 0 !important;
+    width: auto !important;
+    min-width: 120px;
+}
+
+
+
+.ability-score-bubble-hobbs input {
+    font-size: 3.5em !important;
+    font-weight: bold;
+    color: #fff !important;
+    font-family: var(--font-header);
+    background: transparent !important;
+    border: none !important;
+    text-align: center;
+    width: 90px !important;
+    height: auto !important;
+    text-shadow: 2px 2px 4px #000;
+}
+
+
+
+.the-codex.sheet input[type="text"],
+.the-codex.sheet input[type="number"],
+.the-codex.sheet textarea {
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: var(--ink-black) !important;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    box-shadow: none !important;
+}
+
+
+
+.the-codex.sheet input[type="number"]::-webkit-inner-spin-button,
+.the-codex.sheet input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
+
+
+.the-codex.sheet input[type="number"] {
+    -webkit-appearance: none;
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
+
+
+.the-codex.sheet input:disabled {
+    color: var(--iron-gray) !important;
+    background: rgba(0, 0, 0, 0.1) !important;
+    border-color: transparent !important;
+}
+
+
+
+.the-codex.sheet input:focus,
+.the-codex.sheet input:hover:not(:disabled) {
+    outline: none;
+    border-color: var(--blood-red) !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 0 5px rgba(139, 0, 0, 0.5);
+}
+
+
+
+/* Botões de Ação Dinâmicos */
+.icon-button-v13 {
+    background: linear-gradient(to bottom, #4a1a1a, #2a0a0a);
+    border: 1px solid #c1a064;
+    color: #c1a064;
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+
+
+.icon-button-v13:hover {
+    background: #c1a064;
+    color: #111;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(193, 160, 100, 0.3);
+}
+
+
+
+.icon-button-v13.inv-delete:hover {
+    background: #9a0000;
+    border-color: #ff4d4d;
+    color: #fff;
+}
+
+
+
+.skill-bonus-row input[type="number"] {
+    flex: 0 0 50px;
+    text-align: center;
+    height: 26px;
+    border: 1px solid #4a3a2a !important;
+    background: #000 !important;
+}
+
+
+
+.sk-input {
+    height: 28px;
+    border: 1px solid var(--iron-gray) !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    color: var(--ink-black) !important;
+    font-weight: bold;
+    font-family: inherit;
+    font-size: 0.9em;
+    padding: 0 !important;
+}
+
+
+
+.combat-stat-box input {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.hp-values input {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 40px !important;
+    color: #8b0000 !important;
+    text-align: right !important;
+    font-weight: bold !important;
+    font-size: 1.3rem !important;
+}
+
+
+
+.ac-mod-inputs {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    margin-top: -5px;
+}
+
+
+
+.ac-mod-inputs input {
+    width: 25px !important;
+    height: 18px !important;
+    font-size: 0.7em !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid #4a1a1a !important;
+    color: #cca460 !important;
+    text-align: center;
+}
+
+
+
+.res-inputs-majestic {
+    display: flex;
+    gap: 40px;
+    margin-top: 15px;
+}
+
+
+
+.res-input-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+
+
+.res-input-item label {
+    font-size: 0.7em;
+    text-transform: uppercase;
+    color: #cca460;
+    font-weight: bold;
+}
+
+
+
+.res-input-item input {
+    width: 60px !important;
+    height: 35px !important;
+    text-align: center;
+    font-size: 1.3em !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    border: 1px solid #4a1a1a !important;
+    color: #fff !important;
+    font-family: var(--font-header);
+    border-radius: 4px;
+}
+
+
+
+.res-mini-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+
+
+.res-mini-inputs input {
+    width: 50px !important;
+    height: 30px !important;
+    font-weight: bold;
+    font-family: var(--font-header);
+    font-size: 1.1em !important;
+    text-align: center;
+    background: #1a1a1a !important;
+    border: 1px solid #c1a064 !important;
+    color: #fff !important;
+    box-shadow: inset 0 0 5px #000;
+}
+
+
+
+.ether-slot-mini input {
+    flex: 1;
+    height: 22px;
+    text-align: center;
+    background: transparent !important;
+    border: none !important;
+    font-size: 0.9em;
+    color: var(--ink-black);
+}
+
+
+
+.res-input-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+.res-input-row input {
+    width: 50px;
+    text-align: center;
+}
+
+
+
+.ether-slot-row input {
+    width: 40px;
+    border: none;
+    background: transparent;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+
+
+.item-name-input {
+    font-size: 1.4em;
+    font-family: var(--font-gothic, "MedievalSharp", serif);
+    color: #cca460;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #7a6a4a;
+    width: 100%;
+}
+
+
+
+.item-name-input:focus {
+    outline: none;
+    border-bottom-color: #cca460;
+}
+
+
+
+.the-codex .form-group>input,
+.the-codex .form-group>select,
+.the-codex .form-group>textarea {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #3a3a40;
+    border-radius: 3px;
+    color: #e2e2e2;
+    padding: 5px 8px;
+    font-family: inherit;
+    font-size: 0.9em;
+    transition: border-color 0.2s;
+}
+
+
+
+.the-codex .form-group>input:focus,
+.the-codex .form-group>select:focus {
+    border-color: #7a6a4a;
+    outline: none;
+}
+
+
+
+.the-codex .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 15px;
+}
+
+
+
+.the-codex .checkbox-label-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    color: #cca460;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    cursor: pointer;
+}
+
+
+
+.mini-input {
+    width: 38px;
+    height: 26px;
+    text-align: center;
+    border: 1px solid var(--iron-gray);
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--ink-black);
+    font-size: 0.85em;
+    border-radius: 3px;
+}
+
+
+
+.the-codex .sk-input {
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 50% !important;
+    text-align: center;
+    background: #1a1a1a !important;
+    border: 2px solid #c1a064 !important;
+    color: transparent !important;
+    font-size: 0.85em;
+    padding: 0 !important;
+    margin: 0 auto;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+
+
+.the-codex .sk-input:focus,
+.the-codex .sk-input:not([value="0"]):not([value=""]) {
+    background: #c1a064 !important;
+    color: #000 !important;
+    box-shadow: 0 0 5px #c1a064 !important;
+}
+
+/* Multipliers Proficiency Toggle */
+.proficiency-toggle {
+    cursor: pointer;
+    font-size: 1.1em;
+    width: 20px;
+    text-align: center;
+    transition: all 0.2s ease;
+    color: var(--iron-gray);
+
+    &:hover {
+        transform: scale(1.2);
+        text-shadow: 0 0 5px var(--codex-gold);
+    }
+
+    &.fa-check {
+        color: var(--codex-gold);
+    }
+
+    &.fa-check-double {
+        color: #ffd700;
+        text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+    }
+
+    &.fa-adjust {
+        color: #a0a0a0;
+    }
+
+    &.fa-circle {
+        opacity: 0.3;
+    }
+}
+
+
+
+.selections-row {
+    margin-top: 10px;
+    border-top: 1px solid #333;
+    padding-top: 10px;
+    gap: 15px !important;
+}
+
+
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 5px;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #2a2a2a;
+}
+
+
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.7em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--iron-gray);
+    transition: color 0.1s;
+    user-select: none;
+}
+
+
+
+.checkbox-label:hover {
+    color: #fff;
+}
+
+
+
+.checkbox-label input[type="checkbox"] {
+    margin: 0;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+
+
+
+.header-field-group input,
+.header-field-group .field-static-val {
+    all: unset !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    border-bottom: 1px solid #7a6a4a !important;
+    color: #fff !important;
+    padding: 3px 5px !important;
+    font-size: 0.9rem !important;
+    height: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+
+
+.detail-box-v13 input {
+    width: 100% !important;
+    background: rgba(193, 160, 100, 0.05) !important;
+    border: 1px solid rgba(193, 160, 100, 0.2) !important;
+    border-radius: 3px !important;
+    color: #fff !important;
+    text-align: center !important;
+    font-size: 0.85rem !important;
+    height: 24px !important;
+    transition: 0.2s;
+}
+
+
+
+.detail-box-v13 input:focus {
+    background: rgba(193, 160, 100, 0.1) !important;
+    border-color: #c1a064 !important;
+    box-shadow: 0 0 5px rgba(193, 160, 100, 0.3);
+}
+
+
+
+.spell-progression-table input[type="number"] {
+    width: 100%;
+    background: transparent !important;
+    border: none !important;
+    color: #eee !important;
+    text-align: center;
+    padding: 2px !important;
+    font-family: var(--font-primary);
+}
+
+
+
+.spell-progression-table input[type="number"]:focus {
+    background: rgba(193, 160, 100, 0.1) !important;
+}
+
+
+
+.bonuses-grid-v13 .bonus-item input {
+    width: 100%;
+    text-align: center;
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    font-weight: bold;
+    background: transparent;
+    border: none;
+    color: #fff;
+}
+
+
+
+.the-codex.actor.sheet .coin-group input {
+    width: 100%;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.0rem;
+    font-weight: bold;
+    text-align: right;
+    font-family: 'Fondamento', serif;
+    padding: 0;
+}
+
+
+
+.codex-roll-dialog input {
+    background: rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid #7a6a4a !important;
+    color: #1a1a1a !important;
+}
+
+
+
+/* Botão de Dano Interativo */
+.codex-roll-card-v13 .damage-button-section {
+    padding: 8px 12px;
+    background: rgba(74, 26, 26, 0.05);
+    border-top: 1px solid rgba(74, 26, 26, 0.2);
+}
+
+
+
+/* Estação de Descanso Sidebar Mini (V13.4) */
+.sidebar-rest-buttons-v13 {
+    margin: 5px 12px;
+    display: flex;
+    gap: 4px;
+}
+
+
+
+.xp-runic-counter-mini .xp-input-val {
+    background: transparent !important;
+    border: none !important;
+    color: #fdf09d !important;
+    font-family: 'Cinzel', serif !important;
+    font-size: 1rem !important;
+    font-weight: 900 !important;
+    width: 50px !important;
+    text-align: right !important;
+    padding: 0 !important;
+    height: auto !important;
+    box-shadow: none !important;
+}
+
+
+
+/* Remover flechas de input number */
+.xp-runic-counter-mini .xp-input-val::-webkit-outer-spin-button,
+.xp-runic-counter-mini .xp-input-val::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+
+.skill-btn:hover {
+    background: #8b5a2b !important;
+    color: #fff !important;
+}
+
+
+
+.wizard-runico .item-row.selected {
+    border-left: 5px solid #d4af37;
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.wizard-runico .item-row.locked {
+    border-left: 5px solid #8b0000;
+    background: rgba(139, 0, 0, 0.15);
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.wizard-runico .item-row.locked input[type='checkbox'] {
+    cursor: not-allowed;
+    filter: grayscale(100%);
+    opacity: 0.5;
+}
+
+.wizard-runico .item-row input[type='checkbox'] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+
+
+.codex-dialog-v13.grimdark input[type='number'],
+.codex-dialog-v13.grimdark input[type='text'] {
+    background: #000 !important;
+    border: 1px solid #4a2f00 !important;
+    color: #fdf09d !important;
+    font-family: 'Cinzel', serif !important;
+    text-align: center;
+    width: 80px;
+    height: 32px;
+    box-shadow: inset 0 0 5px #000;
+}
+
+
+
+.codex-dialog-v13.grimdark input:focus {
+    border-color: #d4af37 !important;
+    box-shadow: 0 0 5px #d4af37, inset 0 0 5px #000;
+}
+
+
+
+.codex-dialog-v13.grimdark button {
+    background: linear-gradient(to bottom, #4a2f00, #1a0f00);
+    border: 1px solid #d4af37;
+    color: #d4af37;
+    font-weight: 900;
+    text-transform: uppercase;
+    padding: 8px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: all 0.2;
+}
+
+
+
+.codex-dialog-v13.grimdark button:hover {
+    background: #5a3a00;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+
+
+.statblock-header h1.charname input {
+    font-family: 'MedievalSharp', serif;
+    font-size: 1.8rem !important;
+    color: #fff !important;
+    text-shadow: 1px 1px 3px #000;
+}
+
+
+
+.vital-item .value-box,
+.vital-item input {
+    font-family: 'MedievalSharp', serif;
+    font-size: 1.4rem !important;
+    color: #fff !important;
+    text-align: center;
+}
+
+
+
+.npc-2024-sheet .sidebar-hp-meter input {
+    width: 35px !important;
+    border: none !important;
+    text-align: center !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+
+
+.npc-sheet-v2 .cr-badge-v13 input {
+    font-family: 'MedievalSharp', serif;
+    font-size: 1.5rem !important;
+    font-weight: bold;
+    color: #fff !important;
+    text-align: center;
+    border: none !important;
+}
+
+
+
+.npc-sheet-v2 .name-row-npc input {
+    font-size: 2.2rem !important;
+    font-family: 'MedievalSharp', serif;
+    color: #fff !important;
+    border: none !important;
+    padding: 0 !important;
+    height: auto !important;
+}
+
+
+
+.npc-sheet-v2 .hp-box .hp-inputs {
+    display: flex;
+    align-items: center;
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+
+
+.npc-sheet-v2 .hp-inputs input,
+.npc-sheet-v2 .stat-pill-v13 input {
+    background: transparent !important;
+    border: none !important;
+    text-align: center !important;
+    color: #fff !important;
+    font-family: 'Cinzel', serif;
+    padding: 0 !important;
+}
+
+
+
+.npc-sheet-v2 .da-box input {
+    font-size: 1.5rem !important;
+}
+
+
+
+.npc-sheet-v2 .ability-box-v13 input {
+    font-size: 1.1rem !important;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    border: none !important;
+    background: transparent !important;
+}
+
+
+
+.npc-sheet-v2 .ability-box-npc input {
+    font-size: 1.2rem !important;
+    font-weight: bold;
+    text-align: center;
+    border: none !important;
+}
+
+
+
+.npc-sheet-v2 .sidebar-group textarea {
+    width: 100%;
+    min-height: 40px;
+    font-size: 0.85rem;
+    color: #eee !important;
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(122, 106, 74, 0.2) !important;
+    border-radius: 4px;
+    padding: 6px;
+}

@@ -1,0 +1,183 @@
+/* =========================
+   ITEM SHEET
+========================= */
+
+.item-sheet-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    background: linear-gradient(135deg, #1a1218, #2a1a20);
+    border-bottom: 2px solid #7a6a4a;
+}
+
+
+
+.item-sheet-img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border: 2px solid #7a6a4a;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+
+
+.item-sheet-img:hover {
+    border-color: #cca460;
+}
+
+
+
+.item-sheet-title {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+
+
+.the-codex.sheet.item {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.the-codex.sheet.item .item-sheet-body {
+    padding: 10px;
+    flex: 1;
+    overflow-y: auto;
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 1;
+}
+
+
+
+.the-codex.sheet.item .tab {
+    pointer-events: auto !important;
+}
+
+/* Compact Icon Tabs */
+.the-codex.sheet.item    .sheet-tabs.tabs {
+        flex: 0 0 40px;
+        border-bottom: 2px solid #7a6a4a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        background: rgba(0, 0, 0, 0.5);
+        margin: 5px 0;
+        border-radius: 4px;
+
+        .item {
+            padding: 8px;
+            cursor: pointer;
+            color: #7a6a4a;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+
+            i {
+                font-size: 1.4rem; /* Increased from default */
+            }
+
+            &:hover {
+                color: #cca460;
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            &.active {
+                color: #fdf09d;
+                border-bottom: 3px solid #cca460;
+                background: rgba(255, 255, 255, 0.1);
+            }
+        }
+    }
+
+    .item-sheet-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+
+        .tab {
+            display: none;
+            &.active {
+                display: block;
+            }
+        }
+    }
+
+
+
+.the-codex.sheet.item .editor-container-v13 {
+    pointer-events: auto !important;
+    z-index: 10;
+}
+
+
+
+.the-codex.sheet.item input,
+.the-codex.sheet.item select,
+.the-codex.sheet.item textarea,
+.the-codex.sheet.item .prosemirror {
+    pointer-events: auto !important;
+    user-select: text !important;
+}
+
+/* Grids de Proficiência (Classe) */
+.weapon-prof-grid, .armor-prof-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.prof-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 3px 8px;
+    border: 1px solid rgba(193, 160, 100, 0.1);
+    border-radius: 4px;
+    
+    label {
+        font-size: 0.85rem;
+        color: #ddd;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+        flex: 0 0 16px;
+        height: 16px;
+        margin: 0 !important;
+        cursor: pointer;
+    }
+
+    &:hover {
+        background: rgba(193, 160, 100, 0.1);
+        border-color: rgba(193, 160, 100, 0.3);
+    }
+}
+
+.prof-section-title {
+    font-family: var(--font-header);
+    font-size: 0.9rem;
+    color: #c1a064;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(193, 160, 100, 0.3);
+    margin-top: 15px;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+}

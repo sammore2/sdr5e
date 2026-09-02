@@ -1,0 +1,54 @@
+{
+  "name": "the-codex",
+  "version": "0.1.0",
+  "description": "Sistema original de fantasia sombria para Foundry VTT — Dark Fantasy com mecânicas de Ressonância",
+  "scripts": {
+    "gulp": "gulp",
+    "eslint": "eslint scripts/ the-codex.mjs",
+    "dev": "gulp watch",
+    "build": "gulp build",
+    "compile": "gulp compile",
+    "link": "gulp link",
+    "unlink": "gulp unlink",
+    "audit:actions": "node devtools/action-audit.mjs",
+    "rag:sync": "node devtools/rag-sync.mjs"
+  },
+  "browserslist": [
+    "last 3 versions"
+  ],
+  "author": "The Codex Developers",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "keywords": [
+    "dark-fantasy",
+    "foundryvtt",
+    "foundryvtt-system",
+    "rpg",
+    "ressonancia"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sammore2/the-codex"
+  },
+  "bugs": {
+    "url": "https://github.com/sammore2/the-codex/issues"
+  },
+  "homepage": "https://github.com/sammore2/the-codex#readme",
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/eslint-parser": "^7.28.6",
+    "@foundryvtt/foundryvtt-cli": "^3.0.3",
+    "@league-of-foundry-developers/foundry-vtt-types": "*",
+    "eslint": "^9.39.4",
+    "eslint-plugin-hbs": "^1.0.3",
+    "globals": "^15.15.0",
+    "gulp": "^5.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-less": "^5.0.0"
+  },
+  "main": "gulpfile.mjs",
+  "dependencies": {
+    "get-shit-done-cc": "^1.40.0"
+  }
+}

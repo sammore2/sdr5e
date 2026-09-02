@@ -1,0 +1,36 @@
+<div class="spell-config-container papiro-theme">
+    <div class="section-header"><i class="fas fa-project-diagram"></i> Mapeamento Agnóstico de Classes</div>
+    <p class="hint">Defina quais especializações do Codex possuem acesso a esta magia e em qual círculo (nível) ela se
+        manifesta para cada uma.</p>
+
+    <div class="class-mapping-grid">
+        {{#each spellClasses as |cls idx|}}
+        <div class="class-map-item {{#if cls.checked}}active is-active{{else}}is-inactive{{/if}}">
+            <div class="class-header">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="system.requirements.classMapping.{{idx}}.id" value="{{cls.id}}"
+                        {{checked cls.checked}} />
+                    <span class="class-name">{{cls.label}}</span>
+                </label>
+            </div>
+
+            {{#if cls.checked}}
+            <div class="circle-selector">
+                <input type="number" name="system.requirements.classMapping.{{idx}}.circle" value="{{cls.circle}}"
+                    min="0" max="9" />
+            </div>
+            {{else}}
+            <div class="circle-selector disabled">
+                <i class="fas fa-lock"></i>
+            </div>
+            {{/if}}
+        </div>
+        {{/each}}
+    </div>
+
+    <div class="section-header" style="margin-top: 20px;"><i class="fas fa-database"></i> Propriedades da Verdade (5e)
+    </div>
+    <div class="config-metadata-row">
+        <p class="hint">Estes dados são extraídos do Characters_Codex.md para garantir a fidelidade às regras 5e.</p>
+    </div>
+</div>

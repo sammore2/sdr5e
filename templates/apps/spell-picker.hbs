@@ -1,0 +1,20 @@
+<div class="codex-spell-picker the-codex-modern papiro-bg">
+    <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" class="wizard-filter" placeholder="{{localize 'THE-CODEX.UI.SearchPlaceholder'}}" autofocus>
+    </div>
+    <div class="wizard-list custom-scrollbar" style="max-height: 400px; overflow-y: auto; margin-top: 10px;">
+        {{#each items as |item|}}
+        <div class="wizard-item" data-uuid="{{item.uuid}}" 
+             style="display: flex; align-items: center; gap: 10px; padding: 8px; cursor: pointer; border-bottom: 1px solid rgba(193,160,100,0.1);">
+            <img src="{{item.img}}" width="36" height="36" style="border: 1px solid var(--codex-gold-muted); border-radius: 4px;">
+            <div class="wizard-item-info">
+                <div class="item-name" style="font-weight: bold; font-size: 1rem; color: #eee;">{{item.name}}</div>
+                <div class="item-meta" style="font-size: 0.75rem; color: #c1a064; text-transform: uppercase;">
+                    {{localize 'THE-CODEX.UI.Level'}} {{item.level}}
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>

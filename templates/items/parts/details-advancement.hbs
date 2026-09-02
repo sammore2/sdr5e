@@ -1,0 +1,57 @@
+<h3 class="form-header">
+    Sistema de Progressão (Advancements)
+    <i class="fas fa-magic" style="font-size:0.8em;" title="Regras de ganho automático ou escolhas para personagens."></i>
+</h3>
+
+<div class="advancements-container papiro-bg" style="padding:10px;">
+    {{!-- Visualização Unificada: Tabela de Níveis 1 a 20 para Classes e Raças --}}
+    <div class="adv-lvl-table">
+        {{#each (range 1 20) as |lvl|}}
+            <div class="adv-lvl-row" data-level="{{lvl}}" style="display:flex; align-items:center; gap:12px; padding:8px 6px; border-bottom:1px solid rgba(0,0,0,0.1); transition: background 0.2s;">
+                <span class="adv-level-badge" style="width:32px; height:32px; display:flex; align-items:center; justify-content:center; background:{{#if ../isClass}}#4a2f00{{else}}#1a1a1a{{/if}}; color:{{#if ../isClass}}#fdf09d{{else}}#cca460{{/if}}; border-radius:4px; font-weight:bold; font-size:1.1rem; border:1px solid {{#if ../isClass}}#7a6a4a{{else}}#cca460{{/if}};">{{lvl}}</span>
+                
+                <div class="adv-lvl-content" style="flex:1; display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+                    {{#each ../system.advancement as |adv idx|}}
+                        {{#if (eq adv.level lvl)}}
+                            <div class="adv-chip {{adv.type}}" data-adv-index="{{idx}}" style="background:rgba(0,0,0,0.25); border:1px solid {{#if (eq adv.type 'grant')}}#cca460{{else}}#7a6a4a{{/if}}; padding:4px 10px; border-radius:6px; font-size:0.85rem; display:flex; align-items:center; gap:8px; box-shadow:0 2px 4px rgba(0,0,0,0.2); transition:all 0.2s;" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(204,164,96,0.3)'" onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.2)'">
+                                {{#if adv.resolvedImg}}
+                                    <img src="{{adv.resolvedImg}}" style="width:22px; height:22px; border-radius:3px; object-fit:cover; border:1px solid #cca460;" alt="Icon"/>
+                                {{else}}
+                                    <span title="{{adv.type}}" style="color:{{#if (eq adv.type 'grant')}}#cca460{{else}}#aaa{{/if}};">
+                                        {{#if (eq adv.type "grant")}}<i class="fas fa-lock"></i>{{else}}<i class="fas fa-hand-pointer"></i>{{/if}}
+                                    </span>
+                                {{/if}}
+
+                                <strong style="font-size:0.95rem;">
+                                    {{#if adv.resolvedUuid}}
+                                        <a data-action="openGrantedTrait" data-trait-uuid="{{adv.resolvedUuid}}" style="color:#cca460; text-decoration:none;">
+                                            {{#if adv.resolvedName}}{{adv.resolvedName}}{{else if adv.title}}{{adv.title}}{{else if adv.identifier}}<span style="text-transform: capitalize;">{{adv.identifier}}</span>{{else}}{{localize (concat 'THE-CODEX.FeatTypes.' adv.category)}}{{/if}}
+                                        </a>
+                                    {{else}}
+                                        {{#if adv.resolvedName}}{{adv.resolvedName}}{{else if adv.title}}{{adv.title}}{{else if adv.identifier}}<span style="text-transform: capitalize;">{{adv.identifier}}</span>{{else}}{{localize (concat 'THE-CODEX.FeatTypes.' adv.category)}}{{/if}}
+                                    {{/if}}
+                                </strong>
+
+                                {{#if adv.items.length}}<span style="font-size:0.75em; color:#888;">({{adv.items.length}} itens)</span>{{/if}}
+                                
+                                <div style="display:flex; gap:6px; margin-left:8px; border-left:1px solid rgba(255,255,255,0.1); padding-left:6px;">
+                                    <a data-action="editAdvancement" data-adv-index="{{idx}}" title="{{localize 'THE-CODEX.UI.Edit'}}" style="color:-aaa; transition:color 0.2s;" onmouseover="this.style.color='#cca460'" onmouseout="this.style.color='#aaa'"><i class="fas fa-cog"></i></a>
+                                    <a data-action="deleteAdvancement" data-adv-index="{{idx}}" title="{{localize 'THE-CODEX.UI.Delete'}}" style="color:#8a3030; transition:color 0.2s;" onmouseover="this.style.color='#ff4444'" onmouseout="this.style.color='#8a3030'"><i class="fas fa-times-circle"></i></a>
+                                </div>
+                            </div>
+                        {{/if}}
+                    {{/each}}
+                    
+                    {{!-- Drop Area Indicator --}}
+                    <div class="drop-zone-indicator" style="border:1px dashed rgba(204,164,96,0.4); color:#cca460; font-size:0.75rem; padding:4px 12px; border-radius:6px; opacity:0.6; transition:opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+                        <i class="fas fa-plus"></i> {{localize 'THE-CODEX.Advancement.Hints.DropItem'}}
+                    </div>
+                </div>
+                
+                <div class="adv-actions">
+                     <a data-action="addAdvancementAtLevel" data-level="{{lvl}}" title="{{localize 'THE-CODEX.Advancement.Actions.Add'}}" style="color:#cca460; font-size:1.2rem; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='none'"><i class="fas fa-plus-square"></i></a>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>

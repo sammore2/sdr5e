@@ -1,0 +1,185 @@
+<div class="automation-grid-v13 papiro-bg">
+    {{!-- 1. GATILHOS E ENTREGA --}}
+    <div class="automation-section papiro-bg" style="border-bottom: 1px solid var(--codex-gold-muted); padding-bottom: 15px;">
+        <label class="section-title"><i class="fas fa-bolt"></i> Ativação e Entrega</label>
+        <div class="form-group-row">
+            <div class="form-group flex2">
+                <label>Tipo de Mutação (IA)</label>
+                <select name="system.mutationType">
+                    {{selectOptions config.mutationTypes selected=system.mutationType localize=true}}
+                </select>
+            </div>
+            <div class="form-group flex2">
+                <label>Método de Entrega</label>
+                <select name="system.delivery">
+                    {{selectOptions config.spellDelivery selected=system.delivery localize=true}}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    {{!-- 2. ESCALONAMENTO DE PODER (SPELL POWER) --}}
+    <div class="automation-section papiro-bg" style="margin-top: 15px;">
+        <label class="section-title"><i class="fas fa-chart-line"></i> {{localize 'THE-CODEX.UI.powerScaling'}}</label>
+        
+        {{#if (eq system.mutationType "damage")}}
+        <div class="form-group-row">
+            <div class="form-group flex2">
+                <label>{{localize 'THE-CODEX.UI.damageFormula'}}</label>
+                <input type="text" name="system.damage.formula" value="{{system.damage.formula}}" placeholder="1d8" />
+            </div>
+            <div class="form-group">
+                <label>{{localize 'THE-CODEX.UI.damageType'}}</label>
+                <select name="system.damage.type">
+                    <option value="">{{localize "THE-CODEX.UI.none"}}</option>
+                    {{selectOptions config.damageTypes selected=system.damage.type localize=true}}
+                </select>
+            </div>
+        </div>
+        {{/if}}
+
+        <div class="form-group-row" style="margin-top: 10px; background: rgba(212,175,55,0.05); padding: 8px; border-radius: 4px;">
+            <div class="form-group" style="flex: 0.5;">
+                <label>{{localize 'THE-CODEX.UI.isScaling'}}</label>
+                <input type="checkbox" name="system.damage.isScaling" {{checked system.damage.isScaling}} />
+            </div>
+            {{#if system.damage.isScaling}}
+            <div class="form-group flex2">
+                <label>{{localize 'THE-CODEX.Combat.DamageCurrent'}} (Cálculo Automático)</label>
+                <div class="val highlight-gold" style="font-weight: bold; color: var(--codex-gold); font-family: 'Modesto Condensed'; font-size: 1.2rem; text-align: center;">
+                    {{system.scaledDamageFormula}}
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+
+    {{!-- 3. RESISTÊNCIAS E SALVAGUARDAS --}}
+    <div class="automation-section papiro-bg" style="margin-top: 15px; border-top: 1px dashed var(--codex-gold-muted); padding-top: 15px;">
+        <label class="section-title"><i class="fas fa-shield-alt"></i> {{localize 'THE-CODEX.UI.saveHeader'}}</label>
+        <div class="form-group-row">
+            <div class="form-group">
+                <label>{{localize 'THE-CODEX.Spell.Save'}}</label>
+                <select name="system.save.type">
+                    {{selectOptions config.saveTypes selected=system.save.type localize=true}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>{{localize 'THE-CODEX.Spell.SaveEffect'}}</label>
+                <select name="system.save.effect">
+                    {{selectOptions config.saveConsequences selected=system.save.effect localize=true}}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    {{!-- 4. PARÂMETROS ESPECÍFICOS DE MUTAÇÃO --}}
+    {{#if (eq system.mutationType "heal")}}
+    <div class="automation-section papiro-bg" style="background:rgba(134,239,172,0.05); border: 1px solid #22c55e; margin-top: 15px;">
+        <label class="section-title" style="color:#22c55e;"><i class="fas fa-heart"></i> {{localize "THE-CODEX.UI.HealParams"}}</label>
+        <div class="form-group-row">
+            <div class="form-group flex2">
+                <label>{{localize 'THE-CODEX.ActionFields.HealFormula'}}</label>
+                <input type="text" name="system.healing.formula" value="{{system.healing.formula}}" placeholder="Ex: 2d8 + @str" />
+            </div>
+            <div class="form-group">
+                <label>{{localize 'THE-CODEX.ActionFields.Overheal'}}</label>
+                <input type="checkbox" name="system.healing.allowOverheal" {{checked system.healing.allowOverheal}} />
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    {{#if (eq system.mutationType "vision")}}
+    <div class="automation-section papiro-bg" style="background:rgba(147,197,253,0.05); border: 1px solid #60a5fa; margin-top: 15px;">
+        <label class="section-title" style="color:#60a5fa;"><i class="fas fa-eye"></i> {{localize 'THE-CODEX.Vision.Header'}}</label>
+        <div class="form-group-row">
+            <div class="form-group flex2">
+                <label>{{localize 'THE-CODEX.Vision.Mode'}}</label>
+                <select name="system.auraEffect.key">
+                    <option value="darkvision" {{#if (eq system.auraEffect.key "darkvision" )}}selected{{/if}}>{{localize 'THE-CODEX.Vision.Darkvision'}}</option>
+                    <option value="tremorsense" {{#if (eq system.auraEffect.key "tremorsense" )}}selected{{/if}}>{{localize 'THE-CODEX.Vision.Tremorsense'}}</option>
+                    <option value="blindsight" {{#if (eq system.auraEffect.key "blindsight" )}}selected{{/if}}>{{localize 'THE-CODEX.Vision.Blindsight'}}</option>
+                    <option value="truesight" {{#if (eq system.auraEffect.key "truesight" )}}selected{{/if}}>{{localize 'THE-CODEX.Vision.Truesight'}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    {{#if (or (eq system.mutationType "light") (eq system.mutationType "darkness"))}}
+    <div class="automation-section papiro-bg" style="background:rgba(255,200,60,0.05); border: 1px solid #ffd700; margin-top: 15px;">
+        <label class="section-title" style="color:#ffd700;"><i class="fas fa-sun"></i> {{localize 'THE-CODEX.Action.LightHeader'}}</label>
+        <div class="form-group-row">
+            <div class="form-group"><label>Dim</label><input type="number" name="system.light.dim" value="{{system.light.dim}}" /></div>
+            <div class="form-group"><label>Bright</label><input type="number" name="system.light.bright" value="{{system.light.bright}}" /></div>
+            <div class="form-group"><label>Color</label><input type="color" name="system.light.color" value="{{system.light.color}}" /></div>
+            <div class="form-group">
+                <label>Animação</label>
+                <select name="system.light.animationType">
+                    {{selectOptions config.lightAnimations selected=system.light.animationType localize=true}}
+                </select>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    {{!-- 5. AURAS MÁGICAS --}}
+    <div class="automation-section papiro-bg" style="margin-top: 15px; border-top: 2px solid var(--codex-gold);">
+        <label class="section-title"><i class="fas fa-broadcast-tower"></i> Automator: {{localize "THE-CODEX.Auras.Header"}}</label>
+        <div class="form-group-row">
+            <div class="form-group" style="flex: 0.5;">
+                <label>Ativar</label>
+                <input type="checkbox" name="system.auraEffect.enabled" {{checked system.auraEffect.enabled}} />
+            </div>
+            <div class="form-group flex2">
+                <label>Alvo da Aura</label>
+                <select name="system.auraEffect.key">
+                    <option value="">{{localize 'THE-CODEX.Auras.None'}}</option>
+                    {{!-- Optgroups simplified for clarity --}}
+                    <optgroup label="Combate">
+                        <option value="attributes.da.bonus" {{#if (eq system.auraEffect.key "attributes.da.bonus" )}}selected{{/if}}>Defesa (CA)</option>
+                        <option value="attributes.globalAttack" {{#if (eq system.auraEffect.key "attributes.globalAttack" )}}selected{{/if}}>Ataque Global</option>
+                    </optgroup>
+                    <optgroup label="Senses">
+                        <option value="vision.darkvision" {{#if (eq system.auraEffect.key "vision.darkvision" )}}selected{{/if}}>Visão no Escuro</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Valor</label>
+                <input type="text" name="system.auraEffect.value" value="{{system.auraEffect.value}}" placeholder="+2" />
+            </div>
+        </div>
+    </div>
+    
+    {{!-- 6. MOTOR DE MUTAÇÕESDINÂMICAS (FLOWS) --}}
+    <div class="automation-section papiro-bg" style="border: 2px solid var(--codex-gold); background: rgba(204, 164, 96, 0.05); margin-top: 15px; border-radius: 8px; padding: 12px;">
+        <div class="section-header-v13">
+            <label class="section-title" style="color: var(--codex-gold);"><i class="fas fa-microchip"></i> MUTAÇÕES DE FLUXO (SPELL FLOW)</label>
+            <button type="button" class="codex-btn-v13" data-action="addFlowMutation"><i class="fas fa-plus"></i></button>
+        </div>
+        <div class="flow-mutations-list">
+            {{#each system.flowMutations as |mut idx|}}
+            <div class="mutation-box" data-index="{{idx}}" style="background: rgba(0,0,0,0.3); border: 1px solid var(--codex-gold-muted); border-radius: 5px; padding: 8px; margin-bottom: 8px; position: relative;">
+                <button type="button" class="icon-button-v13 inv-delete" data-action="deleteFlowMutation" style="position: absolute; top: 2px; right: 2px;"><i class="fas fa-trash"></i></button>
+                <div style="display: flex; gap: 8px;">
+                     <select name="system.flowMutations.{{idx}}.target" style="flex: 1;">
+                        {{selectOptions @root.config.mutationTargets selected=mut.target localize=true}}
+                    </select>
+                    <input type="text" name="system.flowMutations.{{idx}}.value" value="{{mut.value}}" placeholder="Valor" style="flex: 1;" />
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 5px;">
+                     <select name="system.flowMutations.{{idx}}.scaling.mode" style="font-size: 0.65rem;">
+                         <option value="none">Fixo</option>
+                         <option value="classFreq" {{#if (eq mut.scaling.mode "classFreq")}}selected{{/if}}>Nível Classe</option>
+                         <option value="levelFreq" {{#if (eq mut.scaling.mode "levelFreq")}}selected{{/if}}>Nível Total</option>
+                     </select>
+                     <input type="number" name="system.flowMutations.{{idx}}.scaling.frequency" value="{{mut.scaling.frequency}}" placeholder="Freq" style="font-size: 0.65rem;" />
+                     <input type="text" name="system.flowMutations.{{idx}}.scaling.formula" value="{{mut.scaling.formula}}" placeholder="+Aumento" style="font-size: 0.65rem;" />
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,243 @@
+/* =========================
+   WIZARD & LEVEL UP STYLES
+   ========================= */
+
+.wizard-header {
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 2px solid @codex-gold;
+    text-align: center;
+
+    .runic-title, .wizard-title {
+        font-family: 'Cinzel', serif;
+        color: @codex-gold;
+        margin: 0 0 15px 0;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+    }
+
+    .step-indicator {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 10px;
+
+        .step {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            color: #888;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+
+            &.active {
+                background: linear-gradient(135deg, @codex-gold, @codex-gold-dark);
+                color: #111;
+                border-color: @codex-gold-bright;
+                box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+                transform: scale(1.15);
+                z-index: 2;
+                opacity: 1;
+            }
+
+            &.complete {
+                border-color: #4a8a4a;
+                background: rgba(74, 138, 74, 0.2);
+                color: #fff;
+            }
+
+            &:not(.active) {
+                opacity: 0.6;
+            }
+        }
+    }
+}
+
+/* Ajustes no Assistente de Level Up (Premium) */
+.wizard-container {
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+    color: #eee;
+    font-family: 'Inter', sans-serif;
+    height: 100%;
+    width: 100%;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 100 100"><text y="50" font-family="serif" font-size="14" fill="rgba(212,175,55,0.08)">ᚠᚢᚦᚨᚱᚲ ᚷᚹᚺᚾᛁᛃ</text></svg>');
+        opacity: 0.25;
+        pointer-events: none;
+    }
+}
+
+.wizard-content {
+    background: rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(122, 106, 74, 0.2);
+    min-height: 450px;
+    padding: 20px;
+    
+    scrollbar-width: thin;
+    scrollbar-color: @codex-gold transparent;
+    
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-thumb { background: @codex-gold; border-radius: 3px; }
+}
+
+.wizard-footer {
+    padding: 15px 25px;
+    background: rgba(0, 0, 0, 0.4);
+    border-top: 1px solid rgba(122, 106, 74, 0.4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-finish.secondary {
+    background: linear-gradient(135deg, #421c1c, #8b0000);
+    border-color: #ff3e3e;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(139, 0, 0, 0.3);
+    
+    &:hover {
+        background: linear-gradient(135deg, #5c2626, #a30000);
+        box-shadow: 0 0 20px rgba(255, 62, 62, 0.4);
+    }
+}
+
+/* =========================
+   SPELL SELECTION (STEP 5)
+   ========================= */
+
+.step-spells {
+    .spell-search-container {
+        margin-bottom: 12px;
+        display: flex;
+        gap: 8px;
+    }
+
+    .spell-search-input {
+        width: 100%;
+        padding: 8px 12px;
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(122, 106, 74, 0.6);
+        border-radius: 4px;
+        color: #fff;
+        font-family: 'Cinzel', serif;
+        font-size: 0.9em;
+        transition: all 0.2s ease;
+
+        &:focus {
+            outline: none;
+            border-color: @codex-gold;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+            background: rgba(0, 0, 0, 0.8);
+        }
+    }
+
+    .spells-browser {
+        .items-list {
+            max-height: none !important;
+            overflow-y: visible !important;
+            scrollbar-width: none !important;
+            &::-webkit-scrollbar {
+                display: none !important;
+            }
+        }
+    }
+
+    .circle-group-header {
+        margin: 12px 0 6px 0 !important;
+        padding: 6px 12px !important;
+        font-size: 0.95em !important;
+    }
+
+    .spells-grid {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)) !important;
+        gap: 6px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .item-row {
+        display: flex !important;
+        align-items: center;
+        background: rgba(20, 20, 20, 0.6) !important;
+        border: 1px solid rgba(122, 106, 74, 0.4) !important;
+        padding: 4px 8px !important;
+        border-radius: 4px !important;
+        gap: 8px;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        position: relative;
+        user-select: none;
+        margin: 0 !important;
+
+        &:hover {
+            background: rgba(35, 30, 20, 0.8) !important;
+            border-color: @codex-gold !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0 0 4px rgba(212, 175, 55, 0.2);
+        }
+
+        &.selected {
+            background: linear-gradient(135deg, rgba(35, 30, 20, 0.9) 0%, rgba(20, 18, 12, 0.95) 100%) !important;
+            border-color: @codex-gold !important;
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.4), inset 0 0 4px rgba(212, 175, 55, 0.1);
+
+            .item-img {
+                border-color: @codex-gold !important;
+                box-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
+            }
+
+            .name {
+                color: @codex-gold !important;
+                text-shadow: 0 0 4px rgba(212, 175, 55, 0.2);
+            }
+        }
+    }
+
+    .item-img {
+        width: 24px !important;
+        height: 24px !important;
+        border-radius: 3px !important;
+        border: 1px solid #7a6a4a;
+        transition: all 0.2s ease;
+    }
+
+    .item-info {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .name {
+        font-weight: bold;
+        color: #fff;
+        display: block;
+        font-size: 0.85em;
+        transition: color 0.2s ease;
+    }
+
+    .spell-toggle {
+        accent-color: @codex-gold;
+        transform: scale(0.95) !important;
+        cursor: pointer;
+        margin: 0;
+    }
+}

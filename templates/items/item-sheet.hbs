@@ -1,0 +1,106 @@
+<form class="the-codex sheet item grimdark" autocomplete="off">
+  <header class="item-sheet-header">
+    <img class="item-sheet-img" src="{{item.img}}" title="{{name}}" data-action="editImage" data-field="img" />
+    <div class="item-sheet-title">
+      <input type="text" name="name" value="{{name}}" class="item-name-input" placeholder="Nome do Item" />
+      <span class="item-type-badge">{{typeLabel}}</span>
+    </div>
+  </header>
+
+  <nav class="sheet-tabs tabs">
+    <a class="item {{#if (eq activeTab "details")}}active{{/if}}" data-tab="details" data-action="changeTab" data-tooltip="{{localize 'THE-CODEX.Sheet.Principal'}}">
+      <i class="fas fa-info-circle"></i>
+    </a>
+
+    {{#if isFeature}}
+    <a class="item {{#if (eq activeTab "activation")}}active{{/if}}" data-tab="activation" data-action="changeTab" data-tooltip="{{localize 'THE-CODEX.Sheet.Activation'}}">
+      <i class="fas fa-bolt"></i>
+    </a>
+    <a class="item {{#if (eq activeTab "power")}}active{{/if}}" data-tab="power" data-action="changeTab" data-tooltip="{{localize 'THE-CODEX.Sheet.Power'}}">
+      <i class="fas fa-fist-raised"></i>
+    </a>
+    <a class="item {{#if (eq activeTab "consumption")}}active{{/if}}" data-tab="consumption" data-action="changeTab" data-tooltip="{{localize 'THE-CODEX.Sheet.Consumption'}}">
+      <i class="fas fa-battery-half"></i>
+    </a>
+    <a class="item {{#if (eq activeTab "bonuses")}}active{{/if}}" data-tab="bonuses" data-action="changeTab" data-tooltip="{{localize 'THE-CODEX.Sheet.Bonuses'}}">
+      <i class="fas fa-plus-circle"></i>
+    </a>
+    <a class="item {{#if (eq activeTab "imunidades")}}active{{/if}}" data-tab="imunidades" data-action="changeTab" data-tooltip="{{localize 'THE-CODEX.UI.Traits'}}">
+      <i class="fas fa-shield-alt"></i>
+    </a>
+    {{/if}}
+
+    {{#if isSpell}}
+    <a class="item {{#if (eq activeTab "automation")}}active{{/if}}" data-tab="automation" data-action="changeTab" data-tooltip="{{localize 'THE-CODEX.Sheet.Combate'}}">
+      <i class="fas fa-crosshairs"></i>
+    </a>
+    {{/if}}
+
+    <a class="item {{#if (eq activeTab "description")}}active{{/if}}" data-tab="description" data-action="changeTab" data-tooltip="{{localize 'THE-CODEX.Sheet.Description'}}">
+      <i class="fas fa-file-alt"></i>
+    </a>
+
+    {{#if (or isRace isWeapon isArmor isGear)}}
+    <a class="item {{#if (eq activeTab "imunidades")}}active{{/if}}" data-tab="imunidades" data-action="changeTab" data-tooltip="{{localize 'THE-CODEX.UI.Immunities'}}">
+      <i class="fas fa-shield-virus"></i>
+    </a>
+    {{/if}}
+    <a class="item {{#if (eq activeTab "effects")}}active{{/if}}" data-tab="effects" data-action="changeTab" data-tooltip="{{localize 'THE-CODEX.Sheet.Effects'}}">
+      <i class="fas fa-sparkles"></i>
+    </a>
+  </nav>
+
+  <section class="item-sheet-body scrollable">
+    <div class="tab {{#if (eq activeTab "details")}}active{{/if}}" data-tab="details">
+      {{#if isClass}}{{> "codex-item-details-class" this}}{{/if}}
+      {{#if isRace}}{{> "codex-item-details-race" this}}{{/if}}
+      {{#if isSpell}}{{> "codex-item-details-spell" this}}{{/if}}
+      {{#if isWeapon}}{{> "codex-item-details-weapon" this}}{{/if}}
+      {{#if isArmor}}{{> "codex-item-details-armor" this}}{{/if}}
+      {{#if isFeature}}{{> "codex-item-details-feature" this}}{{/if}}
+      {{#if isPath}}{{> "codex-item-details-path" this}}{{/if}}
+      {{#if isGear}}{{> "codex-item-details-gear" this}}{{/if}}
+    </div>
+
+    {{#if isSpell}}
+    <div class="tab {{#if (eq activeTab "automation")}}active{{/if}}" data-tab="automation">
+      {{> "codex-item-details-automation" this}}
+    </div>
+    {{/if}}
+
+    {{#if isFeature}}
+    <div class="tab {{#if (eq activeTab "activation")}}active{{/if}}" data-tab="activation">
+      {{> "codex-item-details-feature-activation" this}}
+    </div>
+    <div class="tab {{#if (eq activeTab "power")}}active{{/if}}" data-tab="power">
+      {{> "codex-item-details-feature-power" this}}
+    </div>
+    <div class="tab {{#if (eq activeTab "consumption")}}active{{/if}}" data-tab="consumption">
+      {{> "codex-item-details-feature-consumption" this}}
+    </div>
+    <div class="tab {{#if (eq activeTab "bonuses")}}active{{/if}}" data-tab="bonuses">
+      {{> "codex-item-details-feature-bonuses" this}}
+    </div>
+    {{/if}}
+
+    {{#if (or isFeature isRace isWeapon isArmor isGear)}}
+    <div class="tab {{#if (eq activeTab "imunidades")}}active{{/if}}" data-tab="imunidades">
+      {{> "systems/the-codex-modern/templates/items/parts/item-immunities.hbs" this}}
+    </div>
+    {{/if}}
+
+    <div class="tab {{#if (eq activeTab "description")}}active{{/if}}" data-tab="description">
+      <div class="editor-container-v13" style="min-height: 400px; display: flex; flex-direction: column;">
+        <prose-mirror name="system.description" data-document-u-u-i-d="{{item.uuid}}" value="{{descriptionValue}}"
+          toggled="true" collaborate="true" button="true">
+          {{{enrichedDescription}}}
+        </prose-mirror>
+      </div>
+    </div>
+
+    <div class="tab {{#if (eq activeTab "effects")}}active{{/if}}" data-tab="effects">
+      {{> "codex-item-details-effects" this}}
+    </div>
+  </section>
+</form>
+<!-- CODEX CACHE BUSTER -->

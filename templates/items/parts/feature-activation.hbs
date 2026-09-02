@@ -1,0 +1,41 @@
+{{!-- systems/the-codex-modern/templates/items/parts/feature-activation.hbs --}}
+<div class="feature-activation-panel papiro-bg">
+    <h3 class="form-header"><i class="fas fa-bolt"></i> {{localize "THE-CODEX.Action.ActivationHeader"}}</h3>
+    
+    <div class="form-group">
+        <label>{{localize "THE-CODEX.Action.Trigger"}}</label>
+        <select name="system.activationTrigger">
+            {{selectOptions config.activationTriggers selected=system.activationTrigger localize=true}}
+        </select>
+    </div>
+
+    <div class="form-group-row">
+        <div class="form-group">
+            <label>{{localize "THE-CODEX.Action.Delivery"}}</label>
+            <select name="system.delivery">
+                {{selectOptions config.spellDelivery selected=system.delivery localize=true}}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>{{localize "THE-CODEX.UI.Range"}}</label>
+            <div class="form-fields">
+                <input type="number" name="system.range.value" value="{{system.range.value}}" placeholder="0"/>
+                <select name="system.range.units">
+                {{selectOptions config.rangeUnits selected=system.range.units localize=true}}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>{{localize "TYPES.Spell.Duration"}}</label>
+        <div class="form-fields">
+            <input type="number" name="system.duration.value" value="{{system.duration.value}}" placeholder="0"/>
+            <select name="system.duration.units">
+                {{selectOptions config.durationUnits selected=system.duration.units localize=true}}
+            </select>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,147 @@
+<div class="codex-app-container path-picker-container">
+    <div class="picker-header">
+        <h2>{{title}}</h2>
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" class="path-filter" placeholder="{{localize 'THE-CODEX.UI.SearchPlaceholder'}}" autofocus>
+        </div>
+    </div>
+
+    <div class="path-options-grid scrollable" data-scroll>
+        {{#each items}}
+        <div class="path-option-card clickable" data-uuid="{{this.uuid}}" data-identifier="{{this.system.identifier}}">
+            <div class="path-icon">
+                <img src="{{this.img}}" title="{{this.name}}" width="48" height="48">
+            </div>
+            <div class="path-info">
+                <h3 class="path-name">{{this.name}}</h3>
+                <div class="path-description">
+                    {{{this.system.description}}}
+                </div>
+            </div>
+            <div class="path-select-badge">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+        {{else}}
+        <div class="empty-state">
+            <i class="fas fa-ghost"></i>
+            <p>{{localize 'THE-CODEX.UI.NoPathsFound'}}</p>
+        </div>
+        {{/each}}
+    </div>
+    
+    <style>
+        .path-picker-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            color: #e0e0e0;
+            padding: 15px;
+            border: 1px solid #444;
+        }
+
+        .picker-header h2 {
+            font-family: "Modesto Condensed", "Palatino Linotype", serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #c9a063;
+            text-shadow: 0 0 10px rgba(201, 160, 99, 0.3);
+            border-bottom: 1px solid #c9a063;
+        }
+
+        .search-bar {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .path-filter {
+            width: 100%;
+            padding: 8px 10px 8px 35px;
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid #555;
+            color: #fff;
+            border-radius: 4px;
+        }
+
+        .path-options-grid {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .path-option-card {
+            display: flex;
+            align-items: center;
+            background: rgba(40, 40, 40, 0.6);
+            border: 1px solid #444;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .path-option-card:hover {
+            background: rgba(60, 60, 60, 0.9);
+            border-color: #c9a063;
+            transform: translateX(5px);
+        }
+
+        .path-icon {
+            margin-right: 15px;
+        }
+
+        .path-icon img {
+            border: 1px solid #c9a063;
+            border-radius: 4px;
+            background: #000;
+        }
+
+        .path-info {
+            flex: 1;
+        }
+
+        .path-name {
+            margin: 0 0 5px 0;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .path-description {
+            font-size: 0.85rem;
+            color: #aaa;
+            max-height: 40px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .path-select-badge {
+            font-size: 1.2rem;
+            color: #c9a063;
+            padding-left: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 0;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+    </style>
+</div>

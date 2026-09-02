@@ -1,0 +1,194 @@
+<div class="form-group-row">
+  <div class="form-group">
+    <label>Categoria</label>
+    <select name="system.category">
+      {{selectOptions config.itemCategories selected=system.category localize=true}}
+    </select>
+  </div>
+  {{#if (or (eq system.category 'gear') (eq system.category 'wondrous') (eq system.category 'wand'))}}
+  <div class="form-group">
+    <label>Slot de Equipamento</label>
+    <select name="system.primarySlot">
+      {{selectOptions config.equipmentSlots selected=system.primarySlot localize=true}}
+    </select>
+  </div>
+  {{/if}}
+</div>
+
+{{!-- Preço --}}
+<h3 class="form-header">Preço</h3>
+<div class="form-group-row" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+  <div class="form-group"><label>Ouro (PO)</label><input type="number" name="system.price.gp" value="{{system.price.gp}}" min="0"/></div>
+  <div class="form-group"><label>Prata (PP)</label><input type="number" name="system.price.sp" value="{{system.price.sp}}" min="0"/></div>
+  <div class="form-group"><label>Cobre (PC)</label><input type="number" name="system.price.cp" value="{{system.price.cp}}" min="0"/></div>
+</div>
+
+{{!-- Físico --}}
+<div class="form-group-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+  <div class="form-group"><label>Peso (kg)</label><input type="number" name="system.weight" value="{{system.weight}}" min="0" step="0.1"/></div>
+  <div class="form-group"><label>Quantidade</label><input type="number" name="system.quantity" value="{{system.quantity}}" min="0"/></div>
+</div>
+
+{{!-- Cargas --}}
+<div class="form-group-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+  <div class="form-group"><label>Cargas Atuais</label><input type="number" name="system.charges.value" value="{{system.charges.value}}" min="0"/></div>
+  <div class="form-group"><label>Cargas Máximas</label><input type="number" name="system.charges.max" value="{{system.charges.max}}" min="0"/></div>
+</div>
+
+{{!-- Flags --}}
+<div class="form-group-row" style="display:flex; gap:20px; flex-wrap:wrap;">
+  {{#if (or (eq system.category 'gear') (eq system.category 'wondrous') (eq system.category 'wand'))}}
+  <label><input type="checkbox" name="system.equipped" {{checked system.equipped}}/> Equipado</label>
+  {{/if}}
+  <label><input type="checkbox" name="system.magical" {{checked system.magical}}/> Mágico</label>
+  <label><input type="checkbox" name="system.consumable" {{checked system.consumable}}/> Consumível</label>
+  <label><input type="checkbox" name="system.identified" {{checked system.identified}}/> Identificado</label>
+  <label><input type="checkbox" name="system.isBindOnEquip" {{checked system.isBindOnEquip}}/> Vincular ao Equipar</label>
+</div>
+
+{{!-- Campos para itens de magia (poções/pergaminhos) --}}
+<div class="form-group-row" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+  <div class="form-group"><label>Nível de Magia</label><input type="number" name="system.spellLevel" value="{{system.spellLevel}}" min="0" max="9"/></div>
+  <div class="form-group"><label>{{localize "THE-CODEX.UI.BonusItem"}}</label><input type="number" name="system.bonus" value="{{system.bonus}}"/></div>
+</div>
+
+{{!-- {{localize "THE-CODEX.UI.BonusCombatAttributes"}} (Para colares, anéis, etc.) --}}
+<h3 class="form-header">{{localize "THE-CODEX.UI.BonusCombatAttributes"}}</h3>
+<div class="automation-grid-v13" style="grid-template-columns: 1fr 1fr; gap: 10px;">
+    {{!-- 1. Bloco de Atributos --}}
+    <div class="automation-section papiro-bg">
+        <label class="section-title"><i class="fas fa-brain"></i> Atributos</label>
+        <div class="bonuses-grid-v13" style="grid-template-columns: repeat(3, 1fr); gap: 5px;">
+            <div class="bonus-item">
+                <label>FOR</label>
+                <input type="number" name="system.bonuses.abilities.str" value="{{system.bonuses.abilities.str}}" placeholder="0"/>
+            </div>
+            <div class="bonus-item">
+                <label>DES</label>
+                <input type="number" name="system.bonuses.abilities.dex" value="{{system.bonuses.abilities.dex}}" placeholder="0"/>
+            </div>
+            <div class="bonus-item">
+                <label>CON</label>
+                <input type="number" name="system.bonuses.abilities.con" value="{{system.bonuses.abilities.con}}" placeholder="0"/>
+            </div>
+            <div class="bonus-item">
+                <label>INT</label>
+                <input type="number" name="system.bonuses.abilities.int" value="{{system.bonuses.abilities.int}}" placeholder="0"/>
+            </div>
+            <div class="bonus-item">
+                <label>SAB</label>
+                <input type="number" name="system.bonuses.abilities.wis" value="{{system.bonuses.abilities.wis}}" placeholder="0"/>
+            </div>
+            <div class="bonus-item">
+                <label>CAR</label>
+                <input type="number" name="system.bonuses.abilities.cha" value="{{system.bonuses.abilities.cha}}" placeholder="0"/>
+            </div>
+        </div>
+    </div>
+
+    {{!-- 2. Bloco de Combate --}}
+    <div class="automation-section papiro-bg">
+        <label class="section-title"><i class="fas fa-swords"></i> Combate e Salva-vidas</label>
+        <div class="bonuses-grid-v13" style="grid-template-columns: 1fr 1fr 1fr; gap: 5px;">
+            <div class="bonus-item">
+                <label>{{localize "THE-CODEX.UI.BonusSaveStr"}}</label>
+                <input type="number" name="system.bonuses.saves.str" value="{{system.bonuses.saves.str}}" placeholder="0"/>
+            </div>
+            <div class="bonus-item">
+                <label>{{localize "THE-CODEX.UI.BonusSaveDex"}}</label>
+                <input type="number" name="system.bonuses.saves.dex" value="{{system.bonuses.saves.dex}}" placeholder="0"/>
+            </div>
+            <div class="bonus-item">
+                <label>{{localize "THE-CODEX.UI.BonusSaveCon"}}</label>
+                <input type="number" name="system.bonuses.saves.con" value="{{system.bonuses.saves.con}}" placeholder="0"/>
+            </div>
+            <div class="bonus-item">
+                <label>{{localize "THE-CODEX.UI.BonusSaveInt"}}</label>
+                <input type="number" name="system.bonuses.saves.int" value="{{system.bonuses.saves.int}}" placeholder="0"/>
+            </div>
+            <div class="bonus-item">
+                <label>{{localize "THE-CODEX.UI.BonusSaveWis"}}</label>
+                <input type="number" name="system.bonuses.saves.wis" value="{{system.bonuses.saves.wis}}" placeholder="0"/>
+            </div>
+            <div class="bonus-item">
+                <label>{{localize "THE-CODEX.UI.BonusSaveCha"}}</label>
+                <input type="number" name="system.bonuses.saves.cha" value="{{system.bonuses.saves.cha}}" placeholder="0"/>
+            </div>
+            <div class="bonus-item">
+                <label>Defesa</label>
+                <input type="number" name="system.bonuses.da" value="{{system.bonuses.da}}" placeholder="0"/>
+            </div>
+            <div class="bonus-item">
+                <label>CD Magia</label>
+                <input type="number" name="system.bonuses.spellDC" value="{{system.bonuses.spellDC}}" placeholder="0"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- Efeito ao usar --}}
+<div class="form-group">
+  <label>Efeito ao Usar (Texto)</label>
+  <input type="text" name="system.useEffect" value="{{system.useEffect}}" placeholder="ex: Cura 2d8+5 PV ao beber"/>
+</div>
+
+{{!-- Automação Mágica e Gatilhos (Visível se Mágico ou se for Categoria de Conjuração) --}}
+{{#if (or system.magical (eq system.category 'scroll') (eq system.category 'potion') (eq system.category 'wand') (eq system.category 'wondrous'))}}
+<h3 class="form-header"><i class="fas fa-wand-magic-sparkles"></i> {{localize "THE-CODEX.ActivationTriggers.Header"}}</h3>
+<div class="sub-section-v13 papiro-bg" style="border: 1px solid var(--codex-gold-muted); padding: 10px; margin-top: 5px;">
+    <p class="hint" style="font-size: 0.75rem; color: #7a6a4a; margin-bottom: 8px; font-style: italic;">
+        {{localize "THE-CODEX.SpecialActions.CraftingHint"}}
+    </p>
+
+    <div class="form-group-row">
+        <div class="form-group">
+            <label>{{localize "THE-CODEX.ActivationTriggers.Header"}}</label>
+            <select name="system.activationTrigger">
+                {{selectOptions config.activationTriggers selected=system.activationTrigger localize=true}}
+            </select>
+        </div>
+        <div class="form-group flex2">
+            <label>{{localize "THE-CODEX.Spell.Linked"}}</label>
+            <div class="spell-recipe-drop-zone papiro-bg" style="border: 1px dashed rgba(66, 135, 245, 0.4); padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 8px; height: 26px; box-sizing: border-box;">
+                <img src="{{system.linkedSpellImg}}" width="20" height="20" style="border: 1px solid #4287f5; border-radius: 2px;" />
+                <div style="flex: 1; overflow: hidden; display: flex; align-items: center;">
+                    <input type="text" name="system.linkedSpellUuid" value="{{system.linkedSpellUuid}}" 
+                           placeholder="{{localize 'THE-CODEX.UI.Placehold'}}" readonly style="background: transparent; border: none; font-size: 0.75rem; color: #eee; text-overflow: ellipsis; width: 100%; padding: 0; margin: 0; height: 100%; box-shadow: none;" />
+                </div>
+                {{#if system.linkedSpellUuid}}
+                <i class="fas fa-times delete-spell-recipe" style="cursor: pointer; color: #8b0000; font-size: 0.8rem;" title="Remover Magia" data-action="removeSpellRecipe" data-target="system.linkedSpellUuid"></i>
+                {{else}}
+                <i class="fas fa-search open-spell-picker" style="cursor: pointer; color: #4287f5; font-size: 0.8rem;" title="Buscar no Compêndio" data-action="openSpellPicker" data-target="system.linkedSpellUuid"></i>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group-row" style="margin-top: 10px;">
+        <div class="form-group flex2">
+            <label>{{localize "THE-CODEX.Action.MutationType"}}</label>
+            <select name="system.mutationType">
+                {{selectOptions config.mutationTypes selected=system.mutationType localize=true}}
+            </select>
+        </div>
+    </div>
+
+    {{#if (eq system.mutationType "damage")}}
+    <div class="form-group-row" style="background: rgba(239, 68, 68, 0.05); padding: 5px; border-radius: 4px; margin-top:5px;">
+        <div class="form-group"><label>{{localize "THE-CODEX.Combat.Damage"}}</label><input type="text" name="system.damage.formula" value="{{system.damage.formula}}" placeholder="1d6"/></div>
+        <div class="form-group">
+            <label>{{localize "THE-CODEX.UI.Type"}}</label>
+            <select name="system.damage.type">
+                {{selectOptions config.damageTypes selected=system.damage.type localize=true}}
+            </select>
+        </div>
+    </div>
+    {{/if}}
+
+    {{#if (eq system.mutationType "heal")}}
+    <div class="form-group-row" style="background: rgba(34, 197, 94, 0.05); padding: 5px; border-radius: 4px; margin-top:5px;">
+        <div class="form-group"><label>{{localize "THE-CODEX.Combat.Heal"}}</label><input type="text" name="system.healing.formula" value="{{system.healing.formula}}" placeholder="1d8+4"/></div>
+    </div>
+    {{/if}}
+</div>
+{{/if}}

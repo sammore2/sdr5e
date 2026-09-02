@@ -1,0 +1,106 @@
+{{!-- systems/the-codex-modern/templates/items/parts/feature-power.hbs --}}
+<div class="feature-power-panel papiro-bg">
+    <h3 class="form-header"><i class="fas fa-wand-magic-sparkles"></i> {{localize "THE-CODEX.FeatureAutomation.MutationHeader"}}</h3>
+    
+    <div class="form-group">
+        <label style="color: var(--codex-gold); font-weight: bold;">{{localize "THE-CODEX.FeatureAutomation.Classification"}}</label>
+        <select name="system.mutationType" style="background: rgba(0,0,0,0.3); color: white; border: 1px solid var(--codex-gold-muted);">
+            {{selectOptions config.mutationTypes selected=system.mutationType localize=true}}
+        </select>
+    </div>
+
+    {{#if (or (eq system.mutationType "damage") (eq system.mutationType "heal"))}}
+    <div class="automation-section papiro-bg" style="margin-top: 10px;">
+        <label class="section-title"><i class="fas fa-sparkles"></i> {{localize 'THE-CODEX.SpellFields.PowerScaling'}}</label>
+        <div class="form-group-row">
+            {{#if (eq system.mutationType "damage")}}
+            <div class="form-group" style="flex: 2;">
+                <label>{{localize 'THE-CODEX.SpellFields.DamageFormula'}}</label>
+                <input type="text" name="system.damage.formula" value="{{system.damage.formula}}" placeholder="1d8" />
+            </div>
+            <div class="form-group">
+                <label>{{localize 'THE-CODEX.SpellFields.DamageType'}}</label>
+                <select name="system.damage.type">
+                    <option value="">{{localize "THE-CODEX.Sheet.None"}}</option>
+                    {{selectOptions config.damageTypes selected=system.damage.type localize=true}}
+                </select>
+            </div>
+            {{/if}}
+            
+            {{#if (eq system.mutationType "heal")}}
+            <div class="form-group" style="flex: 2; background: rgba(34,197,94,0.05);">
+                <label><i class="fas fa-heart"></i> {{localize 'THE-CODEX.ActionFields.HealFormula'}}</label>
+                <input type="text" name="system.healing.formula" value="{{system.healing.formula}}" placeholder="Ex: 2d8 + @str" />
+            </div>
+            <div class="form-group">
+                <label>{{localize 'THE-CODEX.ActionFields.Overheal'}}</label>
+                <input type="checkbox" name="system.healing.allowOverheal" {{checked system.healing.allowOverheal}} />
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="form-group-row" style="margin-top: 5px;">
+            <div class="form-group">
+                <label>{{localize 'THE-CODEX.SpellFields.IsScaling'}}</label>
+                <input type="checkbox" name="system.damage.isScaling" {{checked system.damage.isScaling}} />
+            </div>
+            <div class="form-group">
+                <label>{{localize 'THE-CODEX.FeatureFields.RacialScaling'}}</label>
+                <input type="checkbox" name="system.damage.racialScaling" {{checked system.damage.racialScaling}} />
+            </div>
+            {{#if (or system.damage.isScaling system.damage.racialScaling)}}
+            <div class="form-group" style="border: 1px dashed var(--codex-gold); padding: 2px 5px;">
+                <label>{{localize 'THE-CODEX.Combat.DamageCurrent'}}</label>
+                <span class="val highlight-gold" style="font-weight: bold; color: #c1a064;">{{system.scaledDamageFormula}}</span>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    {{/if}}
+
+    <div class="automation-section papiro-bg" style="margin-top: 15px; border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 10px;">
+        <label class="section-title"><i class="fas fa-shield-halved"></i> {{localize "THE-CODEX.FeatureAutomation.SaveHeader"}}</label>
+        <div class="form-group-row">
+             <div class="form-group">
+                <label>{{localize "THE-CODEX.FeatureAutomation.SaveType"}}</label>
+                <select name="system.save.type">
+                    <option value="">{{localize "THE-CODEX.Sheet.None"}}</option>
+                    {{selectOptions config.saveTypes selected=system.save.type localize=true}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>{{localize "THE-CODEX.FeatureAutomation.SaveConsequence"}}</label>
+                <select name="system.save.effect">
+                    {{selectOptions config.saveConsequences selected=system.save.effect localize=true}}
+                </select>
+            </div>
+            <div class="form-group" style="max-width: 80px;">
+                <label>{{localize "THE-CODEX.FeatureAutomation.DCBonus"}}</label>
+                <input type="number" name="system.save.dcBonus" value="{{system.save.dcBonus}}" placeholder="0" />
+            </div>
+        </div>
+    </div>
+
+    <div class="automation-section papiro-bg" style="margin-top: 15px; border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 10px;">
+        <label class="section-title"><i class="fas fa-hurricane"></i> {{localize "THE-CODEX.Auras.Header"}}</label>
+        <div class="form-group-row">
+            <div class="form-group" style="flex: 0.5;">
+                <label>{{localize 'THE-CODEX.ActionFields.Activate'}}</label>
+                <input type="checkbox" name="system.auraEffect.enabled" {{checked system.auraEffect.enabled}} />
+            </div>
+            <div class="form-group" style="flex: 1.5;">
+                <label>{{localize 'THE-CODEX.Auras.Header'}}</label>
+                <select name="system.auraEffect.key">
+                    {{#each config.auraOptions as |opt|}}
+                        <option value="{{opt.key}}" {{#if (eq ../system.auraEffect.key opt.key)}}selected{{/if}}>{{localize opt.label}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>{{localize 'THE-CODEX.ActionFields.Value'}}</label>
+                <input type="text" name="system.auraEffect.value" value="{{system.auraEffect.value}}"
+                    placeholder="{{localize 'THE-CODEX.Auras.ValuePlaceholder'}}" />
+            </div>
+        </div>
+    </div>
+</div>

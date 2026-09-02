@@ -1,0 +1,345 @@
+{{!-- d:\modules\system\the-codex-modern\templates\items\parts\details-automation.hbs --}}
+
+<div class="automation-grid-v13">
+    {{!-- 0. Bloco Mestre: Classificação e Gatilhos (Universal) --}}
+    <div class="automation-section papiro-bg" style="border: 2px solid var(--codex-gold); margin-bottom: 15px;">
+        <label class="section-title"><i class="fas fa-wand-magic-sparkles"></i> {{localize "THE-CODEX.FeatureAutomation.MutationHeader"}}</label>
+        <div class="form-group-row">
+            <div class="form-group">
+                <label style="color: var(--codex-gold); font-weight: bold;">{{localize "THE-CODEX.FeatureAutomation.Classification"}}</label>
+                <select name="system.mutationType" style="background: rgba(0,0,0,0.3); color: white; border: 1px solid var(--codex-gold-muted);">
+                    {{selectOptions config.mutationTypes selected=system.mutationType localize=true}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>{{localize "THE-CODEX.Action.Delivery"}}</label>
+                <select name="system.delivery">
+                    {{selectOptions config.spellDelivery selected=system.delivery localize=true}}
+                </select>
+            </div>
+        </div>
+    </div>
+    {{!-- 1. Bloco de Atributos (Apenas Talentos/Features) --}}
+    {{#if isFeature}}
+    <div class="automation-section papiro-bg">
+        <label class="section-title"><i class="fas fa-brain"></i> {{localize
+            'THE-CODEX.FeatureFields.AbilityBonuses'}}</label>
+        <div class="bonuses-grid-v13">
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.Abilities.str'}}</label>
+                <input type="number" name="system.bonuses.abilities.str" value="{{system.bonuses.abilities.str}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.Abilities.dex'}}</label>
+                <input type="number" name="system.bonuses.abilities.dex" value="{{system.bonuses.abilities.dex}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.Abilities.con'}}</label>
+                <input type="number" name="system.bonuses.abilities.con" value="{{system.bonuses.abilities.con}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.Abilities.int'}}</label>
+                <input type="number" name="system.bonuses.abilities.int" value="{{system.bonuses.abilities.int}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.Abilities.wis'}}</label>
+                <input type="number" name="system.bonuses.abilities.wis" value="{{system.bonuses.abilities.wis}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.Abilities.cha'}}</label>
+                <input type="number" name="system.bonuses.abilities.cha" value="{{system.bonuses.abilities.cha}}"
+                    placeholder="0" />
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    {{!-- 2. Bloco de Combate (Talentos) --}}
+    {{#if isFeature}}
+    <div id="codex-combat-automation" class="automation-section papiro-bg"
+        style="border: 2px solid var(--codex-gold); box-shadow: 0 0 10px rgba(204, 164, 96, 0.2); margin-top: 20px;">
+        <label class="section-title"
+            style="color: var(--codex-gold); font-size: 1.1em; border-bottom: 1px solid var(--codex-gold-muted); margin-bottom: 10px; padding-bottom: 5px;">
+            <i class="fas fa-swords"></i> {{localize 'THE-CODEX.FeatureFields.CombatSaves'}}
+        </label>
+        <div class="bonuses-grid-v13">
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.FeatureFields.AtkMelee'}}</label>
+                <input type="number" name="system.bonuses.attack.melee" value="{{system.bonuses.attack.melee}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.FeatureFields.AtkRanged'}}</label>
+                <input type="number" name="system.bonuses.attack.ranged" value="{{system.bonuses.attack.ranged}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.FeatureFields.DamageAll'}}</label>
+                <input type="number" name="system.bonuses.damage.all" value="{{system.bonuses.damage.all}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item" style="flex: 2; border: 1px dashed var(--codex-gold-muted); background: rgba(212,175,55,0.05);">
+                <label><i class="fas fa-dice"></i> {{localize 'THE-CODEX.FeatureFields.DamageBonusFormula'}}</label>
+                <input type="text" name="system.bonuses.damage.formula" value="{{system.bonuses.damage.formula}}"
+                    placeholder="ex: 1d6 ou +2" data-dtype="String"
+                    style="text-align: center; color: var(--codex-gold);" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.FeatureFields.SaveStr'}}</label>
+                <input type="number" name="system.bonuses.saves.str" value="{{system.bonuses.saves.str}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.FeatureFields.SaveDex'}}</label>
+                <input type="number" name="system.bonuses.saves.dex" value="{{system.bonuses.saves.dex}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.FeatureFields.SaveCon'}}</label>
+                <input type="number" name="system.bonuses.saves.con" value="{{system.bonuses.saves.con}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.FeatureFields.SaveInt'}}</label>
+                <input type="number" name="system.bonuses.saves.int" value="{{system.bonuses.saves.int}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.FeatureFields.SaveWis'}}</label>
+                <input type="number" name="system.bonuses.saves.wis" value="{{system.bonuses.saves.wis}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.FeatureFields.SaveCha'}}</label>
+                <input type="number" name="system.bonuses.saves.cha" value="{{system.bonuses.saves.cha}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.FeatureFields.Defense'}}</label>
+                <input type="number" name="system.bonuses.da" value="{{system.bonuses.da}}" placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.FeatureFields.SpellDCBonus'}}</label>
+                <input type="number" name="system.bonuses.spellDC" value="{{system.bonuses.spellDC}}" placeholder="0" />
+            </div>
+            <div class="bonus-item"
+                style="border: 1px solid var(--codex-gold-muted); background: rgba(34,197,94,0.05);">
+                <label><i class="fas fa-shield-halved"></i> {{localize 'THE-CODEX.FeatureFields.GlobalSave'}}</label>
+                <input type="number" name="system.bonuses.saves.all" value="{{system.bonuses.saves.all}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item"
+                style="border: 1px solid var(--codex-gold-muted); background: rgba(212,175,55,0.05);">
+                <label><i class="fas fa-heart"></i> {{localize 'THE-CODEX.FeatureFields.HPBonus'}}</label>
+                <input type="number" name="system.bonuses.hp" value="{{system.bonuses.hp}}" placeholder="0" />
+            </div>
+            <div class="bonus-item"
+                style="border: 1px solid var(--codex-gold-muted); background: rgba(212,175,55,0.05);">
+                <label><i class="fas fa-bolt"></i> {{localize 'THE-CODEX.FeatureFields.InitiativeBonus'}}</label>
+                <input type="number" name="system.bonuses.initiative" value="{{system.bonuses.initiative}}"
+                    placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label><i class="fas fa-running"></i> {{localize 'THE-CODEX.FeatureFields.SpeedBonus'}}</label>
+                <input type="number" name="system.bonuses.speed" value="{{system.bonuses.speed}}" step="0.1"
+                    placeholder="0" />
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    {{!-- 3. Bloco de Magia/Poder (Fórmulas de Dano/Cura) --}}
+    {{#if (or isSpell (eq system.mutationType "damage") (eq system.mutationType "heal"))}}
+    <div class="automation-section papiro-bg">
+        <label class="section-title"><i class="fas fa-sparkles"></i> {{localize 'THE-CODEX.SpellFields.PowerScaling'}}</label>
+        <div class="bonuses-grid-v13">
+            {{#if (eq system.mutationType "damage")}}
+            <div class="bonus-item" style="flex: 2;">
+                <label>{{localize 'THE-CODEX.SpellFields.DamageFormula'}}</label>
+                <input type="text" name="system.damage.formula" value="{{system.damage.formula}}" placeholder="1d8" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.SpellFields.DamageType'}}</label>
+                <select name="system.damage.type">
+                    <option value="">{{localize "THE-CODEX.Sheet.None"}}</option>
+                    {{selectOptions config.damageTypes selected=system.damage.type localize=true}}
+                </select>
+            </div>
+            {{/if}}
+            
+            {{#if (eq system.mutationType "heal")}}
+            <div class="bonus-item" style="flex: 2; background: rgba(34,197,94,0.05);">
+                <label><i class="fas fa-heart"></i> {{localize 'THE-CODEX.ActionFields.HealFormula'}}</label>
+                <input type="text" name="system.healing.formula" value="{{system.healing.formula}}" placeholder="Ex: 2d8 + @str" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize 'THE-CODEX.ActionFields.Overheal'}}</label>
+                <input type="checkbox" name="system.healing.allowOverheal" {{checked system.healing.allowOverheal}} />
+            </div>
+            {{/if}}
+
+            <div class="bonus-item" style="background: rgba(212,175,55,0.05);">
+                <label>{{localize 'THE-CODEX.SpellFields.IsScaling'}}</label>
+                <input type="checkbox" name="system.damage.isScaling" {{checked system.damage.isScaling}} />
+            </div>
+            {{#if isFeature}}
+            <div class="bonus-item" style="background: rgba(168,85,247,0.05); border: 1px solid rgba(168,85,247,0.2);">
+                <label>{{localize 'THE-CODEX.FeatureFields.RacialScaling'}}</label>
+                <input type="checkbox" name="system.damage.racialScaling" {{checked system.damage.racialScaling}} />
+            </div>
+            {{/if}}
+            {{#if (or system.damage.isScaling system.damage.racialScaling)}}
+            <div class="bonus-item" style="border: 1px dashed var(--codex-gold);">
+                <label>{{localize 'THE-CODEX.Combat.DamageCurrent'}}</label>
+                <span class="val highlight-gold" style="font-weight: bold; color: #c1a064; text-align: center; display: block;">{{system.scaledDamageFormula}}</span>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    {{/if}}
+
+    {{!-- 3.5 Seção de Luz/Escuridão --}}
+    {{#if (or (eq system.mutationType "light") (eq system.mutationType "darkness"))}}
+    <div class="automation-section papiro-bg" style="border: 2px solid var(--codex-gold); margin-top: 15px;">
+        <label class="section-title"><i class="fas fa-sun"></i> {{localize "THE-CODEX.Light.ConfigHeader"}}</label>
+        <div class="bonuses-grid-v13">
+            <div class="bonus-item">
+                <label>{{localize "THE-CODEX.Light.Bright"}}</label>
+                <input type="number" name="system.light.bright" value="{{system.light.bright}}" placeholder="0" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize "THE-CODEX.Light.Dim"}}</label>
+                <input type="number" name="system.light.dim" value="{{system.light.dim}}" placeholder="0" />
+            </div>
+            <div class="bonus-item" style="flex: 0.5;">
+                <label>{{localize "THE-CODEX.Light.Color"}}</label>
+                <input type="color" name="system.light.color" value="{{system.light.color}}" style="height: 30px; padding: 2px;" />
+            </div>
+            <div class="bonus-item">
+                <label>{{localize "THE-CODEX.Light.Animation"}}</label>
+                <select name="system.light.animationType">
+                    {{selectOptions config.lightAnimations selected=system.light.animationType localize=true}}
+                </select>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    {{!-- 3.6 Seção de Visão --}}
+    {{#if (eq system.mutationType "vision")}}
+    <div class="automation-section papiro-bg" style="border: 2px solid var(--codex-gold); margin-top: 15px;">
+        <label class="section-title"><i class="fas fa-eye"></i> {{localize "THE-CODEX.Vision.ConfigHeader"}}</label>
+        <div class="bonuses-grid-v13">
+            <div class="bonus-item">
+                <label>{{localize "THE-CODEX.Vision.Mode"}}</label>
+                <select name="system.vision.mode">
+                    {{selectOptions config.visionModes selected=system.vision.mode localize=true}}
+                </select>
+            </div>
+            <div class="bonus-item">
+                <label>{{localize "THE-CODEX.Vision.Range"}}</label>
+                <input type="number" name="system.vision.range" value="{{system.vision.range}}" placeholder="60" />
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    {{!-- 4. Salvaguardas e Gatilhos (Universal) --}}
+    <div class="automation-section papiro-bg" style="margin-top: 15px;">
+        <label class="section-title"><i class="fas fa-shield-halved"></i> {{localize "THE-CODEX.FeatureAutomation.SaveHeader"}}</label>
+        <div class="form-group-row">
+             <div class="form-group">
+                <label>{{localize "THE-CODEX.FeatureAutomation.SaveType"}}</label>
+                <select name="system.save.type">
+                    <option value="">{{localize "THE-CODEX.Sheet.None"}}</option>
+                    {{selectOptions config.saveTypes selected=system.save.type localize=true}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>{{localize "THE-CODEX.FeatureAutomation.SaveConsequence"}}</label>
+                <select name="system.save.effect">
+                    {{selectOptions config.saveConsequences selected=system.save.effect localize=true}}
+                </select>
+            </div>
+            {{#if isFeature}}
+            <div class="form-group" style="max-width: 80px;">
+                <label>{{localize "THE-CODEX.FeatureAutomation.DCBonus"}}</label>
+                <input type="number" name="system.save.dcBonus" value="{{system.save.dcBonus}}" placeholder="0" />
+            </div>
+            {{/if}}
+        </div>
+    </div>
+
+    {{!-- 5. Seção de Auras (Universal) --}}
+    <div class="automation-section papiro-bg" style="margin-top: 15px; border: 1px dashed rgba(212,175,55,0.3);">
+        <label class="section-title"><i class="fas fa-hurricane"></i> {{localize "THE-CODEX.Auras.Header"}}</label>
+        <div class="form-group-row">
+            <div class="form-group" style="flex: 0.5;">
+                <label>{{localize 'THE-CODEX.ActionFields.Activate'}}</label>
+                <input type="checkbox" name="system.auraEffect.enabled" {{checked system.auraEffect.enabled}} />
+            </div>
+            <div class="form-group flex2">
+                <label>{{localize 'THE-CODEX.Auras.Header'}}</label>
+                <select name="system.auraEffect.key">
+                    {{#each config.auraOptions as |opt|}}
+                        <option value="{{opt.key}}" {{#if (eq ../system.auraEffect.key opt.key)}}selected{{/if}}>{{localize opt.label}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>{{localize 'THE-CODEX.ActionFields.Value'}}</label>
+                <input type="text" name="system.auraEffect.value" value="{{system.auraEffect.value}}"
+                    placeholder="{{localize 'THE-CODEX.Auras.ValuePlaceholder'}}" />
+            </div>
+        </div>
+    </div>
+
+    {{!-- 6. Flags e Lógicas Especiais (Apenas Talentos) --}}
+    {{#if isFeature}}
+    <div class="automation-section papiro-bg" style="margin-top: 15px;">
+        <label class="section-title"><i class="fas fa-gears"></i> {{localize 'THE-CODEX.FeatureFields.RulesTriggers'}}</label>
+        <div class="checkbox-group-v13" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 20px; padding: 12px;">
+            <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; line-height: 1.2; font-size: 0.9em;">
+                <input type="checkbox" name="system.flags.isTWF" {{checked system.flags.isTWF}} style="margin-top: 2px; flex-shrink: 0;" /> 
+                <span>{{localize 'THE-CODEX.FeatureFields.TWF'}}</span>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; line-height: 1.2; font-size: 0.9em;">
+                <input type="checkbox" name="system.flags.isImprovedTWF" {{checked system.flags.isImprovedTWF}} style="margin-top: 2px; flex-shrink: 0;" /> 
+                <span>{{localize 'THE-CODEX.FeatureFields.ImprovedTWF'}}</span>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; line-height: 1.2; font-size: 0.9em;">
+                <input type="checkbox" name="system.flags.isGreaterTWF" {{checked system.flags.isGreaterTWF}} style="margin-top: 2px; flex-shrink: 0;" /> 
+                <span>{{localize 'THE-CODEX.FeatureFields.GreaterTWF'}}</span>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; line-height: 1.2; font-size: 0.9em;">
+                <input type="checkbox" name="system.flags.isFinesse" {{checked system.flags.isFinesse}} style="margin-top: 2px; flex-shrink: 0;" /> 
+                <span>{{localize 'THE-CODEX.FeatureFields.Finesse'}}</span>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; line-height: 1.2; font-size: 0.9em;">
+                <input type="checkbox" name="system.meta.isMetamagic" {{checked system.meta.isMetamagic}} style="margin-top: 2px; flex-shrink: 0;" /> 
+                <span>{{localize 'THE-CODEX.FeatureAutomation.IsMetamagic'}}</span>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer; line-height: 1.2; font-size: 0.9em;">
+                <input type="checkbox" name="system.bonuses.crit.modifiesCrit" {{checked system.bonuses.crit.modifiesCrit}} style="margin-top: 2px; flex-shrink: 0;" /> 
+                <span>{{localize 'THE-CODEX.FeatureAutomation.ModifiesCrit'}}</span>
+            </label>
+        </div>
+    </div>
+
+    {{!-- Seção de Skill Training --}}
+    <div class="automation-section papiro-bg" style="margin-top: 15px;">
+        <label class="section-title"><i class="fas fa-graduation-cap"></i> {{localize 'THE-CODEX.FeatureFields.TrainedSkill'}}</label>
+        <select name="system.bonuses.trainedSkill" style="width: 100%; margin-bottom: 10px;">
+            <option value="">-- {{localize 'THE-CODEX.FeatureFields.NoTrainedSkill'}} --</option>
+            {{#each config.skills as |skillData k|}}
+            <option value="{{k}}" {{#if (eq k ../system.bonuses.trainedSkill)}}selected{{/if}}>{{localize skillData.label}}</option>
+            {{/each}}
+        </select>
+    </div>
+    {{/if}}
+</div>

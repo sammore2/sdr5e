@@ -1,0 +1,663 @@
+/* =========================
+   COMBAT & CHAT CARDS
+   ========================= */
+
+.chat-message:has(.codex-combat-frame) {
+    padding: 0;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(122, 106, 74, 0.2);
+    margin: 4px 0;
+
+    .message-header {
+        display: flex;
+        justify-content: flex-end;
+        padding: 4px 12px !important;
+        margin: 0 !important;
+        width: 100%;
+        background: #0b0b0b;
+        border: 2px solid @codex-gold-bright;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+        border-radius: 4px 4px 0 0;
+        box-sizing: border-box;
+    }
+}
+
+.codex-combat-frame {
+    margin: 0;
+    width: 100%;
+    border: 1px solid rgba(204, 164, 96, 0.4);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    background: #111;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    // --- Variantes por Tipo de Ação ---
+    &.hit {
+        border-left: 8px solid @codex-gold;
+    }
+
+    &.damage {
+        border-left: 8px solid #ef4444;
+        border-color: #4a1a1a !important;
+        background: linear-gradient(135deg, rgba(20, 10, 10, 0.95) 0%, rgba(30, 10, 10, 0.9) 100%);
+
+        .runic-result-box {
+            color: #ff4d4d;
+            border-color: #9a0000;
+            text-shadow: 0 0 10px rgba(154, 0, 0, 0.8), 0 0 5px rgba(255, 77, 77, 0.4);
+            box-shadow: 0 0 20px #000 inset, 0 0 25px rgba(154, 0, 0, 0.3);
+        }
+    }
+
+    &.healing {
+        border-left: 8px solid @healing-blue;
+        border-color: @healing-blue !important;
+        background: linear-gradient(135deg, rgba(0, 15, 25, 0.95) 0%, rgba(0, 30, 45, 0.9) 100%);
+        box-shadow: 0 0 15px rgba(0, 136, 170, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.5);
+
+        .runic-result-box {
+            color: #00ffff;
+            text-shadow: 0 0 10px @healing-blue, 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+
+        .status-badge {
+            background: @healing-blue;
+            color: #fff;
+        }
+    }
+
+    &.spell {
+        border-left: 8px solid @spell-purple;
+        border-color: #4a3a2a !important;
+        background: linear-gradient(135deg, rgba(20, 15, 10, 0.95) 0%, rgba(40, 30, 20, 0.9) 100%);
+
+        .runic-result-box {
+            color: #a78bfa;
+            border-color: @spell-purple;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.8), 0 0 5px rgba(167, 139, 250, 0.4);
+            box-shadow: 0 0 20px #000 inset, 0 0 25px rgba(139, 92, 246, 0.3);
+        }
+    }
+
+    &.miss {
+        border-left: 8px solid @miss-gray;
+    }
+
+    &::before,
+    &::after {
+        content: "";
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: @codex-gold;
+        border-radius: 50%;
+        box-shadow: 0 0 5px @codex-gold;
+    }
+
+    &::before {
+        top: 4px;
+        left: 4px;
+    }
+
+    &::after {
+        top: 4px;
+        right: 4px;
+    }
+
+    // --- Header: Identidade ---
+    .frame-identity {
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        background: linear-gradient(to bottom, #2a2a2a, #000);
+        border-bottom: 2px solid @codex-gold-dark;
+        position: relative;
+
+        .actor-portrait {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid @codex-gold;
+            box-shadow: 0 0 10px #000;
+            object-fit: cover;
+            margin-right: 12px;
+            background: #000;
+            flex-shrink: 0;
+        }
+
+        .identity-text {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .actor-name {
+            color: @codex-gold;
+            font-size: 1.1rem;
+            font-weight: 900;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-shadow: 2px 2px 3px #000;
+            line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .action-type {
+            font-size: 0.65rem;
+            color: #888;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .status-badge {
+            padding: 3px 10px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            background: rgba(139, 90, 43, 0.2);
+            border: 1px solid #8b5a2b;
+            color: @codex-gold;
+            text-transform: uppercase;
+            border-radius: 2px;
+            white-space: nowrap;
+            margin-left: 8px;
+        }
+    }
+
+    // --- Body: Resultados ---
+    .frame-body {
+        padding: 15px 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.2) url('https://www.transparenttextures.com/patterns/dark-matter.png');
+
+        .papiro-box {
+            background: @papiro-bg !important;
+            border: 1px solid @codex-gold !important;
+            box-shadow: inset 0 0 10px #000;
+            padding: 8px;
+            border-radius: 4px;
+            width: 100%;
+            margin-bottom: 10px;
+            color: #e0e0e0 !important; // Cor padrão para texto direto
+
+            // Agnosticismo de tag: garante que tudo dentro seja legível
+            *,
+            p,
+            span,
+            i,
+            b,
+            strong,
+            em,
+            li,
+            label,
+            .hint {
+                color: #e0e0e0 !important;
+                text-shadow: 1px 1px 2px #000 !important;
+                font-weight: bold !important;
+            }
+
+            i {
+                color: @codex-gold !important;
+            }
+        }
+
+        .runic-result-box {
+            width: 75px;
+            height: 75px;
+            border: 3px double @codex-gold;
+            background: radial-gradient(circle, #2a2a2a, #000);
+            color: @codex-gold-bright;
+            font-size: 2.8rem;
+            font-weight: 900;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px #000 inset, 0 0 25px rgba(212, 175, 55, 0.4);
+            border-radius: 4px;
+            text-shadow: 2px 2px 15px #000;
+
+            &.max {
+                color: #4ade80;
+                border-color: #4ade80;
+            }
+
+            &.min {
+                color: #f87171;
+                border-color: #f87171;
+            }
+        }
+    }
+
+    // --- Details ---
+    .frame-details {
+        width: 100%;
+        text-align: center;
+        margin-top: 5px;
+        padding: 6px;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(139, 90, 43, 0.1);
+        border-radius: 8px;
+
+        .formula {
+            color: #555;
+            font-size: 0.75rem;
+            font-weight: normal;
+            font-style: italic;
+        }
+
+        .vs {
+            color: @codex-gold;
+            font-size: 1.2rem;
+            font-weight: 900;
+            display: block;
+            margin: 4px 0;
+        }
+
+        .target-info {
+            color: #a78bfa;
+            font-size: 0.8rem;
+            font-family: var(--font-primary);
+            font-style: italic;
+        }
+    }
+
+    // --- Buttons & Action Section ---
+    .action-section,
+    .damage-button-section,
+    .apply-damage-section {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+
+        &.multi-apply {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 2px solid #8b5a2b;
+            background: #000;
+
+            .codex-button {
+                border-top: none;
+                border-right: 1px solid rgba(139, 90, 43, 0.3);
+                font-size: 0.75rem;
+                padding: 10px 5px;
+
+                &:last-child {
+                    border-right: none;
+                }
+
+                &.variant {
+                    background: linear-gradient(to bottom, #2a1a00, #0a0500);
+                    color: #888;
+
+                    &:hover {
+                        color: #fff;
+                        text-shadow: 0 0 5px #fff;
+                    }
+                }
+            }
+
+            .target-apply-label {
+                grid-column: span 2;
+                font-size: 0.65rem;
+                color: #cca460;
+                text-align: center;
+                text-transform: uppercase;
+                padding: 4px;
+                background: linear-gradient(to right, transparent, rgba(139, 90, 43, 0.2), transparent);
+                border-top: 1px solid rgba(139, 90, 43, 0.1);
+            }
+        }
+    }
+
+    .codex-button,
+    button.codex-button {
+        background: linear-gradient(to bottom, #4a2f00, #1a0f00);
+        border: none;
+        border-top: 3px solid #8b5a2b;
+        color: @codex-gold;
+        font-family: 'Cinzel', serif;
+        font-weight: 900;
+        font-size: 0.85rem;
+        padding: 12px;
+        width: 100%;
+        cursor: pointer;
+        text-transform: uppercase;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+        box-shadow: inset 0 2px 10px #000;
+
+        &:hover {
+            background: linear-gradient(to bottom, #5a3a00, #2a1a00);
+            color: #fff;
+            border-top-color: @codex-gold;
+            text-shadow: 0 0 10px @codex-gold;
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            filter: sepia(1) contrast(0.5);
+            cursor: not-allowed;
+        }
+    }
+
+    // --- Dice Pills ---
+    .roll-details-expanded {
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.8);
+        border-top: 2px solid #8b5a2b;
+    }
+
+    .dice-pill {
+        padding: 8px 14px;
+        background: #e9e5dc;
+        border: 1px solid #7a6a4a;
+        border-radius: 4px;
+        box-shadow: 2px 2px 5px #000, inset 0 0 5px #fff;
+        color: #2c1810;
+        font-weight: 900;
+        margin: 4px;
+
+        &.die.max {
+            background: #1a331a;
+            color: #4ade80;
+            border-color: #2e7d32;
+        }
+
+        &.die.min {
+            background: #331a1a;
+            color: #f87171;
+            border-color: #c62828;
+        }
+    }
+}
+
+/* =============================================
+   FLOW MODIFIERS (Agnostic Trigger UI)
+   ============================================= */
+
+.flow-modifiers-section {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.45);
+    border-top: 1px solid rgba(204, 164, 96, 0.3); // @codex-gold
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    
+    label {
+        color: @codex-gold-bright !important;
+        font-family: 'Cinzel', serif;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        
+        i {
+            color: @codex-gold !important;
+            text-shadow: 0 0 5px rgba(204, 164, 96, 0.5);
+        }
+    }
+}
+
+.modifiers-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+
+.modifier-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(to right, rgba(139, 90, 43, 0.15), rgba(74, 47, 0, 0.05));
+    border: 1px solid rgba(139, 90, 43, 0.25);
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    
+    &:hover {
+        background: rgba(139, 90, 43, 0.3);
+        border-color: @codex-gold;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.8), inset 0 0 5px rgba(204, 164, 96, 0.2);
+        transform: translateX(2px);
+
+        .mod-name {
+            color: #fff !important;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+        }
+    }
+    
+    input[type="checkbox"] {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border: 1px solid @codex-gold;
+        border-radius: 2px;
+        background: #000;
+        cursor: pointer;
+        position: relative;
+        flex-shrink: 0;
+
+        &:checked {
+            background: @codex-gold;
+            box-shadow: 0 0 8px @codex-gold;
+
+            &::after {
+                content: "✔";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: #000;
+                font-size: 10px;
+                font-weight: bold;
+            }
+        }
+    }
+    
+    .mod-name {
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 0.85rem;
+        color: #ccc !important;
+        font-weight: bold;
+        transition: color 0.2s;
+    }
+    
+    .mod-cost {
+        margin-left: auto;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        color: @spell-purple !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        opacity: 0.8;
+    }
+}
+
+// --- HP Roll Specialization ---
+.codex-combat-frame.hp-roll {
+    .frame-body {
+        background: rgba(20, 10, 10, 0.8);
+    }
+
+    .runic-result-box {
+        color: #f87171;
+        border-color: @blood-red;
+    }
+
+    .status-badge {
+        background: @blood-red;
+        color: #fff;
+    }
+}
+
+// --- XP & Level UI Elements
+.level-rest-xp-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 1px solid rgba(139, 90, 43, 0.3);
+  gap: 5px;
+}
+
+.level-xp-row {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
+}
+
+.total-level-badge-v13 {
+  background: radial-gradient(circle, #2a2a2a, #000);
+  border: 1px solid #cca460;
+  border-radius: 4px;
+  padding: 4px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 55px;
+  box-shadow: 0 0 10px #000, inset 0 0 5px rgba(212, 175, 55, 0.3);
+
+  label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    color: #8b5a2b;
+    text-transform: uppercase;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .level-value {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    color: #e8d5a0;
+    font-weight: bold;
+    line-height: 1.1;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+  }
+}
+
+.rest-icons-v13 {
+  display: flex;
+  gap: 10px;
+}
+
+.rest-icon-btn {
+  font-size: 1.1rem;
+  color: #8b5a2b;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 6px;
+  border: 1px solid #4a2f00;
+  border-radius: 4px;
+  box-shadow: 0 0 5px #000 inset;
+
+  &:hover {
+    color: #cca460;
+    border-color: #cca460;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+    transform: scale(1.1);
+  }
+}
+
+.xp-bar-module {
+  background: url('https://www.transparenttextures.com/patterns/dark-matter.png'), radial-gradient(circle, #2a2a2a, #000);
+  border: 1px solid #cca460;
+  border-radius: 4px;
+  padding: 6px 12px;
+  box-shadow: 0 0 10px #000, inset 0 0 5px rgba(212, 175, 55, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 130px;
+  transition: all 0.3s ease;
+
+  .xp-inputs-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    white-space: nowrap;
+    width: 100%;
+
+    .xp-label {
+      font-size: 0.7rem;
+      color: #8b5a2b;
+      font-weight: bold;
+    }
+
+    .xp-input-val {
+      width: 45px !important;
+      background: transparent !important;
+      border: none !important;
+      color: #fff !important;
+      text-align: right !important;
+      font-weight: bold;
+      padding: 0 !important;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    .xp-sep {
+      color: #8b5a2b;
+      font-weight: bold;
+    }
+
+    .xp-max {
+      color: #fff;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.xp-track-v13 {
+  width: 100%;
+  height: 6px;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 2px;
+
+  .xp-fill-v13 {
+    height: 100%;
+    background: linear-gradient(90deg, #8b5a2b 0%, #cca460 100%);
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+    transition: width 0.3s ease-out;
+  }
+}
+
+/* Estilos de Raça movidos para unsorted.less para permitir design único por categoria */

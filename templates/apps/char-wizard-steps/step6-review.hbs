@@ -1,0 +1,68 @@
+<div class="char-wizard-step step-review">
+    <div class="step-header">
+        <h3><i class="fas fa-eye"></i> {{localize 'THE-CODEX.Wizard.Steps.ReviewTitle'}}</h3>
+        <p>{{localize 'THE-CODEX.Wizard.Steps.ReviewIntro'}}</p>
+    </div>
+
+    <div class="review-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom: 20px;">
+        {{!-- Painel 1: Identidade --}}
+        <div class="review-panel papiro-box decorative-border" style="padding:15px; background:rgba(0,0,0,0.3); border:2px solid #7a6a4a; border-radius:8px;">
+            <h4 style="margin:0 0 10px; color:#d4af37; border-bottom:1px solid rgba(122,106,74,0.5); font-family:'Cinzel', serif;">{{localize 'THE-CODEX.Wizard.Steps.ReviewIdentity'}}</h4>
+            <div style="font-size:0.9rem; display:flex; flex-direction:column; gap:8px;">
+                <p style="margin:0;"><strong>{{localize 'THE-CODEX.Wizard.Steps.NameLabel'}}:</strong> <span style="color:#fff;">{{data.name}}</span></p>
+                <p style="margin:0;"><strong>{{localize 'THE-CODEX.Wizard.Steps.Race'}}:</strong> <span style="color:#d4af37;">{{selectedRace.name}}</span></p>
+                <p style="margin:0;"><strong>{{localize 'THE-CODEX.Wizard.Steps.Class'}}:</strong> <span style="color:#d4af37;">{{selectedClass.name}}</span></p>
+            </div>
+        </div>
+
+        {{!-- Painel 2: Atributos --}}
+        <div class="review-panel papiro-box decorative-border" style="padding:15px; background:rgba(0,0,0,0.3); border:2px solid #7a6a4a; border-radius:8px;">
+            <h4 style="margin:0 0 10px; color:#d4af37; border-bottom:1px solid rgba(122,106,74,0.5); font-family:'Cinzel', serif;">{{localize 'THE-CODEX.Wizard.Steps.ReviewAbilities'}}</h4>
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; text-align:center;">
+                {{#each data.abilities as |val key|}}
+                <div style="background:rgba(0,0,0,0.2); padding:5px; border-radius:4px; border:1px solid #444;">
+                    <div style="font-size:0.6rem; color:#888; text-transform:uppercase;">{{localize (concat "THE-CODEX.Abilities." key)}}</div>
+                    <div style="font-size:1.1rem; font-weight:bold; color:#fff;">{{val}}</div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+
+    {{!-- Painel 3: Escolhas (Advancements Resolvidos) --}}
+    <div class="review-panel papiro-box" style="padding:15px; background:rgba(0,0,0,0.2); border:1px solid #7a6a4a; border-radius:8px; margin-bottom:20px;">
+        <h4 style="margin:0 0 10px; color:#d4af37; border-bottom:1px solid rgba(122,106,74,0.5); font-family:'Cinzel', serif;">{{localize 'THE-CODEX.Wizard.Steps.ReviewPowers'}}</h4>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            {{#each resolvedAdvancements as |item|}}
+            <div class="token-chip" data-tooltip="{{item.uuid}}" style="display:flex; align-items:center; gap:6px; background:rgba(212,175,55,0.1); padding:5px 10px; border-radius:4px; border:1px solid rgba(212,175,55,0.4); font-size:0.85rem; color:#eee; cursor: help;">
+                <img src="{{item.img}}" width="18" height="18" style="border:none; border-radius:2px;"/>
+                <span>{{item.name}}</span>
+            </div>
+            {{else}}
+            <p style="font-size:0.8rem; color:#666; font-style:italic;">{{localize 'THE-CODEX.Wizard.Steps.NoChoices'}}</p>
+            {{/each}}
+        </div>
+    </div>
+
+    {{!-- Painel 4: Magias Selecionadas --}}
+    {{#if data.spells.length}}
+    <div class="review-panel papiro-box" style="padding:15px; background:rgba(0,0,0,0.2); border:1px solid #7a6a4a; border-radius:8px;">
+        <h4 style="margin:0 0 10px; color:#d4af37; border-bottom:1px solid rgba(122,106,74,0.5); font-family:'Cinzel', serif;">{{localize 'THE-CODEX.Wizard.Steps.ReviewGrimoire'}}</h4>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+            {{#each data.spells as |uuid|}}
+            {{#with (getProperty .. (concat "spellObj_" uuid))}}
+            <div data-tooltip="{{uuid}}" style="display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.3); padding:6px; border-radius:4px; cursor: help;">
+                <img src="{{img}}" width="24" height="24" style="border:1px solid #7a6a4a;"/>
+                <span style="font-size:0.85rem; color:#fff;">{{name}}</span>
+            </div>
+            {{/with}}
+            {{/each}}
+        </div>
+    </div>
+    {{/if}}
+
+    <div class="final-warning papiro-box" style="margin-top:20px; padding:15px; text-align:center; background:rgba(122,106,74,0.1); border:1px dashed #7a6a4a;">
+        <p style="font-family:'Cinzel', serif; color:#dec8a0; font-style:italic; margin-bottom:5px;">{{localize 'THE-CODEX.Wizard.Steps.FinalWarning'}}</p>
+        <p style="font-size:0.8rem; color:#888;">{{localize 'THE-CODEX.Wizard.Steps.FinalHint'}}</p>
+    </div>
+</div>

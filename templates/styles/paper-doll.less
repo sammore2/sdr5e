@@ -1,0 +1,212 @@
+.inventory-layout-v13 {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 15px;
+  align-items: stretch;
+  min-height: 580px;
+  margin-top: 15px;
+  padding: 0px 10px 10px 0px;
+}
+
+.paper-doll-container {
+  padding: 20px;
+  background: rgba(10, 8, 12, 0.4);
+  border: 2px solid #4a3c2b;
+  border-radius: 8px;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8);
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  position: relative;
+  min-height: 580px;
+}
+
+/* --- NOVO LAYOUT  --- */
+.paper-doll-layout-v4 {
+  display: grid;
+  grid-template-columns: 80px 1fr 80px;
+  gap: 20px;
+  margin-top: 15px;
+  align-items: start;
+}
+
+.doll-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+
+  &.left {
+    align-items: flex-start;
+  }
+
+  &.right {
+    align-items: flex-end;
+  }
+}
+
+.doll-slot-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 52px;
+}
+
+.doll-slot {
+  position: relative;
+  width: 52px !important;
+  height: 52px !important;
+  background: rgba(0, 0, 0, 0.75) !important;
+  border: 2px solid #5a4c3b !important;
+  border-radius: 4px !important;
+  box-shadow: inset 0 0 15px #000, 0 4px 10px rgba(0, 0, 0, 0.6) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  overflow: visible;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(193, 160, 100, 0.15);
+    pointer-events: none;
+  }
+
+  &:hover {
+    border-color: #c1a064 !important;
+    box-shadow: 0 0 20px rgba(193, 160, 100, 0.35), inset 0 0 15px rgba(193, 160, 100, 0.15) !important;
+    transform: scale(1.05);
+    z-index: 50;
+
+    .unequip-btn {
+      opacity: 1;
+    }
+  }
+
+  img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.8));
+  }
+
+  .fa-plus {
+    color: rgba(193, 160, 100, 0.15);
+    font-size: 1.2rem;
+  }
+}
+
+.slot-label {
+  font-family: var(--font-cinzel, serif);
+  font-size: 0.48rem;
+  color: #a68b5a;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 0.2px;
+  text-shadow: 1px 1px 2px #000;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0.8;
+  text-align: center;
+  width: 100%;
+}
+
+/* --- AREA CENTRAL (ARTE) --- */
+.doll-center-art {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 440px;
+}
+
+.art-frame-v4 {
+  position: relative;
+  width: 200px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(193, 160, 100, 0.1) 0%, transparent 80%);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+
+  &:hover {
+    border-color: rgba(193, 160, 100, 0.3);
+    background: radial-gradient(circle, rgba(193, 160, 100, 0.15) 0%, transparent 90%);
+
+    .art-overlay-v4 {
+      opacity: 1;
+    }
+
+    .char-inventory-art {
+      filter: brightness(1.2) contrast(1.1);
+    }
+  }
+}
+
+.char-inventory-art {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  transition: all 0.5s ease;
+
+  &.fallback {
+    object-fit: contain;
+    width: 80%;
+    opacity: 0.4;
+    filter: grayscale(1) sepia(0.5);
+  }
+}
+
+.art-overlay-v4 {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: 0.2s;
+  pointer-events: none;
+
+  i {
+    font-size: 2.5rem;
+    color: #c1a064;
+    text-shadow: 0 0 15px #000;
+  }
+}
+
+/* --- BOTÃO UNEQUIP --- */
+.unequip-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #600;
+  color: #fff;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.65rem;
+  border: 1px solid #c1a064;
+  box-shadow: 0 2px 5px #000;
+  opacity: 0;
+  transition: 0.2s;
+  z-index: 60;
+
+  &:hover {
+    background: #a00;
+    transform: scale(1.1);
+  }
+}

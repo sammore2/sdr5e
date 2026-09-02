@@ -1,0 +1,50 @@
+{
+  "engine": "loom",
+  "engineVersion": ">=0.1.0",
+  "type": "ruleset",
+  "name": "srd5e",
+  "title": "SDR5E (Modern SRD)",
+  "version": "0.1.0",
+  "author": "Rob Sammore",
+  "license": "MIT",
+  "description": "SDR5E — Modern SRD (Free5e) mechanics: Proficiency Bonus, Attribute Saves, and simplified Skills. Native LoomVTT ruleset.",
+  "repository": "https://github.com/RobSammore/srd5e",
+  "bugs": "https://github.com/RobSammore/srd5e/issues",
+  "manifest": "https://github.com/RobSammore/srd5e/releases/latest/download/ruleset.json",
+  "download": "https://github.com/RobSammore/srd5e/releases/latest/download/srd5e.zip",
+  "active": true,
+  "backgroundUrl": "/marketplace/rulesets/srd5e/assets/ui/system-banner.png",
+  "client": "srd5e.mjs",
+  "styles": [
+    "styles/srd5e.css"
+  ],
+  "actorTypes": [
+    "character",
+    "npc"
+  ],
+  "itemTypes": [
+    "weapon",
+    "armor",
+    "feature",
+    "item",
+    "language",
+    "race",
+    "class",
+    "subclass",
+    "background",
+    "feat",
+    "spell"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-BR.json"
+    }
+  ]
+}

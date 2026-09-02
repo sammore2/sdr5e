@@ -1,0 +1,122 @@
+/* =========================
+   FOUNDRY / UI
+========================= */
+
+.codex-dialog-v13.grimdark .dialog-buttons button {
+    background: #4a1a1a;
+    color: #f4ece1;
+    border: 1px solid #7a6a4a;
+    font-family: var(--font-header);
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+}
+
+.codex-dialog-v13.grimdark .dialog-buttons button:hover {
+    background: #7a1a1a;
+    box-shadow: 0 0 10px rgba(122, 106, 74, 0.5);
+    transform: scale(1.02);
+}
+
+.chat-message:has(.codex-combat-frame) .message-content {
+    padding: 0;
+}
+
+.chat-message:has(.codex-combat-frame) .message-sender {
+    font-family: var(--font-header);
+    color: #cca460;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+}
+
+/* GLOBAL FOUNDRY UI FIXES (V13) */
+.window-header {
+    z-index: 10 !important; /* Garante que o cabeçalho sempre venha para frente */
+}
+
+.controls-dropdown {
+    z-index: 10000 !important; /* O menu suspenso deve ser a camada mais alta */
+}
+
+/* FIX WIZARD NAVIGATION & PREMIUM FRAME (CRITICAL) */
+.the-codex-modern.wizard-runico.window-app {
+    background: radial-gradient(circle at center, #1b1614 0%, #0d0b0a 100%) !important;
+    background-image: none !important;
+    border: 1px solid rgba(212, 175, 55, 0.5) !important;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(212, 175, 55, 0.1) !important;
+    border-radius: 8px !important;
+
+    .window-header {
+        background: linear-gradient(to bottom, #1a1715, #0d0b0a) !important;
+        border-bottom: 1px solid rgba(122, 106, 74, 0.4) !important;
+        border-radius: 8px 8px 0 0 !important;
+        
+        .window-title {
+            color: #d4af37 !important;
+            font-family: 'Cinzel', serif !important;
+            font-size: 0.95rem !important;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.3) !important;
+            font-weight: bold !important;
+        }
+
+        .close {
+            color: #d4af37 !important;
+            min-width: 30px !important;
+            &:hover { text-shadow: 0 0 8px #ff0000; color: #ff3e3e !important; }
+        }
+    }
+
+    .window-content {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        background: transparent !important;
+    }
+}
+
+/* CUSTOM ACTIVE EFFECT KEYS DROPDOWN */
+.codex-ae-keys-list {
+    max-height: 250px;
+    overflow-y: auto;
+    background: #1a1715;
+    border: 1px solid #7a6a4a;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.9);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: thin;
+    scrollbar-color: #7a6a4a #1a1715;
+
+    .ae-key-item {
+        padding: 6px 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        white-space: nowrap;
+        border-bottom: 1px solid rgba(122, 106, 74, 0.2);
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover {
+            background: rgba(122, 106, 74, 0.3);
+        }
+
+        .key-path {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            color: #d4af37;
+        }
+
+        .key-label {
+            font-size: 0.8rem;
+            color: #f4ece1;
+            font-weight: bold;
+            text-align: right;
+        }
+    }
+
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-track { background: #1a1715; }
+    &::-webkit-scrollbar-thumb { background: #7a6a4a; border-radius: 3px; }
+}

@@ -1,0 +1,46 @@
+<section class="step-hp">
+    <h3 class="step-title">{{localize "TYPES.Wizard.LevelUpWizard.Steps.Vitality"}}</h3>
+
+    {{#if changes.isMulticlass}}
+    <div class="multiclass-selector box-decorative">
+        <h4>{{localize "TYPES.Wizard.LevelUpWizard.Step1.SelectClass"}}</h4>
+        <div class="class-grid">
+            {{#each classes as |cls|}}
+            <div class="class-option select-class-btn {{#if (eq ../changes.classItem.id cls.id)}}selected{{/if}}"
+                data-id="{{cls.id}}">
+                <img src="{{cls.img}}" width="32" height="32" />
+                <span>{{cls.name}} ({{localize "TYPES.Wizard.LevelUpWizard.Step1.Level"}} {{cls.system.levels}})</span>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    {{else}}
+    <div class="class-info box-decorative">
+        <label>{{localize "TYPES.Wizard.LevelUpWizard.Step1.CurrentClass"}}</label>
+        <span>{{changes.classItem.name}}</span>
+        <div class="level-badge">{{localize "TYPES.Wizard.LevelUpWizard.Step1.Level"}} {{actor.system.details.level}} <i
+                class="fas fa-arrow-right"></i> {{changes.level}}</div>
+    </div>
+    {{/if}}
+
+    <div class="hp-roll-section box-decorative">
+        <h4>{{localize "TYPES.Wizard.LevelUpWizard.Step1.HPRollTitle"}} ({{classHitDice}})</h4>
+        <p class="description">{{localize "TYPES.Wizard.LevelUpWizard.Step1.HPRollDesc"}} ({{localize
+            'TYPES.Wizard.LevelUpWizard.Step1.HPRollBonus'}}: {{changes.hpBonus}})</p>
+
+        <div class="roll-controls">
+            <button type="button" class="roll-hd runic-button">
+                <i class="fas fa-dice-d20"></i> {{localize "TYPES.Wizard.LevelUpWizard.Step1.RollBtn"}}
+            </button>
+
+            <div class="roll-result">
+                {{#if changes.hpRoll}}
+                <span class="value">{{changes.hpRoll}} + {{changes.hpBonus}} = <strong>{{add changes.hpRoll
+                        changes.hpBonus}} {{localize 'TYPES.Wizard.LevelUpWizard.Step1.HPRollHPSuffix'}}</strong></span>
+                {{else}}
+                <span class="placeholder">{{localize "TYPES.Wizard.LevelUpWizard.Step1.WaitingRoll"}}</span>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</section>
