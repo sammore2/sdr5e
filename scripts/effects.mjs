@@ -84,3 +84,23 @@ export async function syncEquippedEffect(item) {
     await removeItemEffects(item);
   }
 }
+
+/** Tipos sem toggle "Equipado" — o bônus é permanente assim que o
+ * personagem possui o item, então o gatilho certo é `item.created`/
+ * `item.deleted`, não `item.updated` (ver Handout 11). */
+const PERMANENT_BONUS_TYPES = ['feature', 'background', 'race', 'class', 'subclass', 'feat'];
+
+/** Cria o efeito de um item permanente (feature/background/raça/classe/
+ * subclasse/feat) assim que ele é adicionado ao personagem — idempotente
+ * (não duplica se já existir um efeito pra esse item). Chamado em
+ * `item.created`. */
+export async function syncPermanentBonusEffect(item) {
+  const type = item?.type;
+  if (!PERMANENT_BONUS_TYPES.includes(type)) return;
+  if (!item?.actorId) return;
+
+  const existing = await effects.forItem(item.id);
+  if (existing && existing.length > 0) return;
+
+  await applyItemEffect({ id: item.actorId }, item);
+}

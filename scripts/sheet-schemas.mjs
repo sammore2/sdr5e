@@ -13,7 +13,7 @@
 // can reference any derived path via @.
 // ══════════════════════════════════════════════════════════════════════════
 
-import { ABILITY_KEYS, ABILITY_LABELS, SKILL_ABILITIES, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, SIZE_LABELS } from './config.mjs';
+import { ABILITY_KEYS, ABILITY_LABELS, SKILL_ABILITIES, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, SIZE_LABELS, CLASS_IDENTIFIER_LABELS } from './config.mjs';
 
 export function characterSheetSchema() {
   return {
@@ -157,6 +157,14 @@ export const ITEM_SHEET_SCHEMAS = {
       { value: 'half', label: 'Half caster (Paladin/Ranger)' },
       { value: 'pact', label: 'Pact Magic (Warlock) — not auto-calculated yet' },
     ] },
+    { key: 'knownCasterType', label: 'Known Spells Table', type: 'select', options: [
+      { value: 'none', label: 'N/A — prepares spells instead' },
+      { value: 'bard', label: 'Bard' },
+      { value: 'sorcerer', label: 'Sorcerer' },
+      { value: 'warlock', label: 'Warlock' },
+      { value: 'ranger', label: 'Ranger' },
+    ] },
+    { key: 'classIdentifier', label: 'SRD Class (for multiclass prerequisites)', type: 'select', options: Object.entries(CLASS_IDENTIFIER_LABELS).map(([value, label]) => ({ value, label })) },
   ] }] },
   subclass: { tabs: [{ id: 'main', label: 'Subclass', fields: [
     { key: 'description', label: 'Description', type: 'textarea' },

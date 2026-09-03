@@ -113,3 +113,44 @@ export const SPELL_SLOT_TABLE = {
     [4, 3, 3, 3, 2],
   ],
 };
+
+// SRD 5.1 — magias/cantrips conhecidos por nível, pras 4 classes "known"
+// (sem preparação diária). Index 0 = nível de classe 1. Patrulheiro não tem
+// cantrip (confirmado: sem coluna "Cantrips Known" na tabela do Ranger).
+export const KNOWN_SPELLS_TABLE = {
+  bard: [4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 15, 16, 18, 19, 19, 20, 22, 22, 22],
+  sorcerer: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12, 13, 13, 14, 14, 15, 15, 15, 15],
+  warlock: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15],
+  ranger: [0, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11],
+};
+
+export const KNOWN_CANTRIPS_TABLE = {
+  bard: [2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+  sorcerer: [4, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+  warlock: [2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+};
+
+// SRD 5.1 — Multiclassing Prerequisites (Characterizations/Multiclassing.md).
+// `mode: 'and'` (padrão) exige todos os itens de `abilities`; `mode: 'or'`
+// (só o Fighter) exige pelo menos um.
+export const MULTICLASS_PREREQS = {
+  barbarian: { abilities: ['str'], score: 13 },
+  bard: { abilities: ['cha'], score: 13 },
+  cleric: { abilities: ['wis'], score: 13 },
+  druid: { abilities: ['wis'], score: 13 },
+  fighter: { abilities: ['str', 'dex'], score: 13, mode: 'or' },
+  monk: { abilities: ['dex', 'wis'], score: 13 },
+  paladin: { abilities: ['str', 'cha'], score: 13 },
+  ranger: { abilities: ['dex', 'wis'], score: 13 },
+  rogue: { abilities: ['dex'], score: 13 },
+  sorcerer: { abilities: ['cha'], score: 13 },
+  warlock: { abilities: ['cha'], score: 13 },
+  wizard: { abilities: ['int'], score: 13 },
+};
+
+export const CLASS_IDENTIFIER_LABELS = {
+  none: 'Custom / Homebrew',
+  barbarian: 'Barbarian', bard: 'Bard', cleric: 'Cleric', druid: 'Druid',
+  fighter: 'Fighter', monk: 'Monk', paladin: 'Paladin', ranger: 'Ranger',
+  rogue: 'Rogue', sorcerer: 'Sorcerer', warlock: 'Warlock', wizard: 'Wizard',
+};

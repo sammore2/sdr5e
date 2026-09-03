@@ -118,7 +118,7 @@ export function getDefaultData(type) {
           // Regra opcional do SRD ("Variant: Encumbrance") — desligada por
           // padrão. `weight`/`capacity`/`tier` são calculados sozinhos em
           // prepEncumbrance() (prepare-data.mjs), nunca editados na mão.
-          encumbrance: { enabled: false, weight: 0, capacity: 0, tier: 'none' },
+          encumbrance: { enabled: false, weight: 0, capacity: 0, tier: 'none', overCapacity: false },
           initiative: { value: 0, total: 0 },
           speed: { value: '9m' },
           meleeBonus: 0, rangedBonus: 0, rm: 0,
@@ -306,6 +306,15 @@ export function getDefaultData(type) {
         // 'none' | 'full' | 'half' | 'pact' — usado por prepSpellSlots()
         // em prepare-data.mjs pra calcular resources.spellSlots automaticamente.
         casterType: 'none',
+        // 'none' | 'bard' | 'sorcerer' | 'warlock' | 'ranger' — só pras 4
+        // classes SRD que "conhecem" magia (sem preparação diária). Separado
+        // de `casterType` porque uma classe 'full'/'half' tanto pode ser
+        // "prepara" (Wizard/Paladin) quanto "conhece" (Bard-Sorcerer/Ranger).
+        knownCasterType: 'none',
+        // 'none' | uma das 12 classes SRD — identidade fixa da classe, usada
+        // só pra checar pré-requisito de multiclasse (MULTICLASS_PREREQS em
+        // config.mjs). Separado de casterType/knownCasterType de propósito.
+        classIdentifier: 'none',
       };
 
     case 'background':

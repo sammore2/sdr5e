@@ -12,7 +12,7 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 import { LoomHandlebarsMixin, LoomActorSheet, effects, api, windowManager } from '/_loom/sdk/index.js';
-import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON, ITEM_TYPE_LABEL, ITEM_TYPE_SINGULAR, SIZE_LABELS, SIZE_CARRY_MULTIPLIER, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, DAMAGE_TYPES, DAMAGE_TYPE_LABELS } from './config.mjs';
+import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON, ITEM_TYPE_LABEL, ITEM_TYPE_SINGULAR, SIZE_LABELS, SIZE_CARRY_MULTIPLIER, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, DAMAGE_TYPES, DAMAGE_TYPE_LABELS, KNOWN_SPELLS_TABLE, KNOWN_CANTRIPS_TABLE } from './config.mjs';
 import { fmtMod, setPathValue, currentAdvantageMode } from './utils.mjs';
 import { sdr5eRoll, rollDeathSave, toggleInspiration, setExhaustion, rollWeaponAttack, rollWeaponDamage, castSpell, rollSpellAttack, rollSpellDamage, spendHitDie, postItemToChat, getActorConditions, applyAbilityCheckConditionModifiers, getSaveConditionOutcome, activateFeature } from './roll-engine.mjs';
 import { getDefaultData } from './schema.mjs';
@@ -186,7 +186,23 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const item = (this.document?.items || []).find((i) => i.id === itemId);
     if (!item) return;
     const idata = item.system || item.data || {};
-    const next = idata.attunement === 'attuned' ? 'required' : 'attuned';
+    const willAttune = idata.attunement !== 'attuned';
+
+    // SRD: máximo 3 itens sintonizados ao mesmo tempo. Só checa quando vai
+    // LIGAR a sintonia — desatunar nunca precisa de checagem.
+    if (willAttune) {
+      const attunedCount = (this.document.items || []).filter((i) => {
+        if (i.id === itemId) return false;
+        const d = i.system || i.data || {};
+        return d.attunement === 'attuned';
+      }).length;
+      if (attunedCount >= 3) {
+        window.Loom?.showToast?.('Already attuned to 3 magic items (SRD maximum).', 'warning');
+        return;
+      }
+    }
+
+    const next = willAttune ? 'attuned' : 'required';
     const data = { ...idata, attunement: next };
     await api.put(`/items/${itemId}`, { data });
     await this._reloadDocument();
@@ -409,12 +425,33 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       spells: spellItems.filter((s) => (s.system?.spellLevel ?? s.data?.spellLevel ?? 0) === lvl),
     })).filter((g) => g.spells.length > 0);
     const preparableSpells = spellItems.filter((s) => !s.isCantrip);
+
+    // SRD: Bardo/Feiticeiro/Bruxo/Patrulheiro "conhecem" magia (número fixo,
+    // sem preparação diária) — ver Handout 09. Só olha a primeira classe
+    // 'known' encontrada; multiclasse com 2+ classes 'known' não é somado
+    // (limitação documentada no handout).
+    const knownClassItem = items.find((i) => {
+      const idata = i.system || i.data || {};
+      return i.type === 'class' && KNOWN_SPELLS_TABLE[idata.knownCasterType];
+    });
+    const knownClassData = knownClassItem ? (knownClassItem.system || knownClassItem.data || {}) : null;
+    const knownType = knownClassData?.knownCasterType;
+    const knownLevel = Math.max(1, Math.min(20, Number(knownClassData?.levels) || 1));
+    const knownMax = knownType ? (KNOWN_SPELLS_TABLE[knownType]?.[knownLevel - 1] ?? 0) : 0;
+    const cantripsKnownMax = knownType ? (KNOWN_CANTRIPS_TABLE[knownType]?.[knownLevel - 1] ?? 0) : 0;
+
     const _spellcasting = {
       ability: (attrs.spellcasting?.ability || 'int').toUpperCase(),
       dc: attrs.spellcasting?.dc ?? 0,
       attackBonus: fmtMod(attrs.spellcasting?.attackBonus ?? 0),
       prepared: preparableSpells.filter((s) => s.prepared).length,
       preparedMax: this._maxPreparedSpells(),
+      // Só faz sentido quando `knownClassItem` existe — 0/0 pra quem prepara
+      // magia em vez de "conhecer" (Cleric/Druid/Paladin/Wizard).
+      known: knownClassItem ? preparableSpells.length : 0,
+      knownMax,
+      cantripsKnown: knownClassItem ? spellItems.filter((s) => s.isCantrip).length : 0,
+      cantripsKnownMax,
     };
 
     // Race/Class/Background — 1 item of each expected per actor (the first
@@ -430,9 +467,11 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       // render as a bare non-interactive div once set, with no way back in
       // to edit or swap it (found from direct feedback: "não tem como
       // mudar a class" / "ou adicionar a class").
-      race: raceItem ? { id: raceItem.id, name: raceItem.name, subtitle: raceItem.system?.creatureType || raceItem.data?.creatureType || '' } : null,
+      // `imgUrl` added so o ícone customizado do item (definido na própria
+      // ficha do item) aparece aqui em vez do ícone fixo (Handout 19).
+      race: raceItem ? { id: raceItem.id, name: raceItem.name, imgUrl: raceItem.imgUrl || '', subtitle: raceItem.system?.creatureType || raceItem.data?.creatureType || '' } : null,
       class: classItem ? {
-        id: classItem.id, name: classItem.name,
+        id: classItem.id, name: classItem.name, imgUrl: classItem.imgUrl || '',
         subtitle: `Level ${classItem.system?.levels ?? classItem.data?.levels ?? 1}`,
         level: classItem.system?.levels ?? classItem.data?.levels ?? 1,
         // Separate from `subtitle` above — the main-tab identity card shows
@@ -442,7 +481,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         subclassName: subclassItem?.name || '',
         subclassId: subclassItem?.id || null,
       } : null,
-      background: backgroundItem ? { id: backgroundItem.id, name: backgroundItem.name } : null,
+      background: backgroundItem ? { id: backgroundItem.id, name: backgroundItem.name, imgUrl: backgroundItem.imgUrl || '' } : null,
     };
     const _classLabel = classItem ? classItem.name : '';
 
@@ -468,6 +507,18 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       ...e,
       durationLabel: e.duration < 0 ? 'Permanent' : `${e.duration} round${e.duration === 1 ? '' : 's'}`,
     }));
+
+    // SRD (Characterizations/Multiclassing.md, "Prerequisites") — só checa
+    // de verdade com 2+ classes; com 0 ou 1, não há "multiclasse" pra
+    // qualificar. Informativo, não bloqueia nada (ver Handout 10).
+    const classItemsForPrereq = items.filter((i) => i.type === 'class');
+    const multiclassQualifies = classItemsForPrereq.length <= 1 ? true : classItemsForPrereq.every((item) => {
+      const cdata = item.system || item.data || {};
+      const prereq = MULTICLASS_PREREQS[cdata.classIdentifier];
+      if (!prereq) return true; // classe custom/'none' — não tem tabela pra checar, não bloqueia
+      const scores = prereq.abilities.map((a) => sd.abilities?.[a]?.total ?? 0);
+      return prereq.mode === 'or' ? scores.some((s) => s >= prereq.score) : scores.every((s) => s >= prereq.score);
+    });
 
     const healthMax = res.health?.max ?? 10;
     const healthPct = healthMax > 0 ? Math.max(0, Math.min(100, Math.round(((res.health?.value ?? 0) / healthMax) * 100))) : 0;
@@ -558,6 +609,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _namedWeaponProfs: (sd.proficiencies?.weapons || []).filter((w) => !WEAPON_CATEGORY_CODES.includes(w)),
       _senses: details.senses?.value || [],
       _identity,
+      _multiclassQualifies: multiclassQualifies,
     };
   }
 
@@ -898,6 +950,22 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       res.shortRestsDone = 0;
     } else {
       res.shortRestsDone = (res.shortRestsDone || 0) + 1;
+
+      // SRD (Classes/Warlock.md, "Pact Magic"): "you regain all expended
+      // spell slots when you finish a short or long rest" — exceção real,
+      // só o Warlock recupera magia em descanso CURTO. Multiclasse com
+      // Warlock + outra classe conjuradora fica fora (mesma limitação do
+      // Handout 08 — um bucket de slot só, não dois grupos separados).
+      const classItem = (this.document.items || []).find((i) => i.type === 'class');
+      const cdata = classItem ? (classItem.system || classItem.data || {}) : null;
+      if (cdata?.casterType === 'pact') {
+        let pactSlotsRestored = 0;
+        for (const lvl of Object.keys(res.spellSlots || {})) {
+          const slot = res.spellSlots[lvl];
+          if (slot && slot.value < slot.max) { pactSlotsRestored += slot.max - slot.value; slot.value = slot.max; }
+        }
+        if (pactSlotsRestored > 0) recovered.push(`${pactSlotsRestored} Pact Magic slot${pactSlotsRestored === 1 ? '' : 's'}`);
+      }
     }
 
     await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: sd });

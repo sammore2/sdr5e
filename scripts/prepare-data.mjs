@@ -86,7 +86,11 @@ export function prepSkills(sd, prof) {
   for (const skill of Object.values(sd.skills)) {
     const ablKey = (skill.ability || '').toLowerCase();
     const mod = sd.abilities[ablKey]?.modifier || 0;
-    const multiplier = skill.multiplier ?? (skill.proficient ? 1 : 0);
+    // multiplier:0 é o valor padrão de toda perícia — não pode ser tratado como
+    // "não definido" (?? só cai pro fallback em null/undefined, nunca em 0).
+    // proficient decide 0 vs proficiente; multiplier só entra quando maior que 1
+    // (Expertise, ×2), caso algo defina isso no futuro.
+    const multiplier = skill.proficient ? (skill.multiplier > 1 ? skill.multiplier : 1) : 0;
     const profValue = Math.floor(prof * multiplier);
     skill.total = mod + profValue + (Number(skill.bonus) || 0);
   }
@@ -105,7 +109,9 @@ export function prepSaves(sd, prof) {
 
 export function prepInitiative(sd) {
   const dexMod = sd.abilities.dex.modifier || 0;
-  sd.attributes.initiative.total = dexMod + (Number(sd.attributes.initiative.value) || 0);
+  sd.attributes.initiative.total = dexMod
+    + (Number(sd.attributes.initiative.value) || 0)
+    + (Number(sd.attributes.initiative.bonus) || 0);
 }
 
 // Tipos de item que contam peso físico de verdade — feature/spell/race/
@@ -129,6 +135,7 @@ export function prepEncumbrance(sd, items) {
     enc.weight = 0;
     enc.capacity = 0;
     enc.tier = 'none';
+    enc.overCapacity = false;
     return;
   }
 
@@ -160,6 +167,10 @@ export function prepEncumbrance(sd, items) {
   enc.weight = weight;
   enc.capacity = capacity;
   enc.tier = tier;
+  // SRD: "heavily encumbered... up to your maximum carrying capacity" —
+  // acima da capacidade máxima é outro estado (nem consegue carregar, só
+  // arrastar), não é só "mais heavy ainda". Flag informativa separada.
+  enc.overCapacity = weight > capacity;
 }
 
 // Calcula `resources.spellSlots[1..9].max` a partir do(s) item(ns) 'class'
@@ -190,12 +201,7 @@ function applyPactMagicSlots(slots, classLevel) {
   }
 }
 
-export function prepSpellSlots(sd, items) {
-  const slots = sd.resources?.spellSlots;
-  if (!slots) return;
-
-  const classItem = (items || []).find((i) => i.type === 'class');
-  const idata = classItem ? (classItem.system || classItem.data || {}) : null;
+function applySingleClassSlots(slots, idata) {
   const casterType = idata?.casterType;
 
   if (casterType === 'pact') {
@@ -207,9 +213,6 @@ export function prepSpellSlots(sd, items) {
   const table = casterType === 'full' || casterType === 'half' ? SPELL_SLOT_TABLE[casterType] : null;
 
   if (!table) {
-    // Sem classe conjuradora (ou 'none') — zera o max, mas não mexe
-    // no value se já tiver slot gasto guardado (evita sumir dado do jogador
-    // por engano se ele apagar a classe sem querer).
     for (let lvl = 1; lvl <= 9; lvl++) {
       slots[lvl].max = 0;
     }
@@ -226,10 +229,70 @@ export function prepSpellSlots(sd, items) {
   }
 }
 
+/**
+ * SRD (Characterizations/Multiclassing.md, "Spell Slots"): soma todos os
+ * níveis em classes 'full' + metade (arredondado pra baixo) dos níveis em
+ * classes 'half', e usa esse total pra consultar a tabela "Multiclass
+ * Spellcaster" — que é, número por número, IDÊNTICA à SPELL_SLOT_TABLE.full
+ * já usada pra conjurador único (conferido linha a linha contra o SRD).
+ *
+ * Limitação conhecida, documentada, não resolvida por esta tarefa: se o
+ * personagem também tiver nível de Warlock (Pact Magic), essa reserva
+ * separada do SRD não é aplicada aqui — `resources.spellSlots` só tem um
+ * bucket por nível, sem espaço pra guardar os dois grupos de slot ao mesmo
+ * tempo. Ver Handout 08, seção "Fora do escopo".
+ */
+function applyMulticlassSlots(slots, classItems) {
+  let fullLevels = 0;
+  let halfLevels = 0;
+
+  for (const item of classItems) {
+    const idata = item.system || item.data || {};
+    const levels = Number(idata.levels) || 0;
+    if (idata.casterType === 'full') fullLevels += levels;
+    else if (idata.casterType === 'half') halfLevels += levels;
+  }
+
+  const effectiveLevel = Math.max(0, Math.min(20, fullLevels + Math.floor(halfLevels / 2)));
+
+  if (effectiveLevel === 0) {
+    for (let lvl = 1; lvl <= 9; lvl++) slots[lvl].max = 0;
+    return;
+  }
+
+  const row = SPELL_SLOT_TABLE.full[effectiveLevel - 1] || [];
+  for (let lvl = 1; lvl <= 9; lvl++) {
+    const max = row[lvl - 1] || 0;
+    slots[lvl].max = max;
+    if ((slots[lvl].value ?? 0) > max) slots[lvl].value = max;
+  }
+}
+
+export function prepSpellSlots(sd, items) {
+  const slots = sd.resources?.spellSlots;
+  if (!slots) return;
+
+  const classItems = (items || []).filter((i) => i.type === 'class');
+
+  if (classItems.length > 1) {
+    applyMulticlassSlots(slots, classItems);
+    return;
+  }
+
+  const classItem = classItems[0];
+  const idata = classItem ? (classItem.system || classItem.data || {}) : null;
+  if (!idata) {
+    for (let lvl = 1; lvl <= 9; lvl++) slots[lvl].max = 0;
+    return;
+  }
+  applySingleClassSlots(slots, idata);
+}
+
 export function prepCharacter(sd, items) {
   prepAbilities(sd);
   const level = Number(sd.details?.level) || 1;
-  const prof = Math.floor((level - 1) / 4) + 2;
+  const baseProf = Math.floor((level - 1) / 4) + 2;
+  const prof = baseProf + (Number(sd.attributes.prof.bonus) || 0);
   sd.attributes.prof.value = prof;
   sd.details.proficiencyBonus = prof;
 

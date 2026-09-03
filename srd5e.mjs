@@ -23,7 +23,7 @@ import { mergeDefaults } from './scripts/utils.mjs';
 import { prepCharacter, prepNpc } from './scripts/prepare-data.mjs';
 import { getSheetSchema, getItemSheetSchema } from './scripts/sheet-schemas.mjs';
 import { applyDamageToTargets } from './scripts/roll-engine.mjs';
-import { syncEquippedEffect } from './scripts/effects.mjs';
+import { syncEquippedEffect, syncPermanentBonusEffect, removeItemEffects } from './scripts/effects.mjs';
 import { Sdr5eCharacterSheet } from './scripts/actor-sheet.mjs';
 import { Sdr5eNpcSheet } from './scripts/npc-sheet.mjs';
 import { Sdr5eItemSheet } from './scripts/item-sheet.mjs';
@@ -153,6 +153,11 @@ window.Loom.wraps.renderRollCard.addWrapper((wrapped, roll, esc) => {
 });
 
 window.Loom.socket.on('item.updated', (item) => { void syncEquippedEffect(item); });
+// Feature/Background/Raça/Classe/Subclasse/Feat não têm toggle "Equipado"
+// — o bônus deles é permanente assim que o item existe no personagem, por
+// isso o gatilho é ganhar/perder o item, não atualizar ele. Ver Handout 11.
+window.Loom.socket.on('item.created', (item) => { void syncPermanentBonusEffect(item); });
+window.Loom.socket.on('item.deleted', (item) => { void removeItemEffects(item); });
 
 // ── Native sheets ─────────────────────────────────────────────────────────
 

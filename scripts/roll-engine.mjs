@@ -457,9 +457,10 @@ export async function rollWeaponAttack(actor, item) {
   const abilityMod = sd.abilities?.[abilityKey]?.modifier ?? 0;
   const prof = sd.attributes?.prof?.value ?? 0;
   const proficient = isWeaponProficient(sd, item, idata);
-  const bonus = abilityMod + (proficient ? prof : 0) + (Number(idata.attackBonus) || 0);
-  const conditions = await getActorConditions(actor.id);
   const isRanged = idata.rangeType === 'ranged';
+  const attackTypeBonus = Number((isRanged ? sd.attributes?.rangedBonus : sd.attributes?.meleeBonus)) || 0;
+  const bonus = abilityMod + (proficient ? prof : 0) + (Number(idata.attackBonus) || 0) + attackTypeBonus;
+  const conditions = await getActorConditions(actor.id);
   const armorPenalty = (abilityKey === 'str' || abilityKey === 'dex') && !!sd.attributes?.armor?.penalty;
   const advantage = applyWeaponAttackConditionModifiers(currentAdvantageMode(), conditions, isRanged, sd.resources?.exhaustion ?? 0, armorPenalty);
   return sdr5eRoll({ label: `Attack: ${item.name}`, bonus, actor, advantage });
@@ -471,8 +472,20 @@ export async function rollWeaponDamage(actor, item) {
   const idata = item.system || item.data || {};
   const abilityKey = weaponAbilityKey(sd, idata);
   const abilityMod = sd.abilities?.[abilityKey]?.modifier ?? 0;
+
+  // SRD (Combat, "Two-Weapon Fighting"): ataque da mão secundária (bônus de
+  // ação) só soma modificador de habilidade no dano se for negativo — a não
+  // ser que o personagem tenha o estilo de luta Two-Weapon Fighting
+  // (feature com flags.isTWF), que remove essa restrição.
+  const isOffHand = idata.primarySlot === 'offHand';
+  const hasTWFStyle = (actor.items || []).some((i) => {
+    const fdata = i.system || i.data || {};
+    return i.type === 'feature' && fdata.flags?.isTWF;
+  });
+  const effectiveMod = (isOffHand && abilityMod > 0 && !hasTWFStyle) ? 0 : abilityMod;
+
   const formula = idata.damage?.formula || '1d4';
-  const rollFormula = abilityMod !== 0 ? `${formula} + ${abilityMod}` : formula;
+  const rollFormula = effectiveMod !== 0 ? `${formula} + ${effectiveMod}` : formula;
   const type = idata.damage?.type || '';
   const typeSuffix = type ? ` (${type})` : '';
   // Rolled locally (not just dispatched) so the total is known synchronously
@@ -583,7 +596,13 @@ export async function castSpell(actor, item) {
     return null;
   }
 
-  if (level > 0) {
+  // SRD (Spellcasting, "Rituals"): magia ritual preparada não gasta slot
+  // (leva 10min a mais, não rastreado aqui — narrativo). Simplificação
+  // assumida: usa a regra geral (precisa `prepared: true`), não replica a
+  // exceção do Wizard (ritual direto do grimório sem preparar).
+  const isFreeRitual = idata.ritual && idata.prepared;
+
+  if (level > 0 && !isFreeRitual) {
     const slot = sd.resources?.spellSlots?.[level];
     if (!slot || (slot.value ?? 0) <= 0) {
       globalThis.Loom?.showToast?.(`No level ${level} spell slots remaining.`, 'warning');

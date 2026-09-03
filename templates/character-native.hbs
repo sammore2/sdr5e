@@ -212,12 +212,12 @@
 
           <div class="sdrn-identity-cards">
             {{#if _identity.race}}
-            <button type="button" class="sdrn-id-card" data-action="open-item" data-id="{{_identity.race.id}}" title="Open Race"><i class="fas fa-paw"></i><div><div class="sdrn-id-title">{{_identity.race.name}}</div><div class="sdrn-id-sub">{{_identity.race.subtitle}}</div></div></button>
+            <button type="button" class="sdrn-id-card" data-action="open-item" data-id="{{_identity.race.id}}" title="Open Race">{{#if _identity.race.imgUrl}}<img class="sdrn-id-card-img" src="{{_identity.race.imgUrl}}" alt="" />{{else}}<i class="fas fa-paw"></i>{{/if}}<div><div class="sdrn-id-title">{{_identity.race.name}}</div><div class="sdrn-id-sub">{{_identity.race.subtitle}}</div></div></button>
             {{else}}
             <button type="button" class="sdrn-add-btn" data-action="create-item" data-item-type="race">+ Add Race</button>
             {{/if}}
             {{#if _identity.background}}
-            <button type="button" class="sdrn-id-card" data-action="open-item" data-id="{{_identity.background.id}}" title="Open Background"><i class="fas fa-scroll"></i><div><div class="sdrn-id-title">{{_identity.background.name}}</div></div></button>
+            <button type="button" class="sdrn-id-card" data-action="open-item" data-id="{{_identity.background.id}}" title="Open Background">{{#if _identity.background.imgUrl}}<img class="sdrn-id-card-img" src="{{_identity.background.imgUrl}}" alt="" />{{else}}<i class="fas fa-scroll"></i>{{/if}}<div><div class="sdrn-id-title">{{_identity.background.name}}</div></div></button>
             {{else}}
             <button type="button" class="sdrn-add-btn" data-action="create-item" data-item-type="background">+ Add Background</button>
             {{/if}}
@@ -324,7 +324,7 @@
       {{#if _identity.class}}
       <div class="sdrn-feature-class-card">
         <button type="button" class="sdrn-feature-class-icons" data-action="open-item" data-id="{{_identity.class.id}}" title="Open Class">
-          <i class="fas fa-shield-halved"></i>
+          {{#if _identity.class.imgUrl}}<img class="sdrn-id-card-img" src="{{_identity.class.imgUrl}}" alt="" />{{else}}<i class="fas fa-shield-halved"></i>{{/if}}
           {{#if _identity.class.subclassId}}<i class="fas fa-fire"></i>{{/if}}
         </button>
         <button type="button" class="sdrn-feature-class-name" data-action="open-item" data-id="{{_identity.class.id}}">
