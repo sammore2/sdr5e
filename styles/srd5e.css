@@ -14516,3 +14516,37 @@ form.npc-2024-sheet {
 .sdrn-item-icon-btn img, .sdrn-item-icon img {
   width: 20px; height: 20px; object-fit: cover; border-radius: 3px; display: block;
 }
+
+/* Identity cards (Race, Background) and Features-tab Class card — limit
+   custom uploaded images to their container size so a high-res image
+   doesn't expand to full screen. */
+.sdrn-id-card-img {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid rgba(201, 161, 90, 0.25);
+  display: block;
+  flex: none;
+}
+
+.sdrn-id-card img {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid rgba(201, 161, 90, 0.25);
+  display: block;
+  flex: none;
+}
+
+.sdrn-feature-class-icons img,
+.sdrn-feature-class-icons .sdrn-id-card-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid rgba(201, 161, 90, 0.3);
+  display: block;
+  flex: none;
+}
