@@ -14,7 +14,7 @@
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager } from '/_loom/sdk/index.js';
 import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON } from './config.mjs';
 import { fmtMod, setPathValue, currentAdvantageMode } from './utils.mjs';
-import { sdr5eRoll, applyHeal, applyDamage, getActorConditions, applyPoisonedDisadvantage, getSaveConditionOutcome } from './roll-engine.mjs';
+import { sdr5eRoll, applyHeal, applyDamage, getActorConditions, applyPoisonedDisadvantage, getSaveConditionOutcome, evaluateDamageFormula, postItemToChat } from './roll-engine.mjs';
 import { getDefaultData } from './schema.mjs';
 import { Sdr5eItemSheet } from './item-sheet.mjs';
 
@@ -107,8 +107,16 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       .filter((s) => s.proficient)
       .sort((a, b) => a.label.localeCompare(b.label));
 
+    // SRD: todo stat block de monstro lista "passive Perception N" nos
+    // sentidos, com ou sem proficiência na perícia (Handout 34).
+    const _passivePerception = 10 + (skills.perception?.total ?? 0);
+
     const items = this.document?.items || [];
-    const _actions = items.filter((i) => i.type === 'feature').map((i) => ({ ...i, icon: ITEM_TYPE_ICON.feature || '⭐' }));
+    const _actions = items.filter((i) => i.type === 'feature').map((i) => ({
+      ...i,
+      imgUrl: i.imgUrl || i.img || i.avatarUrl || '',
+      icon: ITEM_TYPE_ICON.feature || '⭐',
+    }));
 
     const healthMax = res.health?.max ?? 10;
     const healthPct = healthMax > 0 ? Math.max(0, Math.min(100, Math.round(((res.health?.value ?? 0) / healthMax) * 100))) : 0;
@@ -136,6 +144,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _alignment: details.alignment || '',
       _senses: details.senses?.value || [],
       _sensesCustom: details.senses?.custom || '',
+      _passivePerception,
       _languages: details.languages?.value || [],
       _languagesCustom: details.languages?.custom || '',
       _traits,
@@ -166,6 +175,14 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (action === 'hp-delta') {
       const delta = Number(target.dataset.delta) || 0;
       void this._applyHpDelta(delta);
+      return;
+    }
+    if (action === 'roll-action-damage') {
+      void this._rollActionDamage(id);
+      return;
+    }
+    if (action === 'post-action-chat') {
+      void this._postActionToChat(id);
       return;
     }
     if (action === 'open-item') {
@@ -239,6 +256,31 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (!itemId) return;
     await api.delete(`/items/${itemId}`);
     await this._reloadDocument();
+  }
+
+  async _rollActionDamage(itemId) {
+    if (!itemId || !this.document) return;
+    const item = (this.document.items || []).find((i) => i.id === itemId);
+    if (!item) return;
+    const idata = item.system || item.data || {};
+    const formula = idata.damage?.formula;
+    if (!formula) return;
+    const type = idata.damage?.type || '';
+    const typeSuffix = type ? ` (${type})` : '';
+    const total = evaluateDamageFormula(formula);
+    window.Loom.dispatchRoll({
+      formula: String(total),
+      actorId: this.document.id,
+      mode: 'public',
+      meta: { label: `Damage: ${item.name}${typeSuffix}`, srd5eDamage: { amount: total, type } },
+    });
+  }
+
+  async _postActionToChat(itemId) {
+    if (!itemId || !this.document) return;
+    const item = (this.document.items || []).find((i) => i.id === itemId);
+    if (!item) return;
+    await postItemToChat(this.document, item);
   }
 
   async _createItem(type) {

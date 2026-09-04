@@ -61,7 +61,7 @@ function defaultBonuses() {
     skills: [], skillMultipliers: [], trainedSkill: '',
     crit: { modifiesCrit: false, rangeMultiplier: 1, fixedReduction: 0, multiplierBonus: 0 },
     traits: { di: [], dr: [], dv: [], ci: [] },
-    unarmedDie: '', fullOffHandDamage: false, isAdeptWeapon: false,
+    fullOffHandDamage: false, isAdeptWeapon: false,
   };
 }
 

@@ -64,6 +64,7 @@
           {{#each _senses}}<span class="sdrn-tag">{{this}}</span>{{/each}}
           {{#if _sensesCustom}}<span class="sdrn-tag">{{_sensesCustom}}</span>{{/if}}
           {{#unless _senses.length}}{{#unless _sensesCustom}}<span class="sdrn-empty">&mdash;</span>{{/unless}}{{/unless}}
+          <span class="sdrn-tag">passive Perception {{_passivePerception}}</span>
         </div>
       </div>
       <div class="sdrn-box">
@@ -98,8 +99,10 @@
       <div class="sdrn-box-title">⚔️ Actions</div>
       {{#each _actions}}
       <div class="sdrn-item-row">
-        <span class="sdrn-item-icon">{{icon}}</span>
+        <span class="sdrn-item-icon">{{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}{{icon}}{{/if}}</span>
         <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
+        <button type="button" class="sdrn-item-roll-btn" data-action="post-action-chat" data-id="{{id}}" title="Post to Chat"><i class="fas fa-comment"></i></button>
+        <button type="button" class="sdrn-item-roll-btn" data-action="roll-action-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
         <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}" title="Delete">&times;</button>
       </div>
       {{else}}

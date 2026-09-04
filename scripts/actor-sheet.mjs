@@ -11,10 +11,10 @@
 // (module functions), never `this.document.rollAbilityTest(...)`.
 // ══════════════════════════════════════════════════════════════════════════
 
-import { LoomHandlebarsMixin, LoomActorSheet, effects, api, windowManager } from '/_loom/sdk/index.js';
+import { LoomHandlebarsMixin, LoomActorSheet, effects, api, windowManager, showToast } from '/_loom/sdk/index.js';
 import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON, ITEM_TYPE_LABEL, ITEM_TYPE_SINGULAR, SIZE_LABELS, SIZE_CARRY_MULTIPLIER, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, DAMAGE_TYPES, DAMAGE_TYPE_LABELS, KNOWN_SPELLS_TABLE, KNOWN_CANTRIPS_TABLE } from './config.mjs';
 import { fmtMod, setPathValue, currentAdvantageMode } from './utils.mjs';
-import { sdr5eRoll, rollDeathSave, toggleInspiration, setExhaustion, rollWeaponAttack, rollWeaponDamage, castSpell, rollSpellAttack, rollSpellDamage, spendHitDie, postItemToChat, getActorConditions, applyAbilityCheckConditionModifiers, getSaveConditionOutcome, activateFeature } from './roll-engine.mjs';
+import { sdr5eRoll, rollDeathSave, toggleInspiration, setExhaustion, rollWeaponAttack, rollWeaponDamage, rollUnarmedStrike, rollUnarmedDamage, castSpell, rollSpellAttack, rollSpellDamage, spendHitDie, postItemToChat, getActorConditions, applyAbilityCheckConditionModifiers, getSaveConditionOutcome, getSkillConditionOutcome, activateFeature } from './roll-engine.mjs';
 import { getDefaultData } from './schema.mjs';
 import { Sdr5eItemSheet } from './item-sheet.mjs';
 
@@ -29,7 +29,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   // `merged.position` (read here via mergeOptionsChain), IGNORING any
   // width/height passed loose to the constructor — without this the window
   // fell back to BaseWindow's 600px default and the sheet's 3 columns overlapped.
-  static DEFAULT_OPTIONS = { position: { width: 640, height: 760 } };
+  static DEFAULT_OPTIONS = { position: { width: 750, height: 890 } };
 
   constructor(props) {
     super({
@@ -462,26 +462,34 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const classItem = findFirst('class');
     const backgroundItem = findFirst('background');
     const subclassItem = findFirst('subclass');
+    const getItemImage = (i) => i ? (i.imgUrl || i.img || i.avatarUrl || i.systemData?.imgUrl || i.systemData?.img || i.data?.imgUrl || i.data?.img || i.system?.img || '') : '';
+    const getItemIcon = (i) => i ? (i.icon || ITEM_TYPE_ICON[i.type] || '') : '';
+
     const _identity = {
-      // `id` added so the card can open the item's own sheet — it used to
-      // render as a bare non-interactive div once set, with no way back in
-      // to edit or swap it (found from direct feedback: "não tem como
-      // mudar a class" / "ou adicionar a class").
-      // `imgUrl` added so o ícone customizado do item (definido na própria
-      // ficha do item) aparece aqui em vez do ícone fixo (Handout 19).
-      race: raceItem ? { id: raceItem.id, name: raceItem.name, imgUrl: raceItem.imgUrl || '', subtitle: raceItem.system?.creatureType || raceItem.data?.creatureType || '' } : null,
+      race: raceItem ? {
+        id: raceItem.id,
+        name: raceItem.name,
+        imgUrl: getItemImage(raceItem),
+        icon: getItemIcon(raceItem),
+        subtitle: raceItem.system?.creatureType || raceItem.data?.creatureType || raceItem.systemData?.creatureType || ''
+      } : null,
       class: classItem ? {
-        id: classItem.id, name: classItem.name, imgUrl: classItem.imgUrl || '',
-        subtitle: `Level ${classItem.system?.levels ?? classItem.data?.levels ?? 1}`,
-        level: classItem.system?.levels ?? classItem.data?.levels ?? 1,
-        // Separate from `subtitle` above — the main-tab identity card shows
-        // level there, but the Features-tab class card (matching real
-        // dnd5e-Foundry) shows the subclass name instead, with level as its
-        // own badge on the right.
+        id: classItem.id,
+        name: classItem.name,
+        imgUrl: getItemImage(classItem),
+        icon: getItemIcon(classItem),
+        subtitle: `Level ${classItem.system?.levels ?? classItem.data?.levels ?? classItem.systemData?.levels ?? 1}`,
+        level: classItem.system?.levels ?? classItem.data?.levels ?? classItem.systemData?.levels ?? 1,
         subclassName: subclassItem?.name || '',
         subclassId: subclassItem?.id || null,
       } : null,
-      background: backgroundItem ? { id: backgroundItem.id, name: backgroundItem.name, imgUrl: backgroundItem.imgUrl || '' } : null,
+      background: backgroundItem ? {
+        id: backgroundItem.id,
+        name: backgroundItem.name,
+        imgUrl: getItemImage(backgroundItem),
+        icon: getItemIcon(backgroundItem),
+        subtitle: backgroundItem.system?.creatureType || backgroundItem.data?.creatureType || backgroundItem.systemData?.creatureType || 'Background'
+      } : null,
     };
     const _classLabel = classItem ? classItem.name : '';
 
@@ -521,7 +529,8 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     });
 
     const healthMax = res.health?.max ?? 10;
-    const healthPct = healthMax > 0 ? Math.max(0, Math.min(100, Math.round(((res.health?.value ?? 0) / healthMax) * 100))) : 0;
+    const effectiveMax = res.health?.effectiveMax ?? healthMax;
+    const healthPct = effectiveMax > 0 ? Math.max(0, Math.min(100, Math.round(((res.health?.value ?? 0) / effectiveMax) * 100))) : 0;
 
     const hitDice = res.hitDice ?? { value: 1, max: 1, die: 'd8' };
     const hitDicePct = hitDice.max > 0 ? Math.max(0, Math.min(100, Math.round((hitDice.value / hitDice.max) * 100))) : 0;
@@ -538,6 +547,15 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const _deathSaves = {
       successPips: Array.from({ length: 3 }, (_, i) => ({ filled: (deathSaves.successes || 0) > i })),
       failurePips: Array.from({ length: 3 }, (_, i) => ({ filled: (deathSaves.failures || 0) > i })),
+    };
+
+    const xpVal = Number(details.xp?.value) || 0;
+    const xpMax = Number(details.xp?.max) || 300;
+    const xpPct = xpMax > 0 ? Math.max(0, Math.min(100, Math.round((xpVal / xpMax) * 100))) : 0;
+    const _xp = {
+      value: xpVal.toLocaleString(),
+      max: xpMax.toLocaleString(),
+      pct: xpPct,
     };
 
     return {
@@ -567,7 +585,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _acBase: attrs.da?.base ?? 10,
       _initiative: fmtMod(attrs.initiative?.total ?? 0),
       _speed: attrs.speed?.value ?? '9m',
-      _health: { value: res.health?.value ?? 0, max: healthMax, pct: healthPct, temp: res.health?.temp ?? 0 },
+      _health: { value: res.health?.value ?? 0, max: healthMax, effectiveMax, pct: healthPct, temp: res.health?.temp ?? 0 },
       _hitDice: { ...hitDice, pct: hitDicePct },
       _carrying,
       _currency: {
@@ -583,6 +601,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _showDeathSaves: (res.health?.value ?? 0) <= 0,
       _level: details.level ?? 1,
       _classLabel: _classLabel,
+      _xp,
       _background: details.background || '',
       _biography: details.biography || '',
       _bio: {
@@ -692,8 +711,23 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       return;
     }
 
+    if (action === 'unarmed-attack') {
+      void rollUnarmedStrike(this.document);
+      return;
+    }
+
+    if (action === 'unarmed-damage') {
+      void rollUnarmedDamage(this.document);
+      return;
+    }
+
     if (action === 'open-item') {
       void this._openItem(id);
+      return;
+    }
+
+    if (action === 'pick-item-icon') {
+      void this._pickItemIcon(id);
       return;
     }
 
@@ -767,6 +801,11 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       return;
     }
 
+    if (action === 'level-up-wizard') {
+      void this._openLevelUpWizard();
+      return;
+    }
+
     if (action === 'short-rest') {
       void this._takeRest('short');
       return;
@@ -788,7 +827,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const conditions = await getActorConditions(this.document.id);
       const exhaustionLevel = sd.resources?.exhaustion ?? 0;
       const armorPenalty = !!sd.attributes?.armor?.penalty;
-      const { autoFail, disadvantage } = getSaveConditionOutcome(key, conditions, exhaustionLevel, armorPenalty);
+      const { autoFail, disadvantage, bonus: coverBonus } = getSaveConditionOutcome(key, conditions, exhaustionLevel, armorPenalty);
       if (autoFail) {
         await window.Loom.ChatMessage.create({
           speaker: window.Loom.ChatMessage.getSpeaker({ actor: this.document }),
@@ -803,7 +842,9 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       // just override the keyboard state (a Shift-held advantage should
       // still cancel a forced disadvantage per SRD, not lose to it blindly).
       const advantage = (kb === 1 && disadvantage) ? 0 : disadvantage ? -1 : kb;
-      await sdr5eRoll({ label: `Save: ${ABILITY_LABELS[key]}`, bonus: save?.total ?? 0, actor: this.document, advantage });
+      // Cover (Handout 28): bônus de +2/+5 em saves de Destreza, resolvido
+      // acima em getSaveConditionOutcome.
+      await sdr5eRoll({ label: `Save: ${ABILITY_LABELS[key]}`, bonus: (save?.total ?? 0) + (coverBonus || 0), actor: this.document, advantage });
     } else {
       const conditions = await getActorConditions(this.document.id);
       const armorPenalty = (key === 'str' || key === 'dex') && !!sd.attributes?.armor?.penalty;
@@ -824,6 +865,15 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const sd = this.document.systemData;
     const skill = sd?.skills?.[key];
     const conditions = await getActorConditions(this.document.id);
+    const { autoFail } = getSkillConditionOutcome(key, conditions);
+    if (autoFail) {
+      await window.Loom.ChatMessage.create({
+        speaker: window.Loom.ChatMessage.getSpeaker({ actor: this.document }),
+        content: `Skill Check: ${SKILL_LABELS[key] || key} — automatic failure`,
+        flags: { srd5e: { name: `${this.document.name} — Skill Check: ${SKILL_LABELS[key] || key}`, description: '<span style="color:#ef4444">Automatic failure (deafened)</span>' } },
+      });
+      return;
+    }
     const armorPenalty = (skill?.ability === 'str' || skill?.ability === 'dex') && !!sd?.attributes?.armor?.penalty;
     const advantage = applyAbilityCheckConditionModifiers(currentAdvantageMode(), conditions, sd?.resources?.exhaustion ?? 0, armorPenalty);
     await sdr5eRoll({ label: `Skill Check: ${SKILL_LABELS[key] || key}`, bonus: skill?.total ?? 0, actor: this.document, advantage });
@@ -855,9 +905,33 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     windowManager.open(id, Sdr5eCharacterWizard, { id });
   }
 
+  async _openLevelUpWizard() {
+    const classItems = (this.document?.items || []).filter((i) => i.type === 'class');
+    if (classItems.length === 0) {
+      showToast?.('Add a Class item to this character first.', 'warning');
+      return;
+    }
+    const { Sdr5eLevelUpWizard } = await import('./level-up-wizard.mjs');
+    const actorId = this.document.id;
+    windowManager.open(`sdr5e-levelup-${actorId}`, Sdr5eLevelUpWizard, { actorId });
+  }
+
   async _openItem(itemId) {
     if (!itemId) return;
     windowManager.open(`item-sheet-${itemId}`, Sdr5eItemSheet, { itemId });
+  }
+
+  async _pickItemIcon(itemId) {
+    if (!itemId) return;
+    const item = (this.document?.items || []).find((i) => i.id === itemId);
+    if (!item) return;
+    const FilePicker = window.Loom?.applications?.apps?.FilePicker?.implementation;
+    if (!FilePicker) return;
+    const current = item.imgUrl || item.img || item.avatarUrl || '';
+    const path = await new FilePicker({ type: 'image', current }).browse();
+    if (!path) return;
+    await api.put(`/items/${itemId}`, { imgUrl: path });
+    await this._reloadDocument();
   }
 
   async _postItemChat(itemId) {
@@ -929,8 +1003,9 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
     if (kind === 'long') {
       const hpBefore = res.health?.value ?? 0;
-      if (res.health) { res.health.value = res.health.max; res.health.temp = 0; }
-      if (res.health && res.health.max > hpBefore) recovered.unshift(`HP +${res.health.max - hpBefore}`);
+      const longRestCap = res.health?.effectiveMax ?? res.health?.max ?? 0;
+      if (res.health) { res.health.value = longRestCap; res.health.temp = 0; }
+      if (res.health && longRestCap > hpBefore) recovered.unshift(`HP +${longRestCap - hpBefore}`);
 
       const hdBefore = res.hitDice?.value ?? 0;
       if (res.hitDice) res.hitDice.value = res.hitDice.max;

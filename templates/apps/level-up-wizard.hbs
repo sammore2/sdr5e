@@ -1,47 +1,73 @@
-<div class="wizard-container">
-    <header class="wizard-header">
-        <h2 class="runic-title">{{localize 'TYPES.Wizard.LevelUpWizard.LevelUpTitle' level=changes.level}}</h2>
-        <div class="step-indicator">
-            {{#each activeSteps as |s|}}
-                <span class="step {{#if (eq ../step s)}}active{{/if}}">{{s}}</span>
-            {{/each}}
-        </div>
-    </header>
+<div class="sdrn-wizard-root">
+  <div class="sdrn-wizard-steps">
+    {{#each _activeSteps}}
+    <div class="sdrn-wizard-step-dot">{{this}}</div>
+    {{/each}}
+  </div>
 
-    <main class="wizard-content scrollable">
-        {{#if (eq step 1)}}
-            {{> "codex-level-up-step1"}}
-        {{/if}}
-        {{#if (eq step 2)}}
-            {{> "codex-level-up-step2"}}
-        {{/if}}
-        {{#if (eq step 3)}}
-            {{> "codex-level-up-step3"}}
-        {{/if}}
-        {{#if (eq step 4)}}
-            {{> "codex-level-up-step4"}}
-        {{/if}}
-        {{#if (eq step 5)}}
-            {{> "codex-level-up-step5"}}
-        {{/if}}
-        {{#if (eq step 7)}}
-            {{> "codex-level-up-step7"}}
-        {{/if}}
-    </main>
+  <div class="sdrn-wizard-body">
+    {{#if _stepClass}}
+    <h3>Which class levels up?</h3>
+    <select name="w:classId">
+      {{#each _classItems}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} (Level {{levels}})</option>{{/each}}
+    </select>
+    {{/if}}
 
-    <footer class="wizard-footer">
-        {{#if canGoBack}}
-            <button type="button" class="btn-prev codex-button"><i class="fas fa-arrow-left"></i> {{localize 'THE-CODEX.Sheet.Back'}}</button>
-        {{else}}
-            <div style="width: 100px;"></div> <!-- Spacer para manter o layout -->
-        {{/if}}
-        
-        {{#if isLastStep}}
-            <button type="button" class="btn-finish codex-button secondary"><i class="fas fa-check"></i> {{localize 'TYPES.Wizard.LevelUpWizard.FinishAscension'}}</button>
-        {{else}}
-            <button type="button" class="btn-next codex-button" {{#if canGoNext}}{{else}}disabled{{/if}}>
-                {{localize 'THE-CODEX.Sheet.Next'}} <i class="fas fa-arrow-right"></i>
-            </button>
-        {{/if}}
-    </footer>
+    {{#if _stepHp}}
+    <h3>{{_className}} — Level {{_currentClassLevel}} → {{_nextClassLevel}}</h3>
+    <p class="sdrn-wizard-hint">Hit Die: {{_die}}. Average result (SRD alternative to rolling): +{{_hpGain}} HP.</p>
+    <div class="sdrn-bio-field"><label>HP Gained</label><input type="number" value="{{_hpGain}}" disabled /></div>
+    {{/if}}
+
+    {{#if _stepAsi}}
+    <h3>Ability Score Improvement</h3>
+    <p class="sdrn-wizard-hint">Level {{_nextClassLevel}}: increase one score by 2, or two scores by 1 each (max 20) — or take a Feat instead.</p>
+    <label><input type="radio" name="w:asiMode" value="scores" {{#if _asiModeScores}}checked{{/if}} /> Ability scores</label>
+    <label><input type="radio" name="w:asiMode" value="feat" {{#if _asiModeFeat}}checked{{/if}} /> Feat</label>
+
+    {{#if _asiModeScores}}
+    <div class="sdrn-bio-field">
+      <label>+1 (or +2 if second is blank)</label>
+      <select name="w:asiFirst">
+        <option value="">—</option>
+        {{#each _abilities}}<option value="{{key}}" {{#if atCap}}disabled{{/if}}>{{label}} ({{value}})</option>{{/each}}
+      </select>
+    </div>
+    <div class="sdrn-bio-field">
+      <label>+1 (optional second score)</label>
+      <select name="w:asiSecond">
+        <option value="">—</option>
+        {{#each _abilities}}<option value="{{key}}" {{#if atCap}}disabled{{/if}}>{{label}} ({{value}})</option>{{/each}}
+      </select>
+    </div>
+    {{/if}}
+
+    {{#if _asiModeFeat}}
+    <p class="sdrn-wizard-hint">No feat compendium yet — this creates a freeform Feat item on the character (same pattern as Race/Class in character creation).</p>
+    <div class="sdrn-bio-field"><label>Feat Name</label><input type="text" name="w:featName" value="{{_featName}}" placeholder="e.g. Great Weapon Master" /></div>
+    {{/if}}
+    {{/if}}
+
+    {{#if _stepSubclass}}
+    <h3>Choose your Subclass</h3>
+    <p class="sdrn-wizard-hint">No subclass compendium yet — this just labels the class item (matches how {{_className}} is stored).</p>
+    <div class="sdrn-bio-field"><label>Subclass Name</label><input type="text" name="w:subclassName" value="{{_subclassName}}" placeholder="e.g. Battle Master" /></div>
+    {{/if}}
+
+    {{#if _stepReview}}
+    <h3>Review</h3>
+    <div class="sdrn-wizard-review">
+      <div><strong>{{_className}}</strong> — Level {{_currentClassLevel}} → {{_nextClassLevel}} (Total {{_nextTotalLevel}})</div>
+      <div>HP: +{{_hpGain}}</div>
+      {{#if _subclassName}}<div>Subclass: {{_subclassName}}</div>{{/if}}
+      {{#if _featName}}<div>Feat: {{_featName}}</div>{{/if}}
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="sdrn-wizard-nav">
+    {{#unless _isFirst}}<button type="button" class="sdrn-wizard-btn" data-action="wizard-back">Back</button>{{/unless}}
+    {{#unless _isLast}}<button type="button" class="sdrn-wizard-btn sdrn-wizard-btn-primary" data-action="wizard-next">Next</button>{{/unless}}
+    {{#if _isLast}}<button type="button" class="sdrn-wizard-btn sdrn-wizard-btn-primary" data-action="wizard-finish" {{#unless _canFinish}}disabled{{/unless}}>Finish</button>{{/if}}
+  </div>
 </div>

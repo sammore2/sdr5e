@@ -296,6 +296,22 @@ export function prepCharacter(sd, items) {
   sd.attributes.prof.value = prof;
   sd.details.proficiencyBonus = prof;
 
+  // SRD (Conditions.md, "Exhaustion", nível 4): "Hit point maximum halved".
+  // Campo DERIVADO — `resources.health.max` em si é editável pelo jogador
+  // (level-up/CON) e nunca é sobrescrito aqui, só lido. Recalculado a cada
+  // prepareData, igual prof/saves/initiative (Handout 26).
+  const rawMax = Number(sd.resources?.health?.max) || 0;
+  const exhaustionLevel = Number(sd.resources?.exhaustion) || 0;
+  if (sd.resources?.health) {
+    sd.resources.health.effectiveMax = exhaustionLevel >= 4 ? Math.floor(rawMax / 2) : rawMax;
+    // Nunca deixa o HP atual acima do teto efetivo (mesmo comportamento do
+    // SRD: HP atual em excesso é descartado, não fica "guardado" esperando
+    // a exaustão baixar).
+    if ((Number(sd.resources.health.value) || 0) > sd.resources.health.effectiveMax) {
+      sd.resources.health.value = sd.resources.health.effectiveMax;
+    }
+  }
+
   if (sd.attributes.armor) prepArmorAndDA(sd, items);
   prepSkills(sd, prof);
   prepSaves(sd, prof);

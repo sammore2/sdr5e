@@ -88,6 +88,8 @@ const SRD_CONDITIONS = [
   { id: 'petrified', label: 'Petrified', color: 0x9e9e9e },
   { id: 'restrained', label: 'Restrained', color: 0x8b4513 },
   { id: 'unconscious', label: 'Unconscious', color: 0x1a1614 },
+  { id: 'cover-half', label: 'Half Cover (+2 AC/DEX)', color: 0x4a90d9 },
+  { id: 'cover-3q', label: 'Three-Quarters Cover (+5 AC/DEX)', color: 0x2c5f8a },
 ];
 for (const cond of SRD_CONDITIONS) {
   if (!statusEffects.get?.(cond.id)) statusEffects.register(cond);
@@ -131,25 +133,92 @@ document.addEventListener('click', (event) => {
 // initiative) is untouched, falling straight through to the original
 // renderer.
 window.Loom.wraps.renderRollCard.addWrapper((wrapped, roll, esc) => {
+  // Card completo estilo dnd5e-Foundry (papiro/pergaminho, header escuro,
+  // total grande, detalhe expansível ao clicar) — reaproveita o CSS
+  // `.codex-roll-card-v13` já existente em styles/srd5e.css (sobra do
+  // ChatManager.mjs do Foundry original, nunca conectado na versão nativa).
+  // Substitui o card genérico do core inteiro em vez de só adicionar um
+  // botão em cima dele — `wrapped` não é mais chamado aqui.
   const dmg = roll.meta?.srd5eDamage;
-  if (!dmg) return wrapped(roll, esc);
-  // The base renderer shows every `meta` key it doesn't recognize as a
-  // "key: value" badge (roll-card.ts's `hiddenMetaKeys`) — `srd5eDamage`
-  // isn't in that hardcoded list, so passing it straight through rendered
-  // a literal "srd5eDamage: [object Object]" badge on the card (found
-  // live). Render off a meta-stripped copy instead; nothing else needs to
-  // change since `wrapped` is a pure function of its arguments.
-  const { srd5eDamage, ...restMeta } = roll.meta;
-  const base = wrapped({ ...roll, meta: restMeta }, esc);
+  const label = esc(String(roll.meta?.label || roll.flavor || 'Roll'));
+  const modeTag = roll.mode !== 'public' ? `<span class="status-badge">${esc(roll.mode)}</span>` : '';
+
+  // Handout 31: nat 20 / nat 1 em d20 (ataque, save, ability check,
+  // iniciativa) — nunca em dano (dano chega como total já resolvido, sem
+  // termo de dado, ver roll-engine.mjs `dispatchRoll({formula: String(total)})`).
+  // Dado descartado por vantagem/desvantagem não conta.
+  let natClass = '';
+  const diceBreakdown = (roll.terms || [])
+    .filter((t) => t.kind === 'dice')
+    .flatMap((t) => (t.rolls || []).map((r, i) => {
+      const dropped = !!t.dropped?.[i];
+      const isD20 = t.faces === 20;
+      const nat = isD20 && !dropped ? (r === 20 ? ' nat20' : r === 1 ? ' nat1' : '') : '';
+      if (nat && !dropped) natClass = nat;
+      return `<span class="dice-roll-pip${dropped ? ' dropped' : ''}${nat}">${r}</span>`;
+    }))
+    .join('');
+  const modifierTerms = (roll.terms || [])
+    .filter((t) => t.kind === 'modifier')
+    .map((t) => `<span class="dice-roll-pip dice-roll-mod">${t.value > 0 ? '+' : ''}${t.value}</span>`)
+    .join('');
+
+  const damageSection = dmg
+    ? `<div class="damage-section">${esc(dmg.type ? `${dmg.type} damage` : 'Damage')}</div>`
+    : '';
+
   const targetCount = window.Loom?.user?.targets?.length || 0;
-  if (targetCount <= 0) return base;
-  const btn = `<button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="apply-damage" data-amount="${dmg.amount}" data-type="${dmg.type || ''}">Apply ${dmg.amount} damage to ${targetCount} target${targetCount === 1 ? '' : 's'}</button>`;
-  // `.replace('</div>', ...)` would hit the FIRST closing tag in the string
-  // (the header's, not the outer `.roll-card` wrapper's) and misplace the
-  // button inside the card header — insert before the LAST `</div>` instead.
-  const idx = base.lastIndexOf('</div>');
-  if (idx === -1) return base + btn;
-  return base.slice(0, idx) + btn + base.slice(idx);
+  const applyBtnSection = (dmg && targetCount > 0)
+    ? `<div class="damage-button-section"><button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="apply-damage" data-amount="${dmg.amount}" data-type="${dmg.type || ''}">Apply ${dmg.amount} damage to ${targetCount} target${targetCount === 1 ? '' : 's'}</button></div>`
+    : '';
+
+  return `<div class="codex-roll-card-v13" data-action="toggle-roll-details">
+    <div class="card-header">
+      <span>${label}</span>
+      ${modeTag}
+    </div>
+    <div class="roll-main">
+      <div class="dice-total${natClass}">${roll.total}</div>
+      <div class="roll-details">
+        <span class="formula">${esc(roll.formula)}</span>
+        ${roll.flavor && roll.flavor !== label ? `<span class="vs">${esc(roll.flavor)}</span>` : ''}
+        <span class="click-to-see">Click to see breakdown</span>
+      </div>
+    </div>
+    <div class="roll-details-expanded hidden">
+      <div class="dice-breakdown">${diceBreakdown}${modifierTerms}</div>
+    </div>
+    ${damageSection}
+    ${applyBtnSection}
+  </div>`;
+});
+
+// Clique no card (fora do botão de aplicar dano) alterna o detalhe da
+// rolagem — mesmo padrão do `click-to-see` do CSS original.
+document.addEventListener('click', (event) => {
+  if (!(event.target instanceof Element)) return;
+  if (event.target.closest('[data-srd5e-action="apply-damage"]')) return;
+  const card = event.target.closest('[data-action="toggle-roll-details"]');
+  if (!card) return;
+  const expanded = card.querySelector('.roll-details-expanded');
+  expanded?.classList.toggle('hidden');
+});
+
+// Card de info estilo dnd5e-Foundry pras mensagens que não são rolagem
+// (descanso, cura, dano aplicado) — mesma família visual do card de rolagem
+// da Parte A, com ícone/cor por tipo (isRest/isHeal/isDamage, flags que
+// `_takeRest`/`applyHeal`/`applyDamage`/`applyDamageToTargets` já mandam).
+window.Loom.wraps.renderMessage.addWrapper((wrapped, msg, ctx) => {
+  const flags = msg.flags?.srd5e;
+  if (!flags || msg.isRoll) return wrapped(msg, ctx);
+  const kind = flags.isRest ? 'rest' : flags.isHeal ? 'heal' : (flags.isDamage || flags.name === 'Damage Applied') ? 'damage' : null;
+  if (!kind) return wrapped(msg, ctx);
+  const icon = { rest: 'fa-campground', heal: 'fa-heart', damage: 'fa-burst' }[kind];
+  const esc = ctx.esc;
+  return `<div class="codex-roll-card-v13 codex-info-card-v13 codex-info-card-${kind}">
+    <div class="card-header"><span><i class="fas ${icon}"></i> ${esc(flags.name || '')}</span></div>
+    ${flags.description ? `<div class="damage-section">${flags.description}</div>` : ''}
+  </div>`;
 });
 
 window.Loom.socket.on('item.updated', (item) => { void syncEquippedEffect(item); });

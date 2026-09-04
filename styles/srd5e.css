@@ -12839,9 +12839,22 @@ form.npc-2024-sheet {
 }
 
 .sdrn-tab-btn.active {
-  color: var(--sdr-ember);
-  background: rgba(217, 123, 63, 0.14);
-  border-color: var(--sdr-ember);
+  color: #f0d59e;
+  background: rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+}
+
+.sdrn-sheet .loom-window-body {
+  background: transparent !important;
+  color: #241c14 !important;
+}
+
+.sdrn-root {
+  position: relative;
+  display: flex;
+  height: 100%;
+  background: transparent !important;
 }
 
 .sdrn-body {
@@ -12850,85 +12863,34 @@ form.npc-2024-sheet {
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  padding: 4px 15px 10px;
-  gap: 8px;
+  padding: 0;
+  gap: 0;
   overflow: hidden;
   container-type: inline-size;
-}
-
-.sdrn-tab-panel {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 8px;
-  /* Parchment texture, multiplied in barely visible (8%) so it only adds
-     grain against the existing dark background — moved here instead of
-     `.loom-window-body` so it never fights the character sheet's banner
-     image for the same layer (see the note on that rule). */
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.92), rgba(0, 0, 0, 0.92)),
-    url('/marketplace/rulesets/srd5e/assets/textures/parcheament.jpg');
-  background-blend-mode: multiply;
-  background-size: cover;
+  background: transparent !important;
 }
 
 .sdrn-header {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 80px 2px 6px;
+  gap: 8px;
+  padding: 44px 22px 44px;
   flex: none;
   position: relative;
   z-index: 2;
+  background: transparent !important;
 }
 
-/* Sits over `banner-character.png` (240px, fading via mask) instead of a
-   flat color now — a fixed light color would go illegible against whatever
-   part of the art lands underneath, so every header text element gets a
-   solid drop-shadow to hold contrast regardless of the image content
-   underneath it, matching how the core banner treats window controls
-   (windows.css:876, same color-mix + text-shadow idea). */
 .sdrn-header .sdrn-subtitle,
-.sdrn-header .sdrn-identity input.sdrn-name-input,
-.sdrn-header .sdrn-prof-circle {
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 0, 0, 0.6);
+.sdrn-header .sdrn-identity input.sdrn-name-input {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.7);
 }
 
 .sdrn-header-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-}
-
-.sdrn-rest-btns {
-  display: flex;
-  gap: 4px;
-  flex: none;
-}
-
-.sdrn-rest-btn {
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  font-size: 11px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(201, 161, 90, 0.3);
-  color: var(--sdr-gold);
-  cursor: pointer;
-  /* Missing centering left the icon glyph sitting off-center inside the
-     square (a plain <button><i></i></button> has no default alignment for
-     its inline icon child) — found from a screenshot of the actual render. */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-
-.sdrn-rest-btn:hover {
-  border-color: var(--sdr-ember);
-  color: var(--sdr-ember);
+  gap: 16px;
 }
 
 .sdrn-identity {
@@ -12936,20 +12898,19 @@ form.npc-2024-sheet {
   min-width: 0;
 }
 
-/* `.loom-window input[type="text"]` (core, (0,2,0)) bate a especificidade de
-   `.sdrn-name-input` sozinho (0,1,0) e mantinha borda azul genérica — precisa
-   igualar via `.sdrn-identity input.sdrn-name-input` (0,2,1). */
 .sdrn-identity input.sdrn-name-input {
   width: 100%;
   background: transparent !important;
   border: none !important;
-  color: #f2ead8;
-  font-family: 'Cinzel', 'Roboto Condensed', serif;
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: 1px;
+  color: #ffffff !important;
+  font-family: 'Cinzel', 'Roboto Condensed', Georgia, serif !important;
+  font-size: 36px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  padding: 2px 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95), 0 0 14px rgba(0, 0, 0, 0.8) !important;
 }
 
 .sdrn-identity input.sdrn-name-input:focus {
@@ -12957,62 +12918,246 @@ form.npc-2024-sheet {
 }
 
 .sdrn-identity input.sdrn-name-input::placeholder {
-  text-transform: none;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .sdrn-subtitle {
-  font-size: 11px;
-  color: var(--sdr-gold);
+  font-size: 12px;
+  color: #e6c88b;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+  margin-top: 3px;
 }
 
-.sdrn-prof-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid var(--sdr-gold);
+.sdrn-header-right-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  flex: none;
+}
+
+.sdrn-top-row-cluster {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sdrn-rest-btns {
+  display: flex;
+  gap: 3px;
+  flex: none;
+  background: rgba(18, 14, 12, 0.65);
+  padding: 3px 5px;
+  border-radius: 5px;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.sdrn-rest-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 3px;
+  font-size: 11px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(225, 200, 150, 0.25);
+  color: #f2ead8;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 15px;
+  padding: 0;
+  transition: all 0.15s ease;
+}
+
+.sdrn-rest-btn:hover {
+  border-color: #d4af37;
+  color: #d4af37;
+  transform: translateY(-1px);
+}
+
+.sdrn-level-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+
+/* Badge de Inspiração ornado em estrela de 4 pontas com curvas côncavas (estilo Foundry) */
+.sdrn-inspiration-badge {
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  background: transparent !important;
+  border: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  z-index: 4;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.85));
+  transition: all 0.2s ease;
+}
+
+.sdrn-inspiration-badge-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sdrn-insp-outer {
+  fill: #2a251f;
+  stroke: #8c734b;
+  stroke-width: 1.5;
+  transition: all 0.2s ease;
+}
+
+.sdrn-insp-inner {
+  fill: #151310;
+  stroke: #5a482e;
+  stroke-width: 1;
+  transition: all 0.2s ease;
+}
+
+.sdrn-insp-core {
+  fill: #8c734b;
+  transition: all 0.2s ease;
+}
+
+.sdrn-inspiration-badge:hover {
+  transform: translateY(-50%) scale(1.12);
+}
+
+.sdrn-inspiration-badge:hover .sdrn-insp-outer {
+  stroke: #d4af37;
+  fill: #3d352a;
+}
+
+.sdrn-inspiration-badge:hover .sdrn-insp-core {
+  fill: #d4af37;
+}
+
+.sdrn-inspiration-badge.active {
+  transform: translateY(-50%) scale(1.08);
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.95)) drop-shadow(0 0 18px rgba(212, 175, 55, 0.7)) !important;
+}
+
+.sdrn-inspiration-badge.active .sdrn-insp-outer {
+  fill: #ffe082 !important;
+  stroke: #ffffff !important;
+}
+
+.sdrn-inspiration-badge.active .sdrn-insp-inner {
+  fill: #d4af37 !important;
+  stroke: #ffd700 !important;
+}
+
+.sdrn-inspiration-badge.active .sdrn-insp-core {
+  fill: #1a1410 !important;
+}
+
+/* Medalhão de nível robusto e imponente usando a arte level-badge.png com fundo escuro e número branco puro */
+.sdrn-level-medallion {
+  width: 84px;
+  height: 84px;
+  background: url('/marketplace/rulesets/srd5e/assets/ui/level-badge.png') no-repeat center center / contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: none;
-  color: var(--sdr-gold);
-  /* Was near-transparent (radial fading straight to nothing) — fine over the
-     flat wine gradient it used to sit on, but reads as a bare gold ring with
-     no fill over the banner art now that the header is transparent. */
-  background: radial-gradient(circle, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.9));
+  position: relative;
+  z-index: 2;
+  border: none !important;
+  border-radius: 50%;
+  box-shadow: none !important;
+  cursor: pointer;
+  padding: 0;
+  outline: none !important;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.sdrn-level-medallion:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+}
+
+.sdrn-level-medallion::before {
+  content: '';
+  position: absolute;
+  inset: 15px;
+  background: radial-gradient(circle, #1a1715 50%, #0a0908 100%);
+  border-radius: 50%;
+  z-index: -1;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.95);
+}
+
+.sdrn-level-medallion .sdrn-level-num {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 34px;
+  font-weight: 800;
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95) !important;
+  line-height: 1;
+  margin-top: -1px;
+}
+
+.sdrn-xp-cluster {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  width: 250px;
+}
+
+.sdrn-xp-text {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: 'Roboto Condensed', sans-serif;
+  letter-spacing: 0.5px;
+  font-weight: 700;
 }
 
 .sdrn-xp-bar {
+  width: 100%;
   height: 4px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 2px;
   overflow: hidden;
 }
 
 .sdrn-xp-fill {
   height: 100%;
-  background: var(--sdr-gold);
+  background: linear-gradient(90deg, #991b1b, #e53935);
 }
 
-/* Portrait/AC/HP/Hit Dice used to be nested INSIDE the "main" tab's own
-   panel, alongside skills/saves — switching to Inventory/Features/Spells
-   made the whole block vanish along with it. Real dnd5e-Foundry keeps its
-   sidebar and ability-score row outside the tab system entirely, always
-   visible. `.sdrn-persistent` is the new outer row (portrait | everything
-   else); `.sdrn-content-col` holds the ability row plus every
-   `data-tab-content` panel, so only THAT swaps. */
+/* Corpo contínuo da ficha em pergaminho */
 .sdrn-persistent {
+  flex: 1;
   display: flex;
-  gap: 10px;
-  height: 100%;
+  gap: 12px;
   min-height: 0;
+  background-color: #f1ebd8;
+  background-image:
+    radial-gradient(ellipse at 50% 25%, rgba(255, 255, 255, 0.45) 0%, rgba(225, 214, 192, 0.3) 60%, rgba(175, 155, 125, 0.4) 100%),
+    url('/marketplace/rulesets/srd5e/assets/textures/parcheament.jpg');
+  background-blend-mode: normal;
+  background-size: cover;
+  border-top: 2px solid #8c734b;
+  border-radius: 4px 4px 0 0;
+  padding: 8px 14px 14px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.35);
 }
 
 .sdrn-content-col {
@@ -13021,37 +13166,185 @@ form.npc-2024-sheet {
   display: flex;
   flex-direction: column;
   min-height: 0;
+  background: transparent;
+}
+
+.sdrn-tab-panel {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+  background: transparent !important;
+  color: #241c14;
 }
 
 .sdrn-col-portrait {
   flex: none;
-  width: 140px;
+  width: 220px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
 }
 
 .sdrn-columns {
   display: grid;
-  grid-template-columns: 1fr 170px;
-  grid-template-rows: auto 1fr;
-  gap: 10px 12px;
-  height: 100%;
+  grid-template-columns: 1fr 240px;
+  grid-template-rows: auto;
+  gap: 8px 12px;
   align-items: start;
 }
 
 .sdrn-header-abilities {
-  grid-column: 1 / 3;
-  grid-row: 1;
   display: flex;
-  justify-content: space-between;
-  gap: 5px;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: -38px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 5;
+  width: 100%;
 }
 
-.sdrn-header-abilities .sdrn-mini-ability {
-  flex: 1;
+.sdrn-mini-ability {
+  width: 58px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+}
+
+/* Card superior pennant em marfim com SVG vetorial */
+.sdrn-ability-pennant-top {
+  width: 58px;
+  height: 52px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
+
+.sdrn-pennant-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sdrn-ability-pennant-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2px;
+}
+
+.sdrn-mini-abbr {
+  font-size: 10px;
+  font-weight: 800;
+  color: #7d6032;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  font-family: 'Cinzel', 'Roboto Condensed', serif;
+  line-height: 1;
+}
+
+.sdrn-mini-mod {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1a1410;
+  line-height: 1.1;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  margin-top: 1px;
+}
+
+.sdrn-mini-mod:hover {
+  color: #8b1515;
+}
+
+/* Aba inferior preta trapezoidal com SVG vetorial */
+.sdrn-ability-tab-bottom {
+  width: 46px;
+  height: 20px;
+  margin: -2px auto 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent !important;
+  border: none !important;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.sdrn-pennant-tab-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sdrn-ability-tab-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sdrn-mini-score {
+  width: 28px !important;
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+  padding: 0 !important;
+  outline: none !important;
+  line-height: 1;
+  margin-top: -1px;
+}
+
+.sdrn-mini-ability input.sdrn-mini-score {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  background: transparent !important;
+  border: none !important;
+  text-align: center !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  margin-top: -2px !important;
+  box-shadow: none !important;
+}
+
+.sdrn-mini-score:focus {
+  outline: none !important;
 }
 
 .sdrn-col-mid {
@@ -13060,6 +13353,7 @@ form.npc-2024-sheet {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
 .sdrn-col-right {
@@ -13068,7 +13362,7 @@ form.npc-2024-sheet {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 @container (max-width: 500px) {
@@ -13091,119 +13385,483 @@ form.npc-2024-sheet {
   }
 }
 
+/* Módulo escuro do Portrait com anel metálico e escudo de AC integrado (estilo Hobbs) */
+.sdrn-portrait-module {
+  width: 100%;
+  background: #181614;
+  border: 1.5px solid #4a3e2b;
+  border-radius: 4px;
+  padding: 8px 8px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.9), 0 4px 10px rgba(0, 0, 0, 0.45);
+}
+
 .sdrn-portrait {
-  width: 108px;
-  height: 130px;
-  border-radius: 40% 40% 6px 6px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: 204px;
+  max-height: 204px;
+  border-radius: 4px;
   overflow: hidden;
-  border: 2px solid var(--sdr-gold);
-  background: #0d0d0e;
+  border: 2px solid #5a4b35;
+  background: #11100e;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
   cursor: pointer;
   flex: none;
-  transition: border-color 0.15s ease;
+  box-shadow: 0 0 0 1px #26221c, 0 4px 10px rgba(0, 0, 0, 0.7);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .sdrn-portrait:hover {
-  border-color: var(--sdr-ember);
+  border-color: #d4af37;
+  box-shadow: 0 0 0 1px #4a3e2b, 0 0 12px rgba(212, 175, 55, 0.4);
 }
 
 .sdrn-portrait img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 2px;
 }
 
 .sdrn-portrait-placeholder {
-  font-size: 24px;
-  color: #555;
+  font-size: 32px;
+  color: #8c734b;
+  font-family: 'Cinzel', serif;
 }
 
-/* Precisa bater a especificidade de `.loom-window-body input[type="number"]`
-   (core main.css, (0,2,1) com !important em border/background) — um seletor
-   de 1 classe só nunca ganha disso, mesmo com !important (especificidade
-   vence antes de desempate por ordem). `input.sdrn-ac-circle` dentro do
-   container = (0,2,1), empata e o CSS do ruleset carrega depois do core. */
-.sdrn-col-portrait input.sdrn-ac-circle {
-  width: 44px !important;
-  height: 44px !important;
-  flex: none;
-  border-radius: 50% !important;
-  border: 2px solid var(--sdr-gold) !important;
-  background: var(--sdr-wine-deep) !important;
-  color: #f2ead8;
-  text-align: center;
-  font-size: 18px;
-  font-weight: 700;
-  z-index: 2;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-}
-
-.sdrn-ac-circle:focus {
-  outline: 1px solid var(--sdr-ember);
-}
-
-/* AC shield flanked 3-and-3 by the exhaustion track (moved out of its own
-   boxed row to match the real dnd5e-Foundry layout, confirmed live against
-   the reference) — the row as a whole carries the negative margin that
-   used to sit on the circle alone, so it still floats up over the
-   portrait's bottom edge as a unit. */
 .sdrn-ac-row {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin-top: -22px;
-  z-index: 2;
+  gap: 6px;
+  margin-top: -30px;
+  z-index: 4;
   position: relative;
+  width: 100%;
 }
 
 .sdrn-exhaustion-side {
   display: flex;
-  gap: 3px;
+  gap: 2.5px;
+  align-items: center;
   flex: none;
 }
 
-/* `!important` + a row-scoped selector here, deliberately: the un-scoped
-   `.sdrn-exhaustion-pip` rule was found NOT shrinking below its own
-   automatic flex-item minimum in live testing (33-34px instead of the
-   20px/12px set on it) even with `flex:none`, `min-width:0`, and a direct
-   inline-style override all failing to explain it — this pins the actual
-   rendered size beyond any doubt rather than re-litigating the cascade. */
-.sdrn-ac-row .sdrn-exhaustion-pip {
-  width: 12px !important;
-  height: 12px !important;
+.sdrn-ac-row .sdrn-exhaustion-pip,
+.sdrn-exhaustion-pip {
+  width: 8px !important;
+  height: 8px !important;
   min-width: 0 !important;
   flex: none !important;
   border-radius: 50% !important;
   cursor: pointer;
   padding: 0 !important;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(201, 161, 90, 0.25);
+  background: rgba(0, 0, 0, 0.6) !important;
+  border: 1.5px solid #8c734b !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: all 0.15s ease;
 }
 
-.sdrn-ac-row .sdrn-exhaustion-pip.filled {
-  background: var(--sdr-wine);
-  border-color: var(--sdr-ember);
+.sdrn-ac-row .sdrn-exhaustion-pip:hover,
+.sdrn-exhaustion-pip:hover {
+  border-color: #d4af37 !important;
+}
+
+.sdrn-ac-row .sdrn-exhaustion-pip.filled,
+.sdrn-exhaustion-pip.filled {
+  background: #991b1b !important;
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 5px rgba(239, 68, 68, 0.85) !important;
+}
+
+/* Escudo de AC ampliado para o número não ficar sobreposto */
+.sdrn-ac-shield-wrap {
+  width: 58px;
+  height: 66px;
+  background: url('/marketplace/rulesets/srd5e/assets/ui/ui-ac.png') no-repeat center center / contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.8));
+  position: relative;
+  flex: none;
+}
+
+.sdrn-col-portrait input.sdrn-ac-circle {
+  width: 38px !important;
+  height: 34px !important;
+  flex: none;
+  border: none !important;
+  background: transparent !important;
+  color: #ffffff !important;
+  text-align: center !important;
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  font-family: 'Cinzel', 'Roboto Condensed', serif !important;
+  margin-top: -6px !important;
+  box-shadow: none !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95) !important;
+  padding: 0 !important;
+}
+
+.sdrn-ac-circle:focus {
+  outline: none !important;
 }
 
 .sdrn-mini-stat-row {
   display: flex;
   gap: 4px;
   width: 100%;
+  margin-top: 2px;
+}
+
+.sdrn-mini-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  min-width: 0;
+}
+
+.sdrn-mini-stat-btn {
+  cursor: pointer;
+}
+
+.sdrn-stat-polygon-wrap {
+  width: 100%;
+  height: 32px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sdrn-stat-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.45));
+}
+
+.sdrn-mini-stat-btn:hover .sdrn-stat-svg polygon {
+  fill: #ffffff;
+  stroke: #d4af37;
+}
+
+.sdrn-mini-stat-num {
+  position: relative;
+  z-index: 1;
+  font-size: 14px;
+  font-weight: 800;
+  color: #1a1410;
+  line-height: 1;
+}
+
+.sdrn-mini-stat-label {
+  font-size: 7.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #c4b59b;
+  letter-spacing: 0.5px;
+  margin-top: 3px;
+  font-family: 'Roboto Condensed', sans-serif;
+  text-shadow: 0 1px 2px #000;
+  line-height: 1;
+}
+
+/* Barras dark integradas de Hit Points e Hit Dice (estilo Hobbs) */
+.sdrn-dark-bar-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sdrn-dark-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #a89470;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-family: 'Roboto Condensed', sans-serif;
+  padding: 0 2px;
+}
+
+.sdrn-dark-bar-btn {
+  background: #2b241c;
+  border: 1px solid #5a482e;
+  color: #d4af37;
+  border-radius: 2px;
+  font-size: 8px;
+  font-weight: 700;
+  padding: 1px 5px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+}
+
+.sdrn-dark-bar-btn:hover {
+  background: #4a3e2b;
+  border-color: #d4af37;
+  color: #fff;
+}
+
+.sdrn-dark-bar {
+  width: 100%;
+  height: 26px;
+  background: #0d0c0b;
+  border: 1px solid #3d3425;
+  border-radius: 3px;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+.sdrn-dark-bar-fill {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  min-width: 35%;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.sdrn-hp-fill {
+  background: linear-gradient(180deg, #27ae60 0%, #1e8449 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.sdrn-hd-fill {
+  background: linear-gradient(180deg, #8b1515 0%, #631212 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.sdrn-dark-bar-text {
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  gap: 1px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
+  white-space: nowrap;
+}
+
+/* 100% sem fundo, sem borda e sem caixa (texto limpo integrado à barra) */
+.sdrn-sheet .loom-window-body .sdrn-dark-bar input[type="number"].sdrn-bar-input,
+.sdrn-sheet .loom-window-body .sdrn-dark-bar input.sdrn-bar-input,
+.sdrn-dark-bar input[type="number"].sdrn-bar-input,
+.sdrn-dark-bar input.sdrn-bar-input {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-width: 0 !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  font-family: inherit !important;
+  line-height: 1 !important;
+  height: auto !important;
+  width: 20px !important;
+  text-align: center !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: textfield !important;
+}
+
+.sdrn-sheet .loom-window-body .sdrn-dark-bar input[type="number"].sdrn-bar-input:focus,
+.sdrn-sheet .loom-window-body .sdrn-dark-bar input.sdrn-bar-input:focus,
+.sdrn-dark-bar input[type="number"].sdrn-bar-input:focus,
+.sdrn-dark-bar input.sdrn-bar-input:focus {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-width: 0 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.sdrn-sheet .loom-window-body .sdrn-dark-bar input[type="number"]::-webkit-outer-spin-button,
+.sdrn-sheet .loom-window-body .sdrn-dark-bar input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+
+.sdrn-bar-sep {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 700;
+  font-size: 13px;
+  margin: 0 1px;
+}
+
+.sdrn-bar-die {
+  margin-left: 4px;
+  font-size: 11px;
+  color: #f1b0b0;
+  font-weight: 700;
+}
+
+.sdrn-dark-bar-tmp {
+  margin-left: auto;
+  width: 42px;
+  height: 100%;
+  border-left: 1px dashed rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.sdrn-sheet .loom-window-body .sdrn-dark-bar input.sdrn-tmp-input,
+.sdrn-dark-bar input.sdrn-tmp-input {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-width: 0 !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: #c4b59b !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  font-family: inherit !important;
+  line-height: 1 !important;
+  height: auto !important;
+  width: 100% !important;
+  text-align: center !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: textfield !important;
+}
+
+.sdrn-sheet .loom-window-body .sdrn-dark-bar input.sdrn-tmp-input:focus,
+.sdrn-dark-bar input.sdrn-tmp-input:focus {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-width: 0 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.sdrn-tmp-input::placeholder {
+  color: rgba(196, 181, 155, 0.45);
+}
+
+/* Skull tab no rodapé do módulo do portrait */
+.sdrn-skull-tab {
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 14px;
+  background: #181614;
+  border: 1px solid #4a3e2b;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #7d6032;
+  font-size: 9px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  transition: all 0.15s ease;
+  z-index: 5;
+}
+
+.sdrn-skull-tab:hover,
+.sdrn-skull-tab.active {
+  color: #e53935;
+  border-color: #8b1515;
+}
+
+/* Bloco de FAVORITES abaixo do módulo do portrait (estilo Foundry Hobbs) */
+.sdrn-favorites-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.sdrn-favorites-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #5c4524;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sdrn-favorites-title i {
+  color: #8c734b;
+  font-size: 10px;
+}
+
+.sdrn-favorites-drop {
+  width: 100%;
+  height: 64px;
+  border: 1.5px dashed #bba377;
+  border-radius: 4px;
+  background: rgba(253, 251, 247, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8c734b;
+  font-family: 'Cinzel', serif;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.sdrn-favorites-drop:hover {
+  border-color: #8b1515;
+  color: #8b1515;
+  background: rgba(253, 251, 247, 0.75);
 }
 
 .sdrn-spellcasting-header {
   display: flex;
   gap: 8px;
   margin-bottom: 10px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(201, 161, 90, 0.25);
-  border-radius: 8px;
+  background: #fbf9f4;
+  border: 1px solid #bba377;
+  border-radius: 6px;
   padding: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .sdrn-spell-stat {
@@ -13213,54 +13871,79 @@ form.npc-2024-sheet {
 
 .sdrn-spell-stat-num {
   font-size: 16px;
-  font-weight: 700;
-  color: var(--sdr-ember, #D97B3F);
+  font-weight: 800;
+  color: #8b1515;
 }
 
 .sdrn-spell-stat-label {
   font-size: 9px;
-  text-transform: uppercase;
-  color: #a89a80;
-}
-
-.sdrn-mini-stat {
-  flex: 1;
-  text-align: center;
-  padding: 3px 0;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(201, 161, 90, 0.2);
-  border-radius: 6px;
-}
-
-.sdrn-mini-stat-num {
-  font-size: 13px;
   font-weight: 700;
-  color: #f2ead8;
+  text-transform: uppercase;
+  color: #7d6032;
 }
 
-.sdrn-mini-stat-label {
-  font-size: 8px;
-  text-transform: uppercase;
-  color: #a89a80;
+.sdrn-inspiration-btn {
+  flex: none;
+  width: 30px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fbf9f4;
+  border: 1px solid #bba377;
+  border-radius: 4px;
+  color: #a89470;
+  cursor: pointer;
+  clip-path: polygon(15% 0, 85% 0, 100% 20%, 100% 80%, 85% 100%, 15% 100%, 0 80%, 0 20%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sdrn-inspiration-btn:hover {
+  color: #7d6032;
+  border-color: #8c734b;
+}
+
+.sdrn-inspiration-btn.active {
+  background: #d4af37;
+  border-color: #8c734b;
+  color: #1a1410;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
 }
 
 .sdrn-box {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(201, 161, 90, 0.2);
-  border-radius: 8px;
-  padding: 6px 8px;
+  background: #fbf9f4;
+  border: 1px solid #bba377;
+  border-radius: 4px;
+  padding: 7px 9px;
   width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  clip-path: polygon(7px 0, calc(100% - 7px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 7px);
 }
 
 .sdrn-box-title {
-  font-family: 'Cinzel', 'Roboto Condensed', serif;
+  font-family: 'Cinzel', Georgia, serif;
   font-size: 11px;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: var(--sdr-gold);
-  border-bottom: 1px solid rgba(201, 161, 90, 0.2);
+  letter-spacing: 1.5px;
+  color: #5c4524;
+  border-bottom: 1px solid #dcd1be;
   padding-bottom: 4px;
   margin-bottom: 6px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.sdrn-box-title i {
+  color: #7d6032;
+  font-size: 10px;
+}
+
+.sdrn-skills {
+  padding: 8px 10px;
 }
 
 /* Details/Bio tab */
@@ -13276,8 +13959,17 @@ form.npc-2024-sheet {
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--sdr-gold);
+  color: #5c4524 !important;
   margin-bottom: 2px;
+  font-weight: 800 !important;
+}
+
+.sdrn-bio-field input {
+  background: #fdfbf7 !important;
+  border: 1px solid #c4b59b !important;
+  color: #1a1410 !important;
+  font-weight: 700 !important;
+  border-radius: 3px !important;
 }
 
 .sdrn-bio-pair {
@@ -13287,13 +13979,28 @@ form.npc-2024-sheet {
   margin-bottom: 10px;
 }
 
+.sdrn-bio-pair textarea {
+  background: #fdfbf7 !important;
+  border: 1px solid #c4b59b !important;
+  color: #1a1410 !important;
+  font-weight: normal !important;
+  border-radius: 3px !important;
+  resize: vertical;
+}
+
 .sdrn-bio-pair .sdrn-box:empty {
   background: transparent;
   border: none;
 }
 
-/* Barra + número na MESMA caixa (padrão do dnd5e — "essas caixas são
-   incorporadas"), não bar decorativa + linha de número separada embaixo. */
+.sdrn-hp-block,
+.sdrn-hitdice-block {
+  background: #fbf9f4;
+  border: 1px solid #bba377;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
 .sdrn-hp-embed {
   display: flex;
   align-items: center;
@@ -13304,11 +14011,11 @@ form.npc-2024-sheet {
   position: relative;
   flex: 1;
   min-width: 0;
-  height: 22px;
-  border-radius: 5px;
+  height: 24px;
+  border-radius: 4px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(201, 161, 90, 0.2);
+  background: #24211e;
+  border: 1px solid #4a3e2e;
 }
 
 .sdrn-hp-fill {
@@ -13316,12 +14023,12 @@ form.npc-2024-sheet {
   inset: 0;
   width: 0;
   height: 100%;
-  background: linear-gradient(90deg, #2f7a3f, #4aa85f);
+  background: linear-gradient(90deg, #1b6330, #34944d);
   transition: width 0.2s ease;
 }
 
 .sdrn-hitdice-fill {
-  background: linear-gradient(90deg, #7a1f1f, #b03030);
+  background: linear-gradient(90deg, #6e1616, #9b2020);
 }
 
 .sdrn-hp-text {
@@ -13332,40 +14039,43 @@ form.npc-2024-sheet {
   align-items: center;
   justify-content: center;
   gap: 3px;
-  font-size: 12px;
-  color: #fff;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
 }
 
 .sdrn-hitdice-die {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
   margin-left: 2px;
+  font-weight: 700;
 }
 
 .sdrn-tmp-chip {
   display: flex;
   align-items: center;
   gap: 3px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(201, 161, 90, 0.3);
-  border-radius: 5px;
+  background: #24211e;
+  border: 1px solid #4a3e2e;
+  border-radius: 4px;
   padding: 0 6px;
-  height: 22px;
+  height: 24px;
   font-size: 9px;
-  color: #a89a80;
+  font-weight: 700;
+  color: #c5b8a0;
   letter-spacing: 0.5px;
 }
 
 .sdrn-tmp-chip input.sdrn-hp-input {
-  color: var(--sdr-ember, #D97B3F) !important;
-  width: 18px !important;
-  height: 16px !important;
+  color: #e6c88b !important;
+  width: 20px !important;
+  height: 18px !important;
   padding: 0 !important;
   border: none !important;
   background: transparent !important;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .sdrn-concentration-row {
@@ -13374,7 +14084,7 @@ form.npc-2024-sheet {
   gap: 6px;
   margin-top: 6px;
   padding-top: 6px;
-  border-top: 1px dashed rgba(201, 161, 90, 0.25);
+  border-top: 1px dashed rgba(187, 163, 119, 0.35);
 }
 
 .sdrn-conc-toggle {
@@ -13384,12 +14094,13 @@ form.npc-2024-sheet {
   border-radius: 4px;
   cursor: pointer;
   font-size: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(201, 161, 90, 0.25);
-  color: #a89a80;
-  /* Same missing-centering bug as `.sdrn-rest-btn` — a bare
-     <button><i></i></button> has no default alignment for its icon. */
-  display: flex; align-items: center; justify-content: center; padding: 0;
+  background: #e5dec9;
+  border: 1px solid #bba377;
+  color: #5c4524;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
 .sdrn-conc-toggle.active {
@@ -13406,14 +14117,130 @@ form.npc-2024-sheet {
   font-size: 11px;
 }
 
-/* Mesmo bug de especificidade do nome/AC: `.loom-window-body input[type="number"]`
-   (core, (0,2,1) com !important) ganhava de `.sdrn-hp-input` sozinho — o número
-   ficava sem espaço/cor certa, lia como campo vazio. */
+/* Cards de identidade (Race, Background) estilo banner do sistema original Foundry */
+.sdrn-identity-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.sdrn-id-card {
+  width: 100%;
+  min-height: 46px;
+  background: linear-gradient(90deg, #1b212c 0%, #242c3b 55%, #181e28 100%) !important;
+  border: 1px solid #3d4a5d !important;
+  border-radius: 6px !important;
+  padding: 5px 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  transition: all 0.2s ease !important;
+}
+
+.sdrn-id-card:hover {
+  border-color: #d4af37 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), 0 0 8px rgba(212, 175, 55, 0.3) !important;
+}
+
+.sdrn-id-card-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 4px;
+  border: 1.5px solid #d4af37;
+  background: #11100e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.sdrn-id-card-icon img,
+.sdrn-id-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.sdrn-id-card-icon i {
+  font-size: 15px;
+  color: #d4af37;
+}
+
+.sdrn-id-card-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sdrn-id-title {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: #f1ebd8 !important;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.sdrn-id-sub {
+  font-size: 10px;
+  color: #94a3b8 !important;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+button.sdrn-id-card-icon {
+  background: #11100e !important;
+  border: 1.5px solid #d4af37 !important;
+  padding: 0 !important;
+  cursor: pointer;
+  outline: none !important;
+}
+
+button.sdrn-id-card-icon:hover {
+  border-color: #ffd700 !important;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.5) !important;
+}
+
+button.sdrn-id-card-content {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  cursor: pointer;
+  text-align: left;
+  outline: none !important;
+}
+
+.sdrn-id-card-emoji {
+  font-size: 20px;
+  line-height: 1;
+}
+
 .sdrn-hp-text input.sdrn-hp-input {
-  width: 26px !important;
+  width: 28px !important;
   text-align: center !important;
-  font-weight: 700;
-  font-size: 12px;
+  font-weight: 800;
+  font-size: 13px;
   color: #fff !important;
   background: transparent !important;
   border: none !important;
@@ -13421,12 +14248,10 @@ form.npc-2024-sheet {
 }
 
 .sdrn-hp-input:focus {
-  outline: 1px solid var(--sdr-ember);
+  outline: 1px solid #d4af37;
   border-radius: 2px;
 }
 
-/* Setinhas nativas do input number colidiam com o dígito numa caixa tão
-   estreita, virava um glifo ilegível ("C"). Tira o spinner, mantém só o dígito. */
 .sdrn-hp-input::-webkit-outer-spin-button,
 .sdrn-hp-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -13464,76 +14289,29 @@ form.npc-2024-sheet {
 }
 
 .sdrn-hp-btn:hover {
-  border-color: var(--sdr-ember);
-}
-
-.sdrn-mini-ability {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-  padding: 6px 3px;
-  background: var(--sdr-parchment);
-  border: 1px solid rgba(201, 161, 90, 0.5);
-  border-radius: 12px;
-  color: var(--sdr-ink);
-}
-
-.sdrn-mini-mod {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--sdr-wine);
-  background: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  width: 100%;
-}
-
-.sdrn-mini-mod:hover {
-  text-decoration: underline;
-}
-
-.sdrn-mini-abbr {
-  font-size: 9px;
-  letter-spacing: 1px;
-  color: #5a5040;
-}
-
-.sdrn-mini-ability input.sdrn-mini-score {
-  font-size: 11px;
-  color: var(--sdr-ink) !important;
-  background: transparent !important;
-  border: none !important;
-  text-align: center !important;
-  width: 100% !important;
-  padding: 0 !important;
-}
-
-.sdrn-mini-score:focus {
-  outline: 1px solid var(--sdr-wine);
-  border-radius: 2px;
+  border-color: #d4af37;
 }
 
 .sdrn-saves-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4px 10px;
+  gap: 3px 10px;
 }
 
 .sdrn-dot {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  border: 1px solid #6f6555;
+  border: 1.5px solid #8c785b;
+  background: #e5dec9;
   display: inline-block;
   flex: none;
 }
 
-/* Azul como a referência (nada a ver com --sdr-ember, que é o acento de hover/interação) */
 .sdrn-dot.filled {
-  background: #4a90d9;
-  border-color: #4a90d9;
+  background: #8c6828;
+  border-color: #5c451b;
+  box-shadow: 0 0 3px rgba(140, 104, 40, 0.5);
 }
 
 .sdrn-dot-btn {
@@ -13550,17 +14328,15 @@ form.npc-2024-sheet {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 0;
+  padding: 3px 0;
   font-size: 11px;
+  border-bottom: 1px solid rgba(187, 163, 119, 0.2);
 }
 
-/* Engrenagem por linha (padrão visual do dnd5e) — só decorativa por enquanto,
-   não abre config real de campo (isso exigiria um sistema de config próprio,
-   fora do escopo desta rodada). Sempre visível, como na referência. */
 .sdrn-row-gear {
   margin-left: auto;
   font-size: 9px;
-  color: #6f6555;
+  color: #a89470;
   pointer-events: none;
   flex: none;
 }
@@ -13569,7 +14345,7 @@ form.npc-2024-sheet {
 .sdrn-skill-btn {
   background: transparent;
   border: none;
-  color: #e8e0d0;
+  color: #1a1410;
   cursor: pointer;
   text-align: left;
   padding: 0;
@@ -13578,7 +14354,7 @@ form.npc-2024-sheet {
 
 .sdrn-save-btn:hover,
 .sdrn-skill-btn:hover {
-  color: var(--sdr-ember);
+  color: #8b1515;
 }
 
 .sdrn-save-btn {
@@ -13590,94 +14366,148 @@ form.npc-2024-sheet {
 .sdrn-save-label {
   font-weight: 700;
   font-size: 10px;
+  color: #241c14;
 }
 
 .sdrn-save-total {
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 11px;
+  color: #1a1410;
 }
 
 .sdrn-skill-ability {
-  width: 22px;
+  width: 24px;
   font-size: 9px;
-  color: #a89a80;
+  font-weight: 700;
+  color: #7d6540;
   flex: none;
+  text-transform: uppercase;
 }
 
 .sdrn-skill-btn {
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 12px;
+  color: #1a1410;
   width: 24px;
   flex: none;
+  text-align: right;
 }
 
 .sdrn-skill-label {
   flex: 1;
+  color: #241c14;
+  font-weight: 600;
+  font-size: 11px;
 }
 
 .sdrn-skill-passive {
   font-size: 10px;
-  color: #6f6555;
+  color: #8c785b;
   flex: none;
+  margin-left: 2px;
 }
 
 .sdrn-identity-cards {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
 }
 
 .sdrn-id-card {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(201, 161, 90, 0.2);
-  border-radius: 8px;
+  background: #f5f0e3;
+  border: 1px solid #bba377;
+  border-radius: 4px;
   padding: 5px 8px;
   font-size: 11px;
-  color: var(--sdr-gold);
+  color: #241c14;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px);
 }
 
 .sdrn-id-title {
-  color: #e8e0d0;
-  font-weight: 700;
+  color: #1a1410;
+  font-weight: 800;
+  font-size: 11px;
 }
 
 .sdrn-id-sub {
-  color: #a89a80;
+  color: #7d6540;
   font-size: 9px;
   text-transform: uppercase;
+}
+
+.sdrn-traits-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 4px 8px;
+}
+
+.sdrn-trait-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(187, 163, 119, 0.3);
+}
+
+.sdrn-trait-row:last-child {
+  border-bottom: none;
+}
+
+.sdrn-trait-title {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #5c4524;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sdrn-trait-title i {
+  font-size: 9px;
+  color: #7d6032;
 }
 
 .sdrn-tag-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 3px;
 }
 
 .sdrn-tag {
-  font-size: 10px;
+  font-size: 9px;
+  font-weight: 700;
   padding: 2px 6px;
-  border-radius: 4px;
-  background: rgba(201, 161, 90, 0.12);
-  border: 1px solid rgba(201, 161, 90, 0.25);
+  border-radius: 2px;
+  background: #efeade;
+  border: 1px solid #b8a688;
+  color: #241c14;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .sdrn-tag-good {
-  background: rgba(70, 140, 90, 0.18);
-  border-color: rgba(70, 140, 90, 0.4);
-  color: #a8e0b8;
+  background: #205c31;
+  border-color: #133c20;
+  color: #ffffff;
 }
 
 .sdrn-tag-toggle {
   cursor: pointer;
-  color: #6f6555;
+  color: #5a4b38;
   font: inherit;
 }
 
 .sdrn-tag-toggle.active {
-  background: rgba(217, 123, 63, 0.18);
-  border-color: var(--sdr-ember);
-  color: var(--sdr-ember);
+  background: #8c6828;
+  border-color: #5c451b;
+  color: #ffffff;
 }
 
 .sdrn-hitdice-spend-btn {
@@ -13686,16 +14516,17 @@ form.npc-2024-sheet {
   text-transform: none;
   letter-spacing: normal;
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(201, 161, 90, 0.25);
+  background: #e5dec9;
+  border: 1px solid #bba377;
   border-radius: 3px;
-  color: #a89a80;
+  color: #5c4524;
+  font-weight: 700;
   padding: 1px 6px;
 }
 
 .sdrn-hitdice-spend-btn:hover {
-  color: var(--sdr-ember);
-  border-color: var(--sdr-ember);
+  color: #8b1515;
+  border-color: #8b1515;
 }
 
 /* Native NPC/monster sheet — single continuous page, no side tabs. */
@@ -13767,7 +14598,7 @@ form.npc-2024-sheet {
 
 .sdrn-empty {
   font-size: 11px;
-  color: #6f6555;
+  color: #7d6540;
 }
 
 .sdrn-item-row {
@@ -13775,7 +14606,7 @@ form.npc-2024-sheet {
   align-items: center;
   gap: 8px;
   padding: 4px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(187, 163, 119, 0.25);
 }
 
 .sdrn-item-row:last-child {
@@ -13801,43 +14632,46 @@ form.npc-2024-sheet {
 
 .sdrn-item-name {
   flex: 1;
+  color: #1a1410 !important;
+  font-weight: 700 !important;
 }
 
 .sdrn-item-name-btn {
   background: transparent;
   border: none;
-  color: #e8e0d0;
+  color: #1a1410 !important;
   cursor: pointer;
   text-align: left;
   padding: 0;
   font-size: inherit;
+  font-weight: 700 !important;
 }
 
 .sdrn-item-name-btn:hover {
-  color: var(--sdr-ember);
+  color: #8b1515 !important;
   text-decoration: underline;
 }
 
-/* Features tab grouped by source ("Wizard Features" / "Background
-   Features" as separate header bars, not one flat list) — matches the
-   real dnd5e-Foundry layout, confirmed live against the reference. */
+/* Features tab grouped by source */
 .sdrn-feature-group {
   margin-bottom: 8px;
 }
 
 .sdrn-feature-group-title {
-  color: var(--sdr-gold);
+  color: #5c4524 !important;
+  font-weight: 800 !important;
 }
 
 .sdrn-feature-header-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 2px 0;
+  padding: 3px 0;
   font-size: 9px;
   text-transform: uppercase;
-  color: #6f6555;
-  border-bottom: 1px solid rgba(201, 161, 90, 0.2);
+  color: #5c4524 !important;
+  font-weight: 800 !important;
+  border-bottom: 1px solid rgba(187, 163, 119, 0.35);
 }
 
 .sdrn-feature-header-row .sdrn-feature-col-name {
@@ -13847,20 +14681,19 @@ form.npc-2024-sheet {
 .sdrn-feature-col-uses,
 .sdrn-feature-col-recovery {
   flex: none;
-  width: 40px;
+  width: 44px;
   text-align: center;
+  color: #5c4524 !important;
+  font-weight: 700 !important;
 }
 
 .sdrn-feature-row .sdrn-feature-col-uses,
 .sdrn-feature-row .sdrn-feature-col-recovery {
   font-size: 11px;
-  color: #a89a80;
+  color: #3d3022 !important;
+  font-weight: 700 !important;
 }
 
-/* Ficha de item (Sdr5eItemSheet / item-native.hbs) — header ícone+nome+
-   raridade/peso/preço, abas internas Description/Details, seções em card,
-   tags no rodapé. Espelha o padrão real do dnd5e (Belt of Frost Giant
-   Strength / Arcane Recovery / Acid Splash), sem os assets da Wizards. */
 .sdrn-item-root {
   padding: 4px;
   display: flex;
@@ -13885,8 +14718,8 @@ form.npc-2024-sheet {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.35);
-  border: 2px solid var(--sdr-gold);
+  background: #fbf9f4;
+  border: 2px solid #bba377;
   border-radius: 8px;
 }
 
@@ -13912,8 +14745,9 @@ form.npc-2024-sheet {
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: var(--sdr-gold);
+  color: #5c4524;
   margin-left: 4px;
+  font-weight: 800;
 }
 
 .sdrn-item-header-row label:first-child {
@@ -13929,7 +14763,7 @@ form.npc-2024-sheet {
 .sdrn-item-tabs {
   display: flex;
   gap: 4px;
-  border-bottom: 1px solid rgba(201, 161, 90, 0.25);
+  border-bottom: 1px solid rgba(187, 163, 119, 0.35);
   margin-bottom: 10px;
   flex: none;
 }
@@ -13938,7 +14772,7 @@ form.npc-2024-sheet {
   background: transparent;
   border: none;
   border-bottom: 2px solid transparent;
-  color: #a89a80;
+  color: #7d6540;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -13947,12 +14781,12 @@ form.npc-2024-sheet {
 }
 
 .sdrn-item-tab-btn:hover {
-  color: #e8e0d0;
+  color: #1a1410;
 }
 
 .sdrn-item-tab-btn.active {
-  color: var(--sdr-ember);
-  border-bottom-color: var(--sdr-ember);
+  color: #8b1515;
+  border-bottom-color: #8b1515;
 }
 
 .sdrn-item-tab-panel {
@@ -13962,19 +14796,20 @@ form.npc-2024-sheet {
 }
 
 .sdrn-item-section {
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(201, 161, 90, 0.2);
-  border-radius: 8px;
+  background: #fbf9f4;
+  border: 1px solid #bba377;
+  border-radius: 6px;
   padding: 8px 10px;
   margin-bottom: 10px;
 }
 
 .sdrn-item-section-title {
-  font-family: 'Cinzel', 'Roboto Condensed', serif;
+  font-family: 'Cinzel', serif;
   font-size: 11px;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--sdr-gold);
+  color: #5c4524;
   margin-bottom: 6px;
 }
 
@@ -14005,8 +14840,9 @@ form.npc-2024-sheet {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--sdr-gold);
+  color: #5c4524;
   margin-bottom: 3px;
+  font-weight: 700;
 }
 
 .sdrn-item-field-boolean {
@@ -14024,29 +14860,32 @@ form.npc-2024-sheet {
   padding: 2px 8px;
   border-radius: 4px;
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(201, 161, 90, 0.25);
-  color: #a89a80;
+  background: #efe8d8;
+  border: 1px solid #bba377;
+  color: #5c4524;
+  font-weight: 700;
 }
 
 .sdrn-item-equip.active {
-  background: rgba(217, 123, 63, 0.15);
-  border-color: var(--sdr-ember);
-  color: var(--sdr-ember);
+  background: #205c31 !important;
+  border-color: #133c20 !important;
+  color: #ffffff !important;
 }
 
 .sdrn-item-del {
   background: transparent;
   border: none;
-  color: #a85050;
+  color: #a83232;
   cursor: pointer;
   font-size: 14px;
+  font-weight: bold;
 }
 
 .sdrn-empty-row {
   font-size: 11px;
-  color: #6f6555;
+  color: #7d6540;
   padding: 4px 0;
+  font-style: italic;
 }
 
 .sdrn-add-btn {
@@ -14054,27 +14893,49 @@ form.npc-2024-sheet {
   width: 100%;
   padding: 5px;
   font-size: 11px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px dashed rgba(201, 161, 90, 0.3);
+  background: #f7f2e4;
+  border: 1px dashed #bba377;
   border-radius: 4px;
-  color: #a89a80;
+  color: #5c4524;
   cursor: pointer;
+  font-weight: 700;
 }
 
 .sdrn-add-btn:hover {
-  color: var(--sdr-ember);
-  border-color: var(--sdr-ember);
+  color: #8b1515;
+  border-color: #8b1515;
+  background: #efe7d2;
 }
 
+/* Todos os campos de input e textarea normais de formulário dentro de sdrn-sheet */
+.sdrn-sheet .loom-window-body input[type="text"]:not(.sdrn-name-input):not(.sdrn-tmp-input),
+.sdrn-sheet .loom-window-body input[type="number"]:not(.sdrn-mini-score):not(.sdrn-ac-circle):not(.sdrn-bar-input),
+.sdrn-sheet .loom-window-body textarea,
+.sdrn-sheet .loom-window-body select,
 .sdrn-tab-panel textarea,
-.sdrn-tab-panel input[type="text"],
-.sdrn-tab-panel input[type="number"] {
+.sdrn-tab-panel input[type="text"]:not(.sdrn-name-input):not(.sdrn-tmp-input),
+.sdrn-tab-panel input[type="number"]:not(.sdrn-mini-score):not(.sdrn-ac-circle):not(.sdrn-bar-input) {
   width: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(201, 161, 90, 0.25);
-  border-radius: 4px;
-  color: #e8e0d0;
-  padding: 6px;
+  background: #fdfbf7 !important;
+  border: 1px solid #c4b59b !important;
+  border-radius: 3px !important;
+  color: #1a1410 !important;
+  font-weight: 700 !important;
+  padding: 5px 7px !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+}
+
+.sdrn-sheet .loom-window-body textarea,
+.sdrn-tab-panel textarea {
+  font-weight: normal !important;
+  color: #241c14 !important;
+  line-height: 1.4 !important;
+}
+
+.sdrn-sheet input:not(.sdrn-name-input):not(.sdrn-mini-score):not(.sdrn-ac-circle):not(.sdrn-bar-input):not(.sdrn-tmp-input):focus,
+.sdrn-sheet textarea:focus {
+  outline: 1px solid #8b1515 !important;
+  border-color: #8b1515 !important;
 }
 
 /* Inspiration pip (4th mini-stat, clickable) */
@@ -14084,16 +14945,17 @@ form.npc-2024-sheet {
 }
 
 .sdrn-mini-stat-btn .sdrn-mini-stat-num {
-  color: #a89a80;
+  color: #1a1410;
+  font-weight: 800;
 }
 
 .sdrn-mini-stat-btn.active {
-  border-color: var(--sdr-gold);
-  background: rgba(201, 161, 90, 0.18);
+  border-color: #8b1515;
+  background: #fbf5e6;
 }
 
 .sdrn-mini-stat-btn.active .sdrn-mini-stat-num {
-  color: var(--sdr-gold);
+  color: #8b1515;
 }
 
 /* Inspiration is a boolean toggle, not a stat with a number like its
@@ -14217,17 +15079,19 @@ form.npc-2024-sheet {
   align-items: center;
   gap: 12px;
   font-size: 11px;
-  color: #a89a80;
+  color: #5c4524;
+  font-weight: 600;
 }
 
 .sdrn-carrying-weight {
-  font-weight: 700;
-  color: var(--sdr-gold);
+  font-weight: 800;
+  color: #5c4524;
   margin-right: auto;
 }
 
 .sdrn-carrying-stat b {
-  color: #e8e0d0;
+  color: #1a1410;
+  font-weight: 800;
 }
 
 /* Currency strip (Inventory tab) */
@@ -14247,7 +15111,8 @@ form.npc-2024-sheet {
   align-items: center;
   gap: 2px;
   font-size: 9px;
-  color: #a89a80;
+  color: #5c4524;
+  font-weight: 800;
   text-transform: uppercase;
 }
 
@@ -14255,6 +15120,11 @@ form.npc-2024-sheet {
   width: 100%;
   text-align: center;
   padding: 4px;
+  background: #fdfbf7 !important;
+  border: 1px solid #c4b59b !important;
+  color: #1a1410 !important;
+  font-weight: 800 !important;
+  border-radius: 3px !important;
 }
 
 /* Item-row quantity + attunement (Inventory tab) */
@@ -14264,6 +15134,11 @@ form.npc-2024-sheet {
   text-align: center;
   padding: 3px;
   font-size: 12px;
+  background: #fdfbf7 !important;
+  border: 1px solid #c4b59b !important;
+  color: #1a1410 !important;
+  font-weight: 800 !important;
+  border-radius: 3px !important;
 }
 
 .sdrn-item-roll-btn {
@@ -14272,16 +15147,17 @@ form.npc-2024-sheet {
   padding: 3px 6px;
   cursor: pointer;
   white-space: nowrap;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(201, 161, 90, 0.25);
+  background: #efe8d8;
+  border: 1px solid #bba377;
   border-radius: 4px;
-  color: #a89a80;
+  color: #3c2f1e;
+  font-weight: 700;
 }
 
 .sdrn-item-roll-btn:hover {
-  background: rgba(217, 123, 63, 0.15);
-  border-color: var(--sdr-ember);
-  color: var(--sdr-ember);
+  background: #8b1515;
+  border-color: #8b1515;
+  color: #ffffff;
 }
 
 .sdrn-item-attune {
@@ -14291,15 +15167,15 @@ form.npc-2024-sheet {
   border-radius: 50%;
   cursor: pointer;
   font-size: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(201, 161, 90, 0.25);
-  color: #a89a80;
+  background: #efe8d8;
+  border: 1px solid #bba377;
+  color: #7d6540;
 }
 
 .sdrn-item-attune.active {
-  background: rgba(74, 144, 217, 0.2);
-  border-color: #4a90d9;
-  color: #4a90d9;
+  background: #4a90d9;
+  border-color: #2b6cb0;
+  color: #ffffff;
 }
 
 .sdrn-item-prepared {
@@ -14309,15 +15185,15 @@ form.npc-2024-sheet {
   border-radius: 50%;
   cursor: pointer;
   font-size: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(201, 161, 90, 0.25);
-  color: #a89a80;
+  background: #efe8d8;
+  border: 1px solid #bba377;
+  color: #7d6540;
 }
 
 .sdrn-item-prepared.active {
-  background: rgba(201, 161, 90, 0.2);
-  border-color: var(--sdr-gold);
-  color: var(--sdr-gold);
+  background: #8c6828;
+  border-color: #5c451b;
+  color: #ffffff;
 }
 
 /* ── Character creation wizard ────────────────────────────────────────── */
@@ -14477,44 +15353,99 @@ form.npc-2024-sheet {
    rendered as a bare unstyled row (icon, text, and a floating "1" with no
    box around it) until this was added, found live from a screenshot. */
 .sdrn-feature-class-card {
-  display: flex; align-items: center; gap: 10px; padding: 8px;
-  background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(201, 161, 90, 0.25);
-  border-radius: 8px; margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(201, 161, 90, 0.25);
+  border-radius: 8px;
+  margin-bottom: 8px;
 }
+
 .sdrn-feature-class-icons {
-  display: flex; flex: none; background: transparent; border: none; padding: 0; cursor: pointer;
+  display: flex;
+  flex: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 }
+
 .sdrn-feature-class-icons i {
-  width: 32px; height: 32px; border-radius: 6px; background: rgba(201, 161, 90, 0.15);
-  border: 1px solid rgba(201, 161, 90, 0.3); color: var(--sdr-gold);
-  display: flex; align-items: center; justify-content: center; font-size: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: rgba(201, 161, 90, 0.15);
+  border: 1px solid rgba(201, 161, 90, 0.3);
+  color: var(--sdr-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
   margin-left: -8px;
 }
-.sdrn-feature-class-icons i:first-child { margin-left: 0; }
-.sdrn-feature-class-name {
-  flex: 1; min-width: 0; text-align: left; background: transparent; border: none; cursor: pointer; padding: 0;
+
+.sdrn-feature-class-icons i:first-child {
+  margin-left: 0;
 }
-.sdrn-feature-class-name:hover .sdrn-id-title { color: var(--sdr-ember); }
+
+.sdrn-feature-class-name {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sdrn-feature-class-name:hover .sdrn-id-title {
+  color: var(--sdr-ember);
+}
+
 .sdrn-feature-class-level {
-  flex: none; width: 32px; height: 32px; border-radius: 50%;
-  background: rgba(201, 161, 90, 0.15); border: 1px solid var(--sdr-gold); color: var(--sdr-gold);
-  display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(201, 161, 90, 0.15);
+  border: 1px solid var(--sdr-gold);
+  color: var(--sdr-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
 }
 
 /* Item icon now a clickable button (was a plain div) that shows a real
    image once `imgUrl` is set — `object-fit: cover` + explicit overflow so a
    non-square upload doesn't distort or spill out of the frame. */
 .sdrn-item-icon-lg {
-  cursor: pointer; overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.sdrn-item-icon-lg img { width: 100%; height: 100%; object-fit: cover; }
+
+.sdrn-item-icon-lg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 /* Same real-image support, small-row sizing — inventory/features/spell
    rows show a per-item icon at roughly the same footprint as the emoji it
    replaces, so a custom image doesn't blow up the row height. */
-.sdrn-item-icon-btn img, .sdrn-item-icon img {
-  width: 20px; height: 20px; object-fit: cover; border-radius: 3px; display: block;
+.sdrn-item-icon-btn img,
+.sdrn-item-icon img {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  border-radius: 3px;
+  display: block;
 }
 
 /* Identity cards (Race, Background) and Features-tab Class card — limit
@@ -14549,4 +15480,72 @@ form.npc-2024-sheet {
   border: 1px solid rgba(201, 161, 90, 0.3);
   display: block;
   flex: none;
+}
+
+/* Handout 23 — pips de dado individuais do card de rolagem nativo (o
+   `.dice-breakdown` já existia no CSS herdado do Foundry, mas os filhos
+   `.dice-roll-pip` são novos porque agora o HTML é gerado por nós, não pelo
+   motor de dados do Foundry). */
+.codex-roll-card-v13 .dice-roll-pip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: rgba(74, 26, 26, 0.1);
+  border: 1px solid #7a6a4a;
+  color: #4a1a1a;
+  font-family: var(--font-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.codex-roll-card-v13 .dice-roll-pip.dropped {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+.codex-roll-card-v13 .dice-roll-pip.dice-roll-mod {
+  background: transparent;
+  border-style: dashed;
+}
+
+/* Handout 31 — nat 20 (dourado) / nat 1 (vermelho) em rolls de d20. */
+.codex-roll-card-v13 .dice-roll-pip.nat20 {
+  background: rgba(212, 175, 55, 0.25);
+  border-color: #d4af37;
+  color: #7a5c00;
+}
+
+.codex-roll-card-v13 .dice-roll-pip.nat1 {
+  background: rgba(139, 0, 0, 0.15);
+  border-color: #8b0000;
+  color: #8b0000;
+}
+
+.codex-roll-card-v13 .dice-total.nat20 { color: #d4af37; }
+.codex-roll-card-v13 .dice-total.nat1 { color: #8b0000; }
+
+.codex-roll-card-v13 .roll-details-expanded.hidden {
+  display: none;
+}
+
+/* Card de info (descanso/cura/dano) — mesma casca do roll-card, sem a
+   seção `.roll-main` (não tem dado nenhum pra mostrar). */
+.codex-info-card-v13 .card-header i {
+  margin-right: 4px;
+}
+
+.codex-info-card-v13.codex-info-card-heal .card-header {
+  background: #1b6330;
+}
+
+.codex-info-card-v13.codex-info-card-damage .card-header {
+  background: #7a1f1f;
+}
+
+.codex-info-card-v13.codex-info-card-rest .card-header {
+  background: #2d4a5c;
 }

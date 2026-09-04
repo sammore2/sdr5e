@@ -154,3 +154,12 @@ export const CLASS_IDENTIFIER_LABELS = {
   fighter: 'Fighter', monk: 'Monk', paladin: 'Paladin', ranger: 'Ranger',
   rogue: 'Rogue', sorcerer: 'Sorcerer', warlock: 'Warlock', wizard: 'Wizard',
 };
+
+// Handout 24 — níveis em que toda classe do SRD ganha Ability Score
+// Improvement (Barbarian.md:95, idêntico nas outras 11 classes: "When you
+// reach 4th level, and again at 8th, 12th, 16th, and 19th level").
+export const ASI_LEVELS = [4, 8, 12, 16, 19];
+
+// Nível em que toda classe escolhe subclasse (Fighter.md:42/102 —
+// "Martial Archetype" no 3rd level; mesmo nível nas demais classes deste SRD).
+export const SUBCLASS_LEVEL = 3;

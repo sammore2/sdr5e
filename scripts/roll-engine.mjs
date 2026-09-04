@@ -14,7 +14,7 @@
 // comes with an "apply" button on the sheet).
 // ══════════════════════════════════════════════════════════════════════════
 
-import { currentAdvantageMode } from './utils.mjs';
+import { currentAdvantageMode, isCriticalHeld } from './utils.mjs';
 
 /**
  * Conditions live on Cast (token) records, not the Actor (`statusMarkers:
@@ -82,6 +82,10 @@ function resolveAdvantage(advantageSources, disadvantageSources) {
 export function applyAbilityCheckConditionModifiers(explicitMode, selfConditions, exhaustionLevel = 0, armorPenalty = false) {
   const disadvantageSources = (explicitMode === -1 ? 1 : 0)
     + (selfConditions?.includes('poisoned') ? 1 : 0)
+    // SRD (Conditions.md, "Frightened"): desvantagem em ability checks
+    // enquanto o marcador estiver ativo — sem checar linha de visão/fonte
+    // do medo, mesma simplificação já usada em poisoned/blinded (Handout 29).
+    + (selfConditions?.includes('frightened') ? 1 : 0)
     + (exhaustionLevel >= 1 ? 1 : 0)
     // SRD (Equipment/Armor.md): armadura sem proficiência dá desvantagem em
     // checks de Força/Destreza — quem chama já filtrou que a habilidade
@@ -106,12 +110,26 @@ export function applyWeaponAttackConditionModifiers(explicitMode, selfConditions
   const targetConditions = getTargetConditions();
   const targetHasIncapacitating = ['paralyzed', 'stunned', 'unconscious', 'restrained'].some((c) => targetConditions.includes(c));
   const targetProne = targetConditions.includes('prone');
+  // SRD (Conditions.md, "Blinded"/"Invisible") — o par espelhado que faltava:
+  // atacante cego = desvantagem no próprio ataque, alvo cego = vantagem pra
+  // quem ataca ele. Atacante invisível = vantagem no próprio ataque, alvo
+  // invisível = desvantagem pra quem ataca ele.
+  const selfBlinded = selfConditions?.includes('blinded');
+  const selfInvisible = selfConditions?.includes('invisible');
+  const targetBlinded = targetConditions.includes('blinded');
+  const targetInvisible = targetConditions.includes('invisible');
 
   const disadvantageSources = (explicitMode === -1 ? 1 : 0)
     + (selfConditions?.includes('poisoned') ? 1 : 0)
+    // SRD (Conditions.md, "Frightened"): desvantagem em attack rolls
+    // enquanto o marcador estiver ativo — mesma simplificação do Passo 1
+    // (Handout 29).
+    + (selfConditions?.includes('frightened') ? 1 : 0)
     + (selfConditions?.includes('restrained') ? 1 : 0)
     + (selfConditions?.includes('prone') ? 1 : 0)
     + (targetProne && isRanged ? 1 : 0)
+    + (selfBlinded ? 1 : 0)
+    + (targetInvisible ? 1 : 0)
     // Exhaustion level 3 (classic 6-level table): disadvantage on attack rolls and saving throws.
     + (exhaustionLevel >= 3 ? 1 : 0)
     // SRD (Equipment/Armor.md): armadura sem proficiência dá desvantagem em
@@ -120,7 +138,9 @@ export function applyWeaponAttackConditionModifiers(explicitMode, selfConditions
     + (armorPenalty ? 1 : 0);
   const advantageSources = (explicitMode === 1 ? 1 : 0)
     + (targetHasIncapacitating ? 1 : 0)
-    + (targetProne && !isRanged ? 1 : 0);
+    + (targetProne && !isRanged ? 1 : 0)
+    + (targetBlinded ? 1 : 0)
+    + (selfInvisible ? 1 : 0);
   return resolveAdvantage(advantageSources, disadvantageSources);
 }
 
@@ -144,7 +164,26 @@ export function getSaveConditionOutcome(abilityKey, conditions, exhaustionLevel 
   // saves de Força/Destreza especificamente — por isso reaproveita `isStrOrDex`.
   const disadvantage = (abilityKey === 'dex' && conditions?.includes('restrained')) || exhaustionLevel >= 3
     || (isStrOrDex && armorPenalty);
-  return { autoFail, disadvantage };
+  // SRD (Combat.md, "Cover"): +2/+5 em saves de DESTREZA especificamente —
+  // três graus não se somam, só o mais protetor conta (Handout 28).
+  let bonus = 0;
+  if (abilityKey === 'dex') {
+    if (conditions?.includes('cover-3q')) bonus = 5;
+    else if (conditions?.includes('cover-half')) bonus = 2;
+  }
+  return { autoFail, disadvantage, bonus };
+}
+
+/**
+ * Perícias: Deafened força AUTO-FALHA em Perception especificamente (SRD:
+ * "automatically fails any ability check that requires hearing" — a única
+ * perícia do SRD inequivocamente ligada a audição). Outras perícias não são
+ * afetadas — não tem granularidade de "requer audição" no schema pra
+ * generalizar sem chutar.
+ */
+export function getSkillConditionOutcome(skillKey, conditions) {
+  const autoFail = skillKey === 'perception' && !!conditions?.includes('deafened');
+  return { autoFail };
 }
 
 /**
@@ -188,7 +227,7 @@ export function getHealthPool(sd, actorType) {
  * quietly produced wrong damage numbers. Hand-rolled instead, scoped to the
  * additive `NdM (+/-) K` shape every SDR5E damage formula actually uses.
  */
-export function evaluateDamageFormula(formula) {
+export function evaluateDamageFormula(formula, critical = false) {
   const terms = String(formula || '0').replace(/\s+/g, '').match(/[+-]?\d*d?\d+/gi) || [];
   let total = 0;
   for (const term of terms) {
@@ -196,7 +235,10 @@ export function evaluateDamageFormula(formula) {
     const body = term.replace(/^[+-]/, '');
     const dieMatch = body.match(/^(\d*)d(\d+)$/i);
     if (dieMatch) {
-      const count = Number(dieMatch[1]) || 1;
+      // SRD (Combat.md, "Critical Hits"): "Roll all of the attack's damage
+      // dice twice" — dobra a CONTAGEM de dados, nunca o modificador fixo
+      // (Handout 30). Só o ramo com `d` (dado) é afetado.
+      const count = (Number(dieMatch[1]) || 1) * (critical ? 2 : 1);
       const faces = Number(dieMatch[2]) || 1;
       for (let i = 0; i < count; i++) total += sign * (Math.floor(Math.random() * faces) + 1);
     } else {
@@ -254,8 +296,13 @@ export async function applyDamageToTargets(amount, type) {
       else if (t && has('dv')) { multiplier = 2; traitLabel = 'Vulnerable'; }
 
       const finalAmount = Math.floor(amount * multiplier);
-      const newValue = Math.max(0, (hp.value || 0) - finalAmount);
-      const patch = { systemData: { ...sd, resources: { ...sd.resources, health: { ...hp, value: newValue } } } };
+      // Mesma regra da Parte A (SRD Combat.md, "Temporary Hit Points") — essa
+      // função duplica o cálculo de `applyDamage`, então duplica o fix também.
+      const tempBefore = hp.temp || 0;
+      const tempAfter = Math.max(0, tempBefore - finalAmount);
+      const leftoverDamage = Math.max(0, finalAmount - tempBefore);
+      const newValue = Math.max(0, (hp.value || 0) - leftoverDamage);
+      const patch = { systemData: { ...sd, resources: { ...sd.resources, health: { ...hp, value: newValue, temp: tempAfter } } } };
       if (newValue === 0) patch.systemData.resources.concentrating = false;
 
       if (isLinked && cast.actorId) await window.Loom.api.put(`/actors/${cast.actorId}`, patch);
@@ -288,7 +335,11 @@ export async function applyHeal(actor, amount, options = {}) {
   const hp = getHealthPool(sd, actor.type);
   if (!hp) return null;
 
-  const newValue = Math.min(hp.max ?? hp.value + amount, (hp.value || 0) + amount);
+  // Exhaustion 4 (Handout 26): curar não pode passar do teto EFETIVO, só do
+  // `max` bruto — senão cura "esconde" HP acima do teto até a exaustão
+  // baixar, o que não é a regra (o excedente é perdido, não guardado).
+  const cap = hp.effectiveMax ?? hp.max ?? hp.value + amount;
+  const newValue = Math.min(cap, (hp.value || 0) + amount);
   await actor.update({ 'system.resources.health.value': newValue });
 
   // `flags.<system>.{name,description}` is the shape the chat card actually
@@ -326,8 +377,17 @@ export async function applyDamage(actor, amount, type = '') {
   else if (t && has('dv')) { multiplier = 2; traitLabel = 'Vulnerable'; }
 
   const finalAmount = Math.floor(amount * multiplier);
-  const newValue = Math.max(0, (hp.value || 0) - finalAmount);
-  const update = { 'system.resources.health.value': newValue };
+  // SRD (Combat.md, "Temporary Hit Points"): "the temporary hit points are
+  // lost first, and any leftover damage carries over to your normal hit
+  // points" — desconta de `temp` até zerar, só o excedente vai pro `value`.
+  const tempBefore = hp.temp || 0;
+  const tempAfter = Math.max(0, tempBefore - finalAmount);
+  const leftoverDamage = Math.max(0, finalAmount - tempBefore);
+  const newValue = Math.max(0, (hp.value || 0) - leftoverDamage);
+  const update = {
+    'system.resources.health.value': newValue,
+    'system.resources.health.temp': tempAfter,
+  };
   if (newValue === 0) update['system.resources.concentrating'] = false; // dropping to 0 HP always breaks concentration
   await actor.update(update);
 
@@ -488,6 +548,10 @@ export async function rollWeaponDamage(actor, item) {
   const rollFormula = effectiveMod !== 0 ? `${formula} + ${effectiveMod}` : formula;
   const type = idata.damage?.type || '';
   const typeSuffix = type ? ` (${type})` : '';
+  // Handout 30: Alt segurado na hora do clique = crítico (dados em dobro,
+  // SRD Combat.md "Critical Hits"). Sem estado compartilhado com o attack
+  // roll — o jogador sinaliza manualmente, motivo completo no handout.
+  const critical = isCriticalHeld();
   // Rolled locally (not just dispatched) so the total is known synchronously
   // for the Apply Damage button — dispatchRoll alone never returns it (the
   // server resolves and broadcasts separately). Dispatching the RESOLVED
@@ -497,12 +561,44 @@ export async function rollWeaponDamage(actor, item) {
   // the `renderRollCard` wrapper in srd5e.mjs to inject the Apply Damage
   // button directly into THIS card (mirrors real dnd5e-Foundry — no
   // separate companion message).
-  const total = evaluateDamageFormula(rollFormula);
+  const total = evaluateDamageFormula(rollFormula, critical);
   window.Loom.dispatchRoll({
     formula: String(total),
     actorId: actor.id,
     mode: 'public',
-    meta: { label: `Damage: ${item.name}${typeSuffix}`, srd5eDamage: { amount: total, type } },
+    meta: { label: `Damage: ${item.name}${critical ? ' (Critical!)' : ''}${typeSuffix}`, srd5eDamage: { amount: total, type } },
+  });
+  return total;
+}
+
+/**
+ * Unarmed strike (SRD Combat.md:293) — "1 + your Strength modifier"
+ * bludgeoning, sempre proficiente, sem item nenhum envolvido. Mais simples
+ * que rollWeaponAttack: sem lookup de proficiência por nome/categoria, sem
+ * finesse (unarmed é sempre Força), sem bônus de item (Handout 32).
+ */
+export async function rollUnarmedStrike(actor) {
+  if (!actor) return null;
+  const sd = actor.systemData;
+  const strMod = sd.abilities?.str?.modifier ?? 0;
+  const prof = sd.attributes?.prof?.value ?? 0;
+  const bonus = strMod + prof + (Number(sd.attributes?.meleeBonus) || 0);
+  const conditions = await getActorConditions(actor.id);
+  const armorPenalty = !!sd.attributes?.armor?.penalty;
+  const advantage = applyWeaponAttackConditionModifiers(currentAdvantageMode(), conditions, false, sd.resources?.exhaustion ?? 0, armorPenalty);
+  return sdr5eRoll({ label: 'Attack: Unarmed Strike', bonus, actor, advantage });
+}
+
+export async function rollUnarmedDamage(actor) {
+  if (!actor) return null;
+  const sd = actor.systemData;
+  const strMod = sd.abilities?.str?.modifier ?? 0;
+  const total = Math.max(0, 1 + strMod);
+  window.Loom.dispatchRoll({
+    formula: String(total),
+    actorId: actor.id,
+    mode: 'public',
+    meta: { label: 'Damage: Unarmed Strike (bludgeoning)', srd5eDamage: { amount: total, type: 'bludgeoning' } },
   });
   return total;
 }
@@ -643,8 +739,21 @@ export async function setExhaustion(actor, level) {
   const current = actor.systemData?.resources?.exhaustion ?? 0;
   // Clicking the already-active top level clears it back to 0 (same toggle
   // pattern as the death-save pips / real dnd5e's exhaustion track).
-  const next = clamped === current ? clamped - 1 : clamped;
-  return actor.update({ 'system.resources.exhaustion': Math.max(0, next) });
+  const next = Math.max(0, clamped === current ? clamped - 1 : clamped);
+  const result = await actor.update({ 'system.resources.exhaustion': next });
+  // SRD (Conditions.md, Exhaustion nível 6): "Death". Só mensagem de chat —
+  // este sistema não tem estado "morto" persistente em lugar nenhum
+  // (rollDeathSave também só posta "Dead" no chat, nunca seta uma flag),
+  // então nível 6 segue a MESMA convenção em vez de inventar uma nova
+  // (Handout 27).
+  if (next === 6 && current !== 6) {
+    await window.Loom.ChatMessage.create({
+      speaker: window.Loom.ChatMessage.getSpeaker({ actor }),
+      content: `${actor.name} reaches Exhaustion level 6 — Death`,
+      flags: { srd5e: { name: `${actor.name} — Exhaustion`, description: '<span style="color:#ef4444">Exhaustion level 6 — the character dies (SRD)</span>' } },
+    });
+  }
+  return result;
 }
 
 /**

@@ -55,10 +55,15 @@ export function setPathValue(obj, path, value) {
 // by every sheet).
 let _shiftDown = false;
 let _ctrlDown = false;
+// Handout 30: Alt segurado ao clicar "Damage" = rola como crítico (dados em
+// dobro). Mesmo mecanismo de tecla global do Shift/Ctrl acima — não tem
+// como o sistema saber sozinho que o ataque foi 20 natural (attack e damage
+// são rolls separados), então o jogador sinaliza na hora.
+let _altDown = false;
 if (typeof window !== 'undefined') {
-  window.addEventListener('keydown', (e) => { if (e.key === 'Shift') _shiftDown = true; if (e.key === 'Control') _ctrlDown = true; });
-  window.addEventListener('keyup', (e) => { if (e.key === 'Shift') _shiftDown = false; if (e.key === 'Control') _ctrlDown = false; });
-  window.addEventListener('blur', () => { _shiftDown = false; _ctrlDown = false; });
+  window.addEventListener('keydown', (e) => { if (e.key === 'Shift') _shiftDown = true; if (e.key === 'Control') _ctrlDown = true; if (e.key === 'Alt') _altDown = true; });
+  window.addEventListener('keyup', (e) => { if (e.key === 'Shift') _shiftDown = false; if (e.key === 'Control') _ctrlDown = false; if (e.key === 'Alt') _altDown = false; });
+  window.addEventListener('blur', () => { _shiftDown = false; _ctrlDown = false; _altDown = false; });
 }
 
 /** 1 = advantage (Shift held), -1 = disadvantage (Ctrl held), 0 = normal. Shift wins if both are held. */
@@ -66,4 +71,9 @@ export function currentAdvantageMode() {
   if (_shiftDown) return 1;
   if (_ctrlDown) return -1;
   return 0;
+}
+
+/** true = Alt está pressionado agora — sinaliza "role este dano como crítico" (Handout 30). */
+export function isCriticalHeld() {
+  return _altDown;
 }
