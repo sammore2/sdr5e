@@ -217,19 +217,19 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const save = sd.saves?.[key];
       const kb = currentAdvantageMode();
       const advantage = (kb === 1 && disadvantage) ? 0 : disadvantage ? -1 : kb;
-      await sdr5eRoll({ label: `Save: ${ABILITY_LABELS[key]}`, bonus: save?.total ?? 0, actor: this.document, advantage });
+      await sdr5eRoll({ label: `Save: ${ABILITY_LABELS[key]}`, parts: [{ label: 'Modifier', value: save?.total ?? 0 }], actor: this.document, advantage });
     } else {
       const conditions = await getActorConditions(this.document.id);
       const advantage = applyPoisonedDisadvantage(currentAdvantageMode(), conditions);
       const abl = sd.abilities?.[key];
-      await sdr5eRoll({ label: `Ability Check: ${ABILITY_LABELS[key]}`, bonus: abl?.modifier ?? 0, actor: this.document, advantage });
+      await sdr5eRoll({ label: `Ability Check: ${ABILITY_LABELS[key]}`, parts: [{ label: 'Modifier', value: abl?.modifier ?? 0 }], actor: this.document, advantage });
     }
   }
 
   async _rollInitiative() {
     if (!this.document) return;
     const bonus = this.document.systemData?.attributes?.initiative?.total ?? 0;
-    await sdr5eRoll({ label: `${this.document.name} rolls Initiative!`, bonus, actor: this.document });
+    await sdr5eRoll({ label: `${this.document.name} rolls Initiative!`, parts: [{ label: 'Initiative', value: bonus }], actor: this.document });
   }
 
   async _rollSkill(key) {
@@ -237,7 +237,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const skill = this.document.systemData?.skills?.[key];
     const conditions = await getActorConditions(this.document.id);
     const advantage = applyPoisonedDisadvantage(currentAdvantageMode(), conditions);
-    await sdr5eRoll({ label: `Skill Check: ${SKILL_LABELS[key] || key}`, bonus: skill?.total ?? 0, actor: this.document, advantage });
+    await sdr5eRoll({ label: `Skill Check: ${SKILL_LABELS[key] || key}`, parts: [{ label: 'Modifier', value: skill?.total ?? 0 }], actor: this.document, advantage });
   }
 
   async _applyHpDelta(delta) {

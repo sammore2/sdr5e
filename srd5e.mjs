@@ -163,6 +163,14 @@ window.Loom.wraps.renderRollCard.addWrapper((wrapped, roll, esc) => {
     .map((t) => `<span class="dice-roll-pip dice-roll-mod">${t.value > 0 ? '+' : ''}${t.value}</span>`)
     .join('');
 
+  // Handout 36 — Acertou/Errou por alvo, comparando o total já resolvido
+  // (roll.total, disponível aqui no momento do render) contra a CA
+  // capturada em meta.targets ANTES do dado ser rolado (Passo 1).
+  const targetsSection = (roll.meta?.targets || []).map((t) => {
+    const hit = roll.total >= t.ac;
+    return `<div class="target-vs-row ${hit ? 'hit' : 'miss'}">vs ${esc(t.name)} (AC ${t.ac}) — ${hit ? 'HIT' : 'MISS'}</div>`;
+  }).join('');
+
   const damageSection = dmg
     ? `<div class="damage-section">${esc(dmg.type ? `${dmg.type} damage` : 'Damage')}</div>`
     : '';
@@ -188,6 +196,7 @@ window.Loom.wraps.renderRollCard.addWrapper((wrapped, roll, esc) => {
     <div class="roll-details-expanded hidden">
       <div class="dice-breakdown">${diceBreakdown}${modifierTerms}</div>
     </div>
+    ${targetsSection}
     ${damageSection}
     ${applyBtnSection}
   </div>`;

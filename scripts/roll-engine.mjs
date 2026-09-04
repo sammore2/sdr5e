@@ -60,6 +60,41 @@ function getTargetConditions() {
 }
 
 /**
+ * CA fresca de cada alvo (não confia no `da.value` que já estiver no
+ * objeto cast — pode nunca ter sido derivado, ver nota do Handout 36).
+ * Mesmo fetch Cast-vs-Actor de `applyDamageToTargets`, mas só lendo CA,
+ * sem tocar em HP.
+ */
+async function getTargetAcInfo() {
+  const targets = window.Loom?.user?.targets || [];
+  if (!targets.length) return [];
+  const { prepCharacter, prepNpc } = await import('./prepare-data.mjs');
+
+  const out = [];
+  for (const t of targets) {
+    const castId = typeof t === 'string' ? t : t?.id;
+    if (!castId) continue;
+    try {
+      const cast = await window.Loom.api.get(`/cast/${castId}`);
+      if (!cast) continue;
+      const isLinked = cast.isLinked === true;
+      const record = isLinked && cast.actorId ? await window.Loom.api.get(`/actors/${cast.actorId}`) : cast;
+      if (!record) continue;
+      const sd = record.systemData || {};
+      if (!sd.abilities) continue;
+      if (record.type === 'npc') prepNpc(sd);
+      else prepCharacter(sd, record.items || []);
+      const ac = Number(sd.attributes?.da?.value);
+      if (!Number.isFinite(ac)) continue;
+      out.push({ name: cast.name || record.name || 'Target', ac });
+    } catch (e) {
+      console.error(`[srd5e] getTargetAcInfo failed for cast ${castId}:`, e);
+    }
+  }
+  return out;
+}
+
+/**
  * SRD 5.1: any number of advantage/disadvantage sources collapse to a
  * single yes/no each — if both end up present, roll normal. Counting
  * sources (rather than the "combine one at a time" approach the first draft
@@ -187,25 +222,28 @@ export function getSkillConditionOutcome(skillKey, conditions) {
 }
 
 /**
- * Rolls 1d20 + bonus, with advantage/disadvantage and an optional DC.
- * @param {{label:string, bonus:number, actor:any, advantage?:number, dc?:number|null}} opts
- *   advantage: 1 = advantage, -1 = disadvantage, 0 = normal.
+ * Rolls 1d20 + parts/bonus, with advantage/disadvantage dialog and optional DC.
+ * Handout 36 (extraMeta / targets) & Handout 37 (roll dialog + situational bonus).
  */
-export async function sdr5eRoll({ label, bonus = 0, actor, advantage = 0, dc = null }) {
-  const b = Number(bonus) || 0;
-  const die = advantage === 1 ? '2d20kh1' : advantage === -1 ? '2d20kl1' : '1d20';
-  const formula = b !== 0 ? `${die} + ${b}` : die;
+export async function sdr5eRoll({ label, parts = [], bonus = 0, actor, advantage = 0, dc = null, extraMeta = {} }) {
+  const effectiveParts = parts.length > 0 ? parts : (bonus !== 0 ? [{ label: 'Modifier', value: Number(bonus) || 0 }] : []);
+  const { showRollDialog } = await import('./roll-dialog.mjs');
+  const choice = await showRollDialog({ title: label, parts: effectiveParts });
+  if (!choice) return null; // cancelado
 
-  // The core `renderRollCard` shows ANY `meta` key as a "key: value" badge —
-  // `srd5e:true` always and `dc:null` on most rolls became visible noise.
-  // Only send what's actually worth displaying.
-  const meta = { label };
+  const baseBonus = effectiveParts.reduce((sum, p) => sum + (Number(p.value) || 0), 0);
+  const totalBonus = baseBonus + choice.situational;
+  const die = choice.advantage === 1 ? '2d20kh1' : choice.advantage === -1 ? '2d20kl1' : '1d20';
+  const formula = totalBonus !== 0 ? `${die} + ${totalBonus}` : die;
+
+  const meta = { label, ...extraMeta };
   if (dc !== null && dc !== undefined) meta.dc = dc;
+  if (choice.situational) meta.situational = choice.situational;
 
   window.Loom.dispatchRoll({
     formula,
     actorId: actor?.id,
-    mode: 'public',
+    mode: choice.rollMode || 'public',
     meta,
   });
 }
@@ -418,8 +456,8 @@ export async function applyDamage(actor, amount, type = '') {
 export async function rollConcentrationSave(actor, damage) {
   if (!actor) return null;
   const dc = Math.max(10, Math.floor(damage / 2));
-  const bonus = actor.systemData?.saves?.con?.total ?? 0;
-  return sdr5eRoll({ label: 'Concentration Save', bonus, actor, dc });
+  const parts = [{ label: 'CON Save', value: actor.systemData?.saves?.con?.total ?? 0 }];
+  return sdr5eRoll({ label: 'Concentration Save', parts, actor, dc });
 }
 
 /**
@@ -519,11 +557,17 @@ export async function rollWeaponAttack(actor, item) {
   const proficient = isWeaponProficient(sd, item, idata);
   const isRanged = idata.rangeType === 'ranged';
   const attackTypeBonus = Number((isRanged ? sd.attributes?.rangedBonus : sd.attributes?.meleeBonus)) || 0;
-  const bonus = abilityMod + (proficient ? prof : 0) + (Number(idata.attackBonus) || 0) + attackTypeBonus;
+  const parts = [
+    { label: abilityKey.toUpperCase(), value: abilityMod },
+    { label: 'Proficiency', value: proficient ? prof : 0 },
+    { label: 'Item', value: Number(idata.attackBonus) || 0 },
+    { label: isRanged ? 'Ranged' : 'Melee', value: attackTypeBonus },
+  ];
   const conditions = await getActorConditions(actor.id);
   const armorPenalty = (abilityKey === 'str' || abilityKey === 'dex') && !!sd.attributes?.armor?.penalty;
   const advantage = applyWeaponAttackConditionModifiers(currentAdvantageMode(), conditions, isRanged, sd.resources?.exhaustion ?? 0, armorPenalty);
-  return sdr5eRoll({ label: `Attack: ${item.name}`, bonus, actor, advantage });
+  const targets = await getTargetAcInfo();
+  return sdr5eRoll({ label: `Attack: ${item.name}`, parts, actor, advantage, extraMeta: targets.length ? { targets } : {} });
 }
 
 export async function rollWeaponDamage(actor, item) {
@@ -582,11 +626,16 @@ export async function rollUnarmedStrike(actor) {
   const sd = actor.systemData;
   const strMod = sd.abilities?.str?.modifier ?? 0;
   const prof = sd.attributes?.prof?.value ?? 0;
-  const bonus = strMod + prof + (Number(sd.attributes?.meleeBonus) || 0);
+  const parts = [
+    { label: 'STR', value: strMod },
+    { label: 'Proficiency', value: prof },
+    { label: 'Melee', value: Number(sd.attributes?.meleeBonus) || 0 },
+  ];
   const conditions = await getActorConditions(actor.id);
   const armorPenalty = !!sd.attributes?.armor?.penalty;
   const advantage = applyWeaponAttackConditionModifiers(currentAdvantageMode(), conditions, false, sd.resources?.exhaustion ?? 0, armorPenalty);
-  return sdr5eRoll({ label: 'Attack: Unarmed Strike', bonus, actor, advantage });
+  const targets = await getTargetAcInfo();
+  return sdr5eRoll({ label: 'Attack: Unarmed Strike', parts, actor, advantage, extraMeta: targets.length ? { targets } : {} });
 }
 
 export async function rollUnarmedDamage(actor) {
@@ -650,10 +699,11 @@ export async function spendHitDie(actor) {
 
 export async function rollSpellAttack(actor, item) {
   if (!actor || !item) return null;
-  const bonus = actor.systemData?.attributes?.spellcasting?.attackBonus ?? 0;
+  const parts = [{ label: 'Spellcasting', value: actor.systemData?.attributes?.spellcasting?.attackBonus ?? 0 }];
   const conditions = await getActorConditions(actor.id);
   const advantage = applyWeaponAttackConditionModifiers(currentAdvantageMode(), conditions, false, actor.systemData?.resources?.exhaustion ?? 0);
-  return sdr5eRoll({ label: `Spell Attack: ${item.name}`, bonus, actor, advantage });
+  const targets = await getTargetAcInfo();
+  return sdr5eRoll({ label: `Spell Attack: ${item.name}`, parts, actor, advantage, extraMeta: targets.length ? { targets } : {} });
 }
 
 export async function rollSpellDamage(actor, item) {

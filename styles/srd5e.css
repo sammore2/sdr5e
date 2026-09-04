@@ -15549,3 +15549,21 @@ button.sdrn-id-card-content {
 .codex-info-card-v13.codex-info-card-rest .card-header {
   background: #2d4a5c;
 }
+
+/* Handout 36 — linha de Acertou/Errou por alvo no card de ataque. */
+.codex-roll-card-v13 .target-vs-row {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  margin-top: 4px;
+}
+.codex-roll-card-v13 .target-vs-row.hit { color: #2e7d32; }
+.codex-roll-card-v13 .target-vs-row.miss { color: #8b0000; }
+
+/* Handout 37 — conteúdo da caixa de rolagem pré-roll. */
+.sdrn-roll-dialog { display: flex; flex-direction: column; gap: 0.6rem; padding: 0.5rem; }
+.sdrn-roll-dialog-formula { font-size: 1.1rem; font-weight: 700; text-align: center; }
+.sdrn-roll-dialog-breakdown { font-size: 0.75rem; opacity: 0.7; text-align: center; }
+.sdrn-roll-dialog-situational { width: 100%; box-sizing: border-box; padding: 0.4rem 0.5rem; }
+.sdrn-roll-dialog-config { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.85rem; }
+.sdrn-roll-dialog-config select { padding: 0.35rem 0.5rem; }
