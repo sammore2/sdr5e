@@ -22,7 +22,7 @@ import { getDefaultData } from './scripts/schema.mjs';
 import { mergeDefaults } from './scripts/utils.mjs';
 import { prepCharacter, prepNpc } from './scripts/prepare-data.mjs';
 import { getSheetSchema, getItemSheetSchema } from './scripts/sheet-schemas.mjs';
-import { applyDamageToTargets } from './scripts/roll-engine.mjs';
+import { applyDamageToTargets, rollWeaponAttack, rollWeaponDamage, rollSpellDamage } from './scripts/roll-engine.mjs';
 import { syncEquippedEffect, syncPermanentBonusEffect, removeItemEffects } from './scripts/effects.mjs';
 import { Sdr5eCharacterSheet } from './scripts/actor-sheet.mjs';
 import { Sdr5eNpcSheet } from './scripts/npc-sheet.mjs';
@@ -119,6 +119,32 @@ document.addEventListener('click', (event) => {
   void applyDamageToTargets(amount, type).finally(() => { btn.disabled = false; });
 });
 
+// Handout 40 — botões Attack/Damage embutidos no card de ativação
+// (Passo 3). Busca actor/item frescos via API porque quem clica pode ser
+// QUALQUER cliente vendo a mensagem no chat, não só quem tem a ficha aberta.
+document.addEventListener('click', async (event) => {
+  const target = event.target instanceof Element ? event.target : null;
+  const btn = target?.closest('[data-srd5e-action="card-attack"], [data-srd5e-action="card-damage"], [data-srd5e-action="card-spell-damage"]');
+  if (!btn) return;
+  const actorId = btn.dataset.actorId;
+  const itemId = btn.dataset.itemId;
+  if (!actorId || !itemId) return;
+  btn.disabled = true;
+  try {
+    const [actor, item] = await Promise.all([
+      window.Loom.api.get(`/actors/${actorId}`),
+      window.Loom.api.get(`/items/${itemId}`),
+    ]);
+    if (!actor || !item) return;
+    const action = btn.dataset.srd5eAction;
+    if (action === 'card-attack') await rollWeaponAttack(actor, item);
+    else if (action === 'card-damage') await rollWeaponDamage(actor, item);
+    else if (action === 'card-spell-damage') await rollSpellDamage(actor, item);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
 // Injects the Apply Damage button directly INTO the roll card itself
 // (Loom.wraps.renderRollCard — the system-hook hosting core's own generic
 // reroll/apply mechanisms already use, per chat-message-card.ts's own
@@ -166,10 +192,17 @@ window.Loom.wraps.renderRollCard.addWrapper((wrapped, roll, esc) => {
   // Handout 36 — Acertou/Errou por alvo, comparando o total já resolvido
   // (roll.total, disponível aqui no momento do render) contra a CA
   // capturada em meta.targets ANTES do dado ser rolado (Passo 1).
-  const targetsSection = (roll.meta?.targets || []).map((t) => {
+  const targetsList = roll.meta?.targets || [];
+  const anyHit = targetsList.some((t) => roll.total >= t.ac);
+  const targetsSection = targetsList.map((t) => {
     const hit = roll.total >= t.ac;
     return `<div class="target-vs-row ${hit ? 'hit' : 'miss'}">vs ${esc(t.name)} (AC ${t.ac}) — ${hit ? 'HIT' : 'MISS'}</div>`;
   }).join('');
+
+  // Handout 41 — botão de dano só aparece quando acertou pelo menos um alvo.
+  const inlineDamageBtn = (anyHit && roll.meta?.actorId && roll.meta?.itemId)
+    ? `<div class="activation-card-buttons"><button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="${roll.meta.isSpell ? 'card-spell-damage' : 'card-damage'}" data-actor-id="${esc(roll.meta.actorId)}" data-item-id="${esc(roll.meta.itemId)}">Roll Damage</button></div>`
+    : '';
 
   const damageSection = dmg
     ? `<div class="damage-section">${esc(dmg.type ? `${dmg.type} damage` : 'Damage')}</div>`
@@ -197,6 +230,7 @@ window.Loom.wraps.renderRollCard.addWrapper((wrapped, roll, esc) => {
       <div class="dice-breakdown">${diceBreakdown}${modifierTerms}</div>
     </div>
     ${targetsSection}
+    ${inlineDamageBtn}
     ${damageSection}
     ${applyBtnSection}
   </div>`;
@@ -206,7 +240,7 @@ window.Loom.wraps.renderRollCard.addWrapper((wrapped, roll, esc) => {
 // rolagem — mesmo padrão do `click-to-see` do CSS original.
 document.addEventListener('click', (event) => {
   if (!(event.target instanceof Element)) return;
-  if (event.target.closest('[data-srd5e-action="apply-damage"]')) return;
+  if (event.target.closest('[data-srd5e-action]')) return;
   const card = event.target.closest('[data-action="toggle-roll-details"]');
   if (!card) return;
   const expanded = card.querySelector('.roll-details-expanded');
@@ -220,10 +254,33 @@ document.addEventListener('click', (event) => {
 window.Loom.wraps.renderMessage.addWrapper((wrapped, msg, ctx) => {
   const flags = msg.flags?.srd5e;
   if (!flags || msg.isRoll) return wrapped(msg, ctx);
+  const esc = ctx.esc;
+
+  // Handout 40 — card de ativação com botões embutidos (Attack/Damage),
+  // referência real do dnd5e-Foundry (Rod of Lordly Might / Acid Splash).
+  if (flags.isWeaponCard) {
+    return `<div class="codex-roll-card-v13 codex-info-card-v13">
+      <div class="card-header"><span><i class="fas fa-sword"></i> ${esc(flags.name || '')}</span></div>
+      ${flags.description ? `<div class="damage-section">${flags.description}</div>` : ''}
+      <div class="activation-card-buttons">
+        <button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-attack" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}">Attack</button>
+        <button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-damage" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}">Damage</button>
+      </div>
+    </div>`;
+  }
+  if (flags.isSpellCast) {
+    return `<div class="codex-roll-card-v13 codex-info-card-v13">
+      <div class="card-header"><span><i class="fas fa-wand-sparkles"></i> ${esc(flags.name || '')}</span></div>
+      ${flags.description ? `<div class="damage-section">${flags.description}</div>` : ''}
+      ${flags.hasDamage ? `<div class="activation-card-buttons">
+        <button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-spell-damage" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}">Damage</button>
+      </div>` : ''}
+    </div>`;
+  }
+
   const kind = flags.isRest ? 'rest' : flags.isHeal ? 'heal' : (flags.isDamage || flags.name === 'Damage Applied') ? 'damage' : null;
   if (!kind) return wrapped(msg, ctx);
   const icon = { rest: 'fa-campground', heal: 'fa-heart', damage: 'fa-burst' }[kind];
-  const esc = ctx.esc;
   return `<div class="codex-roll-card-v13 codex-info-card-v13 codex-info-card-${kind}">
     <div class="card-header"><span><i class="fas ${icon}"></i> ${esc(flags.name || '')}</span></div>
     ${flags.description ? `<div class="damage-section">${flags.description}</div>` : ''}

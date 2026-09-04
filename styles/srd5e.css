@@ -14632,6 +14632,10 @@ button.sdrn-id-card-content {
 
 .sdrn-item-name {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: #1a1410 !important;
   font-weight: 700 !important;
 }
@@ -14856,6 +14860,7 @@ button.sdrn-id-card-content {
 }
 
 .sdrn-item-equip {
+  flex-shrink: 0;
   font-size: 10px;
   padding: 2px 8px;
   border-radius: 4px;
@@ -14873,6 +14878,7 @@ button.sdrn-id-card-content {
 }
 
 .sdrn-item-del {
+  flex-shrink: 0;
   background: transparent;
   border: none;
   color: #a83232;
@@ -15567,3 +15573,7 @@ button.sdrn-id-card-content {
 .sdrn-roll-dialog-situational { width: 100%; box-sizing: border-box; padding: 0.4rem 0.5rem; }
 .sdrn-roll-dialog-config { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.85rem; }
 .sdrn-roll-dialog-config select { padding: 0.35rem 0.5rem; }
+
+/* Handout 40 — botões do card de ativação (Attack/Damage embutidos). */
+.activation-card-buttons { display: flex; gap: 6px; padding-top: 6px; }
+.activation-card-buttons .sdr5e-apply-dmg-btn { flex: 1; }

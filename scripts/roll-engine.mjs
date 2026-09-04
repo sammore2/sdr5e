@@ -567,7 +567,7 @@ export async function rollWeaponAttack(actor, item) {
   const armorPenalty = (abilityKey === 'str' || abilityKey === 'dex') && !!sd.attributes?.armor?.penalty;
   const advantage = applyWeaponAttackConditionModifiers(currentAdvantageMode(), conditions, isRanged, sd.resources?.exhaustion ?? 0, armorPenalty);
   const targets = await getTargetAcInfo();
-  return sdr5eRoll({ label: `Attack: ${item.name}`, parts, actor, advantage, extraMeta: targets.length ? { targets } : {} });
+  return sdr5eRoll({ label: `Attack: ${item.name}`, parts, actor, advantage, extraMeta: { ...(targets.length ? { targets } : {}), actorId: actor.id, itemId: item.id } });
 }
 
 export async function rollWeaponDamage(actor, item) {
@@ -703,7 +703,7 @@ export async function rollSpellAttack(actor, item) {
   const conditions = await getActorConditions(actor.id);
   const advantage = applyWeaponAttackConditionModifiers(currentAdvantageMode(), conditions, false, actor.systemData?.resources?.exhaustion ?? 0);
   const targets = await getTargetAcInfo();
-  return sdr5eRoll({ label: `Spell Attack: ${item.name}`, parts, actor, advantage, extraMeta: targets.length ? { targets } : {} });
+  return sdr5eRoll({ label: `Spell Attack: ${item.name}`, parts, actor, advantage, extraMeta: { ...(targets.length ? { targets } : {}), actorId: actor.id, itemId: item.id, isSpell: true } });
 }
 
 export async function rollSpellDamage(actor, item) {
@@ -771,6 +771,9 @@ export async function castSpell(actor, item) {
       srd5e: {
         name: `${actor.name} — Casts ${item.name}`,
         isSpellCast: true,
+        actorId: actor.id,
+        itemId: item.id,
+        hasDamage: !!idata.damage?.formula,
         description: `<div>${parts.join(' &middot; ')}</div>${idata.description ? `<div style="margin-top:4px;font-style:italic">${idata.description}</div>` : ''}`,
       },
     },
@@ -845,6 +848,7 @@ export async function postItemToChat(actor, item) {
         name: item.name,
         isItemCard: true,
         description: `${subtitleHtml}${description}${pillsHtml}`,
+        ...(item.type === 'weapon' ? { isWeaponCard: true, actorId: actor.id, itemId: item.id } : {}),
       },
     },
   });
