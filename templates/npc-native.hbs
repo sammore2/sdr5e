@@ -52,12 +52,6 @@
           <div class="sdrn-dark-bar-group sdrn-npc-hp-group">
             <div class="sdrn-dark-bar-header">
               <span>HIT POINTS</span>
-              <div class="sdrn-npc-hp-quick-btns">
-                <button type="button" class="sdrn-hp-btn sdrn-hp-btn-minus" data-action="hp-delta" data-delta="-5" title="Take 5 damage">&minus;5</button>
-                <button type="button" class="sdrn-hp-btn sdrn-hp-btn-minus" data-action="hp-delta" data-delta="-1" title="Take 1 damage">&minus;1</button>
-                <button type="button" class="sdrn-hp-btn sdrn-hp-btn-plus" data-action="hp-delta" data-delta="1" title="Heal 1">&plus;1</button>
-                <button type="button" class="sdrn-hp-btn sdrn-hp-btn-plus" data-action="hp-delta" data-delta="5" title="Heal 5">&plus;5</button>
-              </div>
             </div>
             <div class="sdrn-dark-bar sdrn-hp-bar">
               <div class="sdrn-dark-bar-fill sdrn-hp-fill" style="width:{{_health.pct}}%">
@@ -252,16 +246,27 @@
             <span class="sdrn-item-icon-symbol">{{icon}}</span>
             {{/if}}
           </span>
-          <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}" title="Open feature details">{{name}}</button>
-          <button type="button" class="sdrn-item-roll-btn sdrn-npc-chat-btn" data-action="post-action-chat" data-id="{{id}}" title="Post to Chat"><i class="fas fa-comment"></i></button>
+          <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}" title="Open details">{{name}}</button>
+          {{#if isWeapon}}
+          <button type="button" class="sdrn-item-roll-btn sdrn-npc-atk-btn" data-action="roll-attack" data-id="{{id}}" title="Roll Attack"><i class="fas fa-sword"></i> Atk</button>
+          <button type="button" class="sdrn-item-roll-btn sdrn-npc-dmg-btn" data-action="roll-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
+          {{else}}
+          {{#if hasDamage}}
           <button type="button" class="sdrn-item-roll-btn sdrn-npc-dmg-btn" data-action="roll-action-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
+          {{/if}}
+          {{/if}}
+          <button type="button" class="sdrn-item-roll-btn sdrn-npc-chat-btn" data-action="post-action-chat" data-id="{{id}}" title="Post to Chat"><i class="fas fa-comment"></i></button>
           <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}" title="Delete Action">&times;</button>
         </div>
         {{else}}
         <div class="sdrn-empty-row">No actions defined for this creature yet.</div>
         {{/each}}
       </div>
-      <button type="button" class="sdrn-add-btn sdrn-npc-add-btn" data-action="create-item" data-item-type="feature">+ Add Action</button>
+      <div class="sdrn-npc-add-actions-row">
+        <button type="button" class="sdrn-add-btn sdrn-npc-add-btn" data-action="create-item" data-item-type="feature">+ Add Action</button>
+        <button type="button" class="sdrn-add-btn sdrn-npc-add-btn" data-action="create-item" data-item-type="weapon">+ Add Attack</button>
+        <button type="button" class="sdrn-add-btn sdrn-npc-add-btn" data-action="create-item" data-item-type="spell">+ Add Spell</button>
+      </div>
     </div>
 
     <!-- Biografia e Descrição -->

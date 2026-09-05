@@ -14766,19 +14766,6 @@ input.sdrn-npc-sub-input:focus {
   width: 100%;
 }
 
-.sdrn-npc-hp-quick-btns {
-  display: flex;
-  gap: 2px;
-}
-
-.sdrn-npc-hp-quick-btns .sdrn-hp-btn {
-  padding: 0 4px;
-  font-size: 9px;
-  font-weight: 800;
-  height: 16px;
-  min-width: 18px;
-}
-
 .sdrn-npc-mini-row {
   margin-top: 0;
   width: 100%;
@@ -14917,14 +14904,22 @@ input.sdrn-npc-sub-input:focus {
 }
 
 .sdrn-npc-chat-btn,
-.sdrn-npc-dmg-btn {
+.sdrn-npc-dmg-btn,
+.sdrn-npc-atk-btn {
   padding: 3px 8px;
   font-size: 10px;
   border-radius: 3px;
 }
 
-.sdrn-npc-add-btn {
-  margin-top: 4px;
+.sdrn-npc-add-actions-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.sdrn-npc-add-actions-row .sdrn-npc-add-btn {
+  margin-top: 0;
+  flex: 1;
 }
 
 .sdrn-npc-bio-box {
@@ -14985,8 +14980,8 @@ input.sdrn-npc-sub-input:focus {
 }
 
 .sdrn-item-name {
-  flex: 1;
-  min-width: 0;
+  flex: 1 1 auto;
+  min-width: 70px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -15232,13 +15227,20 @@ input.sdrn-npc-sub-input:focus {
 }
 
 .sdrn-item-del {
-  flex-shrink: 0;
+  flex: none !important;
+  flex-shrink: 0 !important;
   background: transparent;
   border: none;
   color: #a83232;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.sdrn-item-del:hover {
+  color: #ef4444;
 }
 
 .sdrn-empty-row {
@@ -15268,13 +15270,13 @@ input.sdrn-npc-sub-input:focus {
 }
 
 /* Todos os campos de input e textarea normais de formulário dentro de sdrn-sheet */
-.sdrn-sheet .loom-window-body input[type="text"]:not(.sdrn-name-input):not(.sdrn-tmp-input),
-.sdrn-sheet .loom-window-body input[type="number"]:not(.sdrn-mini-score):not(.sdrn-ac-circle):not(.sdrn-bar-input),
+.sdrn-sheet .loom-window-body input[type="text"]:not(.sdrn-name-input):not(.sdrn-tmp-input):not(.sdrn-npc-sub-input),
+.sdrn-sheet .loom-window-body input[type="number"]:not(.sdrn-mini-score):not(.sdrn-ac-circle):not(.sdrn-bar-input):not(.sdrn-npc-cr-input):not(.sdrn-item-qty),
 .sdrn-sheet .loom-window-body textarea,
 .sdrn-sheet .loom-window-body select,
 .sdrn-tab-panel textarea,
-.sdrn-tab-panel input[type="text"]:not(.sdrn-name-input):not(.sdrn-tmp-input),
-.sdrn-tab-panel input[type="number"]:not(.sdrn-mini-score):not(.sdrn-ac-circle):not(.sdrn-bar-input) {
+.sdrn-tab-panel input[type="text"]:not(.sdrn-name-input):not(.sdrn-tmp-input):not(.sdrn-npc-sub-input),
+.sdrn-tab-panel input[type="number"]:not(.sdrn-mini-score):not(.sdrn-ac-circle):not(.sdrn-bar-input):not(.sdrn-npc-cr-input):not(.sdrn-item-qty) {
   width: 100%;
   background: #fdfbf7 !important;
   border: 1px solid #c4b59b !important;
@@ -15489,10 +15491,12 @@ input.sdrn-npc-sub-input:focus {
 
 /* Item-row quantity + attunement (Inventory tab) */
 .sdrn-item-row input.sdrn-item-qty {
-  flex: none;
-  width: 40px;
+  flex: none !important;
+  width: 38px !important;
+  min-width: 38px !important;
+  max-width: 38px !important;
   text-align: center;
-  padding: 3px;
+  padding: 3px !important;
   font-size: 12px;
   background: #fdfbf7 !important;
   border: 1px solid #c4b59b !important;

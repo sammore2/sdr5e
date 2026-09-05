@@ -12,9 +12,9 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager } from '/_loom/sdk/index.js';
-import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON } from './config.mjs';
+import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON, ITEM_TYPE_SINGULAR } from './config.mjs';
 import { fmtMod, setPathValue, currentAdvantageMode } from './utils.mjs';
-import { sdr5eRoll, applyHeal, applyDamage, getActorConditions, applyPoisonedDisadvantage, getSaveConditionOutcome, evaluateDamageFormula, postItemToChat } from './roll-engine.mjs';
+import { sdr5eRoll, applyHeal, applyDamage, getActorConditions, applyPoisonedDisadvantage, getSaveConditionOutcome, evaluateDamageFormula, postItemToChat, rollWeaponAttack, rollWeaponDamage } from './roll-engine.mjs';
 import { getDefaultData } from './schema.mjs';
 import { Sdr5eItemSheet } from './item-sheet.mjs';
 
@@ -47,6 +47,55 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   get documentName() { return 'actor'; }
   get apiRoute() { return '/actors'; }
   get dataKey() { return 'systemData'; }
+
+  async mount() {
+    await super.mount();
+    this._attachDropListener();
+  }
+
+  _postRender() {
+    if (typeof super._postRender === 'function') super._postRender();
+    this._attachDropListener();
+  }
+
+  _hasDropListener = false;
+  _attachDropListener() {
+    if (!this.element || this._hasDropListener) return;
+    this._hasDropListener = true;
+    this.element.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+    });
+    this.element.addEventListener('drop', (e) => void this._onDropItem(e));
+  }
+
+  async _onDropItem(event) {
+    event.preventDefault();
+    if (!this.document) return;
+    let data;
+    try {
+      const raw = event.dataTransfer?.getData('application/json') || event.dataTransfer?.getData('text/plain');
+      if (raw) data = JSON.parse(raw);
+    } catch {}
+    if (!data) return;
+    const itemId = data.id || data.itemId;
+    if (!itemId) return;
+    try {
+      const source = await api.get(`/items/${itemId}`);
+      if (!source) return;
+      await api.post('/items', {
+        worldId: window.Loom?.world?.id || this.document.worldId,
+        name: source.name,
+        type: source.type,
+        imgUrl: source.imgUrl || source.img || '',
+        data: source.system || source.data || getDefaultData(source.type),
+        actorId: this.document.id,
+      });
+      await this._reloadDocument();
+    } catch (err) {
+      console.error('Failed to drop item onto NPC:', err);
+    }
+  }
 
   _formSaveTimer;
   // See the note in item-sheet.mjs's _pendingFields — a single shared timer
@@ -115,11 +164,19 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const _passivePerception = 10 + (skills.perception?.total ?? 0);
 
     const items = this.document?.items || [];
-    const _actions = items.filter((i) => i.type === 'feature').map((i) => ({
-      ...i,
-      imgUrl: i.imgUrl || i.img || i.avatarUrl || '',
-      icon: ITEM_TYPE_ICON.feature || '⭐',
-    }));
+    const _actions = items.map((i) => {
+      const idata = i.system || i.data || {};
+      const formula = idata.damage?.formula || '';
+      return {
+        ...i,
+        imgUrl: i.imgUrl || i.img || i.avatarUrl || '',
+        icon: ITEM_TYPE_ICON[i.type] || '⭐',
+        isWeapon: i.type === 'weapon',
+        isSpell: i.type === 'spell',
+        isFeature: i.type === 'feature',
+        hasDamage: !!formula,
+      };
+    });
 
     const healthMax = res.health?.max ?? 10;
     const healthPct = healthMax > 0 ? Math.max(0, Math.min(100, Math.round(((res.health?.value ?? 0) / healthMax) * 100))) : 0;
@@ -181,8 +238,20 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       void this._applyHpDelta(delta);
       return;
     }
+    if (action === 'roll-attack') {
+      const item = (this.document.items || []).find((i) => i.id === id);
+      if (item) void rollWeaponAttack(this.document, item);
+      return;
+    }
+    if (action === 'roll-damage') {
+      const item = (this.document.items || []).find((i) => i.id === id);
+      if (item) void rollWeaponDamage(this.document, item);
+      return;
+    }
     if (action === 'roll-action-damage') {
-      void this._rollActionDamage(id);
+      const item = (this.document.items || []).find((i) => i.id === id);
+      if (item?.type === 'weapon') void rollWeaponDamage(this.document, item);
+      else void this._rollActionDamage(id);
       return;
     }
     if (action === 'post-action-chat') {
@@ -198,7 +267,8 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       return;
     }
     if (action === 'create-item') {
-      void this._createItem(target.dataset.itemType);
+      const type = target?.dataset?.itemType || target?.closest?.('[data-item-type]')?.dataset?.itemType || 'feature';
+      void this._createItem(type);
       return;
     }
     if (typeof super.onAction === 'function') super.onAction(action, id, target);
@@ -287,13 +357,15 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     await postItemToChat(this.document, item);
   }
 
-  async _createItem(type) {
-    if (!type || !this.document) return;
+  async _createItem(type = 'feature') {
+    if (!this.document) return;
+    const itemType = type || 'feature';
+    const singular = ITEM_TYPE_SINGULAR[itemType] || itemType;
     await api.post('/items', {
-      worldId: window.Loom?.world?.id,
-      name: 'New Action',
-      type,
-      data: getDefaultData(type),
+      worldId: window.Loom?.world?.id || this.document.worldId,
+      name: `New ${singular}`,
+      type: itemType,
+      data: getDefaultData(itemType),
       actorId: this.document.id,
     });
     await this._reloadDocument();
