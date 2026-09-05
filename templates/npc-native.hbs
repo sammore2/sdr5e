@@ -1,119 +1,273 @@
 <div class="sdrn-root sdrn-npc-root">
-  <div class="sdrn-body">
+  <div class="sdrn-body sdrn-npc-body">
 
+    <!-- Header com Banner e Identidade da Criatura -->
     <header class="sdrn-header sdrn-npc-header">
       <div class="sdrn-header-top">
         <div class="sdrn-identity">
           <input type="text" class="sdrn-name-input" name="name" value="{{name}}" placeholder="Creature Name" />
-          <div class="sdrn-subtitle">{{_size}} &middot; {{_alignment}}</div>
+          <div class="sdrn-subtitle">
+            <input class="sdrn-npc-sub-input" type="text" name="sd:details.size" value="{{_size}}" placeholder="Size" title="Creature Size (tiny, sm, med, lg, huge, grg)" />
+            &middot;
+            <input class="sdrn-npc-sub-input sdrn-npc-align-input" type="text" name="sd:details.alignment" value="{{_alignment}}" placeholder="Alignment" title="Creature Alignment" />
+          </div>
         </div>
-        <div class="sdrn-npc-cr">
-          <div class="sdrn-npc-cr-num">CR {{_cr}}</div>
-          <div class="sdrn-npc-cr-xp">{{_xpLabel}}</div>
+
+        <!-- Medalhão de CR ornado espelhando o medalhão de nível do jogador -->
+        <div class="sdrn-npc-cr-wrap" title="Challenge Rating (Click to edit) &middot; {{_xpLabel}}">
+          <div class="sdrn-npc-cr-medallion">
+            <span class="sdrn-npc-cr-tag">CR</span>
+            <input class="sdrn-npc-cr-input" type="text" name="sd:details.cr" value="{{_cr}}" title="Challenge Rating" />
+          </div>
+          <div class="sdrn-npc-cr-xp-badge">{{_xpLabel}}</div>
         </div>
       </div>
     </header>
 
-    <div class="sdrn-npc-topline">
-      <input class="sdrn-ac-circle sdrn-npc-ac" type="number" name="sd:attributes.da.base" value="{{_acBase}}" title="Base Armor Class ({{_ac}} com bônus)" />
-      <div class="sdrn-npc-hp">
-        <div class="sdrn-hp-bar-embed">
-          <button type="button" class="sdrn-hp-btn sdrn-hp-btn-minus" data-action="hp-delta" data-delta="-1" title="Apply 1 damage">&minus;</button>
-          <div class="sdrn-hp-fill" style="width:{{_health.pct}}%"></div>
-          <div class="sdrn-hp-text">
-            <input class="sdrn-hp-input" type="number" name="sd:resources.health.value" value="{{_health.value}}" />
-            <span>/</span>
-            <input class="sdrn-hp-input" type="number" name="sd:resources.health.max" value="{{_health.max}}" />
-          </div>
-          <button type="button" class="sdrn-hp-btn sdrn-hp-btn-plus" data-action="hp-delta" data-delta="1" title="Heal 1">&plus;</button>
+    <!-- Módulo Central de Vitals e Combate (Pergaminho com bordas e vinheta) -->
+    <div class="sdrn-npc-vitals-module">
+      <div class="sdrn-npc-vitals-top">
+
+        <!-- Mini-Portrait do Monstro / NPC -->
+        <div class="sdrn-npc-portrait-col">
+          <button type="button" class="sdrn-portrait sdrn-npc-portrait" data-action="pick-portrait" title="Click to change portrait">
+            {{#if avatarUrl}}
+            <img src="{{avatarUrl}}" alt="" />
+            {{else}}
+            <div class="sdrn-portrait-placeholder"><i class="fas fa-dragon"></i></div>
+            {{/if}}
+          </button>
         </div>
-      </div>
-      <div class="sdrn-mini-stat-row sdrn-npc-mini-row">
-        <button type="button" class="sdrn-mini-stat sdrn-mini-stat-btn" data-action="roll-initiative" title="Roll Initiative"><div class="sdrn-mini-stat-num">{{_initiative}}</div><div class="sdrn-mini-stat-label">Init</div></button>
-        <div class="sdrn-mini-stat"><div class="sdrn-mini-stat-num">{{_speed}}</div><div class="sdrn-mini-stat-label">Walk</div></div>
-        <div class="sdrn-mini-stat"><div class="sdrn-mini-stat-num">{{_prof}}</div><div class="sdrn-mini-stat-label">Prof</div></div>
+
+        <!-- Escudo de AC clássico com numeração -->
+        <div class="sdrn-npc-ac-col">
+          <div class="sdrn-ac-shield-wrap sdrn-npc-ac-shield" title="Armor Class: {{_acBase}} base ({{_ac}} with bonuses)">
+            <input class="sdrn-ac-circle" type="number" name="sd:attributes.da.base" value="{{_acBase}}" />
+          </div>
+          <div class="sdrn-npc-vitals-label">ARMOR CLASS</div>
+        </div>
+
+        <!-- Barra Dark de Hit Points (Hobbs-style) com ajustes rápidos -->
+        <div class="sdrn-npc-hp-col">
+          <div class="sdrn-dark-bar-group sdrn-npc-hp-group">
+            <div class="sdrn-dark-bar-header">
+              <span>HIT POINTS</span>
+              <div class="sdrn-npc-hp-quick-btns">
+                <button type="button" class="sdrn-hp-btn sdrn-hp-btn-minus" data-action="hp-delta" data-delta="-5" title="Take 5 damage">&minus;5</button>
+                <button type="button" class="sdrn-hp-btn sdrn-hp-btn-minus" data-action="hp-delta" data-delta="-1" title="Take 1 damage">&minus;1</button>
+                <button type="button" class="sdrn-hp-btn sdrn-hp-btn-plus" data-action="hp-delta" data-delta="1" title="Heal 1">&plus;1</button>
+                <button type="button" class="sdrn-hp-btn sdrn-hp-btn-plus" data-action="hp-delta" data-delta="5" title="Heal 5">&plus;5</button>
+              </div>
+            </div>
+            <div class="sdrn-dark-bar sdrn-hp-bar">
+              <div class="sdrn-dark-bar-fill sdrn-hp-fill" style="width:{{_health.pct}}%">
+                <div class="sdrn-dark-bar-text">
+                  <input class="sdrn-bar-input" type="number" name="sd:resources.health.value" value="{{_health.value}}" title="Current HP" />
+                  <span class="sdrn-bar-sep">/</span>
+                  <input class="sdrn-bar-input" type="number" name="sd:resources.health.max" value="{{_health.max}}" title="Max HP" />
+                </div>
+              </div>
+              <div class="sdrn-dark-bar-tmp">
+                <input class="sdrn-bar-input sdrn-tmp-input" type="number" name="sd:resources.health.temp" value="{{_health.temp}}" placeholder="TMP" title="Temporary HP" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Mini stats poligonais com SVG vector shapes (Initiative, Speed, Proficiency) -->
+          <div class="sdrn-mini-stat-row sdrn-npc-mini-row">
+            <button type="button" class="sdrn-mini-stat sdrn-mini-stat-btn" data-action="roll-initiative" title="Roll Initiative">
+              <div class="sdrn-stat-polygon-wrap">
+                <svg class="sdrn-stat-svg" viewBox="0 0 44 32" preserveAspectRatio="none">
+                  <polygon points="11,1 33,1 43,16 33,31 11,31 1,16" fill="#fcf9f2" stroke="#8c734b" stroke-width="1.5" stroke-linejoin="round" />
+                </svg>
+                <span class="sdrn-mini-stat-num">{{_initiative}}</span>
+              </div>
+              <div class="sdrn-mini-stat-label">INITIATIVE</div>
+            </button>
+
+            <div class="sdrn-mini-stat">
+              <div class="sdrn-stat-polygon-wrap">
+                <svg class="sdrn-stat-svg" viewBox="0 0 44 32" preserveAspectRatio="none">
+                  <polygon points="8,1 36,1 43,16 36,31 8,31 1,16" fill="#fcf9f2" stroke="#8c734b" stroke-width="1.5" stroke-linejoin="round" />
+                </svg>
+                <span class="sdrn-mini-stat-num">{{_speed}}</span>
+              </div>
+              <div class="sdrn-mini-stat-label">SPEED</div>
+            </div>
+
+            <div class="sdrn-mini-stat">
+              <div class="sdrn-stat-polygon-wrap">
+                <svg class="sdrn-stat-svg" viewBox="0 0 44 32" preserveAspectRatio="none">
+                  <polygon points="11,1 33,1 43,16 33,31 11,31 1,16" fill="#fcf9f2" stroke="#8c734b" stroke-width="1.5" stroke-linejoin="round" />
+                </svg>
+                <span class="sdrn-mini-stat-num">{{_prof}}</span>
+              </div>
+              <div class="sdrn-mini-stat-label">PROFICIENCY</div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <div class="sdrn-header-abilities">
+    <!-- Faixa de Pennants SVG de Habilidades (Idêntica à Ficha de Jogador) -->
+    <div class="sdrn-header-abilities sdrn-npc-abilities">
       {{#each _abilities}}
       <div class="sdrn-mini-ability">
-        <button type="button" class="sdrn-mini-mod" data-action="roll-ability" data-key="{{key}}" data-mode="test" title="Roll {{label}}">{{mod}}</button>
-        <span class="sdrn-mini-abbr">{{abbr}}</span>
-        <input class="sdrn-mini-score" type="number" name="sd:abilities.{{key}}.value" value="{{score}}" min="1" max="30" />
+        <div class="sdrn-ability-pennant-top">
+          <svg class="sdrn-pennant-svg" viewBox="0 0 58 52">
+            <polygon points="12,1 46,1 57,12 57,51 1,51 1,12" fill="#fdfbf7" stroke="#bba377" stroke-width="1.5" stroke-linejoin="round" />
+          </svg>
+          <div class="sdrn-ability-pennant-inner">
+            <span class="sdrn-mini-abbr">{{abbr}}</span>
+            <button type="button" class="sdrn-mini-mod" data-action="roll-ability" data-key="{{key}}" data-mode="test" title="Roll {{label}} (hold Shift: advantage, Ctrl: disadvantage)">{{mod}}</button>
+          </div>
+        </div>
+        <div class="sdrn-ability-tab-bottom">
+          <svg class="sdrn-pennant-tab-svg" viewBox="0 0 46 20">
+            <polygon points="1,1 45,1 38,19 8,19" fill="#111111" stroke="#3d3325" stroke-width="1.2" stroke-linejoin="round" />
+          </svg>
+          <div class="sdrn-ability-tab-inner">
+            <input class="sdrn-mini-score" type="number" name="sd:abilities.{{key}}.value" value="{{score}}" min="1" max="30" />
+          </div>
+        </div>
       </div>
       {{/each}}
     </div>
 
+    <!-- Grid de Caixas Chanfradas de Estatísticas (Saves, Skills, Senses, Traits) -->
     <div class="sdrn-npc-stat-grid">
-      <div class="sdrn-box">
-        <div class="sdrn-box-title">Saving Throws</div>
-        <div class="sdrn-tag-list">
-          {{#each _saves}}<button type="button" class="sdrn-tag sdrn-tag-toggle active" data-action="roll-save" data-key="{{key}}">{{label}} {{total}}</button>{{else}}<span class="sdrn-empty">&mdash;</span>{{/each}}
+      <div class="sdrn-col sdrn-npc-col">
+        <!-- Saving Throws -->
+        <div class="sdrn-box sdrn-npc-box">
+          <div class="sdrn-box-title"><i class="fas fa-shield-halved"></i> Saving Throws</div>
+          <div class="sdrn-tag-list">
+            {{#each _saves}}
+            <button type="button" class="sdrn-tag sdrn-tag-toggle active" data-action="roll-save" data-key="{{key}}" title="Roll {{label}} Saving Throw">{{label}} {{total}}</button>
+            {{else}}
+            <span class="sdrn-empty">&mdash; None &mdash;</span>
+            {{/each}}
+          </div>
+        </div>
+
+        <!-- Skills -->
+        <div class="sdrn-box sdrn-npc-box">
+          <div class="sdrn-box-title"><i class="fas fa-briefcase"></i> Skills</div>
+          <div class="sdrn-tag-list">
+            {{#each _skills}}
+            <button type="button" class="sdrn-tag sdrn-tag-toggle active" data-action="roll-skill" data-key="{{key}}" title="Roll {{label}} Check">{{label}} {{total}}</button>
+            {{else}}
+            <span class="sdrn-empty">&mdash; None &mdash;</span>
+            {{/each}}
+          </div>
+        </div>
+
+        <!-- Languages -->
+        <div class="sdrn-box sdrn-npc-box">
+          <div class="sdrn-box-title"><i class="fas fa-comment-dots"></i> Languages</div>
+          <div class="sdrn-tag-list">
+            {{#each _languages}}
+            <span class="sdrn-tag">{{this}}</span>
+            {{/each}}
+            {{#if _languagesCustom}}
+            <span class="sdrn-tag">{{_languagesCustom}}</span>
+            {{/if}}
+            {{#unless _languages.length}}
+            {{#unless _languagesCustom}}
+            <span class="sdrn-empty">&mdash; None &mdash;</span>
+            {{/unless}}
+            {{/unless}}
+          </div>
         </div>
       </div>
-      <div class="sdrn-box">
-        <div class="sdrn-box-title">Skills</div>
-        <div class="sdrn-tag-list">
-          {{#each _skills}}<button type="button" class="sdrn-tag sdrn-tag-toggle active" data-action="roll-skill" data-key="{{key}}">{{label}} {{total}}</button>{{else}}<span class="sdrn-empty">&mdash;</span>{{/each}}
+
+      <div class="sdrn-col sdrn-npc-col">
+        <!-- Senses & Perception -->
+        <div class="sdrn-box sdrn-npc-box">
+          <div class="sdrn-box-title"><i class="fas fa-eye"></i> Senses</div>
+          <div class="sdrn-tag-list">
+            <span class="sdrn-tag sdrn-tag-highlight">Passive Perception {{_passivePerception}}</span>
+            {{#each _senses}}
+            <span class="sdrn-tag">{{this}}</span>
+            {{/each}}
+            {{#if _sensesCustom}}
+            <span class="sdrn-tag">{{_sensesCustom}}</span>
+            {{/if}}
+          </div>
         </div>
-      </div>
-      <div class="sdrn-box">
-        <div class="sdrn-box-title">Senses</div>
-        <div class="sdrn-tag-list">
-          {{#each _senses}}<span class="sdrn-tag">{{this}}</span>{{/each}}
-          {{#if _sensesCustom}}<span class="sdrn-tag">{{_sensesCustom}}</span>{{/if}}
-          {{#unless _senses.length}}{{#unless _sensesCustom}}<span class="sdrn-empty">&mdash;</span>{{/unless}}{{/unless}}
-          <span class="sdrn-tag">passive Perception {{_passivePerception}}</span>
+
+        <!-- Resistances & Immunities -->
+        <div class="sdrn-box sdrn-npc-box">
+          <div class="sdrn-box-title"><i class="fas fa-shield-virus"></i> Resistances &amp; Immunities</div>
+          <div class="sdrn-tag-list">
+            {{#each _traits.dr}}
+            <span class="sdrn-tag sdrn-tag-resist" title="Damage Resistance">{{this}} (resist)</span>
+            {{/each}}
+            {{#each _traits.di}}
+            <span class="sdrn-tag sdrn-tag-good" title="Damage Immunity">{{this}} (immune)</span>
+            {{/each}}
+            {{#each _traits.ci}}
+            <span class="sdrn-tag sdrn-tag-condition" title="Condition Immunity">{{this}} (cond.)</span>
+            {{/each}}
+            {{#each _traits.dv}}
+            <span class="sdrn-tag sdrn-tag-vuln" title="Damage Vulnerability">{{this}} (vuln.)</span>
+            {{/each}}
+            {{#unless _traits.dr.length}}
+            {{#unless _traits.di.length}}
+            {{#unless _traits.ci.length}}
+            {{#unless _traits.dv.length}}
+            <span class="sdrn-empty">&mdash; None &mdash;</span>
+            {{/unless}}
+            {{/unless}}
+            {{/unless}}
+            {{/unless}}
+          </div>
         </div>
-      </div>
-      <div class="sdrn-box">
-        <div class="sdrn-box-title">Languages</div>
-        <div class="sdrn-tag-list">
-          {{#each _languages}}<span class="sdrn-tag">{{this}}</span>{{/each}}
-          {{#if _languagesCustom}}<span class="sdrn-tag">{{_languagesCustom}}</span>{{/if}}
-          {{#unless _languages.length}}{{#unless _languagesCustom}}<span class="sdrn-empty">&mdash;</span>{{/unless}}{{/unless}}
+
+        <!-- Legendary Actions / Resistances (se existirem) -->
+        {{#if _legendaryActions}}
+        <div class="sdrn-box sdrn-npc-box sdrn-npc-legendary">
+          <div class="sdrn-box-title"><i class="fas fa-crown"></i> Legendary</div>
+          <div class="sdrn-tag-list">
+            <span class="sdrn-tag sdrn-tag-gold">{{_legendaryActions}} Actions / round</span>
+            {{#if _legendaryResistances}}
+            <span class="sdrn-tag sdrn-tag-gold">{{_legendaryResistances}} Resistances / day</span>
+            {{/if}}
+          </div>
         </div>
+        {{/if}}
       </div>
-      <div class="sdrn-box">
-        <div class="sdrn-box-title">Resistances / Immunities</div>
-        <div class="sdrn-tag-list">
-          {{#each _traits.dr}}<span class="sdrn-tag">{{this}} (resist)</span>{{/each}}
-          {{#each _traits.di}}<span class="sdrn-tag sdrn-tag-good">{{this}} (immune)</span>{{/each}}
-          {{#each _traits.dv}}<span class="sdrn-tag">{{this}} (vuln.)</span>{{/each}}
-          {{#unless _traits.dr.length}}{{#unless _traits.di.length}}{{#unless _traits.dv.length}}<span class="sdrn-empty">&mdash;</span>{{/unless}}{{/unless}}{{/unless}}
-        </div>
-      </div>
-      {{#if _legendaryActions}}
-      <div class="sdrn-box">
-        <div class="sdrn-box-title">Legendary</div>
-        <div class="sdrn-tag-list">
-          <span class="sdrn-tag">{{_legendaryActions}} Actions/turn</span>
-          {{#if _legendaryResistances}}<span class="sdrn-tag">{{_legendaryResistances}} Resistances/day</span>{{/if}}
-        </div>
-      </div>
-      {{/if}}
     </div>
 
+    <!-- Lista de Ações / Features -->
     <div class="sdrn-box sdrn-npc-actions-box">
-      <div class="sdrn-box-title">⚔️ Actions</div>
-      {{#each _actions}}
-      <div class="sdrn-item-row">
-        <span class="sdrn-item-icon">{{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}{{icon}}{{/if}}</span>
-        <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
-        <button type="button" class="sdrn-item-roll-btn" data-action="post-action-chat" data-id="{{id}}" title="Post to Chat"><i class="fas fa-comment"></i></button>
-        <button type="button" class="sdrn-item-roll-btn" data-action="roll-action-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
-        <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}" title="Delete">&times;</button>
+      <div class="sdrn-box-title"><i class="fas fa-fist-raised"></i> Actions &amp; Attacks</div>
+      <div class="sdrn-npc-actions-list">
+        {{#each _actions}}
+        <div class="sdrn-item-row sdrn-npc-action-row">
+          <span class="sdrn-item-icon">
+            {{#if imgUrl}}
+            <img src="{{imgUrl}}" alt="" />
+            {{else}}
+            <span class="sdrn-item-icon-symbol">{{icon}}</span>
+            {{/if}}
+          </span>
+          <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}" title="Open feature details">{{name}}</button>
+          <button type="button" class="sdrn-item-roll-btn sdrn-npc-chat-btn" data-action="post-action-chat" data-id="{{id}}" title="Post to Chat"><i class="fas fa-comment"></i></button>
+          <button type="button" class="sdrn-item-roll-btn sdrn-npc-dmg-btn" data-action="roll-action-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
+          <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}" title="Delete Action">&times;</button>
+        </div>
+        {{else}}
+        <div class="sdrn-empty-row">No actions defined for this creature yet.</div>
+        {{/each}}
       </div>
-      {{else}}
-      <div class="sdrn-empty-row">No actions yet.</div>
-      {{/each}}
-      <button type="button" class="sdrn-add-btn" data-action="create-item" data-item-type="feature">+ Add Action</button>
+      <button type="button" class="sdrn-add-btn sdrn-npc-add-btn" data-action="create-item" data-item-type="feature">+ Add Action</button>
     </div>
 
+    <!-- Biografia e Descrição -->
     <div class="sdrn-box sdrn-npc-bio-box">
-      <div class="sdrn-box-title">Biography</div>
-      <textarea name="sd:details.biography" rows="4" placeholder="No description yet.">{{_biography}}</textarea>
+      <div class="sdrn-box-title"><i class="fas fa-scroll"></i> Description &amp; Lore</div>
+      <textarea name="sd:details.biography" rows="4" placeholder="Describe appearance, lair, tactics or special traits...">{{_biography}}</textarea>
     </div>
 
   </div>

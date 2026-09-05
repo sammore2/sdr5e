@@ -18,8 +18,10 @@ import { sdr5eRoll, applyHeal, applyDamage, getActorConditions, applyPoisonedDis
 import { getDefaultData } from './schema.mjs';
 import { Sdr5eItemSheet } from './item-sheet.mjs';
 
+const SDR5E_HEADER_BANNER = '/marketplace/rulesets/srd5e/assets/images/banner-character.png';
+
 export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
-  static DEFAULT_OPTIONS = { position: { width: 460, height: 620 } };
+  static DEFAULT_OPTIONS = { position: { width: 540, height: 740 } };
 
   constructor(props) {
     super({
@@ -31,6 +33,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       resizable: true,
       allowOverflow: true,
       classes: ['sdrn-sheet', 'sdrn-npc-sheet'],
+      bannerImage: SDR5E_HEADER_BANNER,
     });
   }
 
@@ -126,6 +129,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     return {
       ...context,
       ...this.document,
+      avatarUrl: this.document?.avatarUrl || this.document?.img || '',
       name: (this.document?.name && this.document.name !== 'undefined') ? this.document.name : '',
       systemData: sd,
       _abilities,
