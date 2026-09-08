@@ -46,5 +46,15 @@
       "name": "Português (Brasil)",
       "path": "lang/pt-BR.json"
     }
+  ],
+  "compendiums": [
+    "packs/spells.json",
+    "packs/races.json",
+    "packs/classes.json",
+    "packs/subclasses.json",
+    "packs/feats.json",
+    "packs/magic-items.json",
+    "packs/monsters.json",
+    "packs/journal.json"
   ]
 }

@@ -25,31 +25,41 @@
   DEALINGS IN THE SOFTWARE.
 
 ────────────────────────────────────────────────────────────────────────────
-  Open Game License Notice
+  System Reference Document Notice
 ────────────────────────────────────────────────────────────────────────────
 
-  SDR5E's game mechanics are built on Open Game Content from the System
-  Reference Document 5.1 ("SRD5"), released by Wizards of the Coast, Inc.
-  under the Open Game License Version 1.0a.
+  SDR5E's game mechanics and compendium content (spells, species, classes,
+  subclasses, feats, magic items, creatures, and rules text under
+  packs/*.json) are built on Open Game Content from the System Reference
+  Document 5.2.1 ("SRD 5.2.1"), released by Wizards of the Coast, Inc.
+  under the Creative Commons Attribution 4.0 International License
+  ("CC-BY-4.0").
 
-  Full license text & SRD5:
-  https://media.wizards.com/2016/downloads/DND/SRD-OGL_V5.1.pdf
+  Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
+  SRD 5.2.1: https://www.dndbeyond.com/srd
 
-  Open Game License v 1.0a           Copyright 2000, Wizards of the Coast, LLC
-  System Reference Document 5.1      Copyright 2016, Wizards of the Coast, Inc.
+  System Reference Document 5.2.1    Copyright 2024, Wizards of the Coast LLC
+
+  This SRD content has been altered from the original: reformatted from
+  markdown into JSON compendium entries and adapted to SDR5E's own field
+  schema (converted units, restructured stat blocks, added system-specific
+  fields). Per CC-BY-4.0 §3(a)(1)(A), no endorsement by Wizards of the Coast
+  is implied.
 
   ── 1. Declared Product Identity ──────────────────────────────────────────
-  Not Open Game Content — proprietary to SDR5E:
+  Not covered by the SRD license — proprietary to SDR5E:
     • The name "SDR5E"
-    • All proper names (characters, deities, etc.)
+    • All proper names, lore and setting text not sourced from the SRD
     • All artwork and graphic design
     • The "Resonance" mechanics — narrative and specific implementation
     • The "Grimdark" system setting
 
-  ── 2. Declared Open Game Content ─────────────────────────────────────────
-  Licensed under the OGL:
+  ── 2. SRD-Derived Content ────────────────────────────────────────────────
+  Licensed under CC-BY-4.0, © Wizards of the Coast LLC:
     • All roleplaying game mechanics and tables derived from or
-      compatible with the System Reference Document (SRD)
+      compatible with the System Reference Document 5.2.1
+    • The compendium packs under packs/ (spells, races, classes,
+      subclasses, feats, magic-items, monsters, journal)
 
 ────────────────────────────────────────────────────────────────────────────
 

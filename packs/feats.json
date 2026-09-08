@@ -1,0 +1,27 @@
+{
+  "name": "Talentos (SRD 5.2)",
+  "type": "Item",
+  "entries": [
+    {
+      "id": "0a4cca83-27bf-46a8-9bdc-a4ca9c8d6bfe",
+      "name": "Grappler",
+      "type": "feat",
+      "data": {
+        "identifier": "",
+        "description": "Prerequisite: Strength 13 or higher\n\nYou've developed the skills necessary to hold your own in close-quarters grappling. You gain the following benefits:\n\n- You have advantage on attack rolls against a creature you are grappling.\n\n- You can use your action to try to pin a creature grappled by you. To do so, make another grapple check. If you succeed, you and the creature are both restrained until the grapple ends.",
+        "weight": 0,
+        "quantity": 1,
+        "rarity": "common",
+        "isBindOnEquip": false,
+        "attunement": "none",
+        "source": "SRD 5.2 (CC-BY-4.0)",
+        "price": {
+          "gp": 0,
+          "sp": 0,
+          "cp": 0
+        },
+        "requiresLevel": 1
+      }
+    }
+  ]
+}
