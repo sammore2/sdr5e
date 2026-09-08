@@ -14529,8 +14529,11 @@ button.sdrn-id-card-content {
   border-color: #8b1515;
 }
 
-/* Native NPC/monster sheet — single continuous page, no side tabs. */
+/* Native NPC/monster sheet — tabbed layout with persistent vitals and side tabs. */
 .sdrn-npc-root {
+  position: relative;
+  display: flex;
+  height: 100%;
   background-color: #f1ebd8;
   background-image:
     radial-gradient(ellipse at 50% 25%, rgba(255, 255, 255, 0.45) 0%, rgba(225, 214, 192, 0.3) 60%, rgba(175, 155, 125, 0.4) 100%),
@@ -14539,14 +14542,26 @@ button.sdrn-id-card-content {
   background-size: cover;
   border-top: 2px solid #8c734b;
   overflow: hidden;
-  height: 100%;
 }
 
 .sdrn-npc-body {
-  padding: 0 16px 20px 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: 0 16px 14px 16px;
+  overflow: hidden;
+  height: 100%;
+}
+
+.sdrn-npc-body .sdrn-tab-panel {
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  height: 100%;
+  padding-right: 4px;
+  padding-bottom: 10px;
 }
 
 .sdrn-npc-header {
@@ -14610,6 +14625,8 @@ button.sdrn-id-card-content {
   text-shadow: 0 1px 2px #000;
 }
 
+.sdrn-npc-cr-medallion input.sdrn-npc-cr-input,
+.sdrn-sheet .loom-window-body input.sdrn-npc-cr-input,
 .sdrn-npc-cr-num,
 input.sdrn-npc-cr-input {
   font-family: 'Cinzel', Georgia, serif !important;
@@ -14619,8 +14636,10 @@ input.sdrn-npc-cr-input {
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95) !important;
   background: transparent !important;
   border: none !important;
+  border-radius: 0 !important;
   text-align: center !important;
   width: 44px !important;
+  max-width: 44px !important;
   padding: 0 !important;
   margin: 0 !important;
   outline: none !important;
@@ -15048,6 +15067,53 @@ input.sdrn-npc-sub-input:focus {
   box-shadow: 0 0 6px rgba(140, 115, 75, 0.35) !important;
 }
 
+/* Configuração do NPC (Aba Config) */
+.sdrn-npc-config-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.sdrn-npc-config-box {
+  background: #fbf9f4;
+  border: 1px solid #bba377;
+  border-radius: 4px;
+  padding: 8px 10px;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  clip-path: polygon(7px 0, calc(100% - 7px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 7px);
+}
+
+.sdrn-npc-field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.sdrn-npc-field-row:last-child {
+  margin-bottom: 0;
+}
+
+.sdrn-npc-field-row label {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #4a3b2c;
+  flex: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sdrn-npc-field-row input,
+.sdrn-npc-field-row select {
+  flex: 1.3;
+  max-width: 150px;
+}
+
 .sdrn-empty {
   font-size: 11px;
   color: #7d6540;
@@ -15374,12 +15440,12 @@ input.sdrn-npc-sub-input:focus {
 }
 
 /* Todos os campos de input e textarea normais de formulário dentro de sdrn-sheet */
-.sdrn-sheet .loom-window-body input[type="text"]:not(.sdrn-name-input):not(.sdrn-tmp-input):not(.sdrn-npc-sub-input),
+.sdrn-sheet .loom-window-body input[type="text"]:not(.sdrn-name-input):not(.sdrn-tmp-input):not(.sdrn-npc-sub-input):not(.sdrn-npc-cr-input),
 .sdrn-sheet .loom-window-body input[type="number"]:not(.sdrn-mini-score):not(.sdrn-ac-circle):not(.sdrn-bar-input):not(.sdrn-npc-cr-input):not(.sdrn-item-qty),
 .sdrn-sheet .loom-window-body textarea,
 .sdrn-sheet .loom-window-body select,
 .sdrn-tab-panel textarea,
-.sdrn-tab-panel input[type="text"]:not(.sdrn-name-input):not(.sdrn-tmp-input):not(.sdrn-npc-sub-input),
+.sdrn-tab-panel input[type="text"]:not(.sdrn-name-input):not(.sdrn-tmp-input):not(.sdrn-npc-sub-input):not(.sdrn-npc-cr-input),
 .sdrn-tab-panel input[type="number"]:not(.sdrn-mini-score):not(.sdrn-ac-circle):not(.sdrn-bar-input):not(.sdrn-npc-cr-input):not(.sdrn-item-qty) {
   width: 100%;
   background: #fdfbf7 !important;
@@ -15398,7 +15464,7 @@ input.sdrn-npc-sub-input:focus {
   line-height: 1.4 !important;
 }
 
-.sdrn-sheet input:not(.sdrn-name-input):not(.sdrn-mini-score):not(.sdrn-ac-circle):not(.sdrn-bar-input):not(.sdrn-tmp-input):focus,
+.sdrn-sheet input:not(.sdrn-name-input):not(.sdrn-mini-score):not(.sdrn-ac-circle):not(.sdrn-bar-input):not(.sdrn-tmp-input):not(.sdrn-npc-cr-input):not(.sdrn-npc-sub-input):focus,
 .sdrn-sheet textarea:focus {
   outline: 1px solid #8b1515 !important;
   border-color: #8b1515 !important;

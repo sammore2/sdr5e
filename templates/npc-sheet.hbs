@@ -1,4 +1,11 @@
 <div class="sdrn-root sdrn-npc-root">
+
+  <nav class="sdrn-side-tabs">
+    <button type="button" class="sdrn-tab-btn active" data-action="tab" data-tab="actions" title="Actions &amp; Attacks"><i class="fas fa-fist-raised"></i></button>
+    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="details" title="Details, Traits &amp; Lore"><i class="fas fa-scroll"></i></button>
+    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="config" title="Configuration &amp; Settings"><i class="fas fa-cog"></i></button>
+  </nav>
+
   <div class="sdrn-body sdrn-npc-body">
 
     <!-- Header com Banner e Identidade da Criatura -->
@@ -129,279 +136,385 @@
       {{/each}}
     </div>
 
-    <!-- Grid de Caixas Chanfradas de Estatísticas (Saves, Skills, Senses, Traits) -->
-    <div class="sdrn-npc-stat-grid">
-      <div class="sdrn-col sdrn-npc-col">
-        <!-- Saving Throws -->
-        <div class="sdrn-box sdrn-npc-box">
-          <div class="sdrn-box-header">
-            <div class="sdrn-box-title"><i class="fas fa-shield-halved"></i> Saving Throws</div>
-            <select class="sdrn-npc-quick-select" data-action="add-save-prof" title="Add Saving Throw">
-              <option value="" disabled selected>+ Add Save...</option>
-              {{#each _availableSaves}}
-              <option value="{{key}}">{{label}}</option>
-              {{/each}}
-            </select>
-          </div>
-          <div class="sdrn-tag-list">
-            {{#each _saves}}
-            <div class="sdrn-tag-pill">
-              <button type="button" class="sdrn-tag sdrn-tag-toggle active" data-action="roll-save" data-key="{{key}}" title="Roll {{label}} Saving Throw">{{label}} {{total}}</button>
-              <button type="button" class="sdrn-tag-del-btn" data-action="remove-save-prof" data-key="{{key}}" title="Remove {{label}} Save">&times;</button>
-            </div>
+    <!-- ABA 1: ACTIONS & ATTACKS -->
+    <div data-tab-content="actions" class="sdrn-tab-panel">
+      <!-- Lista de Ações / Features -->
+      <div class="sdrn-box sdrn-npc-actions-box">
+        <div class="sdrn-box-title"><i class="fas fa-fist-raised"></i> Actions &amp; Attacks</div>
+        <div class="sdrn-npc-actions-list">
+          {{#each _actions}}
+          <div class="sdrn-item-row sdrn-npc-action-row">
+            <span class="sdrn-item-icon">
+              {{#if imgUrl}}
+              <img src="{{imgUrl}}" alt="" />
+              {{else}}
+              <span class="sdrn-item-icon-symbol">{{icon}}</span>
+              {{/if}}
+            </span>
+            <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}" title="Open details">{{name}}</button>
+            {{#if isWeapon}}
+            <button type="button" class="sdrn-item-roll-btn sdrn-npc-atk-btn" data-action="roll-attack" data-id="{{id}}" title="Roll Attack"><i class="fas fa-sword"></i> Atk</button>
+            <button type="button" class="sdrn-item-roll-btn sdrn-npc-dmg-btn" data-action="roll-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
             {{else}}
-            <span class="sdrn-empty">&mdash; None &mdash;</span>
-            {{/each}}
-          </div>
-        </div>
-
-        <!-- Skills -->
-        <div class="sdrn-box sdrn-npc-box">
-          <div class="sdrn-box-header">
-            <div class="sdrn-box-title"><i class="fas fa-briefcase"></i> Skills</div>
-            <select class="sdrn-npc-quick-select" data-action="add-skill-prof" title="Add Skill">
-              <option value="" disabled selected>+ Add Skill...</option>
-              {{#each _availableSkills}}
-              <option value="{{key}}">{{label}}</option>
-              {{/each}}
-            </select>
-          </div>
-          <div class="sdrn-tag-list">
-            {{#each _skills}}
-            <div class="sdrn-tag-pill">
-              <button type="button" class="sdrn-tag sdrn-tag-toggle active" data-action="roll-skill" data-key="{{key}}" title="Roll {{label}} Check">{{label}} {{total}}</button>
-              <button type="button" class="sdrn-tag-del-btn" data-action="remove-skill-prof" data-key="{{key}}" title="Remove {{label}} Skill">&times;</button>
-            </div>
-            {{else}}
-            <span class="sdrn-empty">&mdash; None &mdash;</span>
-            {{/each}}
-          </div>
-        </div>
-
-        <!-- Languages -->
-        <div class="sdrn-box sdrn-npc-box">
-          <div class="sdrn-box-header">
-            <div class="sdrn-box-title"><i class="fas fa-comment-dots"></i> Languages</div>
-            <select class="sdrn-npc-quick-select" data-action="add-language" title="Add Language">
-              <option value="" disabled selected>+ Add Language...</option>
-              <optgroup label="Standard">
-                <option value="Common">Common</option>
-                <option value="Dwarvish">Dwarvish</option>
-                <option value="Elvish">Elvish</option>
-                <option value="Giant">Giant</option>
-                <option value="Gnomish">Gnomish</option>
-                <option value="Goblin">Goblin</option>
-                <option value="Halfling">Halfling</option>
-                <option value="Orc">Orc</option>
-              </optgroup>
-              <optgroup label="Exotic">
-                <option value="Abyssal">Abyssal</option>
-                <option value="Celestial">Celestial</option>
-                <option value="Draconic">Draconic</option>
-                <option value="Deep Speech">Deep Speech</option>
-                <option value="Infernal">Infernal</option>
-                <option value="Primordial">Primordial</option>
-                <option value="Sylvan">Sylvan</option>
-                <option value="Undercommon">Undercommon</option>
-                <option value="Telepathy 36m">Telepathy 36m</option>
-              </optgroup>
-            </select>
-          </div>
-          <div class="sdrn-tag-list">
-            {{#each _languages}}
-            <div class="sdrn-tag-pill">
-              <span class="sdrn-tag">{{name}}</span>
-              <button type="button" class="sdrn-tag-del-btn" data-action="remove-language" data-name="{{name}}" {{#if id}}data-id="{{id}}"{{/if}} title="Remove {{name}}">&times;</button>
-            </div>
-            {{else}}
-            <span class="sdrn-empty">&mdash; None &mdash;</span>
-            {{/each}}
-          </div>
-          <input type="text" class="sdrn-npc-custom-field" name="sd:details.languages.custom" value="{{_languagesCustom}}" placeholder="+ Custom language..." />
-        </div>
-      </div>
-
-      <div class="sdrn-col sdrn-npc-col">
-        <!-- Senses & Perception -->
-        <div class="sdrn-box sdrn-npc-box">
-          <div class="sdrn-box-header">
-            <div class="sdrn-box-title"><i class="fas fa-eye"></i> Senses</div>
-            <select class="sdrn-npc-quick-select" data-action="add-sense" title="Add Sense">
-              <option value="" disabled selected>+ Add Sense...</option>
-              <option value="Darkvision 18m">Darkvision 18m</option>
-              <option value="Darkvision 36m">Darkvision 36m</option>
-              <option value="Blindsight 9m">Blindsight 9m</option>
-              <option value="Blindsight 18m">Blindsight 18m</option>
-              <option value="Tremorsense 18m">Tremorsense 18m</option>
-              <option value="Truesight 36m">Truesight 36m</option>
-            </select>
-          </div>
-          <div class="sdrn-tag-list">
-            <span class="sdrn-tag sdrn-tag-highlight">Passive Perception {{_passivePerception}}</span>
-            {{#each _senses}}
-            <div class="sdrn-tag-pill">
-              <span class="sdrn-tag">{{this}}</span>
-              <button type="button" class="sdrn-tag-del-btn" data-action="remove-sense" data-value="{{this}}" title="Remove {{this}}">&times;</button>
-            </div>
-            {{/each}}
-          </div>
-          <input type="text" class="sdrn-npc-custom-field" name="sd:details.senses.custom" value="{{_sensesCustom}}" placeholder="+ Custom sense..." />
-        </div>
-
-        <!-- Resistances & Immunities -->
-        <div class="sdrn-box sdrn-npc-box">
-          <div class="sdrn-box-header">
-            <div class="sdrn-box-title"><i class="fas fa-shield-virus"></i> Resistances &amp; Immunities</div>
-            <select class="sdrn-npc-quick-select" data-action="add-trait" title="Add Resistance or Immunity">
-              <option value="" disabled selected>+ Add Trait...</option>
-              <optgroup label="Damage Resistances">
-                <option value="dr:acid">Resist Acid</option>
-                <option value="dr:cold">Resist Cold</option>
-                <option value="dr:fire">Resist Fire</option>
-                <option value="dr:force">Resist Force</option>
-                <option value="dr:lightning">Resist Lightning</option>
-                <option value="dr:necrotic">Resist Necrotic</option>
-                <option value="dr:poison">Resist Poison</option>
-                <option value="dr:psychic">Resist Psychic</option>
-                <option value="dr:radiant">Resist Radiant</option>
-                <option value="dr:thunder">Resist Thunder</option>
-                <option value="dr:bludgeoning">Resist Bludgeoning</option>
-                <option value="dr:piercing">Resist Piercing</option>
-                <option value="dr:slashing">Resist Slashing</option>
-              </optgroup>
-              <optgroup label="Damage Immunities">
-                <option value="di:acid">Immune Acid</option>
-                <option value="di:cold">Immune Cold</option>
-                <option value="di:fire">Immune Fire</option>
-                <option value="di:force">Immune Force</option>
-                <option value="di:lightning">Immune Lightning</option>
-                <option value="di:necrotic">Immune Necrotic</option>
-                <option value="di:poison">Immune Poison</option>
-                <option value="di:psychic">Immune Psychic</option>
-                <option value="di:radiant">Immune Radiant</option>
-                <option value="di:thunder">Immune Thunder</option>
-                <option value="di:bludgeoning">Immune Bludgeoning</option>
-                <option value="di:piercing">Immune Piercing</option>
-                <option value="di:slashing">Immune Slashing</option>
-              </optgroup>
-              <optgroup label="Condition Immunities">
-                <option value="ci:blinded">Immune Blinded</option>
-                <option value="ci:charmed">Immune Charmed</option>
-                <option value="ci:deafened">Immune Deafened</option>
-                <option value="ci:exhaustion">Immune Exhaustion</option>
-                <option value="ci:frightened">Immune Frightened</option>
-                <option value="ci:grappled">Immune Grappled</option>
-                <option value="ci:paralyzed">Immune Paralyzed</option>
-                <option value="ci:petrified">Immune Petrified</option>
-                <option value="ci:poisoned">Immune Poisoned</option>
-                <option value="ci:prone">Immune Prone</option>
-                <option value="ci:restrained">Immune Restrained</option>
-                <option value="ci:stunned">Immune Stunned</option>
-                <option value="ci:unconscious">Immune Unconscious</option>
-              </optgroup>
-              <optgroup label="Damage Vulnerabilities">
-                <option value="dv:acid">Vuln. Acid</option>
-                <option value="dv:cold">Vuln. Cold</option>
-                <option value="dv:fire">Vuln. Fire</option>
-                <option value="dv:force">Vuln. Force</option>
-                <option value="dv:lightning">Vuln. Lightning</option>
-                <option value="dv:necrotic">Vuln. Necrotic</option>
-                <option value="dv:poison">Vuln. Poison</option>
-                <option value="dv:psychic">Vuln. Psychic</option>
-                <option value="dv:radiant">Vuln. Radiant</option>
-                <option value="dv:thunder">Vuln. Thunder</option>
-                <option value="dv:bludgeoning">Vuln. Bludgeoning</option>
-                <option value="dv:piercing">Vuln. Piercing</option>
-                <option value="dv:slashing">Vuln. Slashing</option>
-              </optgroup>
-            </select>
-          </div>
-          <div class="sdrn-tag-list">
-            {{#each _traits.dr}}
-            <div class="sdrn-tag-pill">
-              <span class="sdrn-tag sdrn-tag-resist" title="Damage Resistance">{{this}} (resist)</span>
-              <button type="button" class="sdrn-tag-del-btn" data-action="remove-trait" data-trait-type="dr" data-value="{{this}}" title="Remove">&times;</button>
-            </div>
-            {{/each}}
-            {{#each _traits.di}}
-            <div class="sdrn-tag-pill">
-              <span class="sdrn-tag sdrn-tag-good" title="Damage Immunity">{{this}} (immune)</span>
-              <button type="button" class="sdrn-tag-del-btn" data-action="remove-trait" data-trait-type="di" data-value="{{this}}" title="Remove">&times;</button>
-            </div>
-            {{/each}}
-            {{#each _traits.ci}}
-            <div class="sdrn-tag-pill">
-              <span class="sdrn-tag sdrn-tag-condition" title="Condition Immunity">{{this}} (cond.)</span>
-              <button type="button" class="sdrn-tag-del-btn" data-action="remove-trait" data-trait-type="ci" data-value="{{this}}" title="Remove">&times;</button>
-            </div>
-            {{/each}}
-            {{#each _traits.dv}}
-            <div class="sdrn-tag-pill">
-              <span class="sdrn-tag sdrn-tag-vuln" title="Damage Vulnerability">{{this}} (vuln.)</span>
-              <button type="button" class="sdrn-tag-del-btn" data-action="remove-trait" data-trait-type="dv" data-value="{{this}}" title="Remove">&times;</button>
-            </div>
-            {{/each}}
-            {{#unless _hasTraits}}
-            <span class="sdrn-empty">&mdash; None &mdash;</span>
-            {{/unless}}
-          </div>
-        </div>
-
-        <!-- Legendary Actions / Resistances (se existirem) -->
-        {{#if _legendaryActions}}
-        <div class="sdrn-box sdrn-npc-box sdrn-npc-legendary">
-          <div class="sdrn-box-title"><i class="fas fa-crown"></i> Legendary</div>
-          <div class="sdrn-tag-list">
-            <span class="sdrn-tag sdrn-tag-gold">{{_legendaryActions}} Actions / round</span>
-            {{#if _legendaryResistances}}
-            <span class="sdrn-tag sdrn-tag-gold">{{_legendaryResistances}} Resistances / day</span>
+            {{#if hasDamage}}
+            <button type="button" class="sdrn-item-roll-btn sdrn-npc-dmg-btn" data-action="roll-action-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
             {{/if}}
-          </div>
-        </div>
-        {{/if}}
-      </div>
-    </div>
-
-    <!-- Lista de Ações / Features -->
-    <div class="sdrn-box sdrn-npc-actions-box">
-      <div class="sdrn-box-title"><i class="fas fa-fist-raised"></i> Actions &amp; Attacks</div>
-      <div class="sdrn-npc-actions-list">
-        {{#each _actions}}
-        <div class="sdrn-item-row sdrn-npc-action-row">
-          <span class="sdrn-item-icon">
-            {{#if imgUrl}}
-            <img src="{{imgUrl}}" alt="" />
-            {{else}}
-            <span class="sdrn-item-icon-symbol">{{icon}}</span>
             {{/if}}
-          </span>
-          <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}" title="Open details">{{name}}</button>
-          {{#if isWeapon}}
-          <button type="button" class="sdrn-item-roll-btn sdrn-npc-atk-btn" data-action="roll-attack" data-id="{{id}}" title="Roll Attack"><i class="fas fa-sword"></i> Atk</button>
-          <button type="button" class="sdrn-item-roll-btn sdrn-npc-dmg-btn" data-action="roll-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
+            <button type="button" class="sdrn-item-roll-btn sdrn-npc-chat-btn" data-action="post-action-chat" data-id="{{id}}" title="Post to Chat"><i class="fas fa-comment"></i></button>
+            <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}" title="Delete Action">&times;</button>
+          </div>
           {{else}}
-          {{#if hasDamage}}
-          <button type="button" class="sdrn-item-roll-btn sdrn-npc-dmg-btn" data-action="roll-action-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
-          {{/if}}
-          {{/if}}
-          <button type="button" class="sdrn-item-roll-btn sdrn-npc-chat-btn" data-action="post-action-chat" data-id="{{id}}" title="Post to Chat"><i class="fas fa-comment"></i></button>
-          <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}" title="Delete Action">&times;</button>
+          <div class="sdrn-empty-row">No actions defined for this creature yet.</div>
+          {{/each}}
         </div>
-        {{else}}
-        <div class="sdrn-empty-row">No actions defined for this creature yet.</div>
-        {{/each}}
+        <div class="sdrn-npc-add-actions-row">
+          <button type="button" class="sdrn-add-btn sdrn-npc-add-btn" data-action="create-item" data-item-type="feature">+ Add Action</button>
+          <button type="button" class="sdrn-add-btn sdrn-npc-add-btn" data-action="create-item" data-item-type="weapon">+ Add Attack</button>
+          <button type="button" class="sdrn-add-btn sdrn-npc-add-btn" data-action="create-item" data-item-type="spell">+ Add Spell</button>
+        </div>
       </div>
-      <div class="sdrn-npc-add-actions-row">
-        <button type="button" class="sdrn-add-btn sdrn-npc-add-btn" data-action="create-item" data-item-type="feature">+ Add Action</button>
-        <button type="button" class="sdrn-add-btn sdrn-npc-add-btn" data-action="create-item" data-item-type="weapon">+ Add Attack</button>
-        <button type="button" class="sdrn-add-btn sdrn-npc-add-btn" data-action="create-item" data-item-type="spell">+ Add Spell</button>
+
+      {{#if _legendaryActions}}
+      <div class="sdrn-box sdrn-npc-box sdrn-npc-legendary" style="margin-top: 8px;">
+        <div class="sdrn-box-title"><i class="fas fa-crown"></i> Legendary Actions</div>
+        <div class="sdrn-tag-list">
+          <span class="sdrn-tag sdrn-tag-gold">{{_legendaryActions}} Actions / round</span>
+          {{#if _legendaryResistances}}
+          <span class="sdrn-tag sdrn-tag-gold">{{_legendaryResistances}} Resistances / day</span>
+          {{/if}}
+        </div>
+      </div>
+      {{/if}}
+    </div>
+
+    <!-- ABA 2: DETAILS & LORE -->
+    <div data-tab-content="details" class="sdrn-tab-panel" style="display:none;">
+      <!-- Grid de Caixas Chanfradas de Estatísticas (Saves, Skills, Senses, Traits) -->
+      <div class="sdrn-npc-stat-grid">
+        <div class="sdrn-col sdrn-npc-col">
+          <!-- Saving Throws -->
+          <div class="sdrn-box sdrn-npc-box">
+            <div class="sdrn-box-header">
+              <div class="sdrn-box-title"><i class="fas fa-shield-halved"></i> Saving Throws</div>
+              <select class="sdrn-npc-quick-select" data-action="add-save-prof" title="Add Saving Throw">
+                <option value="" disabled selected>+ Add Save...</option>
+                {{#each _availableSaves}}
+                <option value="{{key}}">{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="sdrn-tag-list">
+              {{#each _saves}}
+              <div class="sdrn-tag-pill">
+                <button type="button" class="sdrn-tag sdrn-tag-toggle active" data-action="roll-save" data-key="{{key}}" title="Roll {{label}} Saving Throw">{{label}} {{total}}</button>
+                <button type="button" class="sdrn-tag-del-btn" data-action="remove-save-prof" data-key="{{key}}" title="Remove {{label}} Save">&times;</button>
+              </div>
+              {{else}}
+              <span class="sdrn-empty">&mdash; None &mdash;</span>
+              {{/each}}
+            </div>
+          </div>
+
+          <!-- Skills -->
+          <div class="sdrn-box sdrn-npc-box">
+            <div class="sdrn-box-header">
+              <div class="sdrn-box-title"><i class="fas fa-briefcase"></i> Skills</div>
+              <select class="sdrn-npc-quick-select" data-action="add-skill-prof" title="Add Skill">
+                <option value="" disabled selected>+ Add Skill...</option>
+                {{#each _availableSkills}}
+                <option value="{{key}}">{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="sdrn-tag-list">
+              {{#each _skills}}
+              <div class="sdrn-tag-pill">
+                <button type="button" class="sdrn-tag sdrn-tag-toggle active" data-action="roll-skill" data-key="{{key}}" title="Roll {{label}} Check">{{label}} {{total}}</button>
+                <button type="button" class="sdrn-tag-del-btn" data-action="remove-skill-prof" data-key="{{key}}" title="Remove {{label}} Skill">&times;</button>
+              </div>
+              {{else}}
+              <span class="sdrn-empty">&mdash; None &mdash;</span>
+              {{/each}}
+            </div>
+          </div>
+
+          <!-- Languages -->
+          <div class="sdrn-box sdrn-npc-box">
+            <div class="sdrn-box-header">
+              <div class="sdrn-box-title"><i class="fas fa-comment-dots"></i> Languages</div>
+              <select class="sdrn-npc-quick-select" data-action="add-language" title="Add Language">
+                <option value="" disabled selected>+ Add Language...</option>
+                <optgroup label="Standard">
+                  <option value="Common">Common</option>
+                  <option value="Dwarvish">Dwarvish</option>
+                  <option value="Elvish">Elvish</option>
+                  <option value="Giant">Giant</option>
+                  <option value="Gnomish">Gnomish</option>
+                  <option value="Goblin">Goblin</option>
+                  <option value="Halfling">Halfling</option>
+                  <option value="Orc">Orc</option>
+                </optgroup>
+                <optgroup label="Exotic">
+                  <option value="Abyssal">Abyssal</option>
+                  <option value="Celestial">Celestial</option>
+                  <option value="Draconic">Draconic</option>
+                  <option value="Deep Speech">Deep Speech</option>
+                  <option value="Infernal">Infernal</option>
+                  <option value="Primordial">Primordial</option>
+                  <option value="Sylvan">Sylvan</option>
+                  <option value="Undercommon">Undercommon</option>
+                  <option value="Telepathy 36m">Telepathy 36m</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="sdrn-tag-list">
+              {{#each _languages}}
+              <div class="sdrn-tag-pill">
+                <span class="sdrn-tag">{{name}}</span>
+                <button type="button" class="sdrn-tag-del-btn" data-action="remove-language" data-name="{{name}}" {{#if id}}data-id="{{id}}"{{/if}} title="Remove {{name}}">&times;</button>
+              </div>
+              {{else}}
+              <span class="sdrn-empty">&mdash; None &mdash;</span>
+              {{/each}}
+            </div>
+            <input type="text" class="sdrn-npc-custom-field" name="sd:details.languages.custom" value="{{_languagesCustom}}" placeholder="+ Custom language..." />
+          </div>
+        </div>
+
+        <div class="sdrn-col sdrn-npc-col">
+          <!-- Senses & Perception -->
+          <div class="sdrn-box sdrn-npc-box">
+            <div class="sdrn-box-header">
+              <div class="sdrn-box-title"><i class="fas fa-eye"></i> Senses</div>
+              <select class="sdrn-npc-quick-select" data-action="add-sense" title="Add Sense">
+                <option value="" disabled selected>+ Add Sense...</option>
+                <option value="Darkvision 18m">Darkvision 18m</option>
+                <option value="Darkvision 36m">Darkvision 36m</option>
+                <option value="Blindsight 9m">Blindsight 9m</option>
+                <option value="Blindsight 18m">Blindsight 18m</option>
+                <option value="Tremorsense 18m">Tremorsense 18m</option>
+                <option value="Truesight 36m">Truesight 36m</option>
+              </select>
+            </div>
+            <div class="sdrn-tag-list">
+              <span class="sdrn-tag sdrn-tag-highlight">Passive Perception {{_passivePerception}}</span>
+              {{#each _senses}}
+              <div class="sdrn-tag-pill">
+                <span class="sdrn-tag">{{this}}</span>
+                <button type="button" class="sdrn-tag-del-btn" data-action="remove-sense" data-value="{{this}}" title="Remove {{this}}">&times;</button>
+              </div>
+              {{/each}}
+            </div>
+            <input type="text" class="sdrn-npc-custom-field" name="sd:details.senses.custom" value="{{_sensesCustom}}" placeholder="+ Custom sense..." />
+          </div>
+
+          <!-- Resistances & Immunities -->
+          <div class="sdrn-box sdrn-npc-box">
+            <div class="sdrn-box-header">
+              <div class="sdrn-box-title"><i class="fas fa-shield-virus"></i> Resistances &amp; Immunities</div>
+              <select class="sdrn-npc-quick-select" data-action="add-trait" title="Add Resistance or Immunity">
+                <option value="" disabled selected>+ Add Trait...</option>
+                <optgroup label="Damage Resistances">
+                  <option value="dr:acid">Resist Acid</option>
+                  <option value="dr:cold">Resist Cold</option>
+                  <option value="dr:fire">Resist Fire</option>
+                  <option value="dr:force">Resist Force</option>
+                  <option value="dr:lightning">Resist Lightning</option>
+                  <option value="dr:necrotic">Resist Necrotic</option>
+                  <option value="dr:poison">Resist Poison</option>
+                  <option value="dr:psychic">Resist Psychic</option>
+                  <option value="dr:radiant">Resist Radiant</option>
+                  <option value="dr:thunder">Resist Thunder</option>
+                  <option value="dr:bludgeoning">Resist Bludgeoning</option>
+                  <option value="dr:piercing">Resist Piercing</option>
+                  <option value="dr:slashing">Resist Slashing</option>
+                </optgroup>
+                <optgroup label="Damage Immunities">
+                  <option value="di:acid">Immune Acid</option>
+                  <option value="di:cold">Immune Cold</option>
+                  <option value="di:fire">Immune Fire</option>
+                  <option value="di:force">Immune Force</option>
+                  <option value="di:lightning">Immune Lightning</option>
+                  <option value="di:necrotic">Immune Necrotic</option>
+                  <option value="di:poison">Immune Poison</option>
+                  <option value="di:psychic">Immune Psychic</option>
+                  <option value="di:radiant">Immune Radiant</option>
+                  <option value="di:thunder">Immune Thunder</option>
+                  <option value="di:bludgeoning">Immune Bludgeoning</option>
+                  <option value="di:piercing">Immune Piercing</option>
+                  <option value="di:slashing">Immune Slashing</option>
+                </optgroup>
+                <optgroup label="Condition Immunities">
+                  <option value="ci:blinded">Immune Blinded</option>
+                  <option value="ci:charmed">Immune Charmed</option>
+                  <option value="ci:deafened">Immune Deafened</option>
+                  <option value="ci:exhaustion">Immune Exhaustion</option>
+                  <option value="ci:frightened">Immune Frightened</option>
+                  <option value="ci:grappled">Immune Grappled</option>
+                  <option value="ci:paralyzed">Immune Paralyzed</option>
+                  <option value="ci:petrified">Immune Petrified</option>
+                  <option value="ci:poisoned">Immune Poisoned</option>
+                  <option value="ci:prone">Immune Prone</option>
+                  <option value="ci:restrained">Immune Restrained</option>
+                  <option value="ci:stunned">Immune Stunned</option>
+                  <option value="ci:unconscious">Immune Unconscious</option>
+                </optgroup>
+                <optgroup label="Damage Vulnerabilities">
+                  <option value="dv:acid">Vuln. Acid</option>
+                  <option value="dv:cold">Vuln. Cold</option>
+                  <option value="dv:fire">Vuln. Fire</option>
+                  <option value="dv:force">Vuln. Force</option>
+                  <option value="dv:lightning">Vuln. Lightning</option>
+                  <option value="dv:necrotic">Vuln. Necrotic</option>
+                  <option value="dv:poison">Vuln. Poison</option>
+                  <option value="dv:psychic">Vuln. Psychic</option>
+                  <option value="dv:radiant">Vuln. Radiant</option>
+                  <option value="dv:thunder">Vuln. Thunder</option>
+                  <option value="dv:bludgeoning">Vuln. Bludgeoning</option>
+                  <option value="dv:piercing">Vuln. Piercing</option>
+                  <option value="dv:slashing">Vuln. Slashing</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="sdrn-tag-list">
+              {{#each _traits.dr}}
+              <div class="sdrn-tag-pill">
+                <span class="sdrn-tag sdrn-tag-resist" title="Damage Resistance">{{this}} (resist)</span>
+                <button type="button" class="sdrn-tag-del-btn" data-action="remove-trait" data-trait-type="dr" data-value="{{this}}" title="Remove">&times;</button>
+              </div>
+              {{/each}}
+              {{#each _traits.di}}
+              <div class="sdrn-tag-pill">
+                <span class="sdrn-tag sdrn-tag-good" title="Damage Immunity">{{this}} (immune)</span>
+                <button type="button" class="sdrn-tag-del-btn" data-action="remove-trait" data-trait-type="di" data-value="{{this}}" title="Remove">&times;</button>
+              </div>
+              {{/each}}
+              {{#each _traits.ci}}
+              <div class="sdrn-tag-pill">
+                <span class="sdrn-tag sdrn-tag-condition" title="Condition Immunity">{{this}} (cond.)</span>
+                <button type="button" class="sdrn-tag-del-btn" data-action="remove-trait" data-trait-type="ci" data-value="{{this}}" title="Remove">&times;</button>
+              </div>
+              {{/each}}
+              {{#each _traits.dv}}
+              <div class="sdrn-tag-pill">
+                <span class="sdrn-tag sdrn-tag-vuln" title="Damage Vulnerability">{{this}} (vuln.)</span>
+                <button type="button" class="sdrn-tag-del-btn" data-action="remove-trait" data-trait-type="dv" data-value="{{this}}" title="Remove">&times;</button>
+              </div>
+              {{/each}}
+              {{#unless _hasTraits}}
+              <span class="sdrn-empty">&mdash; None &mdash;</span>
+              {{/unless}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Biografia e Descrição -->
+      <div class="sdrn-box sdrn-npc-bio-box">
+        <div class="sdrn-box-title"><i class="fas fa-scroll"></i> Description &amp; Lore</div>
+        <textarea name="sd:details.biography" rows="5" placeholder="Describe appearance, lair, tactics or special traits...">{{_biography}}</textarea>
       </div>
     </div>
 
-    <!-- Biografia e Descrição -->
-    <div class="sdrn-box sdrn-npc-bio-box">
-      <div class="sdrn-box-title"><i class="fas fa-scroll"></i> Description &amp; Lore</div>
-      <textarea name="sd:details.biography" rows="4" placeholder="Describe appearance, lair, tactics or special traits...">{{_biography}}</textarea>
+    <!-- ABA 3: CONFIG -->
+    <div data-tab-content="config" class="sdrn-tab-panel" style="display:none;">
+      <div class="sdrn-npc-config-grid">
+        <div class="sdrn-col sdrn-npc-col">
+          <!-- Identity & Typing -->
+          <div class="sdrn-npc-config-box">
+            <div class="sdrn-box-title"><i class="fas fa-fingerprint"></i> Creature Identity</div>
+            <div class="sdrn-npc-field-row">
+              <label>Creature Type</label>
+              <input type="text" name="sd:details.type" value="{{_type}}" placeholder="e.g. Humanoid, Beast, Fiend" />
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>Subtype</label>
+              <input type="text" name="sd:details.subtype" value="{{_subtype}}" placeholder="e.g. Elf, Goblinoid, Demon" />
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>Size</label>
+              <select name="sd:details.size">
+                {{#each _sizeOptions}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>Alignment</label>
+              <input type="text" name="sd:details.alignment" value="{{_alignment}}" placeholder="e.g. Chaotic Evil, Unaligned" />
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>Source / Book</label>
+              <input type="text" name="sd:details.source" value="{{_source}}" placeholder="e.g. Monster Manual" />
+            </div>
+          </div>
+
+          <!-- Movement Speeds -->
+          <div class="sdrn-npc-config-box">
+            <div class="sdrn-box-title"><i class="fas fa-person-running"></i> Movement Speeds</div>
+            <div class="sdrn-npc-field-row">
+              <label>Walking</label>
+              <input type="text" name="sd:attributes.speed.value" value="{{_speed}}" placeholder="9m" />
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>Fly</label>
+              <input type="text" name="sd:attributes.speed.fly" value="{{_speeds.fly}}" placeholder="e.g. 18m" />
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>Swim</label>
+              <input type="text" name="sd:attributes.speed.swim" value="{{_speeds.swim}}" placeholder="e.g. 9m" />
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>Climb</label>
+              <input type="text" name="sd:attributes.speed.climb" value="{{_speeds.climb}}" placeholder="e.g. 9m" />
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>Burrow</label>
+              <input type="text" name="sd:attributes.speed.burrow" value="{{_speeds.burrow}}" placeholder="e.g. 6m" />
+            </div>
+          </div>
+        </div>
+
+        <div class="sdrn-col sdrn-npc-col">
+          <!-- Combat & Challenge Math -->
+          <div class="sdrn-npc-config-box">
+            <div class="sdrn-box-title"><i class="fas fa-calculator"></i> Combat &amp; Challenge</div>
+            <div class="sdrn-npc-field-row">
+              <label>Challenge Rating</label>
+              <input type="text" name="sd:details.cr" value="{{_cr}}" placeholder="1" />
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>XP Reward</label>
+              <input type="number" name="sd:details.xp.value" value="{{_xpValue}}" placeholder="200" />
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>Hit Dice / Formula</label>
+              <input type="text" name="sd:attributes.hp.formula" value="{{_hpFormula}}" placeholder="e.g. 8d8 + 16" />
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>Base Armor Class</label>
+              <input type="number" name="sd:attributes.da.base" value="{{_acBase}}" placeholder="10" />
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>Proficiency Bonus</label>
+              <input type="number" name="sd:attributes.prof.value" value="{{_profValue}}" placeholder="2" />
+            </div>
+          </div>
+
+          <!-- Legendary & Boss Settings -->
+          <div class="sdrn-npc-config-box">
+            <div class="sdrn-box-title"><i class="fas fa-crown"></i> Boss &amp; Legendary</div>
+            <div class="sdrn-npc-field-row">
+              <label>Legendary Actions</label>
+              <input type="number" name="sd:details.legendaryActions" value="{{_legendaryActions}}" placeholder="0" min="0" max="10" />
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>Legendary Resists</label>
+              <input type="number" name="sd:details.legendaryResistances" value="{{_legendaryResistances}}" placeholder="0" min="0" max="10" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>

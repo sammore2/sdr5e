@@ -21,7 +21,9 @@ import { Sdr5eItemSheet } from './item-sheet.mjs';
 const SDR5E_HEADER_BANNER = '/marketplace/rulesets/srd5e/assets/images/banner-character.png';
 
 export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
-  static DEFAULT_OPTIONS = { position: { width: 540, height: 740 } };
+  static DEFAULT_OPTIONS = { position: { width: 640, height: 780 } };
+
+  _activeTab = 'actions';
 
   constructor(props) {
     super({
@@ -50,12 +52,65 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
   async mount() {
     await super.mount();
+    this._applyActiveTab();
+    this._detachSideTabs();
     this._attachListeners();
   }
 
   _postRender() {
     if (typeof super._postRender === 'function') super._postRender();
+    this._applyActiveTab();
+    this._detachSideTabs();
     this._attachListeners();
+  }
+
+  onClose() {
+    this._cleanupSideTabs();
+  }
+
+  _detachSideTabs() {
+    const nav = this.element?.querySelector('.sdrn-side-tabs');
+    if (!nav) return;
+    this._cleanupSideTabs();
+    const container = this.element?.parentElement;
+    if (!container) return;
+    container.appendChild(nav);
+    nav.style.position = 'fixed';
+    nav.addEventListener('click', (event) => {
+      const btn = event.target instanceof Element ? event.target.closest('[data-action]') : null;
+      if (!btn) return;
+      const action = btn.dataset.action;
+      const id = btn.dataset.id || btn.closest('[data-id]')?.dataset.id || null;
+      if (typeof this.onAction === 'function') this.onAction(action, id, btn);
+    });
+    this._sideTabsEl = nav;
+    const sync = () => {
+      if (!this._sideTabsEl?.isConnected || !this.element?.isConnected) return;
+      const r = this.element.getBoundingClientRect();
+      this._sideTabsEl.style.left = `${r.right - 1}px`;
+      this._sideTabsEl.style.top = `${r.top + 40}px`;
+      this._sideTabsRaf = requestAnimationFrame(sync);
+    };
+    sync();
+  }
+
+  _cleanupSideTabs() {
+    if (this._sideTabsRaf) cancelAnimationFrame(this._sideTabsRaf);
+    this._sideTabsRaf = null;
+    this._sideTabsEl?.remove();
+    this._sideTabsEl = null;
+  }
+
+  _applyActiveTab() {
+    const root = this.element;
+    if (!root) return;
+    const tab = this._activeTab || 'actions';
+    (this._sideTabsEl || root).querySelectorAll('.sdrn-tab-btn').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
+    root.querySelectorAll('[data-tab-content]').forEach((panel) => {
+      panel.style.display = panel.dataset.tabContent === tab ? '' : 'none';
+    });
   }
 
   _hasListeners = false;
@@ -253,6 +308,20 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const _traits = details.traits || { di: [], dr: [], dv: [], ci: [] };
     const _hasTraits = ((_traits.dr?.length || 0) + (_traits.di?.length || 0) + (_traits.ci?.length || 0) + (_traits.dv?.length || 0)) > 0;
 
+    const SIZES = [
+      { value: 'tiny', label: 'Tiny' },
+      { value: 'sm', label: 'Small' },
+      { value: 'med', label: 'Medium' },
+      { value: 'lg', label: 'Large' },
+      { value: 'huge', label: 'Huge' },
+      { value: 'grg', label: 'Gargantuan' },
+    ];
+    const _size = details.size || 'med';
+    const _sizeOptions = SIZES.map((s) => ({
+      ...s,
+      selected: s.value === _size,
+    }));
+
     return {
       ...context,
       ...this.document,
@@ -266,15 +335,28 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _availableSkills,
       _actions,
       _prof: fmtMod(attrs.prof?.value ?? 2),
+      _profValue: attrs.prof?.value ?? 2,
       _ac: attrs.da?.value ?? 10,
       _acBase: attrs.da?.base ?? 10,
       _initiative: fmtMod(attrs.initiative?.total ?? 0),
       _speed: attrs.speed?.value ?? '9m',
+      _speeds: {
+        fly: attrs.speed?.fly || '',
+        swim: attrs.speed?.swim || '',
+        climb: attrs.speed?.climb || '',
+        burrow: attrs.speed?.burrow || '',
+      },
       _health: { value: res.health?.value ?? 0, max: healthMax, pct: healthPct, temp: res.health?.temp ?? 0 },
+      _hpFormula: attrs.hp?.formula || '',
       _cr: details.cr ?? 0,
       _xpLabel: details.xp?.label || `${details.xp?.value ?? 0} XP`,
-      _size: details.size || 'med',
+      _xpValue: details.xp?.value ?? 0,
+      _size,
+      _sizeOptions,
       _alignment: details.alignment || '',
+      _type: details.type?.value || (typeof details.type === 'string' ? details.type : ''),
+      _subtype: details.type?.subtype || details.subtype || '',
+      _source: details.source || '',
       _senses: details.senses?.value || [],
       _sensesCustom: details.senses?.custom || '',
       _passivePerception,
@@ -384,6 +466,14 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   }
 
   onAction(action, id, target) {
+    if (action === 'tab') {
+      const tab = target?.dataset?.tab;
+      if (!tab) return;
+      this._activeTab = tab;
+      this._applyActiveTab();
+      return;
+    }
+
     if (action === 'roll-ability') {
       void this._rollAbility(target.dataset.key, target.dataset.mode || 'test');
       return;
