@@ -1,8 +1,8 @@
 // ══════════════════════════════════════════════════════════════════════════
-// SDR5E — scripts/actor-sheet.mjs
+// SDR5E — scripts/character-sheet.mjs
 // Component Version: 0.1.0
 //
-// Native character sheet — dnd5e-inspired layout, own tab bar floating
+// Character sheet — dnd5e-inspired layout, own tab bar floating
 // outside the window edge (same pattern as wod6e), grimdark/gold palette.
 // `this.document` here is NEVER an instance of the actor document class —
 // LoomDocumentSheet only borrows the `prepareData` prototype to run
@@ -58,7 +58,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   // the debounce window and silently dropped the rest).
   _pendingFields = new Map();
 
-  static PARTS = { main: { template: '/marketplace/rulesets/srd5e/templates/character-native.hbs' } };
+  static PARTS = { main: { template: '/marketplace/rulesets/srd5e/templates/character-sheet.hbs' } };
 
   // Overrides the mixin's default `_onChangeForm` (which only submits when
   // `options.form.submitOnChange` is set — not the case here). Saves field by
@@ -219,6 +219,14 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       if (key === 'name') name = value;
       else setPathValue(sd, key.slice(3), value);
     }
+    if (sd.resources?.health) {
+      if (!sd.attributes) sd.attributes = {};
+      sd.attributes.hp = {
+        value: Number(sd.resources.health.value) || 0,
+        max: Number(sd.resources.health.max) || 0,
+        temp: Number(sd.resources.health.temp) || 0,
+      };
+    }
     const submitData = { systemData: sd };
     if (name !== undefined) submitData.name = name;
 
@@ -239,17 +247,76 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     await super.mount();
     this._applyActiveTab();
     this._detachSideTabs();
+    this._attachDropListener();
   }
 
   _postRender() {
     if (typeof super._postRender === 'function') super._postRender();
     this._applyActiveTab();
-    // Every re-render (a field save, `_reloadDocument`, etc.) re-runs the
-    // Handlebars template and creates a FRESH `.sdrn-side-tabs` inside
-    // `this.element` — redo the detach each time or the old floating copy
-    // goes stale while a second, un-detached one silently reappears hidden
-    // behind the game canvas inside the window.
     this._detachSideTabs();
+    this._attachDropListener();
+  }
+
+  _hasDropListener = false;
+  _attachDropListener() {
+    if (!this.element || this._hasDropListener) return;
+    this._hasDropListener = true;
+    this.element.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+    });
+    this.element.addEventListener('drop', (e) => void this._onDropItem(e));
+  }
+
+  async _onDropItem(event) {
+    event.preventDefault();
+    if (!this.document) return;
+    let data;
+    try {
+      const raw = event.dataTransfer?.getData('application/json') || event.dataTransfer?.getData('text/plain');
+      if (raw) data = JSON.parse(raw);
+    } catch {}
+    if (!data) return;
+    const itemId = data.id || data.itemId;
+    if (!itemId && !data.data) return;
+    try {
+      let source = data.data;
+      if (!source && itemId) {
+        source = await api.get(`/items/${itemId}`);
+      }
+      if (!source) return;
+
+      const itemType = source.type || 'item';
+      await api.post('/items', {
+        worldId: window.Loom?.world?.id || this.document.worldId,
+        name: source.name,
+        type: itemType,
+        imgUrl: source.imgUrl || source.img || '',
+        data: source.system || source.data || getDefaultData(itemType),
+        actorId: this.document.id,
+      });
+
+      if (itemType === 'language') {
+        const sd = this.document.systemData || {};
+        const details = sd.details || {};
+        const langs = details.languages?.value || [];
+        if (!langs.includes(source.name)) {
+          await api.put(`${this.apiRoute}/${this.document.id}`, {
+            systemData: {
+              ...sd,
+              details: {
+                ...details,
+                languages: { ...(details.languages || {}), value: [...langs, source.name] },
+              },
+            },
+          });
+        }
+      }
+
+      await this._reloadDocument();
+    } catch (err) {
+      console.error('Failed to drop item onto Character:', err);
+    }
   }
 
   onClose() {

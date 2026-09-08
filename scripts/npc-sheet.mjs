@@ -12,7 +12,7 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager } from '/_loom/sdk/index.js';
-import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON, ITEM_TYPE_SINGULAR } from './config.mjs';
+import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, SKILL_ABILITIES, ITEM_TYPE_ICON, ITEM_TYPE_SINGULAR } from './config.mjs';
 import { fmtMod, setPathValue, currentAdvantageMode } from './utils.mjs';
 import { sdr5eRoll, applyHeal, applyDamage, getActorConditions, applyPoisonedDisadvantage, getSaveConditionOutcome, evaluateDamageFormula, postItemToChat, rollWeaponAttack, rollWeaponDamage } from './roll-engine.mjs';
 import { getDefaultData } from './schema.mjs';
@@ -37,7 +37,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     });
   }
 
-  static PARTS = { main: { template: '/marketplace/rulesets/srd5e/templates/npc-native.hbs' } };
+  static PARTS = { main: { template: '/marketplace/rulesets/srd5e/templates/npc-sheet.hbs' } };
 
   get title() {
     const n = this.document?.name;
@@ -50,12 +50,29 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
   async mount() {
     await super.mount();
-    this._attachDropListener();
+    this._attachListeners();
   }
 
   _postRender() {
     if (typeof super._postRender === 'function') super._postRender();
+    this._attachListeners();
+  }
+
+  _hasListeners = false;
+  _attachListeners() {
     this._attachDropListener();
+    if (!this.element || this._hasListeners) return;
+    this._hasListeners = true;
+    this.element.addEventListener('change', (e) => {
+      const select = e.target?.closest?.('select.sdrn-npc-quick-select[data-action]');
+      if (!select) return;
+      const action = select.dataset.action;
+      const val = select.value;
+      if (action && val) {
+        select.value = '';
+        void this._onSelectAction(action, val, select);
+      }
+    });
   }
 
   _hasDropListener = false;
@@ -79,18 +96,41 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     } catch {}
     if (!data) return;
     const itemId = data.id || data.itemId;
-    if (!itemId) return;
+    if (!itemId && !data.data) return;
     try {
-      const source = await api.get(`/items/${itemId}`);
+      let source = data.data;
+      if (!source && itemId) {
+        source = await api.get(`/items/${itemId}`);
+      }
       if (!source) return;
+
+      const itemType = source.type || 'item';
       await api.post('/items', {
         worldId: window.Loom?.world?.id || this.document.worldId,
         name: source.name,
-        type: source.type,
+        type: itemType,
         imgUrl: source.imgUrl || source.img || '',
-        data: source.system || source.data || getDefaultData(source.type),
+        data: source.system || source.data || getDefaultData(itemType),
         actorId: this.document.id,
       });
+
+      if (itemType === 'language') {
+        const sd = this.document.systemData || {};
+        const details = sd.details || {};
+        const langs = details.languages?.value || [];
+        if (!langs.includes(source.name)) {
+          await api.put(`${this.apiRoute}/${this.document.id}`, {
+            systemData: {
+              ...sd,
+              details: {
+                ...details,
+                languages: { ...(details.languages || {}), value: [...langs, source.name] },
+              },
+            },
+          });
+        }
+      }
+
       await this._reloadDocument();
     } catch (err) {
       console.error('Failed to drop item onto NPC:', err);
@@ -126,6 +166,14 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       if (key === 'name') name = value;
       else setPathValue(sd, key.slice(3), value);
     }
+    if (sd.resources?.health) {
+      if (!sd.attributes) sd.attributes = {};
+      sd.attributes.hp = {
+        value: Number(sd.resources.health.value) || 0,
+        max: Number(sd.resources.health.max) || 0,
+        temp: Number(sd.resources.health.temp) || 0,
+      };
+    }
     const submitData = { systemData: sd };
     if (name !== undefined) submitData.name = name;
 
@@ -154,9 +202,18 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       .map((k) => ({ key: k, label: ABILITY_LABELS[k].slice(0, 3).toUpperCase(), total: fmtMod(saves[k]?.total ?? 0), proficient: !!saves[k]?.proficient }))
       .filter((s) => s.proficient);
 
+    const _availableSaves = ABILITY_KEYS
+      .filter((k) => !saves[k]?.proficient)
+      .map((k) => ({ key: k, label: ABILITY_LABELS[k] }));
+
     const _skills = Object.keys(SKILL_LABELS)
       .map((k) => ({ key: k, label: SKILL_LABELS[k], total: fmtMod(skills[k]?.total ?? 0), proficient: !!skills[k]?.proficient }))
       .filter((s) => s.proficient)
+      .sort((a, b) => a.label.localeCompare(b.label));
+
+    const _availableSkills = Object.keys(SKILL_LABELS)
+      .filter((k) => !skills[k]?.proficient)
+      .map((k) => ({ key: k, label: SKILL_LABELS[k] }))
       .sort((a, b) => a.label.localeCompare(b.label));
 
     // SRD: todo stat block de monstro lista "passive Perception N" nos
@@ -164,7 +221,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const _passivePerception = 10 + (skills.perception?.total ?? 0);
 
     const items = this.document?.items || [];
-    const _actions = items.map((i) => {
+    const _actions = items.filter((i) => i.type !== 'language').map((i) => {
       const idata = i.system || i.data || {};
       const formula = idata.damage?.formula || '';
       return {
@@ -178,10 +235,23 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       };
     });
 
+    const langItems = items.filter((i) => i.type === 'language').map((i) => ({ id: i.id, name: i.name }));
+    const langValues = (details.languages?.value || []).map((v) => ({ name: v }));
+    const seenLangs = new Set();
+    const _languages = [];
+    for (const l of [...langItems, ...langValues]) {
+      const lower = l.name.toLowerCase();
+      if (!seenLangs.has(lower)) {
+        seenLangs.add(lower);
+        _languages.push(l);
+      }
+    }
+
     const healthMax = res.health?.max ?? 10;
     const healthPct = healthMax > 0 ? Math.max(0, Math.min(100, Math.round(((res.health?.value ?? 0) / healthMax) * 100))) : 0;
 
     const _traits = details.traits || { di: [], dr: [], dv: [], ci: [] };
+    const _hasTraits = ((_traits.dr?.length || 0) + (_traits.di?.length || 0) + (_traits.ci?.length || 0) + (_traits.dv?.length || 0)) > 0;
 
     return {
       ...context,
@@ -191,7 +261,9 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       systemData: sd,
       _abilities,
       _saves,
+      _availableSaves,
       _skills,
+      _availableSkills,
       _actions,
       _prof: fmtMod(attrs.prof?.value ?? 2),
       _ac: attrs.da?.value ?? 10,
@@ -206,13 +278,109 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _senses: details.senses?.value || [],
       _sensesCustom: details.senses?.custom || '',
       _passivePerception,
-      _languages: details.languages?.value || [],
+      _languages,
       _languagesCustom: details.languages?.custom || '',
       _traits,
+      _hasTraits,
       _legendaryActions: details.legendaryActions || 0,
       _legendaryResistances: details.legendaryResistances || 0,
       _biography: details.biography || '',
     };
+  }
+
+  async _onSelectAction(action, value, target) {
+    if (!this.document || !action || !value) return;
+    const sd = this.document.systemData || {};
+
+    if (action === 'add-save-prof') {
+      const saves = { ...(sd.saves || {}) };
+      const currentSave = saves[value] || { proficient: false, total: 10 };
+      const ablMod = sd.abilities?.[value]?.modifier ?? 0;
+      const prof = sd.attributes?.prof?.value ?? 2;
+      saves[value] = {
+        ...currentSave,
+        proficient: true,
+        total: ablMod + prof,
+      };
+      await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, saves } });
+      await this._reloadDocument();
+      return;
+    }
+
+    if (action === 'add-skill-prof') {
+      const skills = { ...(sd.skills || {}) };
+      const currentSkill = skills[value] || { proficient: false, total: 0 };
+      const ablKey = currentSkill.ability || SKILL_ABILITIES[value] || 'int';
+      const ablMod = sd.abilities?.[ablKey]?.modifier ?? 0;
+      const prof = sd.attributes?.prof?.value ?? 2;
+      skills[value] = {
+        ...currentSkill,
+        proficient: true,
+        total: ablMod + prof,
+      };
+      await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, skills } });
+      await this._reloadDocument();
+      return;
+    }
+
+    if (action === 'add-language') {
+      await api.post('/items', {
+        worldId: window.Loom?.world?.id || this.document.worldId,
+        name: value,
+        type: 'language',
+        data: getDefaultData('language'),
+        actorId: this.document.id,
+      });
+      const details = sd.details || {};
+      const langs = details.languages?.value || [];
+      if (!langs.includes(value)) {
+        await api.put(`${this.apiRoute}/${this.document.id}`, {
+          systemData: {
+            ...sd,
+            details: {
+              ...details,
+              languages: { ...(details.languages || {}), value: [...langs, value] },
+            },
+          },
+        });
+      }
+      await this._reloadDocument();
+      return;
+    }
+
+    if (action === 'add-sense') {
+      const details = sd.details || {};
+      const senses = details.senses?.value || [];
+      if (!senses.includes(value)) {
+        await api.put(`${this.apiRoute}/${this.document.id}`, {
+          systemData: {
+            ...sd,
+            details: {
+              ...details,
+              senses: { ...(details.senses || {}), value: [...senses, value] },
+            },
+          },
+        });
+        await this._reloadDocument();
+      }
+      return;
+    }
+
+    if (action === 'add-trait') {
+      const [type, trait] = value.split(':');
+      if (!type || !trait) return;
+      const details = sd.details || {};
+      const traits = { ...(details.traits || { di: [], dr: [], dv: [], ci: [] }) };
+      const list = traits[type] || [];
+      if (!list.includes(trait)) {
+        traits[type] = [...list, trait];
+        await api.put(`${this.apiRoute}/${this.document.id}`, {
+          systemData: { ...sd, details: { ...details, traits } },
+        });
+        await this._reloadDocument();
+      }
+      return;
+    }
   }
 
   onAction(action, id, target) {
@@ -226,6 +394,96 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     }
     if (action === 'roll-save') {
       void this._rollAbility(target.dataset.key, 'save');
+      return;
+    }
+
+    if (action === 'remove-save-prof') {
+      const key = target?.dataset?.key;
+      if (key && this.document) {
+        const sd = this.document.systemData || {};
+        const saves = { ...(sd.saves || {}) };
+        if (saves[key]) {
+          const ablMod = sd.abilities?.[key]?.modifier ?? 0;
+          saves[key] = { ...saves[key], proficient: false, total: ablMod };
+          void api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, saves } })
+            .then(() => this._reloadDocument());
+        }
+      }
+      return;
+    }
+
+    if (action === 'remove-skill-prof') {
+      const key = target?.dataset?.key;
+      if (key && this.document) {
+        const sd = this.document.systemData || {};
+        const skills = { ...(sd.skills || {}) };
+        if (skills[key]) {
+          const ablKey = skills[key].ability || SKILL_ABILITIES[key] || 'int';
+          const ablMod = sd.abilities?.[ablKey]?.modifier ?? 0;
+          skills[key] = { ...skills[key], proficient: false, total: ablMod };
+          void api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, skills } })
+            .then(() => this._reloadDocument());
+        }
+      }
+      return;
+    }
+
+    if (action === 'remove-language') {
+      const id = target?.dataset?.id;
+      const name = target?.dataset?.name;
+      const promises = [];
+      if (id) {
+        promises.push(api.delete(`/items/${id}`));
+      }
+      if (name && this.document) {
+        const sd = this.document.systemData || {};
+        const details = sd.details || {};
+        const langs = (details.languages?.value || []).filter((l) => l.toLowerCase() !== name.toLowerCase());
+        promises.push(api.put(`${this.apiRoute}/${this.document.id}`, {
+          systemData: {
+            ...sd,
+            details: {
+              ...details,
+              languages: { ...(details.languages || {}), value: langs },
+            },
+          },
+        }));
+      }
+      Promise.all(promises).then(() => this._reloadDocument());
+      return;
+    }
+
+    if (action === 'remove-sense') {
+      const val = target?.dataset?.value;
+      if (val && this.document) {
+        const sd = this.document.systemData || {};
+        const details = sd.details || {};
+        const senses = (details.senses?.value || []).filter((s) => s !== val);
+        void api.put(`${this.apiRoute}/${this.document.id}`, {
+          systemData: {
+            ...sd,
+            details: {
+              ...details,
+              senses: { ...(details.senses || {}), value: senses },
+            },
+          },
+        }).then(() => this._reloadDocument());
+      }
+      return;
+    }
+
+    if (action === 'remove-trait') {
+      const type = target?.dataset?.traitType;
+      const val = target?.dataset?.value;
+      if (type && val && this.document) {
+        const sd = this.document.systemData || {};
+        const details = sd.details || {};
+        const traits = { ...(details.traits || { di: [], dr: [], dv: [], ci: [] }) };
+        traits[type] = (traits[type] || []).filter((t) => t !== val);
+        void api.put(`${this.apiRoute}/${this.document.id}`, {
+          systemData: { ...sd, details: { ...details, traits } },
+        }).then(() => this._reloadDocument());
+      }
       return;
     }
 

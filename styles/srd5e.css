@@ -12707,7 +12707,7 @@ form.npc-2024-sheet {
 
 
 /* ══════════════════════════════════════════════════════════════════════════
-   SDRN — Ficha nativa (Sdr5eCharacterSheet / character-native.hbs)
+   SDRN — Ficha (Sdr5eCharacterSheet / character-sheet.hbs)
    Namespace próprio ("sdrn-") pra não colidir com o CSS legado do "the-codex"
    acima. Plano de design (skill frontend-design): grimdark/gótico — vinho +
    dourado + parchment, Cinzel (display) + Roboto Condensed (corpo/UI).
@@ -12759,11 +12759,11 @@ form.npc-2024-sheet {
   padding: 0;
 }
 
-/* Barra de titulo mesclada com o header da ficha. A ficha de personagem
-   agora carrega `bannerImage` (banner-character.png via core's
-   .window-has-banner) — o header dela precisa ficar transparente pro
-   mecanismo do core (windows.css:862) mostrar a imagem por trás; NPC/Item
-   ainda não têm banner, então mantêm o degradê vinho original. */
+/* Title Bar merged with the character sheet header. The character sheet
+   now loads `bannerImage` (banner-character.png via core's
+   .window-has-banner) — the header needs to be transparent for
+   the core mechanism (windows.css:862) to show the image behind;
+   NPC/Item still don't have banners, so they keep the original wine gradient. */
 .sdrn-sheet:not(.window-has-banner) .loom-window-header {
   background: linear-gradient(to bottom, var(--sdr-wine) 0%, var(--sdr-wine-deep) 100%) !important;
   border-bottom: none !important;
@@ -12774,8 +12774,8 @@ form.npc-2024-sheet {
   color: #e8dcc4;
 }
 
-/* O nome já aparece grande no header da ficha (.sdrn-name-input) — repetir
-   na barra de título quebra a ilusão de "não é uma janela separada". */
+/* The name already appears big in the character sheet header (.sdrn-name-input) — repeating
+   in the title bar breaks the illusion of "it's not a separate window". */
 .sdrn-sheet .loom-window-title-text,
 .sdrn-sheet .loom-window-title-icon {
   display: none;
@@ -12988,7 +12988,7 @@ form.npc-2024-sheet {
   margin-left: 20px;
 }
 
-/* Badge de Inspiração ornado em estrela de 4 pontas com curvas côncavas (estilo Foundry) */
+/* Badge de Inspiration ornate in a four-pointed star with concave curves */
 .sdrn-inspiration-badge {
   position: absolute;
   left: -20px;
@@ -13065,7 +13065,7 @@ form.npc-2024-sheet {
   fill: #1a1410 !important;
 }
 
-/* Medalhão de nível robusto e imponente usando a arte level-badge.png com fundo escuro e número branco puro */
+/* Level medallion robust and imposing using the level-badge.png art with dark background and pure white number */
 .sdrn-level-medallion {
   width: 84px;
   height: 84px;
@@ -13142,7 +13142,7 @@ form.npc-2024-sheet {
   background: linear-gradient(90deg, #991b1b, #e53935);
 }
 
-/* Corpo contínuo da ficha em pergaminho */
+/* Continuous sheet body in parchment */
 .sdrn-persistent {
   flex: 1;
   display: flex;
@@ -13220,7 +13220,7 @@ form.npc-2024-sheet {
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
 }
 
-/* Card superior pennant em marfim com SVG vetorial */
+/* Top card pennant in ivory with vector SVG */
 .sdrn-ability-pennant-top {
   width: 58px;
   height: 52px;
@@ -13282,7 +13282,7 @@ form.npc-2024-sheet {
   color: #8b1515;
 }
 
-/* Aba inferior preta trapezoidal com SVG vetorial */
+/* Bottom tab black trapezoidal with vector SVG */
 .sdrn-ability-tab-bottom {
   width: 46px;
   height: 20px;
@@ -13385,7 +13385,7 @@ form.npc-2024-sheet {
   }
 }
 
-/* Módulo escuro do Portrait com anel metálico e escudo de AC integrado (estilo Hobbs) */
+/* Dark module of Portrait with metallic ring and integrated AC shield */
 .sdrn-portrait-module {
   width: 100%;
   background: #181614;
@@ -13481,7 +13481,7 @@ form.npc-2024-sheet {
   box-shadow: 0 0 5px rgba(239, 68, 68, 0.85) !important;
 }
 
-/* Escudo de AC ampliado para o número não ficar sobreposto */
+/* Shield widened for AC to prevent numbers from overlapping */
 .sdrn-ac-shield-wrap {
   width: 58px;
   height: 66px;
@@ -13664,7 +13664,7 @@ form.npc-2024-sheet {
   white-space: nowrap;
 }
 
-/* 100% sem fundo, sem borda e sem caixa (texto limpo integrado à barra) */
+/* 100% transparent, borderless, and frameless */
 .sdrn-sheet .loom-window-body .sdrn-dark-bar input[type="number"].sdrn-bar-input,
 .sdrn-sheet .loom-window-body .sdrn-dark-bar input.sdrn-bar-input,
 .sdrn-dark-bar input[type="number"].sdrn-bar-input,
@@ -13774,7 +13774,7 @@ form.npc-2024-sheet {
   color: rgba(196, 181, 155, 0.45);
 }
 
-/* Skull tab no rodapé do módulo do portrait */
+/* Skull tab */
 .sdrn-skull-tab {
   position: absolute;
   bottom: -9px;
@@ -13803,7 +13803,7 @@ form.npc-2024-sheet {
   border-color: #8b1515;
 }
 
-/* Bloco de FAVORITES abaixo do módulo do portrait (estilo Foundry Hobbs) */
+/* Block of FAVORITES below the portrait module */
 .sdrn-favorites-section {
   width: 100%;
   display: flex;
@@ -14117,7 +14117,7 @@ form.npc-2024-sheet {
   font-size: 11px;
 }
 
-/* Cards de identidade (Race, Background) estilo banner do sistema original Foundry */
+/* Identity cards (Race, Background) style banner of original Foundry system */
 .sdrn-identity-cards {
   display: flex;
   flex-direction: column;
@@ -14559,7 +14559,7 @@ button.sdrn-id-card-content {
   gap: 16px;
 }
 
-/* Medalhão de CR ornado (espelhado no medalhão de nível do jogador) */
+/* CR medallion mirrored from the player's level medallion */
 .sdrn-npc-cr-wrap {
   display: flex;
   flex-direction: column;
@@ -14670,7 +14670,7 @@ input.sdrn-npc-sub-input:focus {
   text-shadow: 0 1px 2px #000;
 }
 
-/* Módulo escuro de vitals e combate (estilo Hobbs) */
+/* Dark module of vitals and combat */
 .sdrn-npc-vitals-module {
   background: #181614;
   border: 1.5px solid #4a3e2b;
@@ -14771,7 +14771,7 @@ input.sdrn-npc-sub-input:focus {
   width: 100%;
 }
 
-/* Faixa de Pennants de Habilidade no NPC */
+/* NPC Ability Pennant Bar */
 .sdrn-npc-abilities {
   display: flex;
   justify-content: space-between;
@@ -14849,6 +14849,110 @@ input.sdrn-npc-sub-input:focus {
   background: #544320 !important;
   border-color: #8c734b !important;
   color: #fdedc9 !important;
+}
+
+/* Box Header with Quick Select */
+.sdrn-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  border-bottom: 1px solid #dcd1be;
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+}
+
+.sdrn-box-header .sdrn-box-title {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  text-align: left;
+}
+
+/* Quick Select Dropdowns on NPC Box Headers */
+.sdrn-npc-quick-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #f4ede1 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6' viewBox='0 0 8 6'%3E%3Cpath fill='%2366543b' d='M0 0l4 5 4-5z'/%3E%3C/svg%3E") no-repeat right 6px center;
+  background-size: 7px 5px;
+  border: 1px solid #c4b59d;
+  border-radius: 3px;
+  color: #4a3b2c;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 18px 2px 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  max-width: 120px;
+  outline: none;
+}
+
+.sdrn-npc-quick-select:hover {
+  border-color: #8c734b;
+  background-color: #fffaf2;
+}
+
+.sdrn-npc-quick-select:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 4px rgba(212, 175, 55, 0.4);
+}
+
+/* Tag Pills with Delete Buttons */
+.sdrn-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  margin: 1px;
+}
+
+.sdrn-tag-pill .sdrn-tag {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  padding-right: 5px;
+}
+
+.sdrn-tag-del-btn {
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-left: none;
+  border-radius: 0 3px 3px 0;
+  color: #8c3a3a;
+  font-size: 11px;
+  line-height: 1;
+  padding: 3px 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.sdrn-tag-del-btn:hover {
+  background: #d92d20;
+  color: #ffffff;
+  border-color: #b42318;
+}
+
+/* Custom Text Fields on NPC Sheet (Custom Senses / Languages) */
+.sdrn-npc-custom-field {
+  width: 100%;
+  margin-top: 6px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px dashed #c4b59d;
+  border-radius: 3px;
+  padding: 3px 6px;
+  font-size: 10px;
+  font-family: inherit;
+  color: #4a3b2c;
+  box-sizing: border-box;
+}
+
+.sdrn-npc-custom-field:focus {
+  background: #ffffff;
+  border-style: solid;
+  border-color: #8c734b;
+  outline: none;
 }
 
 /* Ações e Biografia */
@@ -15889,8 +15993,13 @@ input.sdrn-npc-sub-input:focus {
   color: #8b0000;
 }
 
-.codex-roll-card-v13 .dice-total.nat20 { color: #d4af37; }
-.codex-roll-card-v13 .dice-total.nat1 { color: #8b0000; }
+.codex-roll-card-v13 .dice-total.nat20 {
+  color: #d4af37;
+}
+
+.codex-roll-card-v13 .dice-total.nat1 {
+  color: #8b0000;
+}
 
 .codex-roll-card-v13 .roll-details-expanded.hidden {
   display: none;
@@ -15921,17 +16030,526 @@ input.sdrn-npc-sub-input:focus {
   padding: 2px 8px;
   margin-top: 4px;
 }
-.codex-roll-card-v13 .target-vs-row.hit { color: #2e7d32; }
-.codex-roll-card-v13 .target-vs-row.miss { color: #8b0000; }
+
+.codex-roll-card-v13 .target-vs-row.hit {
+  color: #2e7d32;
+}
+
+.codex-roll-card-v13 .target-vs-row.miss {
+  color: #8b0000;
+}
 
 /* Handout 37 — conteúdo da caixa de rolagem pré-roll. */
-.sdrn-roll-dialog { display: flex; flex-direction: column; gap: 0.6rem; padding: 0.5rem; }
-.sdrn-roll-dialog-formula { font-size: 1.1rem; font-weight: 700; text-align: center; }
-.sdrn-roll-dialog-breakdown { font-size: 0.75rem; opacity: 0.7; text-align: center; }
-.sdrn-roll-dialog-situational { width: 100%; box-sizing: border-box; padding: 0.4rem 0.5rem; }
-.sdrn-roll-dialog-config { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.85rem; }
-.sdrn-roll-dialog-config select { padding: 0.35rem 0.5rem; }
+.sdrn-roll-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.5rem;
+}
+
+.sdrn-roll-dialog-formula {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.sdrn-roll-dialog-breakdown {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  text-align: center;
+}
+
+.sdrn-roll-dialog-situational {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.4rem 0.5rem;
+}
+
+.sdrn-roll-dialog-config {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+}
+
+.sdrn-roll-dialog-config select {
+  padding: 0.35rem 0.5rem;
+}
 
 /* Handout 40 — botões do card de ativação (Attack/Damage embutidos). */
-.activation-card-buttons { display: flex; gap: 6px; padding-top: 6px; }
-.activation-card-buttons .sdr5e-apply-dmg-btn { flex: 1; }
+.activation-card-buttons {
+  display: flex;
+  gap: 6px;
+  padding-top: 6px;
+}
+
+.activation-card-buttons .sdr5e-apply-dmg-btn {
+  flex: 1;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SDR5E CHAT CARDS & SPEAKER HEADER (Unified Grimdark & Gold Theme)
+   Styling the outer message, speaker block (portrait, name, role badge, timestamp)
+   and roll card so the whole chat message feels like a single handcrafted fantasy artifact.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Container da mensagem no chat da sidebar */
+.sidebar-message {
+  background: #14110e !important;
+  border: 1.5px solid #3d3325 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55), inset 0 0 1px rgba(201, 161, 90, 0.15) !important;
+  padding: 0 !important;
+  margin: 4px 0 8px 0 !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease !important;
+}
+
+.sidebar-message:hover {
+  border-color: #635036 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7), 0 0 10px rgba(201, 161, 90, 0.15) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Header do Speaker: Portrait, Nome, Tag de GM/Jogador e Timestamp */
+.sidebar-message .chat-speaker-block {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 8px 12px !important;
+  margin: 0 !important;
+  background: linear-gradient(180deg, #221c17 0%, #171310 100%) !important;
+  border-bottom: 1.5px solid #3d3325 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(201, 161, 90, 0.2) !important;
+  position: relative !important;
+}
+
+/* Medalhão de Portrait com aro dourado metálico */
+.sidebar-message .chat-avatar {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  border: 2px solid #c9a15a !important;
+  box-shadow: 0 0 0 1px #14110e, 0 2px 6px rgba(0, 0, 0, 0.8), 0 0 8px rgba(201, 161, 90, 0.35) !important;
+  background: #0f0d0b !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.sidebar-message .chat-avatar-img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Informações do Speaker */
+.sidebar-message .chat-speaker-info {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+}
+
+/* Nome do Personagem / Criatura / Usuário */
+.sidebar-message .chat-speaker-name {
+  font-family: 'Cinzel', serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  color: #f5eccb !important;
+  letter-spacing: 0.5px !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 7px !important;
+  line-height: 1.2 !important;
+}
+
+/* Badge/Tag do Jogador ou Gamemaster */
+.sidebar-message .chat-speaker-player-tag {
+  font-family: 'Roboto Condensed', sans-serif !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.8px !important;
+  background: linear-gradient(180deg, #3a1414 0%, #1f0a0a 100%) !important;
+  color: #e2bc74 !important;
+  border: 1px solid rgba(201, 161, 90, 0.5) !important;
+  border-radius: 3px !important;
+  padding: 1px 6px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), inset 0 0 3px rgba(201, 161, 90, 0.15) !important;
+  line-height: 1.3 !important;
+}
+
+/* Timestamp da Mensagem */
+.sidebar-message .chat-message-ts {
+  font-family: 'Roboto Condensed', sans-serif !important;
+  font-size: 0.72rem !important;
+  color: rgba(201, 161, 90, 0.6) !important;
+  letter-spacing: 0.5px !important;
+  margin-top: 1px !important;
+}
+
+/* Botão de Excluir Mensagem */
+.sidebar-message .chat-message-delete {
+  background: transparent !important;
+  border: none !important;
+  color: rgba(201, 161, 90, 0.35) !important;
+  font-size: 0.82rem !important;
+  cursor: pointer !important;
+  padding: 4px 6px !important;
+  transition: all 0.15s ease !important;
+  border-radius: 3px !important;
+}
+
+.sidebar-message .chat-message-delete:hover {
+  color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.12) !important;
+  transform: scale(1.15) !important;
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.7) !important;
+}
+
+/* Corpo da Mensagem */
+.sidebar-message .sidebar-message-body {
+  padding: 8px 10px 10px !important;
+  background: #14110e !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+
+.sidebar-message .sidebar-message-body:empty {
+  display: none !important;
+}
+
+/* Mensagens de Texto Comuns */
+.sidebar-message .sidebar-message-text {
+  font-family: 'Roboto Condensed', sans-serif !important;
+  font-size: 0.95rem !important;
+  color: #e8dcc4 !important;
+  line-height: 1.5 !important;
+  padding: 2px 4px !important;
+}
+
+/* Mensagens do tipo Info (Item mostrado no chat, cura, descrições de feature) */
+.sidebar-message .sidebar-message-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  color: #e8dcc4 !important;
+}
+
+.sidebar-message .sidebar-message-info-header {
+  color: #f5eccb !important;
+  font-family: 'Cinzel', serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.sidebar-message .sidebar-message-info-desc {
+  color: #d8cfc0 !important;
+  font-family: 'Roboto Condensed', sans-serif !important;
+  font-size: 0.9rem !important;
+  line-height: 1.4 !important;
+}
+
+/* Integração Completa do Card de Rolagem / Ativação (.codex-roll-card-v13) */
+.sidebar-message .codex-roll-card-v13,
+.codex-roll-card-v13 {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  border: 1.5px solid #4a1a1a !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.45) !important;
+  background: url('https://www.transparenttextures.com/patterns/papyros.png'), #f4eedb !important;
+}
+
+/* Cabeçalho do Card (ex: "DAMAGE: UNARMED STRIKE", "ATTACK: LONGSWORD") */
+.sidebar-message .codex-roll-card-v13 .card-header,
+.codex-roll-card-v13 .card-header {
+  background: linear-gradient(180deg, #3a1414 0%, #220b0b 100%) !important;
+  border-bottom: 1.5px solid #c9a15a !important;
+  color: #f5eccb !important;
+  font-family: 'Cinzel', serif !important;
+  font-weight: 700 !important;
+  font-size: 0.82rem !important;
+  letter-spacing: 0.8px !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important;
+  padding: 7px 12px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  box-sizing: border-box !important;
+  min-height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  line-height: 1.3 !important;
+}
+
+/* Área Central de Rolagem */
+.sidebar-message .codex-roll-card-v13 .roll-main {
+  padding: 12px 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  background: #f4eedb !important;
+}
+
+/* Total do Dado */
+.sidebar-message .codex-roll-card-v13 .dice-total {
+  font-family: 'Cinzel', serif !important;
+  font-size: 2.3rem !important;
+  font-weight: 700 !important;
+  color: #1a120b !important;
+  line-height: 1 !important;
+  width: 60px !important;
+  text-align: center !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+.sidebar-message .codex-roll-card-v13 .dice-total.nat20 {
+  color: #1b6330 !important;
+  text-shadow: 0 0 10px rgba(46, 125, 50, 0.4) !important;
+}
+
+.sidebar-message .codex-roll-card-v13 .dice-total.nat1 {
+  color: #8b1515 !important;
+  text-shadow: 0 0 10px rgba(139, 21, 21, 0.4) !important;
+}
+
+/* Detalhes da Fórmula e Breakdown */
+.sidebar-message .codex-roll-card-v13 .roll-details .formula {
+  font-family: 'Roboto Condensed', sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: #423525 !important;
+}
+
+.sidebar-message .codex-roll-card-v13 .roll-details .vs {
+  font-family: 'Cinzel', serif !important;
+  font-size: 0.85rem !important;
+  color: #3a1414 !important;
+  font-weight: 700 !important;
+}
+
+.sidebar-message .codex-roll-card-v13 .roll-details .click-to-see {
+  font-family: 'Roboto Condensed', sans-serif !important;
+  font-size: 0.72rem !important;
+  color: #80705d !important;
+  font-style: italic !important;
+}
+
+/* Seção de Tipo de Dano (ex: "bludgeoning damage") */
+.sidebar-message .codex-roll-card-v13 .damage-section {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-top: 1px dashed rgba(74, 62, 43, 0.4) !important;
+  color: #2b2014 !important;
+  font-family: 'Roboto Condensed', sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  padding: 8px 12px !important;
+  text-transform: capitalize !important;
+}
+
+/* Seções de Botões de Ação no Card */
+.sidebar-message .codex-roll-card-v13 .damage-button-section,
+.sidebar-message .codex-roll-card-v13 .activation-card-buttons {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-top: 1px solid rgba(74, 62, 43, 0.25) !important;
+  padding: 8px 12px 10px !important;
+}
+
+/* Botões do Card de Ativação / Dano */
+.sidebar-message .codex-roll-card-v13 .sdr5e-apply-dmg-btn {
+  font-family: 'Roboto Condensed', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.82rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.6px !important;
+  padding: 7px 14px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) !important;
+  transition: all 0.15s ease !important;
+  background: linear-gradient(180deg, rgba(217, 45, 32, 0.16) 0%, rgba(139, 21, 21, 0.28) 100%) !important;
+  border: 1px solid rgba(185, 28, 28, 0.65) !important;
+  color: #8b1515 !important;
+}
+
+.sidebar-message .sdr-roll-card .sdr5e-apply-dmg-btn:hover,
+.sidebar-message .codex-roll-card-v13 .sdr5e-apply-dmg-btn:hover {
+  background: linear-gradient(180deg, rgba(217, 45, 32, 0.32) 0%, rgba(139, 21, 21, 0.45) 100%) !important;
+  border-color: #ef4444 !important;
+  color: #5c0b0b !important;
+  box-shadow: 0 0 8px rgba(217, 45, 32, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Botões de Ataque (tema bronze/dourado marcial) */
+.sidebar-message .sdr-roll-card .sdr5e-apply-dmg-btn[data-srd5e-action="card-attack"],
+.sidebar-message .sdr-roll-card .sdr5e-apply-dmg-btn[data-srd5e-action="card-spell-attack"],
+.sidebar-message .codex-roll-card-v13 .sdr5e-apply-dmg-btn[data-srd5e-action="card-attack"],
+.sidebar-message .codex-roll-card-v13 .sdr5e-apply-dmg-btn[data-srd5e-action="card-spell-attack"] {
+  background: linear-gradient(180deg, rgba(201, 161, 90, 0.22) 0%, rgba(130, 95, 45, 0.32) 100%) !important;
+  border: 1px solid rgba(201, 161, 90, 0.65) !important;
+  color: #5c4314 !important;
+}
+
+.sidebar-message .sdr-roll-card .sdr5e-apply-dmg-btn[data-srd5e-action="card-attack"]:hover,
+.sidebar-message .sdr-roll-card .sdr5e-apply-dmg-btn[data-srd5e-action="card-spell-attack"]:hover,
+.sidebar-message .codex-roll-card-v13 .sdr5e-apply-dmg-btn[data-srd5e-action="card-attack"]:hover,
+.sidebar-message .codex-roll-card-v13 .sdr5e-apply-dmg-btn[data-srd5e-action="card-spell-attack"]:hover {
+  background: linear-gradient(180deg, rgba(201, 161, 90, 0.38) 0%, rgba(130, 95, 45, 0.5) 100%) !important;
+  border-color: #e2bc74 !important;
+  color: #3b2a09 !important;
+  box-shadow: 0 0 8px rgba(201, 161, 90, 0.35) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SDR — Fixes da Sidebar do Chat (Scrolling & Anti-Achatamento de Cards)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Impede que o flexbox da aba do chat limite a altura ou oculte o scroll */
+.sidebar-content.active[data-tab="chat"],
+.sidebar-panel[data-tab="chat"],
+.sidebar-panel.active[data-tab="chat"] {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Container de mensagens: força flex-grow, min-height zero e scrolling vertical */
+.sidebar-message-list,
+#chat-messages {
+  flex: 1 1 0px !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-y: contain !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(201, 161, 90, 0.45) transparent !important;
+}
+
+.sidebar-message-list::-webkit-scrollbar,
+#chat-messages::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.sidebar-message-list::-webkit-scrollbar-track,
+#chat-messages::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.sidebar-message-list::-webkit-scrollbar-thumb,
+#chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(201, 161, 90, 0.45) !important;
+  border-radius: 3px !important;
+}
+
+.sidebar-message-list::-webkit-scrollbar-thumb:hover,
+#chat-messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 161, 90, 0.7) !important;
+}
+
+/* Cards individuais de mensagens: NUNCA encolher (flex-shrink: 0) */
+.sidebar-message {
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+  min-height: fit-content !important;
+}
+
+/* Mensagens de Info vazias não devem gerar barras fantasmas */
+.sidebar-message-info:empty,
+.sidebar-message-body:empty {
+  display: none !important;
+}
+
+/* Suporte à classe SDR para os cards de rolagem */
+.sidebar-message .sdr-roll-card,
+.sdr-roll-card {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  border: 1.5px solid #4a1a1a !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.45) !important;
+  background: url('https://www.transparenttextures.com/patterns/papyros.png'), #f4eedb !important;
+}
+
+.sidebar-message .sdr-roll-card .card-header,
+.sdr-roll-card .card-header {
+  background: linear-gradient(180deg, #3a1414 0%, #220b0b 100%) !important;
+  border-bottom: 1.5px solid #c9a15a !important;
+  color: #f5eccb !important;
+  font-family: 'Cinzel', serif !important;
+  font-weight: 700 !important;
+  font-size: 0.82rem !important;
+  letter-spacing: 0.8px !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important;
+  padding: 7px 12px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  box-sizing: border-box !important;
+  min-height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  line-height: 1.3 !important;
+}
+
+.sidebar-message .sdr-roll-card .roll-main {
+  padding: 12px 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  background: #f4eedb !important;
+}
+
+.sidebar-message .sdr-roll-card .dice-total {
+  font-family: 'Cinzel', serif !important;
+  font-size: 2.3rem !important;
+  font-weight: 700 !important;
+  color: #1a120b !important;
+  line-height: 1 !important;
+  width: 60px !important;
+  text-align: center !important;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+.sidebar-message .sdr-roll-card .damage-section {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-top: 1px dashed rgba(74, 62, 43, 0.4) !important;
+  color: #2b2014 !important;
+  font-family: 'Roboto Condensed', sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  padding: 8px 12px !important;
+  text-transform: capitalize !important;
+}
+
+.sidebar-message .sdr-roll-card .damage-button-section,
+.sidebar-message .sdr-roll-card .activation-card-buttons {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-top: 1px solid rgba(74, 62, 43, 0.25) !important;
+  padding: 8px 12px 10px !important;
+}

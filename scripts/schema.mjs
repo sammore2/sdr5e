@@ -111,6 +111,7 @@ export function getDefaultData(type) {
         resonance: { axis_flux: 0, genesis_abyss: 0 },
         saves: { str: defaultSave(), dex: defaultSave(), con: defaultSave(), int: defaultSave(), wis: defaultSave(), cha: defaultSave() },
         attributes: {
+          hp: { value: 10, max: 10, bonus: 0, temp: 0 },
           da: { value: 10, base: 10, magic: 0, bonus: 0 },
           prof: { value: 2, bonus: 0 },
           dominio: { value: 2 },
@@ -172,6 +173,7 @@ export function getDefaultData(type) {
         abilities: defaultAbilities(),
         saves: { str: defaultNpcSave(), dex: defaultNpcSave(), con: defaultNpcSave(), int: defaultNpcSave(), wis: defaultNpcSave(), cha: defaultNpcSave() },
         attributes: {
+          hp: { value: 10, max: 10, bonus: 0, temp: 0 },
           da: { value: 10, base: null, magic: 0, bonus: 0 },
           prof: { value: 2 },
           initiative: { value: 0, bonus: 0, total: 0 },

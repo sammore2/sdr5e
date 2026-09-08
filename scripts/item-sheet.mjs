@@ -33,7 +33,7 @@ export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
 
   get dataKey() { return 'data'; }
 
-  static PARTS = { main: { template: '/marketplace/rulesets/srd5e/templates/item-native.hbs' } };
+  static PARTS = { main: { template: '/marketplace/rulesets/srd5e/templates/item-sheet.hbs' } };
 
   _activeItemTab = 'description';
   // Keyed by field name — every pending edit gets flushed together on the

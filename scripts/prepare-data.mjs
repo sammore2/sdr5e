@@ -310,6 +310,9 @@ export function prepCharacter(sd, items) {
     if ((Number(sd.resources.health.value) || 0) > sd.resources.health.effectiveMax) {
       sd.resources.health.value = sd.resources.health.effectiveMax;
     }
+    // Alias for Loom's canvas token bars and vital resource monitoring (attributes.hp)
+    if (!sd.attributes) sd.attributes = {};
+    sd.attributes.hp = sd.resources.health;
   }
 
   if (sd.attributes.armor) prepArmorAndDA(sd, items);
@@ -331,7 +334,13 @@ export function prepNpc(sd) {
   prepAbilities(sd);
   const cr = Number(sd.details?.cr) || 0;
   const prof = Math.floor((Math.max(cr, 1) - 1) / 4) + 2;
+  if (!sd.attributes) sd.attributes = {};
   sd.attributes.prof.value = prof;
+
+  // Alias for Loom's canvas token bars and vital resource monitoring (attributes.hp)
+  if (sd.resources?.health) {
+    sd.attributes.hp = sd.resources.health;
+  }
 
   const dexMod = sd.abilities.dex.modifier || 0;
   const base = Number(sd.attributes.da.base) || 10;

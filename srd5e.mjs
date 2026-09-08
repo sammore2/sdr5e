@@ -22,9 +22,9 @@ import { getDefaultData } from './scripts/schema.mjs';
 import { mergeDefaults } from './scripts/utils.mjs';
 import { prepCharacter, prepNpc } from './scripts/prepare-data.mjs';
 import { getSheetSchema, getItemSheetSchema } from './scripts/sheet-schemas.mjs';
-import { applyDamageToTargets, rollWeaponAttack, rollWeaponDamage, rollSpellDamage } from './scripts/roll-engine.mjs';
+import { applyDamageToTargets, rollWeaponAttack, rollWeaponDamage, rollSpellAttack, rollSpellDamage, rollUnarmedDamage } from './scripts/roll-engine.mjs';
 import { syncEquippedEffect, syncPermanentBonusEffect, removeItemEffects } from './scripts/effects.mjs';
-import { Sdr5eCharacterSheet } from './scripts/actor-sheet.mjs';
+import { Sdr5eCharacterSheet } from './scripts/character-sheet.mjs';
 import { Sdr5eNpcSheet } from './scripts/npc-sheet.mjs';
 import { Sdr5eItemSheet } from './scripts/item-sheet.mjs';
 import { SDR5EApi } from './scripts/api.mjs';
@@ -124,21 +124,26 @@ document.addEventListener('click', (event) => {
 // QUALQUER cliente vendo a mensagem no chat, não só quem tem a ficha aberta.
 document.addEventListener('click', async (event) => {
   const target = event.target instanceof Element ? event.target : null;
-  const btn = target?.closest('[data-srd5e-action="card-attack"], [data-srd5e-action="card-damage"], [data-srd5e-action="card-spell-damage"]');
+  const btn = target?.closest('[data-srd5e-action="card-attack"], [data-srd5e-action="card-damage"], [data-srd5e-action="card-spell-attack"], [data-srd5e-action="card-spell-damage"], [data-srd5e-action="card-unarmed-damage"]');
   if (!btn) return;
   const actorId = btn.dataset.actorId;
   const itemId = btn.dataset.itemId;
-  if (!actorId || !itemId) return;
+  if (!actorId) return;
   btn.disabled = true;
   try {
-    const [actor, item] = await Promise.all([
-      window.Loom.api.get(`/actors/${actorId}`),
-      window.Loom.api.get(`/items/${itemId}`),
-    ]);
-    if (!actor || !item) return;
+    const actor = await window.Loom.api.get(`/actors/${actorId}`);
+    if (!actor) return;
     const action = btn.dataset.srd5eAction;
+    if (action === 'card-unarmed-damage') {
+      await rollUnarmedDamage(actor);
+      return;
+    }
+    if (!itemId) return;
+    const item = await window.Loom.api.get(`/items/${itemId}`);
+    if (!item) return;
     if (action === 'card-attack') await rollWeaponAttack(actor, item);
     else if (action === 'card-damage') await rollWeaponDamage(actor, item);
+    else if (action === 'card-spell-attack') await rollSpellAttack(actor, item);
     else if (action === 'card-spell-damage') await rollSpellDamage(actor, item);
   } finally {
     btn.disabled = false;
@@ -199,10 +204,13 @@ window.Loom.wraps.renderRollCard.addWrapper((wrapped, roll, esc) => {
     return `<div class="target-vs-row ${hit ? 'hit' : 'miss'}">vs ${esc(t.name)} (AC ${t.ac}) — ${hit ? 'HIT' : 'MISS'}</div>`;
   }).join('');
 
-  // Handout 41 — botão de dano só aparece quando acertou pelo menos um alvo.
-  const inlineDamageBtn = (anyHit && roll.meta?.actorId && roll.meta?.itemId)
-    ? `<div class="activation-card-buttons"><button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="${roll.meta.isSpell ? 'card-spell-damage' : 'card-damage'}" data-actor-id="${esc(roll.meta.actorId)}" data-item-id="${esc(roll.meta.itemId)}">Roll Damage</button></div>`
-    : '';
+  let inlineDamageBtn = '';
+  if (roll.meta?.actorId && roll.meta?.itemId) {
+    const isSpell = !!roll.meta.isSpell;
+    inlineDamageBtn = `<div class="activation-card-buttons"><button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="${isSpell ? 'card-spell-damage' : 'card-damage'}" data-actor-id="${esc(roll.meta.actorId)}" data-item-id="${esc(roll.meta.itemId)}"><i class="fas fa-burst"></i> Roll Damage</button></div>`;
+  } else if (roll.meta?.isUnarmed && roll.meta?.actorId) {
+    inlineDamageBtn = `<div class="activation-card-buttons"><button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-unarmed-damage" data-actor-id="${esc(roll.meta.actorId)}"><i class="fas fa-burst"></i> Roll Damage</button></div>`;
+  }
 
   const damageSection = dmg
     ? `<div class="damage-section">${esc(dmg.type ? `${dmg.type} damage` : 'Damage')}</div>`
@@ -213,7 +221,7 @@ window.Loom.wraps.renderRollCard.addWrapper((wrapped, roll, esc) => {
     ? `<div class="damage-button-section"><button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="apply-damage" data-amount="${dmg.amount}" data-type="${dmg.type || ''}">Apply ${dmg.amount} damage to ${targetCount} target${targetCount === 1 ? '' : 's'}</button></div>`
     : '';
 
-  return `<div class="codex-roll-card-v13" data-action="toggle-roll-details">
+  return `<div class="sdr-roll-card codex-roll-card-v13" data-action="toggle-roll-details">
     <div class="card-header">
       <span>${label}</span>
       ${modeTag}
@@ -252,14 +260,16 @@ document.addEventListener('click', (event) => {
 // da Parte A, com ícone/cor por tipo (isRest/isHeal/isDamage, flags que
 // `_takeRest`/`applyHeal`/`applyDamage`/`applyDamageToTargets` já mandam).
 window.Loom.wraps.renderMessage.addWrapper((wrapped, msg, ctx) => {
+  const outer = wrapped(msg, ctx);
   const flags = msg.flags?.srd5e;
-  if (!flags || msg.isRoll) return wrapped(msg, ctx);
+  if (!flags || msg.isRoll) return outer;
   const esc = ctx.esc;
 
+  let cardHtml = '';
   // Handout 40 — card de ativação com botões embutidos (Attack/Damage),
   // referência real do dnd5e-Foundry (Rod of Lordly Might / Acid Splash).
   if (flags.isWeaponCard) {
-    return `<div class="codex-roll-card-v13 codex-info-card-v13">
+    cardHtml = `<div class="codex-roll-card-v13 codex-info-card-v13">
       <div class="card-header"><span><i class="fas fa-sword"></i> ${esc(flags.name || '')}</span></div>
       ${flags.description ? `<div class="damage-section">${flags.description}</div>` : ''}
       <div class="activation-card-buttons">
@@ -267,24 +277,30 @@ window.Loom.wraps.renderMessage.addWrapper((wrapped, msg, ctx) => {
         <button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-damage" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}">Damage</button>
       </div>
     </div>`;
-  }
-  if (flags.isSpellCast) {
-    return `<div class="codex-roll-card-v13 codex-info-card-v13">
+  } else if (flags.isSpellCast) {
+    cardHtml = `<div class="codex-roll-card-v13 codex-info-card-v13">
       <div class="card-header"><span><i class="fas fa-wand-sparkles"></i> ${esc(flags.name || '')}</span></div>
       ${flags.description ? `<div class="damage-section">${flags.description}</div>` : ''}
-      ${flags.hasDamage ? `<div class="activation-card-buttons">
-        <button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-spell-damage" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}">Damage</button>
-      </div>` : ''}
+      <div class="activation-card-buttons">
+        <button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-spell-attack" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}"><i class="fas fa-sword"></i> Attack</button>
+        <button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-spell-damage" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}"><i class="fas fa-burst"></i> Damage</button>
+      </div>
     </div>`;
+  } else {
+    const kind = flags.isRest ? 'rest' : flags.isHeal ? 'heal' : (flags.isDamage || flags.name === 'Damage Applied') ? 'damage' : null;
+    if (kind) {
+      const icon = { rest: 'fa-campground', heal: 'fa-heart', damage: 'fa-burst' }[kind];
+      cardHtml = `<div class="codex-roll-card-v13 codex-info-card-v13 codex-info-card-${kind}">
+        <div class="card-header"><span><i class="fas ${icon}"></i> ${esc(flags.name || '')}</span></div>
+        ${flags.description ? `<div class="damage-section">${flags.description}</div>` : ''}
+      </div>`;
+    }
   }
 
-  const kind = flags.isRest ? 'rest' : flags.isHeal ? 'heal' : (flags.isDamage || flags.name === 'Damage Applied') ? 'damage' : null;
-  if (!kind) return wrapped(msg, ctx);
-  const icon = { rest: 'fa-campground', heal: 'fa-heart', damage: 'fa-burst' }[kind];
-  return `<div class="codex-roll-card-v13 codex-info-card-v13 codex-info-card-${kind}">
-    <div class="card-header"><span><i class="fas ${icon}"></i> ${esc(flags.name || '')}</span></div>
-    ${flags.description ? `<div class="damage-section">${flags.description}</div>` : ''}
-  </div>`;
+  if (cardHtml) {
+    return outer.replace(/<div class="sidebar-message-body">[\s\S]*?<\/div>\s*<\/div>$/, `<div class="sidebar-message-body">${cardHtml}</div></div>`);
+  }
+  return outer;
 });
 
 window.Loom.socket.on('item.updated', (item) => { void syncEquippedEffect(item); });

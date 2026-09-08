@@ -287,6 +287,38 @@ export function evaluateDamageFormula(formula, critical = false) {
 }
 
 /**
+ * Finds the token/cast ID for an actor on the active canvas scene.
+ */
+export function findTokenIdForActor(actorId) {
+  if (!actorId) return null;
+  const targets = window.Loom?.user?.targets || [];
+  for (const t of targets) {
+    if (t?.actorId === actorId) return t.id;
+  }
+  const cm = window.Loom?.canvas?.active;
+  if (cm?.tokenData) {
+    for (const [id, data] of cm.tokenData.entries()) {
+      if (data?.actorId === actorId) return id;
+    }
+  }
+  return null;
+}
+
+/**
+ * Displays floating text (damage in red, healing in green) on a token with broadcast.
+ */
+export function showFloatingDamageOrHeal(targetId, amount, isHeal = false) {
+  if (!window.Loom?.canvas?.showFloatingText || !targetId || amount === 0) return;
+  const sign = isHeal ? `+${amount}` : `-${amount}`;
+  const color = isHeal ? '#2ecc71' : '#e74c3c';
+  try {
+    window.Loom.canvas.showFloatingText(targetId, sign, color, { broadcast: true });
+  } catch (err) {
+    console.warn('[srd5e] Failed to display floating text:', err);
+  }
+}
+
+/**
  * Damage-to-targets, driven by `window.Loom.user.targets` (real, live
  * targeting concept — confirmed via `client/core/apply-to-targets.ts`,
  * which already resolves Cast vs Actor persistence). Not reused directly:
@@ -346,6 +378,10 @@ export async function applyDamageToTargets(amount, type) {
       if (isLinked && cast.actorId) await window.Loom.api.put(`/actors/${cast.actorId}`, patch);
       else await window.Loom.api.put(`/cast/${castId}`, patch);
 
+      if (finalAmount > 0) {
+        showFloatingDamageOrHeal(castId, finalAmount, false);
+      }
+
       results.push({ name: record.name, finalAmount, traitLabel });
     } catch (e) {
       console.error(`[srd5e] applyDamageToTargets failed for cast ${castId}:`, e);
@@ -379,6 +415,11 @@ export async function applyHeal(actor, amount, options = {}) {
   const cap = hp.effectiveMax ?? hp.max ?? hp.value + amount;
   const newValue = Math.min(cap, (hp.value || 0) + amount);
   await actor.update({ 'system.resources.health.value': newValue });
+
+  const tokenId = findTokenIdForActor(actor.id);
+  if (tokenId && amount > 0) {
+    showFloatingDamageOrHeal(tokenId, amount, true);
+  }
 
   // `flags.<system>.{name,description}` is the shape the chat card actually
   // knows how to render as HTML (`chat-message-card.ts:infoFlags`) — `content`
@@ -428,6 +469,11 @@ export async function applyDamage(actor, amount, type = '') {
   };
   if (newValue === 0) update['system.resources.concentrating'] = false; // dropping to 0 HP always breaks concentration
   await actor.update(update);
+
+  const tokenId = findTokenIdForActor(actor.id);
+  if (tokenId && finalAmount > 0) {
+    showFloatingDamageOrHeal(tokenId, finalAmount, false);
+  }
 
   const suffix = traitLabel ? ` (${traitLabel})` : '';
   const message = await window.Loom.ChatMessage.create({
@@ -567,7 +613,7 @@ export async function rollWeaponAttack(actor, item) {
   const armorPenalty = (abilityKey === 'str' || abilityKey === 'dex') && !!sd.attributes?.armor?.penalty;
   const advantage = applyWeaponAttackConditionModifiers(currentAdvantageMode(), conditions, isRanged, sd.resources?.exhaustion ?? 0, armorPenalty);
   const targets = await getTargetAcInfo();
-  return sdr5eRoll({ label: `Attack: ${item.name}`, parts, actor, advantage, extraMeta: { ...(targets.length ? { targets } : {}), actorId: actor.id, itemId: item.id } });
+  return sdr5eRoll({ label: `Attack: ${item.name}`, parts, actor, advantage, extraMeta: { isAttack: true, ...(targets.length ? { targets } : {}), actorId: actor.id, itemId: item.id } });
 }
 
 export async function rollWeaponDamage(actor, item) {
@@ -635,7 +681,7 @@ export async function rollUnarmedStrike(actor) {
   const armorPenalty = !!sd.attributes?.armor?.penalty;
   const advantage = applyWeaponAttackConditionModifiers(currentAdvantageMode(), conditions, false, sd.resources?.exhaustion ?? 0, armorPenalty);
   const targets = await getTargetAcInfo();
-  return sdr5eRoll({ label: 'Attack: Unarmed Strike', parts, actor, advantage, extraMeta: targets.length ? { targets } : {} });
+  return sdr5eRoll({ label: 'Attack: Unarmed Strike', parts, actor, advantage, extraMeta: { isAttack: true, isUnarmed: true, actorId: actor.id, ...(targets.length ? { targets } : {}) } });
 }
 
 export async function rollUnarmedDamage(actor) {
@@ -694,6 +740,12 @@ export async function spendHitDie(actor) {
     'system.resources.hitDice.value': hd.value - 1,
     'system.resources.health.value': newValue,
   });
+
+  const tokenId = findTokenIdForActor(actor.id);
+  if (tokenId && healAmount > 0) {
+    showFloatingDamageOrHeal(tokenId, healAmount, true);
+  }
+
   return { healAmount, newValue };
 }
 
@@ -703,14 +755,17 @@ export async function rollSpellAttack(actor, item) {
   const conditions = await getActorConditions(actor.id);
   const advantage = applyWeaponAttackConditionModifiers(currentAdvantageMode(), conditions, false, actor.systemData?.resources?.exhaustion ?? 0);
   const targets = await getTargetAcInfo();
-  return sdr5eRoll({ label: `Spell Attack: ${item.name}`, parts, actor, advantage, extraMeta: { ...(targets.length ? { targets } : {}), actorId: actor.id, itemId: item.id, isSpell: true } });
+  return sdr5eRoll({ label: `Spell Attack: ${item.name}`, parts, actor, advantage, extraMeta: { isAttack: true, ...(targets.length ? { targets } : {}), actorId: actor.id, itemId: item.id, isSpell: true } });
 }
 
 export async function rollSpellDamage(actor, item) {
   if (!actor || !item) return null;
   const idata = item.system || item.data || {};
   const formula = idata.damage?.formula;
-  if (!formula) return null;
+  if (!formula) {
+    globalThis.Loom?.showToast?.(`No damage formula configured for ${item.name || 'this spell'}.`, 'info');
+    return null;
+  }
   const type = idata.damage?.type || '';
   const typeSuffix = type ? ` (${type})` : '';
   const total = evaluateDamageFormula(formula);
@@ -849,6 +904,7 @@ export async function postItemToChat(actor, item) {
         isItemCard: true,
         description: `${subtitleHtml}${description}${pillsHtml}`,
         ...(item.type === 'weapon' ? { isWeaponCard: true, actorId: actor.id, itemId: item.id } : {}),
+        ...(item.type === 'spell' ? { isSpellCast: true, actorId: actor.id, itemId: item.id, hasDamage: true } : {}),
       },
     },
   });

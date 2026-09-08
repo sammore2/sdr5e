@@ -132,7 +132,7 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
       await api.post('/items', { worldId, name: this._data.klass.name.trim(), type: 'class', data: classData, actorId });
     }
 
-    const { Sdr5eCharacterSheet } = await import('./actor-sheet.mjs');
+    const { Sdr5eCharacterSheet } = await import('./character-sheet.mjs');
     windowManager.open(`actor-sheet-${actorId}`, Sdr5eCharacterSheet, { actorId });
     // `windowManager.close(id)`, not `this.close()` — BaseWindow instances
     // don't expose their own close(); the manager owns lifecycle.
