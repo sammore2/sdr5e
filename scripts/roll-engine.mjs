@@ -15,6 +15,7 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 import { currentAdvantageMode, isCriticalHeld } from './utils.mjs';
+import { getSetting } from './settings.mjs';
 
 /**
  * Conditions live on Cast (token) records, not the Actor (`statusMarkers:
@@ -276,9 +277,21 @@ export function evaluateDamageFormula(formula, critical = false) {
       // SRD (Combat.md, "Critical Hits"): "Roll all of the attack's damage
       // dice twice" — dobra a CONTAGEM de dados, nunca o modificador fixo
       // (Handout 30). Só o ramo com `d` (dado) é afetado.
-      const count = (Number(dieMatch[1]) || 1) * (critical ? 2 : 1);
+      let count = Number(dieMatch[1]) || 1;
       const faces = Number(dieMatch[2]) || 1;
-      for (let i = 0; i < count; i++) total += sign * (Math.floor(Math.random() * faces) + 1);
+      if (critical) {
+        const critRule = getSetting('criticalHitRule', 'doubleDice');
+        if (critRule === 'maxDice') {
+          for (let i = 0; i < count; i++) total += sign * ((Math.floor(Math.random() * faces) + 1) + faces);
+        } else if (critRule === 'flatMax') {
+          for (let i = 0; i < count; i++) total += sign * (faces * 2);
+        } else {
+          count *= 2;
+          for (let i = 0; i < count; i++) total += sign * (Math.floor(Math.random() * faces) + 1);
+        }
+      } else {
+        for (let i = 0; i < count; i++) total += sign * (Math.floor(Math.random() * faces) + 1);
+      }
     } else {
       total += sign * (Number(body) || 0);
     }
@@ -535,8 +548,9 @@ export async function rollDeathSave(actor) {
     });
     outcome = 'Critical Success — regains 1 HP';
   } else {
+    const deathDC = Number(getSetting('deathSaveDC', 10)) || 10;
     if (roll === 1) failures += 2;
-    else if (roll >= 10) successes += 1;
+    else if (roll >= deathDC) successes += 1;
     else failures += 1;
     successes = Math.min(3, successes);
     failures = Math.min(3, failures);
@@ -546,7 +560,7 @@ export async function rollDeathSave(actor) {
     });
     if (failures >= 3) outcome = 'Dead';
     else if (successes >= 3) outcome = 'Stabilized';
-    else outcome = roll === 1 ? 'Critical Failure (2 failures)' : roll >= 10 ? 'Success' : 'Failure';
+    else outcome = roll === 1 ? 'Critical Failure (2 failures)' : roll >= (Number(getSetting('deathSaveDC', 10)) || 10) ? 'Success' : 'Failure';
   }
 
   window.Loom.dispatchRoll({

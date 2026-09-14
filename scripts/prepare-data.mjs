@@ -10,6 +10,7 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 import { ABILITY_KEYS, SPELL_SLOT_TABLE, SIZE_CARRY_MULTIPLIER } from './config.mjs';
+import { getSetting } from './settings.mjs';
 
 export function prepAbilities(sd) {
   for (const k of ABILITY_KEYS) {
@@ -109,9 +110,11 @@ export function prepSaves(sd, prof) {
 
 export function prepInitiative(sd) {
   const dexMod = sd.abilities.dex.modifier || 0;
+  const tiebreaker = getSetting('initiativeTiebreaker', true) ? (Number(sd.abilities.dex.total ?? sd.abilities.dex.value) || 10) / 100 : 0;
   sd.attributes.initiative.total = dexMod
     + (Number(sd.attributes.initiative.value) || 0)
-    + (Number(sd.attributes.initiative.bonus) || 0);
+    + (Number(sd.attributes.initiative.bonus) || 0)
+    + tiebreaker;
 }
 
 // Tipos de item que contam peso físico de verdade — feature/spell/race/
@@ -131,7 +134,8 @@ export function prepEncumbrance(sd, items) {
   const enc = sd.attributes?.encumbrance;
   if (!enc) return;
 
-  if (!enc.enabled) {
+  const isEnabled = enc.enabled ?? getSetting('encumbranceTracking', false);
+  if (!isEnabled) {
     enc.weight = 0;
     enc.capacity = 0;
     enc.tier = 'none';

@@ -48,13 +48,97 @@
     }
   ],
   "compendiums": [
-    "packs/spells.json",
-    "packs/races.json",
-    "packs/classes.json",
-    "packs/subclasses.json",
-    "packs/feats.json",
-    "packs/magic-items.json",
-    "packs/monsters.json",
-    "packs/journal.json"
+    "packs/spells-0.sqlite",
+    "packs/spells-1.sqlite",
+    "packs/spells-2.sqlite",
+    "packs/spells-3.sqlite",
+    "packs/spells-4.sqlite",
+    "packs/spells-5.sqlite",
+    "packs/spells-6.sqlite",
+    "packs/spells-7.sqlite",
+    "packs/spells-8.sqlite",
+    "packs/spells-9.sqlite",
+    "packs/races.sqlite",
+    "packs/classes.sqlite",
+    "packs/subclasses.sqlite",
+    "packs/feats.sqlite",
+    "packs/magic-items.sqlite",
+    "packs/monsters.sqlite",
+    "packs/journal.sqlite"
+  ],
+  "settings": [
+    {
+      "key": "initiativeTiebreaker",
+      "type": "boolean",
+      "default": true,
+      "scope": "world",
+      "name": "Desempate de Iniciativa (Tiebreaker)",
+      "hint": "Adiciona a fração de Destreza (DEX / 100) ao total da rolagem de iniciativa para desempatar automaticamente."
+    },
+    {
+      "key": "maxHpFirstLevel",
+      "type": "boolean",
+      "default": true,
+      "scope": "world",
+      "name": "PV Máximo no 1º Nível",
+      "hint": "Garante que novos heróis recebam o valor máximo de pontos de vida em seu primeiro nível."
+    },
+    {
+      "key": "encumbranceTracking",
+      "type": "boolean",
+      "default": false,
+      "scope": "world",
+      "name": "Rastreamento de Carga (Encumbrance)",
+      "hint": "Calcula penalidades de sobrecarga por excesso de peso no inventário (regra variante do SRD)."
+    },
+    {
+      "key": "collapseItemCards",
+      "type": "boolean",
+      "default": false,
+      "scope": "client",
+      "name": "Cards Compactos no Chat",
+      "hint": "Exibe rolagens e ativações de itens de forma mais enxuta para economizar espaço no chat."
+    },
+    {
+      "key": "learningMilestones",
+      "type": "boolean",
+      "default": true,
+      "scope": "world",
+      "name": "Progressão por Marcos (Milestones)",
+      "hint": "Permite evolução de nível guiada por marcos de história em vez de acúmulo numérico de XP."
+    },
+    {
+      "key": "criticalHitRule",
+      "type": "string",
+      "default": "doubleDice",
+      "scope": "world",
+      "name": "Regra de Dano Crítico",
+      "hint": "Método de cálculo do dano em acertos críticos.",
+      "choices": {
+        "doubleDice": "Dobrar Dados de Dano (SRD)",
+        "maxDice": "Dado Máximo + Rolagem",
+        "flatMax": "Dano Máximo Fixo"
+      }
+    },
+    {
+      "key": "deathSaveDC",
+      "type": "number",
+      "default": 10,
+      "scope": "world",
+      "name": "CD da Salvaguarda Contra a Morte",
+      "hint": "Valor de dificuldade (DC) para testes de resistência contra a morte (padrão 5e é 10)."
+    },
+    {
+      "key": "diagonalMovement",
+      "type": "string",
+      "default": "555",
+      "scope": "world",
+      "name": "Cálculo de Diagonal na Grade",
+      "hint": "Regra de contagem para movimentação diagonal no grid.",
+      "choices": {
+        "555": "5/5/5 ft (Equidistante - Padrão)",
+        "5105": "5/10/5 ft (Variante DMG)"
+      }
+    }
   ]
 }

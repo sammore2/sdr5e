@@ -28,6 +28,7 @@ import { Sdr5eCharacterSheet } from './scripts/character-sheet.mjs';
 import { Sdr5eNpcSheet } from './scripts/npc-sheet.mjs';
 import { Sdr5eItemSheet } from './scripts/item-sheet.mjs';
 import { SDR5EApi } from './scripts/api.mjs';
+import { registerSettings } from './scripts/settings.mjs';
 
 // ── System registration ──────────────────────────────────────────────────
 
@@ -56,6 +57,8 @@ function prepareData(row) {
   else prepCharacter(sd, row.items || []);
   return row;
 }
+
+registerSettings();
 
 SystemRegistry.register(defineSystem({
   id: 'srd5e',
