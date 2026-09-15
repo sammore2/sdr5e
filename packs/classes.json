@@ -3,7 +3,7 @@
   "type": "Item",
   "entries": [
     {
-      "id": "c1d6d381-01f1-4ae7-bca6-bec50970a23c",
+      "id": "cf5f22f6-fb67-484f-b06c-fc97a0c59512",
       "name": "Barbarian",
       "type": "class",
       "data": {
@@ -29,7 +29,7 @@
       }
     },
     {
-      "id": "93ebf7b8-b018-44ba-b758-4b4fe1e391e3",
+      "id": "67a28ca6-19a8-47ab-a844-c2ecd37f20a8",
       "name": "Bard",
       "type": "class",
       "data": {
@@ -55,7 +55,7 @@
       }
     },
     {
-      "id": "ab18ebfe-5ac1-45ff-9857-0eea3c7c0a1c",
+      "id": "0a9e68a0-f1f7-4256-8c99-6cb86fdd5e38",
       "name": "Cleric",
       "type": "class",
       "data": {
@@ -81,7 +81,7 @@
       }
     },
     {
-      "id": "37c29ef9-00bd-4fd7-aff4-746396d54857",
+      "id": "ec427aef-e308-4137-a218-9dcb448ac300",
       "name": "Druid",
       "type": "class",
       "data": {
@@ -107,7 +107,7 @@
       }
     },
     {
-      "id": "53dcb022-cfaf-4d85-8a6a-4f2e3cbc099c",
+      "id": "f38bba28-874e-44f7-b8b6-d9f03140e3c5",
       "name": "Fighter",
       "type": "class",
       "data": {
@@ -133,7 +133,7 @@
       }
     },
     {
-      "id": "4f1db8fc-fc81-4547-b330-f4787a68b29d",
+      "id": "fa858673-fc6a-47c6-9767-d54696fef155",
       "name": "Monk",
       "type": "class",
       "data": {
@@ -159,7 +159,7 @@
       }
     },
     {
-      "id": "d2e03b6c-e72c-4344-9399-3a3ce21cbcb3",
+      "id": "499b6c3b-c44b-4747-8f18-39b0082550e9",
       "name": "Paladin",
       "type": "class",
       "data": {
@@ -185,7 +185,7 @@
       }
     },
     {
-      "id": "b453b3fa-8f90-4143-be78-24a68a500045",
+      "id": "457f68df-4444-4ac9-9fd4-887a0dc44b35",
       "name": "Ranger",
       "type": "class",
       "data": {
@@ -211,7 +211,7 @@
       }
     },
     {
-      "id": "189c9afc-a1c6-4505-91bc-2b1d966c24a1",
+      "id": "007c787f-90f5-43de-a846-f005709f235d",
       "name": "Rogue",
       "type": "class",
       "data": {
@@ -237,7 +237,7 @@
       }
     },
     {
-      "id": "1ab7acc5-6db3-4fae-9aba-1be4d4f3de52",
+      "id": "97568b63-11aa-4df6-bdf8-f5c5c22ddf00",
       "name": "Sorcerer",
       "type": "class",
       "data": {
@@ -263,7 +263,7 @@
       }
     },
     {
-      "id": "4d342c30-9cdd-4772-b06f-a9ce1ef7d2ae",
+      "id": "69c06c04-adcf-4c31-a2b9-9b1a0f1dbc38",
       "name": "Warlock",
       "type": "class",
       "data": {
@@ -289,7 +289,7 @@
       }
     },
     {
-      "id": "ff97ec14-6899-4431-8450-a29b4adc1ea6",
+      "id": "7de2ea26-6183-465c-bf2b-f4c15b93e2ac",
       "name": "Wizard",
       "type": "class",
       "data": {

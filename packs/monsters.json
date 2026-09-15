@@ -3,7 +3,7 @@
   "type": "Actor",
   "entries": [
     {
-      "id": "00b229bb-782e-4403-a6f5-144cc1e2be17",
+      "id": "9010f8ef-bc3c-4251-8165-fb1d7781780e",
       "name": "Aboleth",
       "type": "npc",
       "data": {
@@ -255,7 +255,7 @@
       }
     },
     {
-      "id": "faa907f3-96ba-4f4d-b54a-029ed59c8720",
+      "id": "8ceb6fa0-9eef-4083-8b4a-59e12e25247e",
       "name": "Acolyte (NPC)",
       "type": "npc",
       "data": {
@@ -507,7 +507,7 @@
       }
     },
     {
-      "id": "1a7b46c7-9098-4807-92c4-bef076aed4c8",
+      "id": "6f468533-e725-4572-b475-5759663009e3",
       "name": "Adult Black Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -759,7 +759,7 @@
       }
     },
     {
-      "id": "65598e1f-0156-4e2b-a434-af449e99947c",
+      "id": "29a2bd78-3cd7-45fa-bd82-b396410998c5",
       "name": "Adult Blue Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -1011,7 +1011,7 @@
       }
     },
     {
-      "id": "19866618-a3e7-4f31-8a08-96c3d85b7028",
+      "id": "49c79f9d-7152-44c0-be87-6f34624a5cb4",
       "name": "Adult Brass Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -1263,7 +1263,7 @@
       }
     },
     {
-      "id": "4035a213-a3db-4341-bfe8-ad0216e81e3d",
+      "id": "b3db5aaf-8593-493e-87e0-efe05513d469",
       "name": "Adult Bronze Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -1515,7 +1515,7 @@
       }
     },
     {
-      "id": "e6ceae93-ce71-4d1a-9d46-1a51b46401e9",
+      "id": "3e2b850a-b60d-4734-b628-d11848d269ae",
       "name": "Adult Copper Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -1767,7 +1767,7 @@
       }
     },
     {
-      "id": "be3195f1-bf73-412e-81b5-919ff6a9e0ad",
+      "id": "de060d6d-11c9-4597-8750-452a45bb5a45",
       "name": "Adult Gold Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -2019,7 +2019,7 @@
       }
     },
     {
-      "id": "9d35c856-cbfd-4ba2-a711-186b5af18d5c",
+      "id": "43ee8e66-8ce3-4ca4-a9e0-52ae96e3203d",
       "name": "Adult Green Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -2271,7 +2271,7 @@
       }
     },
     {
-      "id": "2867840b-4fba-4e87-8f5a-5546b0e70a3b",
+      "id": "152e151b-9406-4f38-8ee6-750ce5766021",
       "name": "Adult Red Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -2523,7 +2523,7 @@
       }
     },
     {
-      "id": "a68c3e22-4108-42b9-a862-77d44e9c7bb7",
+      "id": "43c6cae6-ed27-4631-95ee-7248ceb2bf96",
       "name": "Adult Silver Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -2775,7 +2775,7 @@
       }
     },
     {
-      "id": "ae8a6aba-066e-4a2e-93c5-e1b137450e6c",
+      "id": "1448c916-121a-4143-9339-ed49436d8e12",
       "name": "Adult White Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -3027,7 +3027,7 @@
       }
     },
     {
-      "id": "338232e2-a224-4539-b2b6-494f96de33e5",
+      "id": "912c1098-697a-46c9-ab0b-cb87a6a0ed7c",
       "name": "Air Elemental",
       "type": "npc",
       "data": {
@@ -3279,7 +3279,7 @@
       }
     },
     {
-      "id": "79dec059-e506-43b4-9fe9-ea8e602ee30d",
+      "id": "5222e974-7e48-482b-b1e1-2ed7991d201c",
       "name": "Ancient Black Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -3531,7 +3531,7 @@
       }
     },
     {
-      "id": "ceb82cd9-0864-4538-81fa-6dd33eba5261",
+      "id": "80549d6f-f269-41d7-a1ba-a0af5596947d",
       "name": "Ancient Blue Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -3783,7 +3783,7 @@
       }
     },
     {
-      "id": "757b61a5-94d7-42d2-9906-948aab61aaf2",
+      "id": "b774fa7f-64d2-46c9-8d6f-36c3ca47c4f7",
       "name": "Ancient Brass Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -4035,7 +4035,7 @@
       }
     },
     {
-      "id": "57ad94e6-a1b3-40ae-96aa-1a26a7b82fb0",
+      "id": "90c88550-b0a5-484a-b7b1-127dffbfd9e2",
       "name": "Ancient Bronze Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -4287,7 +4287,7 @@
       }
     },
     {
-      "id": "e9567f1b-452f-4049-9011-ae33fddbf02d",
+      "id": "df6bff3d-1beb-40a7-a55a-ec39bb922336",
       "name": "Ancient Copper Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -4539,7 +4539,7 @@
       }
     },
     {
-      "id": "985605c0-d5d9-4051-bc82-c08c17c77633",
+      "id": "311f0f1f-71f6-4cbc-8340-b6f292ddbce6",
       "name": "Ancient Gold Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -4791,7 +4791,7 @@
       }
     },
     {
-      "id": "858ec028-267d-4ed9-baf3-aeb1447cfeda",
+      "id": "bd9fa04f-f0a2-4fdc-9ec5-270c7e9376e3",
       "name": "Ancient Green Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -5043,7 +5043,7 @@
       }
     },
     {
-      "id": "9799a7bc-cdaa-4731-bfb3-19752c9c38f9",
+      "id": "b96ad5dd-5c61-43f7-af01-285dc68c1808",
       "name": "Ancient Red Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -5295,7 +5295,7 @@
       }
     },
     {
-      "id": "12c71ad4-202a-4aca-bb71-2febcad1a16c",
+      "id": "d246be6f-57a5-4473-b9ea-939c53fd0e9a",
       "name": "Ancient Silver Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -5547,7 +5547,7 @@
       }
     },
     {
-      "id": "4ff77c38-a45c-450e-a34f-8a7e6b745d2d",
+      "id": "f42aa1ad-5617-49ad-95d3-9eca89a07867",
       "name": "Ancient White Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -5799,7 +5799,7 @@
       }
     },
     {
-      "id": "331c8204-4a24-4cd7-b628-d649d94fa64c",
+      "id": "3272047e-3a59-4b21-ba1f-6d54c03eca6c",
       "name": "Androsphinx (Sphinx)",
       "type": "npc",
       "data": {
@@ -6051,7 +6051,7 @@
       }
     },
     {
-      "id": "027ed573-c002-440b-86ac-be78db19f17a",
+      "id": "0e98cbb2-2d8a-4f6e-9f60-19dfa3479372",
       "name": "Animated Armor (Animated Object)",
       "type": "npc",
       "data": {
@@ -6303,7 +6303,7 @@
       }
     },
     {
-      "id": "119ca3d8-d4ab-405a-ab55-3dd9d0d2c5e4",
+      "id": "ff7c969b-af31-446c-af46-55ca0a114505",
       "name": "Ankheg",
       "type": "npc",
       "data": {
@@ -6555,7 +6555,7 @@
       }
     },
     {
-      "id": "6ddaef77-524a-40ca-b069-26bcecfe81da",
+      "id": "2ef10cb1-c43a-4e62-b0c6-8bd43ddfce8d",
       "name": "Ape (Creature)",
       "type": "npc",
       "data": {
@@ -6807,7 +6807,7 @@
       }
     },
     {
-      "id": "57bb5184-2908-49eb-b9e5-1deab49ece92",
+      "id": "4436f453-df13-4671-a87f-b64ea99dcaf5",
       "name": "Archmage (NPC)",
       "type": "npc",
       "data": {
@@ -7059,7 +7059,7 @@
       }
     },
     {
-      "id": "9bc196ac-7593-4b13-808e-99e61d34796a",
+      "id": "f1622d6b-51a1-4582-a70c-287cd2d5bab3",
       "name": "Assassin (NPC)",
       "type": "npc",
       "data": {
@@ -7311,7 +7311,7 @@
       }
     },
     {
-      "id": "f5b070d9-250d-4a50-b884-c75a2129e67b",
+      "id": "c348330d-bf41-4a03-abf6-974d981b19da",
       "name": "Awakened Shrub (Creature)",
       "type": "npc",
       "data": {
@@ -7563,7 +7563,7 @@
       }
     },
     {
-      "id": "1d695b8e-5f61-4836-8a26-5e38ca452dfa",
+      "id": "b8bbae40-554a-4d26-bf7a-9ed20df40be8",
       "name": "Awakened Tree (Creature)",
       "type": "npc",
       "data": {
@@ -7815,7 +7815,7 @@
       }
     },
     {
-      "id": "b7eca76a-824c-46f6-adfb-80aca6219784",
+      "id": "00d90582-778f-45f3-982e-ad1345681ff8",
       "name": "Axe Beak (Creature)",
       "type": "npc",
       "data": {
@@ -8067,7 +8067,7 @@
       }
     },
     {
-      "id": "d6a776d4-22e6-46f4-8ba4-50a49145d58f",
+      "id": "cae86899-3693-4541-a279-5f1e566fce5e",
       "name": "Azer",
       "type": "npc",
       "data": {
@@ -8319,7 +8319,7 @@
       }
     },
     {
-      "id": "2c3c24bb-5798-4d28-8ee3-6ea6137d111a",
+      "id": "9d491a74-9e92-405c-bb0c-9020278ee129",
       "name": "Baboon (Creature)",
       "type": "npc",
       "data": {
@@ -8571,7 +8571,7 @@
       }
     },
     {
-      "id": "32547812-e939-4530-89d2-2a40e826c01c",
+      "id": "a9704897-c96a-456c-ba5b-0083b211d2ed",
       "name": "Badger (Creature)",
       "type": "npc",
       "data": {
@@ -8823,7 +8823,7 @@
       }
     },
     {
-      "id": "84e77ced-90ea-45f7-ab52-b9ee12e58591",
+      "id": "2226fd9b-3bc6-476a-b9b5-08c9baa01a80",
       "name": "Balor (Demon)",
       "type": "npc",
       "data": {
@@ -9075,7 +9075,7 @@
       }
     },
     {
-      "id": "2f270f32-13ba-4769-8e07-9f6a16aa2843",
+      "id": "a1333ede-1ea4-4201-b443-348b7d6ecb9f",
       "name": "Bandit (NPC)",
       "type": "npc",
       "data": {
@@ -9327,7 +9327,7 @@
       }
     },
     {
-      "id": "6c299f87-8a7a-4717-8cc4-c55b42465d11",
+      "id": "3c62d915-b3f4-4310-8999-606fd5c47a1d",
       "name": "Bandit Captain (NPC)",
       "type": "npc",
       "data": {
@@ -9579,7 +9579,7 @@
       }
     },
     {
-      "id": "6ad12939-c2e4-40c0-a826-3f0d0891d731",
+      "id": "724c4ecd-8c62-46d7-899b-76dd1c09936f",
       "name": "Barbed Devil (Devil)",
       "type": "npc",
       "data": {
@@ -9831,7 +9831,7 @@
       }
     },
     {
-      "id": "8242e09f-3134-45cb-b665-ef2383ddf3b5",
+      "id": "18766858-f59d-417f-be73-f34ab1303520",
       "name": "Basilisk",
       "type": "npc",
       "data": {
@@ -10083,7 +10083,7 @@
       }
     },
     {
-      "id": "d134035b-d681-4b95-a879-a8bd0b197d6e",
+      "id": "491a8053-631f-4d25-82cb-ead0d844fbfe",
       "name": "Bat (Creature)",
       "type": "npc",
       "data": {
@@ -10335,7 +10335,7 @@
       }
     },
     {
-      "id": "acfae750-7835-4382-8cac-5709452d48f3",
+      "id": "cc4ec9c0-db7c-4adc-8936-3cc0a8fc9f0e",
       "name": "Bearded Devil (Devil)",
       "type": "npc",
       "data": {
@@ -10587,7 +10587,7 @@
       }
     },
     {
-      "id": "5436801c-67f9-4cb1-b960-169f415c9f73",
+      "id": "90567337-c619-43c5-858e-2a2902d40a25",
       "name": "Behir",
       "type": "npc",
       "data": {
@@ -10839,7 +10839,7 @@
       }
     },
     {
-      "id": "f32f3195-9a2b-4369-a370-5cc9bfdbcb4b",
+      "id": "3914fddb-e12e-4d8c-b53b-1b0f55c6b029",
       "name": "Berserker (NPC)",
       "type": "npc",
       "data": {
@@ -11091,7 +11091,7 @@
       }
     },
     {
-      "id": "6c61da1a-77be-4d23-8153-b26d83320c3c",
+      "id": "6f08e6ee-5e7c-4f2e-8a27-c348227afd13",
       "name": "Black Bear (Creature)",
       "type": "npc",
       "data": {
@@ -11343,7 +11343,7 @@
       }
     },
     {
-      "id": "9fb0ac1d-2195-4f4d-ae01-2118abaebffd",
+      "id": "7f355425-a373-4e09-94a3-0e047f8fce89",
       "name": "Black Pudding (Ooze)",
       "type": "npc",
       "data": {
@@ -11595,7 +11595,7 @@
       }
     },
     {
-      "id": "a2bb162c-f23b-45b5-9edd-f20c3c18e288",
+      "id": "de16ddba-513c-406e-bf41-2230463cfa33",
       "name": "Blink Dog (Creature)",
       "type": "npc",
       "data": {
@@ -11847,7 +11847,7 @@
       }
     },
     {
-      "id": "9b572ae8-b03c-4c47-9729-fb1830192b5e",
+      "id": "0e72e832-3e4f-4c55-a051-57868e8214fa",
       "name": "Blood Hawk (Creature)",
       "type": "npc",
       "data": {
@@ -12099,7 +12099,7 @@
       }
     },
     {
-      "id": "54f62a3a-9f4a-4d00-9f62-789cef9f7c55",
+      "id": "412e7e59-466c-49fd-adb1-ddfd08c057cf",
       "name": "Boar (Creature)",
       "type": "npc",
       "data": {
@@ -12351,7 +12351,7 @@
       }
     },
     {
-      "id": "63abc633-968f-4567-a839-1e82a86e4f61",
+      "id": "b8dae0c3-9db1-4da7-b8d4-36f436d1ff75",
       "name": "Bone Devil (Devil)",
       "type": "npc",
       "data": {
@@ -12603,7 +12603,7 @@
       }
     },
     {
-      "id": "b0ba93ca-778a-4511-84fc-a456a105dc57",
+      "id": "3c05205c-140c-4bad-8c4f-154b823ff3a5",
       "name": "Brown Bear (Creature)",
       "type": "npc",
       "data": {
@@ -12855,7 +12855,7 @@
       }
     },
     {
-      "id": "41c243ae-070f-4710-8ba7-21da65898f63",
+      "id": "b02a2b76-dbd3-4665-b5cd-08617d6f6920",
       "name": "Bugbear",
       "type": "npc",
       "data": {
@@ -13107,7 +13107,7 @@
       }
     },
     {
-      "id": "72540b59-f4bc-4190-89aa-4555bfcbbed1",
+      "id": "24e029be-1989-4973-bfdb-bf3b88941d6e",
       "name": "Bulette",
       "type": "npc",
       "data": {
@@ -13359,7 +13359,7 @@
       }
     },
     {
-      "id": "e2bc0d04-ccfb-42ad-b877-c3952be476af",
+      "id": "5063e149-62f6-4a8a-8ef7-40e012085427",
       "name": "Camel (Creature)",
       "type": "npc",
       "data": {
@@ -13611,7 +13611,7 @@
       }
     },
     {
-      "id": "3968e82f-ed21-4c5b-bd5a-d318a4aa28af",
+      "id": "4244c7e2-3362-4955-bff1-59abdfa1d05c",
       "name": "Cat (Creature)",
       "type": "npc",
       "data": {
@@ -13863,7 +13863,7 @@
       }
     },
     {
-      "id": "ef691dd5-8eda-430e-9edd-14b2c0451c77",
+      "id": "684518be-0710-4d62-996a-be5e99cad00d",
       "name": "Centaur",
       "type": "npc",
       "data": {
@@ -14115,7 +14115,7 @@
       }
     },
     {
-      "id": "6f7889ca-bd70-470e-9cf1-45a6252704dd",
+      "id": "60fcaff0-d7c2-4567-be5c-bd079e090502",
       "name": "Chain Devil (Devil)",
       "type": "npc",
       "data": {
@@ -14367,7 +14367,7 @@
       }
     },
     {
-      "id": "b5b194bd-5688-4a23-b4c9-a87891b659eb",
+      "id": "822f4a41-d988-4bde-a1ac-e9e5af28784b",
       "name": "Chimera",
       "type": "npc",
       "data": {
@@ -14619,7 +14619,7 @@
       }
     },
     {
-      "id": "7fbc7ae7-0f26-40a5-8180-4224a07a0f78",
+      "id": "703c6b67-23f2-4bb6-b612-a7bd6d89fd25",
       "name": "Chuul",
       "type": "npc",
       "data": {
@@ -14871,7 +14871,7 @@
       }
     },
     {
-      "id": "3efa4896-613a-4551-8139-a8cc8b6ed57f",
+      "id": "79274640-7d64-4bb2-8103-f0f066504a41",
       "name": "Clay Golem",
       "type": "npc",
       "data": {
@@ -15123,7 +15123,7 @@
       }
     },
     {
-      "id": "c69dd5d0-944d-4e62-88cf-d40591810b8d",
+      "id": "a0f43a84-7773-4ce1-b251-4a04ace3e5fc",
       "name": "Cloaker",
       "type": "npc",
       "data": {
@@ -15375,7 +15375,7 @@
       }
     },
     {
-      "id": "5dc311be-3213-4b11-b37e-44649410674c",
+      "id": "feff7f3f-8e28-4695-b986-42f91990c332",
       "name": "Cloud Giant (Giant)",
       "type": "npc",
       "data": {
@@ -15627,7 +15627,7 @@
       }
     },
     {
-      "id": "22b8e029-8d50-4f24-a132-d87bc65e1bb1",
+      "id": "90adbcbf-2832-4bfb-85dc-988b669c55ac",
       "name": "Cockatrice",
       "type": "npc",
       "data": {
@@ -15879,7 +15879,7 @@
       }
     },
     {
-      "id": "47e8ba85-b241-438c-b4cd-6e22ef08ab46",
+      "id": "f3a1564f-8222-4363-ab08-ed9bf95e4a1e",
       "name": "Commoner (NPC)",
       "type": "npc",
       "data": {
@@ -16131,7 +16131,7 @@
       }
     },
     {
-      "id": "6fff609c-99d3-4ba8-8bc0-acf72034253d",
+      "id": "9c218f28-5122-4368-a973-6c9dfdb9ef3f",
       "name": "Constrictor Snake (Creature)",
       "type": "npc",
       "data": {
@@ -16383,7 +16383,7 @@
       }
     },
     {
-      "id": "807d3215-eccb-4bb3-b85e-17b5313c41d8",
+      "id": "48e57827-ca02-4c45-8eac-03631893857a",
       "name": "Couatl",
       "type": "npc",
       "data": {
@@ -16635,7 +16635,7 @@
       }
     },
     {
-      "id": "69f9d763-4985-4560-b859-6ae6ae2f8f90",
+      "id": "3a3d364b-8181-4b97-ab78-0b5c745e700e",
       "name": "Crab (Creature)",
       "type": "npc",
       "data": {
@@ -16887,7 +16887,7 @@
       }
     },
     {
-      "id": "3e95ef97-f7c5-45c4-b0e4-b8d7119aa82d",
+      "id": "1e04d80b-7b7c-422c-b5c5-8a088e1fcf9e",
       "name": "Crocodile (Creature)",
       "type": "npc",
       "data": {
@@ -17139,7 +17139,7 @@
       }
     },
     {
-      "id": "bb96d7cc-121e-4800-acb1-33a8cc1f0bdf",
+      "id": "5f08baa1-7263-49bd-87af-5f545e3ce9d0",
       "name": "Cult Fanatic (NPC)",
       "type": "npc",
       "data": {
@@ -17391,7 +17391,7 @@
       }
     },
     {
-      "id": "b2f507ec-d949-4451-960e-58882817d125",
+      "id": "af019436-85d4-4445-a345-63f38b303273",
       "name": "Cultist (NPC)",
       "type": "npc",
       "data": {
@@ -17643,7 +17643,7 @@
       }
     },
     {
-      "id": "f7ee7008-9dce-43ff-8f74-aacb776e9668",
+      "id": "2eef2aab-f84c-4a54-8b54-c5e6b025ba0e",
       "name": "Customizing NPCs (NPC)",
       "type": "npc",
       "data": {
@@ -17895,7 +17895,7 @@
       }
     },
     {
-      "id": "32ae1fd6-fa45-4ceb-8d52-31d3cb3e7226",
+      "id": "1c264ff9-f27d-4c15-a0f5-803f3ae7accb",
       "name": "Darkmantle",
       "type": "npc",
       "data": {
@@ -18147,7 +18147,7 @@
       }
     },
     {
-      "id": "80e0e376-5336-402b-acf1-45786a45903d",
+      "id": "34f7c0a1-e2b7-415b-9055-4c992d9cba7a",
       "name": "Death Dog (Creature)",
       "type": "npc",
       "data": {
@@ -18399,7 +18399,7 @@
       }
     },
     {
-      "id": "14708aed-7d05-473e-b2fb-50346292c757",
+      "id": "d49b7d26-8771-47c8-beb7-6060f1bcdb9f",
       "name": "Deer (Creature)",
       "type": "npc",
       "data": {
@@ -18651,7 +18651,7 @@
       }
     },
     {
-      "id": "00cc032e-ebf7-4275-831d-0ad9a57d32a1",
+      "id": "2a9b3453-a426-4edc-94ec-2964ee694b1f",
       "name": "Deva (Angel)",
       "type": "npc",
       "data": {
@@ -18903,7 +18903,7 @@
       }
     },
     {
-      "id": "03c2055f-7b29-4ab2-97c9-50d1fc2d988c",
+      "id": "3c78506c-0725-431b-8a92-08ae876fc312",
       "name": "Dire Wolf (Creature)",
       "type": "npc",
       "data": {
@@ -19155,7 +19155,7 @@
       }
     },
     {
-      "id": "f18e853d-7174-43ce-9c7c-c7f259bd0cfe",
+      "id": "94445d3c-f80b-49ad-a7b7-eaf071e4f07b",
       "name": "Djinni (Genie)",
       "type": "npc",
       "data": {
@@ -19407,7 +19407,7 @@
       }
     },
     {
-      "id": "94ba48bc-76f0-45a8-994b-86ce7273cb8d",
+      "id": "85a08740-6bbd-428a-8b9c-cf4be8fa1865",
       "name": "Doppelganger",
       "type": "npc",
       "data": {
@@ -19659,7 +19659,7 @@
       }
     },
     {
-      "id": "ba32321a-ff13-4723-ac42-ae96a8efbee6",
+      "id": "9fb6f8f6-b32e-442f-b728-4bdda0e73faf",
       "name": "Draft Horse (Creature)",
       "type": "npc",
       "data": {
@@ -19911,7 +19911,7 @@
       }
     },
     {
-      "id": "b445ef41-8fde-4cd6-bc8b-adf92970fe1f",
+      "id": "06a72c16-019b-48e8-b9eb-0ee12f5e80a3",
       "name": "Dragon Turtle",
       "type": "npc",
       "data": {
@@ -20163,7 +20163,7 @@
       }
     },
     {
-      "id": "89a768c2-9a7c-40f1-bf12-4c5d1d20bbd4",
+      "id": "9221a980-57d4-4586-992b-820571c8b363",
       "name": "Dretch (Demon)",
       "type": "npc",
       "data": {
@@ -20415,7 +20415,7 @@
       }
     },
     {
-      "id": "dd153c61-93bc-4405-bfba-c7f6411d43f1",
+      "id": "53691ed9-7e4e-4c70-b9ff-dc2dbc8963b7",
       "name": "Drider",
       "type": "npc",
       "data": {
@@ -20667,7 +20667,7 @@
       }
     },
     {
-      "id": "3dbb9de1-7fcb-4e98-bc48-84613fb2b36e",
+      "id": "1b85af6e-41cd-4de2-9557-89f5447d46f6",
       "name": "Druid (NPC)",
       "type": "npc",
       "data": {
@@ -20919,7 +20919,7 @@
       }
     },
     {
-      "id": "618f65b2-9cfe-42be-8de9-5d7c494e6d18",
+      "id": "892af942-a4fe-440d-b428-210ce60c1db8",
       "name": "Dryad",
       "type": "npc",
       "data": {
@@ -21171,7 +21171,7 @@
       }
     },
     {
-      "id": "3095e405-7584-4944-a48b-63a07e9244b6",
+      "id": "5b0b0cf2-46eb-4d1b-944e-f37925e152f9",
       "name": "Duergar",
       "type": "npc",
       "data": {
@@ -21423,7 +21423,7 @@
       }
     },
     {
-      "id": "ad698576-ecd7-4a6c-aa96-48525b67218e",
+      "id": "d3f94b14-cc83-45c2-bba9-6fc0536b3ca3",
       "name": "Dust Mephit",
       "type": "npc",
       "data": {
@@ -21675,7 +21675,7 @@
       }
     },
     {
-      "id": "6711f025-8e23-4ea0-ab27-db35188dbf4f",
+      "id": "9a827c7a-4f1a-4dbf-9ac4-a25ad0f517a8",
       "name": "Eagle (Creature)",
       "type": "npc",
       "data": {
@@ -21927,7 +21927,7 @@
       }
     },
     {
-      "id": "7431dcb4-56d2-4e21-bf49-0b99c0d91401",
+      "id": "d3144e47-8592-4870-9630-6a5f137eac02",
       "name": "Earth Elemental",
       "type": "npc",
       "data": {
@@ -22179,7 +22179,7 @@
       }
     },
     {
-      "id": "a8e096db-8646-42fb-b543-1a2c0dd9bbf5",
+      "id": "b6bd62c9-8d19-4b87-8f3e-f0159b59d2a6",
       "name": "Efreeti (Genie)",
       "type": "npc",
       "data": {
@@ -22431,7 +22431,7 @@
       }
     },
     {
-      "id": "2864c786-c2f6-49a7-bee1-0d00bfed3c24",
+      "id": "363e3d97-95cf-454a-b4a0-f1416bd314df",
       "name": "Elephant (Creature)",
       "type": "npc",
       "data": {
@@ -22683,7 +22683,7 @@
       }
     },
     {
-      "id": "b837fe39-75d5-457d-a731-1a9c46f565b8",
+      "id": "e481415c-4e18-4752-90e4-9d815ac9cb05",
       "name": "Elf, Drow",
       "type": "npc",
       "data": {
@@ -22935,7 +22935,7 @@
       }
     },
     {
-      "id": "6996a741-8de6-4fab-a0b1-2f2e21ae4fd9",
+      "id": "19adc668-41e2-4087-9022-c027ca08a906",
       "name": "Elk (Creature)",
       "type": "npc",
       "data": {
@@ -23187,7 +23187,7 @@
       }
     },
     {
-      "id": "8f9c3d07-2f23-4ff6-88b6-ea8a560d8294",
+      "id": "105cd9f2-ff5e-4c4f-848b-9270669bb6a8",
       "name": "Erinyes (Devil)",
       "type": "npc",
       "data": {
@@ -23439,7 +23439,7 @@
       }
     },
     {
-      "id": "83957580-6eb6-4d75-9148-5fc9e4de2dd9",
+      "id": "a3bf2897-e088-4aea-8a58-f726b33155e6",
       "name": "Ettercap",
       "type": "npc",
       "data": {
@@ -23691,7 +23691,7 @@
       }
     },
     {
-      "id": "b6fdc2de-d3c0-4735-ac3d-695a2fb657f7",
+      "id": "1412a324-5fba-48ff-94e4-51aae4cb05ba",
       "name": "Ettin",
       "type": "npc",
       "data": {
@@ -23943,7 +23943,7 @@
       }
     },
     {
-      "id": "d6f38d87-459e-49b5-9084-cdb20bc74d18",
+      "id": "6c4beaee-1740-436f-b1e5-6a35527526f8",
       "name": "Fire Elemental",
       "type": "npc",
       "data": {
@@ -24195,7 +24195,7 @@
       }
     },
     {
-      "id": "3f3bf9c9-4d59-47ef-a2f2-c62d571d879a",
+      "id": "e8c6a7a0-1a7d-4979-993b-56b319028b84",
       "name": "Fire Giant (Giant)",
       "type": "npc",
       "data": {
@@ -24447,7 +24447,7 @@
       }
     },
     {
-      "id": "9656d176-187a-4033-ba98-03ccba5016f6",
+      "id": "01bb1eea-8d28-442b-873a-d4d5ef9e2672",
       "name": "Flesh Golem",
       "type": "npc",
       "data": {
@@ -24699,7 +24699,7 @@
       }
     },
     {
-      "id": "64d2c8eb-821a-4940-aea7-2a807d1c207a",
+      "id": "23af10f8-da12-49df-bd86-f4311aa43487",
       "name": "Flying Snake (Creature)",
       "type": "npc",
       "data": {
@@ -24951,7 +24951,7 @@
       }
     },
     {
-      "id": "2077087d-6dca-4bb2-a540-de08317c03f6",
+      "id": "0ce9a948-2c08-404b-b27b-80155c62bd2b",
       "name": "Flying Sword (Animated Object)",
       "type": "npc",
       "data": {
@@ -25203,7 +25203,7 @@
       }
     },
     {
-      "id": "124df3ba-98bc-470c-804b-cbebbbcd63ab",
+      "id": "e5313077-8d0d-4bce-b696-f5ff70f6416b",
       "name": "Frog (Creature)",
       "type": "npc",
       "data": {
@@ -25455,7 +25455,7 @@
       }
     },
     {
-      "id": "312d3c01-5804-4ab5-8701-9505695dec2e",
+      "id": "5f3ec64c-ad75-4b21-97b4-2732bd89c7eb",
       "name": "Frost Giant (Giant)",
       "type": "npc",
       "data": {
@@ -25707,7 +25707,7 @@
       }
     },
     {
-      "id": "16b6e183-e163-4d73-8ba5-19740434693b",
+      "id": "9e10d82d-352c-40fd-8668-f4614037554f",
       "name": "Gargoyle",
       "type": "npc",
       "data": {
@@ -25959,7 +25959,7 @@
       }
     },
     {
-      "id": "9607ff0a-98f4-477b-a261-c69e10da5bd2",
+      "id": "3128beaa-fa4d-4a1c-8da4-83278609d357",
       "name": "Gelatinous Cube (Ooze)",
       "type": "npc",
       "data": {
@@ -26211,7 +26211,7 @@
       }
     },
     {
-      "id": "1a7cd3a7-4b90-45e4-9024-4d93b0ddb75b",
+      "id": "44a398f9-8b72-4d22-8009-491463060021",
       "name": "Ghast (Ghoul)",
       "type": "npc",
       "data": {
@@ -26463,7 +26463,7 @@
       }
     },
     {
-      "id": "af56bb94-58e5-4b93-acfc-0e8f399362c7",
+      "id": "cd4918f9-5f05-4e74-ac3c-dadcc9c1a929",
       "name": "Ghost",
       "type": "npc",
       "data": {
@@ -26715,7 +26715,7 @@
       }
     },
     {
-      "id": "89e1eb58-27a2-427a-80e6-6429d89f24a2",
+      "id": "bffefcb2-26eb-42c4-8a35-ca720afbb468",
       "name": "Ghoul",
       "type": "npc",
       "data": {
@@ -26967,7 +26967,7 @@
       }
     },
     {
-      "id": "df884747-229b-463f-a735-a65ed0c85005",
+      "id": "52bfe5d1-8f74-4dc9-a0c5-aa847507886e",
       "name": "Giant Ape (Creature)",
       "type": "npc",
       "data": {
@@ -27219,7 +27219,7 @@
       }
     },
     {
-      "id": "34af71f4-c432-4856-9ffb-2ed6b3f821bf",
+      "id": "4a737811-d5e1-41fa-a327-f9d8f0d8c4c4",
       "name": "Giant Badger (Creature)",
       "type": "npc",
       "data": {
@@ -27471,7 +27471,7 @@
       }
     },
     {
-      "id": "d66cd2a4-c692-4d4c-9a52-0574c06bb861",
+      "id": "77668392-d5f4-4def-8aac-cafe3dafa82b",
       "name": "Giant Bat (Creature)",
       "type": "npc",
       "data": {
@@ -27723,7 +27723,7 @@
       }
     },
     {
-      "id": "5b6efe5b-6c44-463a-bdec-bcd9f92feea9",
+      "id": "f840cc25-ba30-4d91-9ac0-55165990b5c0",
       "name": "Giant Boar (Creature)",
       "type": "npc",
       "data": {
@@ -27975,7 +27975,7 @@
       }
     },
     {
-      "id": "587e8e94-4e74-4559-acd8-28ee53d8e3f9",
+      "id": "2312cb21-b496-41b2-b6d9-933b76bd27d4",
       "name": "Giant Centipede (Creature)",
       "type": "npc",
       "data": {
@@ -28227,7 +28227,7 @@
       }
     },
     {
-      "id": "e296c60a-5c15-4810-855b-479217e786d1",
+      "id": "6897ec03-710b-444f-93c9-3050dcb97ba5",
       "name": "Giant Constrictor Snake (Creature)",
       "type": "npc",
       "data": {
@@ -28479,7 +28479,7 @@
       }
     },
     {
-      "id": "24e560d6-6fc0-4f0c-8a50-bbe440eaa3af",
+      "id": "cd81f749-8dbd-4e32-8529-e5fd078e6529",
       "name": "Giant Crab (Creature)",
       "type": "npc",
       "data": {
@@ -28731,7 +28731,7 @@
       }
     },
     {
-      "id": "b286c6e9-ce94-4a60-ae9c-88f91330550c",
+      "id": "33db28ac-2de8-4857-9ab8-8edab75c6fb7",
       "name": "Giant Crocodile (Creature)",
       "type": "npc",
       "data": {
@@ -28983,7 +28983,7 @@
       }
     },
     {
-      "id": "71d212ff-33b0-40c4-9729-444dc4dae3b0",
+      "id": "ee77df8a-5313-4e9c-8fbb-6cae308cf3be",
       "name": "Giant Eagle (Creature)",
       "type": "npc",
       "data": {
@@ -29235,7 +29235,7 @@
       }
     },
     {
-      "id": "05044341-c4e9-4149-bce9-6a30989ae91b",
+      "id": "b02436e0-1d5c-4543-a8c9-b45b4f916ff5",
       "name": "Giant Elk (Creature)",
       "type": "npc",
       "data": {
@@ -29487,7 +29487,7 @@
       }
     },
     {
-      "id": "f61b0dbb-a04d-4721-b19a-6876790bcd9c",
+      "id": "780c2866-fcea-4cfb-8eb6-3c2c715170c5",
       "name": "Giant Fire Beetle (Creature)",
       "type": "npc",
       "data": {
@@ -29739,7 +29739,7 @@
       }
     },
     {
-      "id": "b397658c-2a16-4f2e-b5a2-907af4b2c1b6",
+      "id": "cfd0dd69-987b-4cf3-8227-f1a77fac3a47",
       "name": "Giant Frog (Creature)",
       "type": "npc",
       "data": {
@@ -29991,7 +29991,7 @@
       }
     },
     {
-      "id": "112c956e-91f7-4b77-9797-614738776895",
+      "id": "5ef3b5ed-c7b1-4478-a9a2-4cba9fa41718",
       "name": "Giant Goat (Creature)",
       "type": "npc",
       "data": {
@@ -30243,7 +30243,7 @@
       }
     },
     {
-      "id": "78178bca-1e92-4680-b08e-1fe188a24c89",
+      "id": "7116cb8d-1cac-462c-b56e-8f7754a55812",
       "name": "Giant Hyena (Creature)",
       "type": "npc",
       "data": {
@@ -30495,7 +30495,7 @@
       }
     },
     {
-      "id": "0eafe461-65c9-4f0f-8bbd-f025d7c9a00d",
+      "id": "9d0297e7-13d1-40f5-b3c0-2c011cd893d3",
       "name": "Giant Lizard (Creature)",
       "type": "npc",
       "data": {
@@ -30747,7 +30747,7 @@
       }
     },
     {
-      "id": "e7bdd768-558f-460d-9642-8fef3034b642",
+      "id": "24e9a340-2e71-419a-bb2f-23e017e95c1c",
       "name": "Giant Octopus (Creature)",
       "type": "npc",
       "data": {
@@ -30999,7 +30999,7 @@
       }
     },
     {
-      "id": "c35fd67f-f178-4fd1-bc71-371d32048b55",
+      "id": "3991ad61-2a85-4f36-8ec2-201797ef2ab4",
       "name": "Giant Owl (Creature)",
       "type": "npc",
       "data": {
@@ -31251,7 +31251,7 @@
       }
     },
     {
-      "id": "980b45fa-2a61-4be0-9094-b49339c493cb",
+      "id": "5375eded-f11e-4caf-96b7-c2ed255f2a03",
       "name": "Giant Poisonous Snake (Creature)",
       "type": "npc",
       "data": {
@@ -31503,7 +31503,7 @@
       }
     },
     {
-      "id": "e9cfae20-918a-490b-b398-9fb9099e2d5a",
+      "id": "71f27776-a3f1-48eb-bccb-0e93e51f488d",
       "name": "Giant Rat (Creature)",
       "type": "npc",
       "data": {
@@ -31755,7 +31755,7 @@
       }
     },
     {
-      "id": "80698a0a-2106-47e4-8d79-5388483ccebc",
+      "id": "618af344-7f51-4f8c-81c8-daa99aee5d70",
       "name": "Giant Scorpion (Creature)",
       "type": "npc",
       "data": {
@@ -32007,7 +32007,7 @@
       }
     },
     {
-      "id": "0c4d0796-07a0-4e1d-9f47-e7fb66f2f0e5",
+      "id": "a674bcae-af31-4248-8ae7-592ce4246f3e",
       "name": "Giant Sea Horse (Creature)",
       "type": "npc",
       "data": {
@@ -32259,7 +32259,7 @@
       }
     },
     {
-      "id": "ce25d8a4-8f67-4761-b513-a98b7eb9b6db",
+      "id": "9ab46f56-8d69-44c5-ad33-f8e7ef17f35a",
       "name": "Giant Shark (Creature)",
       "type": "npc",
       "data": {
@@ -32511,7 +32511,7 @@
       }
     },
     {
-      "id": "83651b16-f919-4abf-b34a-f996bc7b4202",
+      "id": "28052a5a-2ddc-4a51-b6ef-615e99e82b01",
       "name": "Giant Spider (Creature)",
       "type": "npc",
       "data": {
@@ -32763,7 +32763,7 @@
       }
     },
     {
-      "id": "613d43bd-8cee-4e45-98ae-c36f8b0d7ec6",
+      "id": "bbb6df49-4561-4780-ad73-d4f42cc5ee60",
       "name": "Giant Toad (Creature)",
       "type": "npc",
       "data": {
@@ -33015,7 +33015,7 @@
       }
     },
     {
-      "id": "efc71f9c-5523-4392-a903-113203b86bf9",
+      "id": "abc4e236-6caa-4c26-a896-0f46408e295d",
       "name": "Giant Vulture (Creature)",
       "type": "npc",
       "data": {
@@ -33267,7 +33267,7 @@
       }
     },
     {
-      "id": "492c29da-c550-44d7-b8a4-7325d36be910",
+      "id": "cf00f2bb-a31c-44ee-87f8-dbe2f6f324cd",
       "name": "Giant Wasp (Creature)",
       "type": "npc",
       "data": {
@@ -33519,7 +33519,7 @@
       }
     },
     {
-      "id": "20e0500e-652c-46a2-8cfd-9513536603f6",
+      "id": "38967bd3-0c52-4818-a8ac-8876825a76f1",
       "name": "Giant Weasel (Creature)",
       "type": "npc",
       "data": {
@@ -33771,7 +33771,7 @@
       }
     },
     {
-      "id": "c3995141-db4b-4e2f-bb2d-73bd50008a80",
+      "id": "49c95eb3-734a-4540-90c9-bd98acbb4473",
       "name": "Giant Wolf Spider (Creature)",
       "type": "npc",
       "data": {
@@ -34023,7 +34023,7 @@
       }
     },
     {
-      "id": "d9175370-5823-463d-bb1f-1559afd29c0d",
+      "id": "bbd22705-303e-4f01-83d8-a833d482dbab",
       "name": "Gibbering Mouther",
       "type": "npc",
       "data": {
@@ -34275,7 +34275,7 @@
       }
     },
     {
-      "id": "0efb5599-b83b-4792-b148-bd9e45832b01",
+      "id": "925d149e-6a40-4d29-a0e2-f1326595663b",
       "name": "Glabrezu (Demon)",
       "type": "npc",
       "data": {
@@ -34527,7 +34527,7 @@
       }
     },
     {
-      "id": "1469c549-b90e-4025-a378-df20dc81d9cf",
+      "id": "61cd45c2-f42b-4451-a7d3-963879d5d879",
       "name": "Gladiator (NPC)",
       "type": "npc",
       "data": {
@@ -34779,7 +34779,7 @@
       }
     },
     {
-      "id": "02e5d206-eb59-4061-91d2-c7081c0eeab6",
+      "id": "f8fb1c5e-409f-457f-88a9-e65b32c87ba0",
       "name": "Gnoll",
       "type": "npc",
       "data": {
@@ -35031,7 +35031,7 @@
       }
     },
     {
-      "id": "9965761f-15dd-4b93-9f85-516386161b2c",
+      "id": "8d7dc3d6-f9f7-4ac8-9a66-ff3b073c327c",
       "name": "Gnome, Deep (Svirfneblin)",
       "type": "npc",
       "data": {
@@ -35283,7 +35283,7 @@
       }
     },
     {
-      "id": "6d1601d3-8997-4093-a1d1-670eb9311992",
+      "id": "1abb9ee4-e940-4842-9d6c-87912a6f7e6e",
       "name": "Goat (Creature)",
       "type": "npc",
       "data": {
@@ -35535,7 +35535,7 @@
       }
     },
     {
-      "id": "914c1102-1af5-485e-99fc-d5c10a02aa1e",
+      "id": "6ed67812-878a-48e3-baab-e7e6d9586bad",
       "name": "Goblin",
       "type": "npc",
       "data": {
@@ -35787,7 +35787,7 @@
       }
     },
     {
-      "id": "42468b8b-dc84-4f04-b34b-9bdd01cea0c6",
+      "id": "30f675fd-398d-4bfe-b121-4376aeef975d",
       "name": "Gorgon",
       "type": "npc",
       "data": {
@@ -36039,7 +36039,7 @@
       }
     },
     {
-      "id": "05061ab6-53cb-40da-ac84-efc174fb94df",
+      "id": "589143c7-d330-450d-a0b4-cb5b9e0050be",
       "name": "Gray Ooze",
       "type": "npc",
       "data": {
@@ -36291,7 +36291,7 @@
       }
     },
     {
-      "id": "8c3e2e50-15c9-4e9b-8333-fc61d37f0997",
+      "id": "265b7584-e7c7-428e-b949-412c84f773b9",
       "name": "Green Hag",
       "type": "npc",
       "data": {
@@ -36543,7 +36543,7 @@
       }
     },
     {
-      "id": "d9b02980-48a1-479b-9836-fce46f5ed8ef",
+      "id": "409e4d3e-3416-4aee-b0f6-dc81a2997544",
       "name": "Grick",
       "type": "npc",
       "data": {
@@ -36795,7 +36795,7 @@
       }
     },
     {
-      "id": "22a8348a-a7f1-4ab0-bb0a-980e3957d55d",
+      "id": "908c8c42-a030-4718-b8c7-1d687c418af3",
       "name": "Griffon",
       "type": "npc",
       "data": {
@@ -37047,7 +37047,7 @@
       }
     },
     {
-      "id": "ca938186-5690-448c-902e-2932d61535fa",
+      "id": "7ddc5f75-b1c8-4f1c-87ea-14e0216fe0bf",
       "name": "Grimlock",
       "type": "npc",
       "data": {
@@ -37299,7 +37299,7 @@
       }
     },
     {
-      "id": "dae75326-2c36-4cd1-aa5f-7d3b165cd3c8",
+      "id": "1abb7395-737e-476d-9e23-514ef27cd917",
       "name": "Guard (NPC)",
       "type": "npc",
       "data": {
@@ -37551,7 +37551,7 @@
       }
     },
     {
-      "id": "e5cb2988-dfdf-4f05-b6d1-3459b40a5117",
+      "id": "119e1fc6-4f1a-40d3-88fe-7323f7b5bcc5",
       "name": "Guardian Naga",
       "type": "npc",
       "data": {
@@ -37803,7 +37803,7 @@
       }
     },
     {
-      "id": "7e90f3e1-daf2-4a76-bb14-11d983e6e69b",
+      "id": "8b62dc9a-f4b9-40ac-8911-cf2ec9219175",
       "name": "Gynosphinx (Sphinx)",
       "type": "npc",
       "data": {
@@ -38055,7 +38055,7 @@
       }
     },
     {
-      "id": "b9a89e29-5f08-4efb-bf62-6912f18895d8",
+      "id": "966eb2ea-5aae-419d-a6b8-762f341be0b0",
       "name": "Half-Dragon Template",
       "type": "npc",
       "data": {
@@ -38307,7 +38307,7 @@
       }
     },
     {
-      "id": "7733b5e2-749d-49be-9383-c72f8843c3e8",
+      "id": "e84a9706-3f6a-4493-b1c5-7a44d1177674",
       "name": "Harpy",
       "type": "npc",
       "data": {
@@ -38559,7 +38559,7 @@
       }
     },
     {
-      "id": "e05320fc-6ce4-47fc-bb4b-74625e8d078d",
+      "id": "84e95894-0995-4889-982e-7fa0512bc2f5",
       "name": "Hawk (Creature)",
       "type": "npc",
       "data": {
@@ -38811,7 +38811,7 @@
       }
     },
     {
-      "id": "ba7d7e01-b17a-4042-9bc2-fdb3a8287285",
+      "id": "9a2c4b61-5094-4194-a350-554fef8fbdd2",
       "name": "Hell Hound",
       "type": "npc",
       "data": {
@@ -39063,7 +39063,7 @@
       }
     },
     {
-      "id": "88252c89-93dd-4dda-8e7d-7c14437dfe6e",
+      "id": "1483e33f-9f78-4f8f-997c-2cd2ba71b313",
       "name": "Hezrou (Demon)",
       "type": "npc",
       "data": {
@@ -39315,7 +39315,7 @@
       }
     },
     {
-      "id": "e07c2c27-bf08-4edb-8213-6abb1300f662",
+      "id": "cf9f29fa-39f9-4c85-b6fe-8cbd7603c59c",
       "name": "Hill Giant (Giant)",
       "type": "npc",
       "data": {
@@ -39567,7 +39567,7 @@
       }
     },
     {
-      "id": "3353fe33-ee7d-4e6e-ac9e-8b518960657f",
+      "id": "87febdb9-32dc-4b6e-a3eb-78c00e13b1e2",
       "name": "Hippogriff",
       "type": "npc",
       "data": {
@@ -39819,7 +39819,7 @@
       }
     },
     {
-      "id": "eef7c3ee-51a5-478b-82e3-054ea408bcad",
+      "id": "1695b39a-cfba-4113-85c6-1456a3de1343",
       "name": "Hobgoblin",
       "type": "npc",
       "data": {
@@ -40071,7 +40071,7 @@
       }
     },
     {
-      "id": "9664447e-1ce1-4f5a-b287-fa4bdc13a1e2",
+      "id": "bc771192-da8a-4efd-afb5-55fe27e5ba0a",
       "name": "Homunculus",
       "type": "npc",
       "data": {
@@ -40323,7 +40323,7 @@
       }
     },
     {
-      "id": "0eddad0d-7a92-4aab-b48b-524ffabd027a",
+      "id": "1cebb04d-d061-44c1-a0f5-8c2123d72c61",
       "name": "Horned Devil",
       "type": "npc",
       "data": {
@@ -40575,7 +40575,7 @@
       }
     },
     {
-      "id": "f725ec3a-2724-48f4-b43e-31aa81a63365",
+      "id": "8f548a55-a7b5-4d4a-ace9-b1144ec93f40",
       "name": "Hunter Shark (Creature)",
       "type": "npc",
       "data": {
@@ -40827,7 +40827,7 @@
       }
     },
     {
-      "id": "fa0c79bc-9d02-48cc-bd3a-445b46d74da7",
+      "id": "d4cc2939-2ef1-4d40-9bae-fd9dc27208f0",
       "name": "Hydra",
       "type": "npc",
       "data": {
@@ -41079,7 +41079,7 @@
       }
     },
     {
-      "id": "767f1b01-21a1-41b6-8c49-eca0428cbf33",
+      "id": "86db29d5-9175-4fd0-b11b-8e4efae4aa34",
       "name": "Hyena (Creature)",
       "type": "npc",
       "data": {
@@ -41331,7 +41331,7 @@
       }
     },
     {
-      "id": "a2038bce-d752-492f-bbf9-474910b9ca28",
+      "id": "be52748e-e218-4fba-b4be-972ec2951988",
       "name": "Ice Devil (Devil)",
       "type": "npc",
       "data": {
@@ -41583,7 +41583,7 @@
       }
     },
     {
-      "id": "accd7d2b-751a-4be9-8d98-ac4bf817ff58",
+      "id": "fa28c4ab-210f-4089-a2ad-1e9d522bd41e",
       "name": "Ice Mephit",
       "type": "npc",
       "data": {
@@ -41835,7 +41835,7 @@
       }
     },
     {
-      "id": "ff86d55f-888d-452b-ba0a-19dd531abfa0",
+      "id": "9b18e813-bcd2-44e4-bf9d-8945a6cf2cdc",
       "name": "Imp (Devil)",
       "type": "npc",
       "data": {
@@ -42087,7 +42087,7 @@
       }
     },
     {
-      "id": "b5f6c163-ffdb-4fc4-83b4-2e2d25d7ed60",
+      "id": "b0f65226-d93d-4a9e-9687-ad4c22519370",
       "name": "Invisible Stalker",
       "type": "npc",
       "data": {
@@ -42339,7 +42339,7 @@
       }
     },
     {
-      "id": "04a64b2a-1e9f-4045-9b51-a1847ff00373",
+      "id": "f30ebcb1-f81d-4f05-a58a-4a1287b14830",
       "name": "Iron Golem",
       "type": "npc",
       "data": {
@@ -42591,7 +42591,7 @@
       }
     },
     {
-      "id": "93a270f5-1894-4924-bdf3-c994373826b0",
+      "id": "a59e1d88-4883-4dea-850c-53dbe72b70b6",
       "name": "Jackal (Creature)",
       "type": "npc",
       "data": {
@@ -42843,7 +42843,7 @@
       }
     },
     {
-      "id": "2189928a-e5bd-48c3-9235-f23cdea172b6",
+      "id": "082b008b-691b-4c7e-be69-012da12793e1",
       "name": "Killer Whale (Creature)",
       "type": "npc",
       "data": {
@@ -43095,7 +43095,7 @@
       }
     },
     {
-      "id": "95880b60-11ee-46fb-b9b4-e7df2fb412aa",
+      "id": "21facbe5-f890-4385-8c19-194566a91268",
       "name": "Knight (NPC)",
       "type": "npc",
       "data": {
@@ -43347,7 +43347,7 @@
       }
     },
     {
-      "id": "8ea77f54-ea2a-4c5a-9268-2ac031cc1ef7",
+      "id": "a25bb125-bb89-4404-bb9a-70c306858119",
       "name": "Kobold",
       "type": "npc",
       "data": {
@@ -43599,7 +43599,7 @@
       }
     },
     {
-      "id": "c62bb6a4-66f6-4d41-8aa7-6f4b32c7b2f2",
+      "id": "fd286c34-8045-492b-a6ee-f52261588754",
       "name": "Kraken",
       "type": "npc",
       "data": {
@@ -43851,7 +43851,7 @@
       }
     },
     {
-      "id": "45e01a50-1c4f-4815-b22f-093600fdf363",
+      "id": "1c604370-22c1-4388-9cd8-f6c1ab21c51b",
       "name": "Lamia",
       "type": "npc",
       "data": {
@@ -44103,7 +44103,7 @@
       }
     },
     {
-      "id": "109a3467-8e81-4a05-84d8-1b69d32bd9b3",
+      "id": "f16c2ae1-6cda-4b31-9355-24993b8abd39",
       "name": "Lemure (Devil)",
       "type": "npc",
       "data": {
@@ -44355,7 +44355,7 @@
       }
     },
     {
-      "id": "4f13677d-c91c-4543-831a-3a8e7e463828",
+      "id": "1e092eb4-3641-41d8-9114-8b3d30c53397",
       "name": "Lich",
       "type": "npc",
       "data": {
@@ -44607,7 +44607,7 @@
       }
     },
     {
-      "id": "d7aac45e-85ea-4414-b0a9-ef8a4afb2bab",
+      "id": "c0802b4c-faf4-407b-aaea-bd87a67cbc79",
       "name": "Lion (Creature)",
       "type": "npc",
       "data": {
@@ -44859,7 +44859,7 @@
       }
     },
     {
-      "id": "aa04831b-e82a-4ee6-8203-1660d926cec8",
+      "id": "f18824da-7bb7-44bb-a83d-fcd9bc974fa9",
       "name": "Lizard (Creature)",
       "type": "npc",
       "data": {
@@ -45111,7 +45111,7 @@
       }
     },
     {
-      "id": "22d70273-d5c2-47b5-8a5f-10a2473db406",
+      "id": "65ed1e86-dfe4-48fb-8aaa-b1f1ef15c0a8",
       "name": "Lizardfolk",
       "type": "npc",
       "data": {
@@ -45363,7 +45363,7 @@
       }
     },
     {
-      "id": "3f89ff01-306e-496c-808d-e006f9a18a04",
+      "id": "3ed24985-fb9a-4dfc-9604-5cec3a692449",
       "name": "Mage (NPC)",
       "type": "npc",
       "data": {
@@ -45615,7 +45615,7 @@
       }
     },
     {
-      "id": "5fc24e05-c14b-4adb-b20e-ef5f9cb0c2f9",
+      "id": "fd5d734f-4e89-474b-94b7-5104d71c94e4",
       "name": "Magma Mephit",
       "type": "npc",
       "data": {
@@ -45867,7 +45867,7 @@
       }
     },
     {
-      "id": "38e23687-8285-445b-b7db-fd78c8a49fa8",
+      "id": "f7c54092-adcd-40e2-99e6-1611c0cf4598",
       "name": "Magmin",
       "type": "npc",
       "data": {
@@ -46119,7 +46119,7 @@
       }
     },
     {
-      "id": "5febbb26-f0c2-49da-a411-be7e548b708a",
+      "id": "b676b4ae-d248-4867-8973-61f8fe9573fa",
       "name": "Mammoth (Creature)",
       "type": "npc",
       "data": {
@@ -46371,7 +46371,7 @@
       }
     },
     {
-      "id": "6d84f2c7-4e5f-4c4d-8972-98c3f654c970",
+      "id": "dc5d70bf-a56a-4507-b64f-98a06b5f496b",
       "name": "Manticore",
       "type": "npc",
       "data": {
@@ -46623,7 +46623,7 @@
       }
     },
     {
-      "id": "d363ea8a-4cff-4f37-9534-4f6831c1c2fc",
+      "id": "b1f50648-f502-4422-82e3-81771af930c2",
       "name": "Marilith (Demon)",
       "type": "npc",
       "data": {
@@ -46875,7 +46875,7 @@
       }
     },
     {
-      "id": "020a4fc4-8314-4f3c-80c7-1ffb6f4a31ef",
+      "id": "57a144e6-18c1-4dde-92a7-51661198e835",
       "name": "Mastiff (Creature)",
       "type": "npc",
       "data": {
@@ -47127,7 +47127,7 @@
       }
     },
     {
-      "id": "384df57b-5547-47cb-a808-c71a62e23cd6",
+      "id": "b2ca4903-127e-4d67-a49e-e0688d780e27",
       "name": "Medusa",
       "type": "npc",
       "data": {
@@ -47379,7 +47379,7 @@
       }
     },
     {
-      "id": "fac8e384-d871-43f0-8569-5c4226f0f5ae",
+      "id": "6de1bc37-0da1-4722-82b6-178b506826e0",
       "name": "Merfolk",
       "type": "npc",
       "data": {
@@ -47631,7 +47631,7 @@
       }
     },
     {
-      "id": "f2304018-babc-409a-b48b-54978be7d5fe",
+      "id": "8c562036-3c86-4654-92a8-f4130efd02d0",
       "name": "Merrow",
       "type": "npc",
       "data": {
@@ -47883,7 +47883,7 @@
       }
     },
     {
-      "id": "78b3a847-091f-4a06-a15d-9ec363797e63",
+      "id": "ab41815e-14b0-4663-87ec-b6ca891e1064",
       "name": "Mimic",
       "type": "npc",
       "data": {
@@ -48135,7 +48135,7 @@
       }
     },
     {
-      "id": "0e2992ad-4cf7-4e0c-937f-33925fcf1877",
+      "id": "7a4bd024-703c-4d76-b5f7-d15ca0dee24a",
       "name": "Minotaur Skeleton",
       "type": "npc",
       "data": {
@@ -48387,7 +48387,7 @@
       }
     },
     {
-      "id": "d1c638f6-d95b-4f4a-820e-343257780ed6",
+      "id": "bc42a0ca-d8d0-46a0-93bf-ad8dbb506d95",
       "name": "Minotaur",
       "type": "npc",
       "data": {
@@ -48639,7 +48639,7 @@
       }
     },
     {
-      "id": "9892ef67-0c0a-495c-a62d-35a6f064fab3",
+      "id": "16f28740-c57e-48da-9be5-b0c32a36de40",
       "name": "Mule (Creature)",
       "type": "npc",
       "data": {
@@ -48891,7 +48891,7 @@
       }
     },
     {
-      "id": "8172f274-7df7-4b86-8e70-f26bd602a339",
+      "id": "1b081598-95c3-4f43-b7ba-6570b3a6a0be",
       "name": "Mummy Lord",
       "type": "npc",
       "data": {
@@ -49143,7 +49143,7 @@
       }
     },
     {
-      "id": "ac931075-a658-4689-8a48-4db421b65bdd",
+      "id": "403f5d31-f051-4df4-9729-96387cd94ed1",
       "name": "Mummy",
       "type": "npc",
       "data": {
@@ -49395,7 +49395,7 @@
       }
     },
     {
-      "id": "e1aa5737-5dcd-4cc8-b793-48e4c7ed749e",
+      "id": "270896b0-21ac-475a-b049-7a490946a4cd",
       "name": "Nalfeshnee (Demon)",
       "type": "npc",
       "data": {
@@ -49647,7 +49647,7 @@
       }
     },
     {
-      "id": "5c69d21f-6df9-4033-aa2e-1bd3a00ca842",
+      "id": "1898d62a-119e-4ae9-ab06-0cd5baacf7a5",
       "name": "Night Hag",
       "type": "npc",
       "data": {
@@ -49899,7 +49899,7 @@
       }
     },
     {
-      "id": "19013156-1942-4413-a575-ef5106147778",
+      "id": "b85a747e-80fd-43a3-bbb1-51e5b86411f0",
       "name": "Nightmare",
       "type": "npc",
       "data": {
@@ -50151,7 +50151,7 @@
       }
     },
     {
-      "id": "afc8e0e5-f9a1-4a29-b837-fd51f01608de",
+      "id": "6cece446-218b-46d3-9a5f-d0b49f1be908",
       "name": "Noble (NPC)",
       "type": "npc",
       "data": {
@@ -50403,7 +50403,7 @@
       }
     },
     {
-      "id": "b688adbc-303f-404d-81d0-c0ba5c934d15",
+      "id": "5f4008b4-3ff2-46d0-b976-45bffd3d6d2c",
       "name": "Ochre Jelly (Ooze)",
       "type": "npc",
       "data": {
@@ -50655,7 +50655,7 @@
       }
     },
     {
-      "id": "dbcf0a7d-f992-4b8b-8e7d-99096dd710a5",
+      "id": "963bb595-d8fa-43fc-b61a-89df88be044e",
       "name": "Octopus (Creature)",
       "type": "npc",
       "data": {
@@ -50907,7 +50907,7 @@
       }
     },
     {
-      "id": "5c1acf27-e2dc-4641-afe6-ce41e5e03625",
+      "id": "ce00b3d1-8fd1-44b9-8b73-5c87538e5505",
       "name": "Ogre Zombie",
       "type": "npc",
       "data": {
@@ -51159,7 +51159,7 @@
       }
     },
     {
-      "id": "5b330982-d80c-4c69-8d57-1af18d3d9d8e",
+      "id": "15a3f1e2-0d83-46d2-9eed-d99e6225a6b8",
       "name": "Ogre",
       "type": "npc",
       "data": {
@@ -51411,7 +51411,7 @@
       }
     },
     {
-      "id": "64bca961-5402-43cf-b699-9b6ae8920851",
+      "id": "b8251f89-494d-468c-9d1e-90b8801eefc9",
       "name": "Oni",
       "type": "npc",
       "data": {
@@ -51663,7 +51663,7 @@
       }
     },
     {
-      "id": "640c939c-3041-4af3-bf77-0a5a7bcf2a94",
+      "id": "1ff79046-a9e1-497d-bb45-6faaf961ba10",
       "name": "Orc",
       "type": "npc",
       "data": {
@@ -51915,7 +51915,7 @@
       }
     },
     {
-      "id": "8a1f4f53-a67c-4e71-812c-6e17e515930d",
+      "id": "3fe4a2be-0e21-42ca-b546-922c7c18168f",
       "name": "Otyugh",
       "type": "npc",
       "data": {
@@ -52167,7 +52167,7 @@
       }
     },
     {
-      "id": "e55de90a-4a2f-4c36-8740-b6410773f40c",
+      "id": "7e3bf6a8-f094-4d6a-8963-dd3272f3f3ee",
       "name": "Owl (Creature)",
       "type": "npc",
       "data": {
@@ -52419,7 +52419,7 @@
       }
     },
     {
-      "id": "28b4aece-9759-45a0-bc91-6099b5140949",
+      "id": "c6bfe688-4728-4b9f-a55e-baa5cf72c894",
       "name": "Owlbear",
       "type": "npc",
       "data": {
@@ -52671,7 +52671,7 @@
       }
     },
     {
-      "id": "6312fc12-653e-4f00-b8f0-d6c93b6a0170",
+      "id": "ba19ba42-2fd8-4b32-a969-f1185ee70fa0",
       "name": "Panther (Creature)",
       "type": "npc",
       "data": {
@@ -52923,7 +52923,7 @@
       }
     },
     {
-      "id": "6baf3aef-92c1-4441-8e0d-30dcae137e71",
+      "id": "21a7b007-d857-4762-aad4-dc8606698773",
       "name": "Pegasus",
       "type": "npc",
       "data": {
@@ -53175,7 +53175,7 @@
       }
     },
     {
-      "id": "ffe38568-0c01-4d4f-b8dc-a3bd6d961d3f",
+      "id": "6fb50e9a-89b6-436c-a4d8-9fd0af135c61",
       "name": "Phase Spider (Creature)",
       "type": "npc",
       "data": {
@@ -53427,7 +53427,7 @@
       }
     },
     {
-      "id": "454ebf5b-252f-40eb-8d2a-0ba4d6d0674b",
+      "id": "af429af8-5caf-4485-90de-81a8a5725624",
       "name": "Pit Fiend (Devil)",
       "type": "npc",
       "data": {
@@ -53679,7 +53679,7 @@
       }
     },
     {
-      "id": "ee0d805f-f4bf-47ba-a529-5ff3e74534ea",
+      "id": "8df780fc-ef2f-4ec1-afcc-f2480e87c1db",
       "name": "Planetar (Angel)",
       "type": "npc",
       "data": {
@@ -53931,7 +53931,7 @@
       }
     },
     {
-      "id": "0aa39ddf-9cc5-4260-b711-4509fadc8b16",
+      "id": "f28e928a-94f9-4bd4-9608-93d1308567d4",
       "name": "Plesiosaurus (Dinosaur)",
       "type": "npc",
       "data": {
@@ -54183,7 +54183,7 @@
       }
     },
     {
-      "id": "619b1dc3-3882-49a1-b231-7d2354067215",
+      "id": "fc8d2007-64c2-4206-83a7-2b8a98fbceba",
       "name": "Poisonous Snake (Creature)",
       "type": "npc",
       "data": {
@@ -54435,7 +54435,7 @@
       }
     },
     {
-      "id": "bef3b0cc-44a7-4776-807c-b2e0233900fe",
+      "id": "b32c8184-485e-4910-83d0-abbc363e7cc4",
       "name": "Polar Bear (Creature)",
       "type": "npc",
       "data": {
@@ -54687,7 +54687,7 @@
       }
     },
     {
-      "id": "0af35567-f991-4b05-ad0a-01cf9a4009f1",
+      "id": "7c444d5b-b7fc-4c49-b1ee-3ffd6c54f495",
       "name": "Pony (Creature)",
       "type": "npc",
       "data": {
@@ -54939,7 +54939,7 @@
       }
     },
     {
-      "id": "e9b665c0-da7c-49da-9d65-259a0f8efa10",
+      "id": "6b9139ed-7261-453a-b1c9-e2445184c5c7",
       "name": "Priest (NPC)",
       "type": "npc",
       "data": {
@@ -55191,7 +55191,7 @@
       }
     },
     {
-      "id": "1402e546-2df4-48d5-9f49-2d6081344d3f",
+      "id": "ce0981f0-4b04-4afe-a28b-f325022bfdf8",
       "name": "Pseudodragon",
       "type": "npc",
       "data": {
@@ -55443,7 +55443,7 @@
       }
     },
     {
-      "id": "419ba273-d6e3-454d-824a-b558dc9ba877",
+      "id": "19f8cea0-0f89-4043-b253-51726617790b",
       "name": "Purple Worm",
       "type": "npc",
       "data": {
@@ -55695,7 +55695,7 @@
       }
     },
     {
-      "id": "2a10dae6-bfe4-4122-8dd4-60d9612357db",
+      "id": "32f39c9b-3546-4d53-b66b-4ef102fbcfdc",
       "name": "Quasit (Demon)",
       "type": "npc",
       "data": {
@@ -55947,7 +55947,7 @@
       }
     },
     {
-      "id": "51f8cbc3-1553-428d-8918-7003ce0856e0",
+      "id": "a0215986-3f2d-43ae-8195-c23d1ebd1a93",
       "name": "Quipper (Creature)",
       "type": "npc",
       "data": {
@@ -56199,7 +56199,7 @@
       }
     },
     {
-      "id": "42679410-b723-417d-a018-5dd5fc8aec90",
+      "id": "5a0fe5ba-4af8-4849-9178-eabfca4e9a2f",
       "name": "Rakshasa",
       "type": "npc",
       "data": {
@@ -56451,7 +56451,7 @@
       }
     },
     {
-      "id": "d9cfffb3-8dbc-45d0-987f-c07b09ec37d7",
+      "id": "b8db671c-103a-4c7b-82d1-b749a3e43c9d",
       "name": "Rat (Creature)",
       "type": "npc",
       "data": {
@@ -56703,7 +56703,7 @@
       }
     },
     {
-      "id": "23ca29aa-2eff-4e7d-a222-c3f30d0db1eb",
+      "id": "3343bd16-f74e-462c-b258-e8f923822fcf",
       "name": "Raven (Creature)",
       "type": "npc",
       "data": {
@@ -56955,7 +56955,7 @@
       }
     },
     {
-      "id": "955fedc9-f0a4-42bb-92cf-6d85fdfbfc54",
+      "id": "506864ff-2404-4346-a284-6d588c5b03f0",
       "name": "Reef Shark (Creature)",
       "type": "npc",
       "data": {
@@ -57207,7 +57207,7 @@
       }
     },
     {
-      "id": "d050b724-0998-4cd1-8b02-4c3b3d1cb49b",
+      "id": "f4169975-b012-4a76-a368-997eb4800cac",
       "name": "Remorhaz",
       "type": "npc",
       "data": {
@@ -57459,7 +57459,7 @@
       }
     },
     {
-      "id": "5223127c-2696-43f7-89c9-327f303e68d1",
+      "id": "d21a22b5-c839-41e4-af04-967abe4679b7",
       "name": "Rhinoceros (Creature)",
       "type": "npc",
       "data": {
@@ -57711,7 +57711,7 @@
       }
     },
     {
-      "id": "24f79240-36a0-4b0d-9572-98fdb870e011",
+      "id": "bfe6cf80-4b59-4e95-920e-d3cb960c558f",
       "name": "Riding Horse (Creature)",
       "type": "npc",
       "data": {
@@ -57963,7 +57963,7 @@
       }
     },
     {
-      "id": "a2c07015-a400-4105-966f-63aaf8a09d33",
+      "id": "74bf2820-4da2-42f1-be7f-af9ff749d4fc",
       "name": "Roc",
       "type": "npc",
       "data": {
@@ -58215,7 +58215,7 @@
       }
     },
     {
-      "id": "4f0b3e2c-affb-4b7f-89c6-69d899fbb5bc",
+      "id": "a06537b8-bd7d-44fa-82cb-a4b96191b749",
       "name": "Roper",
       "type": "npc",
       "data": {
@@ -58467,7 +58467,7 @@
       }
     },
     {
-      "id": "71304641-bf3c-4c73-8469-7dac2fdb15fa",
+      "id": "0a490ed4-5106-40b4-8651-4da6ac14b608",
       "name": "Rug of Smothering (Animated Object)",
       "type": "npc",
       "data": {
@@ -58719,7 +58719,7 @@
       }
     },
     {
-      "id": "d99afbe5-6dba-4c05-93b6-6040346243d0",
+      "id": "fa96065f-56df-4003-9107-9ccf1c7c056e",
       "name": "Rust Monster",
       "type": "npc",
       "data": {
@@ -58971,7 +58971,7 @@
       }
     },
     {
-      "id": "2400c94e-073e-47ec-8cfe-e542b6ef9f91",
+      "id": "899933f8-a3e6-4ed2-88b1-d8951225043e",
       "name": "Saber-Toothed Tiger (Creature)",
       "type": "npc",
       "data": {
@@ -59223,7 +59223,7 @@
       }
     },
     {
-      "id": "30c2bf64-34eb-40b2-85d2-f6263755bc7e",
+      "id": "b56e26a3-eb1a-4a2c-9898-d46f5ededfd8",
       "name": "Sahuagin",
       "type": "npc",
       "data": {
@@ -59475,7 +59475,7 @@
       }
     },
     {
-      "id": "fe6d6368-dcc0-4ff8-917f-3dde1440df4e",
+      "id": "ba5cd877-89e3-4253-9956-2d65347765ed",
       "name": "Salamander",
       "type": "npc",
       "data": {
@@ -59727,7 +59727,7 @@
       }
     },
     {
-      "id": "75aebdc6-1cf0-437e-9df8-fd9e51e54c91",
+      "id": "85d0d8d1-e4f4-441c-8075-6e4a05fa648e",
       "name": "Satyr",
       "type": "npc",
       "data": {
@@ -59979,7 +59979,7 @@
       }
     },
     {
-      "id": "9fc0edaf-dcc7-4ab4-8cc1-3ed110aefa76",
+      "id": "509d94a6-cbe3-41e5-9c1e-083d491ea25c",
       "name": "Scorpion (Creature)",
       "type": "npc",
       "data": {
@@ -60231,7 +60231,7 @@
       }
     },
     {
-      "id": "71cc9043-bc96-4d79-875d-4d26f003fd0a",
+      "id": "08f9dba8-7592-4b0e-b94d-d1fb4ac66896",
       "name": "Scout (NPC)",
       "type": "npc",
       "data": {
@@ -60483,7 +60483,7 @@
       }
     },
     {
-      "id": "31792655-635c-4c5f-807b-60fa42b3caad",
+      "id": "126970fd-a530-4c8e-997a-2004e43e6ed5",
       "name": "Sea Hag",
       "type": "npc",
       "data": {
@@ -60735,7 +60735,7 @@
       }
     },
     {
-      "id": "b4695766-178c-48ca-8549-5d32b387efe6",
+      "id": "06822118-504b-4425-96e9-bc2a3c3864c8",
       "name": "Sea Horse (Creature)",
       "type": "npc",
       "data": {
@@ -60987,7 +60987,7 @@
       }
     },
     {
-      "id": "f2212f8b-831f-45fc-bfa0-bb3492bea33c",
+      "id": "2edd86d6-5ae5-4147-bce1-7cc6b26f5ebe",
       "name": "Shadow",
       "type": "npc",
       "data": {
@@ -61239,7 +61239,7 @@
       }
     },
     {
-      "id": "154e0fca-18c8-46d0-9e61-8d69271bd1f5",
+      "id": "1c24b788-104f-4e39-b0cb-0bf521b5c175",
       "name": "Shambling Mound",
       "type": "npc",
       "data": {
@@ -61491,7 +61491,7 @@
       }
     },
     {
-      "id": "c68e3070-242b-45fe-b643-10963fb5266a",
+      "id": "53fdcfe9-2864-4491-b267-77f81309f108",
       "name": "Shield Guardian",
       "type": "npc",
       "data": {
@@ -61743,7 +61743,7 @@
       }
     },
     {
-      "id": "b6c88d9f-3927-4838-9412-e8c49ab7ff63",
+      "id": "aed29a87-71c6-4b31-8281-8e594e5a9ef9",
       "name": "Shrieker (Fungi)",
       "type": "npc",
       "data": {
@@ -61995,7 +61995,7 @@
       }
     },
     {
-      "id": "58a71c5c-208e-4cac-87c8-6db5f4ca38ec",
+      "id": "8795e19a-0acc-40bf-bf0a-af1e37142b3b",
       "name": "Skeleton",
       "type": "npc",
       "data": {
@@ -62247,7 +62247,7 @@
       }
     },
     {
-      "id": "bf2b1496-487c-41f1-8818-87456efdee5a",
+      "id": "13ce4545-e4fd-4ae7-b3a8-95a5e28a115c",
       "name": "Solar (Angel)",
       "type": "npc",
       "data": {
@@ -62499,7 +62499,7 @@
       }
     },
     {
-      "id": "64f57842-ef00-48ad-bd50-2661b852c25a",
+      "id": "601c4b63-6a71-487e-bf76-ff6ed1bea2ae",
       "name": "Specter",
       "type": "npc",
       "data": {
@@ -62751,7 +62751,7 @@
       }
     },
     {
-      "id": "25a8c852-9aa2-4ee4-a5f3-8f3f6c0c6e18",
+      "id": "49b62769-f8d9-49db-b7ee-6072ce51e9fa",
       "name": "Spider (Creature)",
       "type": "npc",
       "data": {
@@ -63003,7 +63003,7 @@
       }
     },
     {
-      "id": "9e6fb7c8-3efe-4ea9-91e3-a13223680e89",
+      "id": "44b7ff80-f634-45ae-800a-7355b4385f51",
       "name": "Spirit Naga",
       "type": "npc",
       "data": {
@@ -63255,7 +63255,7 @@
       }
     },
     {
-      "id": "2a0a1f3f-6bb8-49ad-873a-16926c1c22d1",
+      "id": "a5a6761a-daf2-495b-bcf5-ea2c61af0e5a",
       "name": "Sprite",
       "type": "npc",
       "data": {
@@ -63507,7 +63507,7 @@
       }
     },
     {
-      "id": "91779dd4-8b82-40b9-be8f-24e3cdf22902",
+      "id": "36de4d2a-ead0-46ae-b57a-68eee5160f3e",
       "name": "Spy (NPC)",
       "type": "npc",
       "data": {
@@ -63759,7 +63759,7 @@
       }
     },
     {
-      "id": "6d1d0e83-ba08-4762-be7f-462dc4f62d61",
+      "id": "91f2e532-24ad-4d0a-8a3d-37e21f3f282b",
       "name": "Steam Mephit",
       "type": "npc",
       "data": {
@@ -64011,7 +64011,7 @@
       }
     },
     {
-      "id": "79c323f5-5d11-47c4-98db-e6f8918e6bc5",
+      "id": "7227826e-defa-4617-83d8-56344373ae7f",
       "name": "Stirge",
       "type": "npc",
       "data": {
@@ -64263,7 +64263,7 @@
       }
     },
     {
-      "id": "2dc9524c-a8a8-4822-862b-d5196e5a8fbb",
+      "id": "62916012-5f98-4acb-96d3-e8890c60e300",
       "name": "Stone Giant (Giant)",
       "type": "npc",
       "data": {
@@ -64515,7 +64515,7 @@
       }
     },
     {
-      "id": "6a14ea1a-ec93-4c5a-9d8d-c0f4a676a4c8",
+      "id": "526df3e9-5eff-4966-97ce-a5e3d9e06c00",
       "name": "Stone Golem",
       "type": "npc",
       "data": {
@@ -64767,7 +64767,7 @@
       }
     },
     {
-      "id": "4b8d916e-90f2-4dc9-bca3-4ef88e2f34f0",
+      "id": "ca15931d-3e94-4666-9bdd-04ba43880087",
       "name": "Storm Giant (Giant)",
       "type": "npc",
       "data": {
@@ -65019,7 +65019,7 @@
       }
     },
     {
-      "id": "d9553dd2-096b-4e38-870f-85d7d4c69d84",
+      "id": "0d2ebf02-20e2-4247-9126-4076a635099c",
       "name": "Succubus-Incubus",
       "type": "npc",
       "data": {
@@ -65271,7 +65271,7 @@
       }
     },
     {
-      "id": "5e56a18e-2c9e-46a5-a089-f65ba171be06",
+      "id": "2dcc35de-aa3d-4028-a39a-4a8e28a4cd4b",
       "name": "Swarm of Bats (Creature)",
       "type": "npc",
       "data": {
@@ -65523,7 +65523,7 @@
       }
     },
     {
-      "id": "817c49f7-3e19-4bb2-95b1-41036a097cd0",
+      "id": "4627c0bd-2cc4-4a06-90d2-871a7c0edc90",
       "name": "Swarm of Insects (Creature)",
       "type": "npc",
       "data": {
@@ -65775,7 +65775,7 @@
       }
     },
     {
-      "id": "6a96e1af-5e48-4b1e-a657-fcbf2ca0d5f9",
+      "id": "56486b4a-49e8-4d4a-ad53-9d018baa8c29",
       "name": "Swarm of Poisonous Snakes (Creature)",
       "type": "npc",
       "data": {
@@ -66027,7 +66027,7 @@
       }
     },
     {
-      "id": "f1d70829-68fd-47c3-9501-1cae034a9868",
+      "id": "1b2a09ce-b9b7-493d-8fe6-4d0082ed401e",
       "name": "Swarm of Quippers (Creature)",
       "type": "npc",
       "data": {
@@ -66279,7 +66279,7 @@
       }
     },
     {
-      "id": "5799b926-c601-41aa-9166-745390806f68",
+      "id": "a67c5137-2209-42ee-b27f-a38ded2683b2",
       "name": "Swarm of Rats (Creature)",
       "type": "npc",
       "data": {
@@ -66531,7 +66531,7 @@
       }
     },
     {
-      "id": "a86a2fa0-2966-4e5c-8cf9-7704a2a523c8",
+      "id": "70369733-2b8b-49c8-b54c-db08c651d1ec",
       "name": "Swarm of Ravens (Creature)",
       "type": "npc",
       "data": {
@@ -66783,7 +66783,7 @@
       }
     },
     {
-      "id": "7e5413b4-39d5-427a-8529-993200c4f6f8",
+      "id": "fc519cbe-ee52-46a1-a145-7a97296b9db1",
       "name": "Tarrasque",
       "type": "npc",
       "data": {
@@ -67035,7 +67035,7 @@
       }
     },
     {
-      "id": "6fe9b9c4-883e-4ab0-b92e-d9c13b6a9009",
+      "id": "9f40edd8-a643-490b-a473-ff2ef027daed",
       "name": "Thug (NPC)",
       "type": "npc",
       "data": {
@@ -67287,7 +67287,7 @@
       }
     },
     {
-      "id": "cd73b77d-3834-4bb0-8c77-10f5437d30dd",
+      "id": "b5cbec3d-e09a-4347-b972-12b7dd54931e",
       "name": "Tiger (Creature)",
       "type": "npc",
       "data": {
@@ -67539,7 +67539,7 @@
       }
     },
     {
-      "id": "9e66ecd3-b4a0-4329-8a24-db89c31b1fee",
+      "id": "8ca78949-371e-4958-bd40-b4515bba927a",
       "name": "Treant",
       "type": "npc",
       "data": {
@@ -67791,7 +67791,7 @@
       }
     },
     {
-      "id": "98ac5dd0-6177-4e61-9d12-168ea20312d4",
+      "id": "3b5be9a3-2798-4efd-9d2f-a2d2a116d228",
       "name": "Tribal Warrior (NPC)",
       "type": "npc",
       "data": {
@@ -68043,7 +68043,7 @@
       }
     },
     {
-      "id": "b8a41d99-8598-4ba2-a26f-07d019d8618f",
+      "id": "c9d693d5-29f1-461f-ac1b-a0e8e8be82c6",
       "name": "Triceratops (Dinosaur)",
       "type": "npc",
       "data": {
@@ -68295,7 +68295,7 @@
       }
     },
     {
-      "id": "87c931f9-915b-4c25-ab7e-8ded1339375a",
+      "id": "d4a82baa-ef4f-489b-b9d7-12e47f61cad9",
       "name": "Troll",
       "type": "npc",
       "data": {
@@ -68547,7 +68547,7 @@
       }
     },
     {
-      "id": "2acc78f5-b9a2-43f9-9e68-f64545516df5",
+      "id": "1e3d845c-4500-4e30-8951-0b4cfcb297dd",
       "name": "Tyrannosaurus Rex (Dinosaur)",
       "type": "npc",
       "data": {
@@ -68799,7 +68799,7 @@
       }
     },
     {
-      "id": "b1c729f0-967d-4a87-915f-6eee535f3a3b",
+      "id": "406c52bb-522c-43f8-98e7-82381cc64705",
       "name": "Unicorn",
       "type": "npc",
       "data": {
@@ -69051,7 +69051,7 @@
       }
     },
     {
-      "id": "10440eb5-8de2-458d-9490-ff5e0a3f7a98",
+      "id": "235c02b0-3de9-4113-885f-bf11d743b6ab",
       "name": "Vampire Spawn",
       "type": "npc",
       "data": {
@@ -69303,7 +69303,7 @@
       }
     },
     {
-      "id": "63286dea-3ffb-4b85-9bbd-ff698cab9bde",
+      "id": "4ad5fdca-5d69-4fd6-aa85-8b7ab66fcc32",
       "name": "Vampire",
       "type": "npc",
       "data": {
@@ -69555,7 +69555,7 @@
       }
     },
     {
-      "id": "03407e92-bae8-4a56-a989-c2bc802f2c0e",
+      "id": "74706006-5822-433e-b1d0-3955cd2b369a",
       "name": "Veteran (NPC)",
       "type": "npc",
       "data": {
@@ -69807,7 +69807,7 @@
       }
     },
     {
-      "id": "de2bba78-2280-41b8-99f7-702d848d763c",
+      "id": "7a486204-c63f-4d74-aacc-c622fe5140e6",
       "name": "Violet Fungus (Fungi)",
       "type": "npc",
       "data": {
@@ -70059,7 +70059,7 @@
       }
     },
     {
-      "id": "59e85d20-0173-415e-bbaa-4041bdd502e3",
+      "id": "09d28633-6092-4898-8779-04ba5a70c687",
       "name": "Vrock (Demon)",
       "type": "npc",
       "data": {
@@ -70311,7 +70311,7 @@
       }
     },
     {
-      "id": "ff0be6b9-122e-4eb0-af2c-1a50848f2c2e",
+      "id": "6d4f559a-61b1-4e65-bf1a-1e5aca3aaaac",
       "name": "Vulture (Creature)",
       "type": "npc",
       "data": {
@@ -70563,7 +70563,7 @@
       }
     },
     {
-      "id": "498e07c4-5c07-4520-b3c9-fb699a72c3b2",
+      "id": "4b03506e-0e03-4f9b-82b1-96177a26e87d",
       "name": "Warhorse (Creature)",
       "type": "npc",
       "data": {
@@ -70815,7 +70815,7 @@
       }
     },
     {
-      "id": "b4a44e0b-ce01-4600-b00e-cfb35b7eadc7",
+      "id": "9b277d17-d227-40b0-8289-604c3a43f31f",
       "name": "Warhorse Skeleton",
       "type": "npc",
       "data": {
@@ -71067,7 +71067,7 @@
       }
     },
     {
-      "id": "0ff1f8c2-11a1-4a10-ae89-c27d97ac4ab5",
+      "id": "bb78441b-7cb7-4ff6-b4aa-2713b0473440",
       "name": "Water Elemental",
       "type": "npc",
       "data": {
@@ -71319,7 +71319,7 @@
       }
     },
     {
-      "id": "385a3fb2-552c-48a6-a3b7-5ef87ff720e2",
+      "id": "101a4c50-02f0-468f-bb21-be120eb49dae",
       "name": "Weasel (Creature)",
       "type": "npc",
       "data": {
@@ -71571,7 +71571,7 @@
       }
     },
     {
-      "id": "3af0b957-a7f2-4606-9186-b96ff305a596",
+      "id": "beb66e6a-b52b-4113-88a0-8168c213c04f",
       "name": "Werebear (Lycanthrope)",
       "type": "npc",
       "data": {
@@ -71823,7 +71823,7 @@
       }
     },
     {
-      "id": "20b96f3f-b181-4d91-a6af-b28a1bd8fda1",
+      "id": "596e7656-4bb2-4f55-ac3e-6063f6344d79",
       "name": "Wereboar (Lycanthrope)",
       "type": "npc",
       "data": {
@@ -72075,7 +72075,7 @@
       }
     },
     {
-      "id": "9571c38d-64a1-4f7a-a96b-b61330522eda",
+      "id": "046e4e67-e0f9-42de-ab6b-497983812093",
       "name": "Wererat (Lycanthrope)",
       "type": "npc",
       "data": {
@@ -72327,7 +72327,7 @@
       }
     },
     {
-      "id": "72b7fe3a-5ce4-4543-bd88-ceab99a0f8ac",
+      "id": "11be7ae3-0209-41ff-bbd9-903a112895ee",
       "name": "Weretiger (Lycanthrope)",
       "type": "npc",
       "data": {
@@ -72579,7 +72579,7 @@
       }
     },
     {
-      "id": "87036e10-d1bc-415a-af0c-0b830e09a4a7",
+      "id": "7a492d21-c2de-4b16-82c6-21ba6db8708e",
       "name": "Werewolf (Lycanthrope)",
       "type": "npc",
       "data": {
@@ -72831,7 +72831,7 @@
       }
     },
     {
-      "id": "b19de12d-eaef-4389-bef9-1202496daa59",
+      "id": "84b18b39-2f69-4e8b-bf8f-507c8b4433d7",
       "name": "Wight",
       "type": "npc",
       "data": {
@@ -73083,7 +73083,7 @@
       }
     },
     {
-      "id": "3ffc52f5-4630-4c20-8bc5-738db18ea3e9",
+      "id": "3fa9aa08-2762-4379-be18-a77aedf6c8c6",
       "name": "Will-o'-Wisp",
       "type": "npc",
       "data": {
@@ -73335,7 +73335,7 @@
       }
     },
     {
-      "id": "d1129791-9293-4af8-9353-d11aba6f9aad",
+      "id": "430d0ee7-ee24-4d09-81e4-4e1c906686b7",
       "name": "Winter Wolf (Creature)",
       "type": "npc",
       "data": {
@@ -73587,7 +73587,7 @@
       }
     },
     {
-      "id": "6c0f8087-a757-428c-92da-a7cb473753fb",
+      "id": "bca49a39-eb6a-436c-8ca1-cf10db8f1fa8",
       "name": "Wolf (Creature)",
       "type": "npc",
       "data": {
@@ -73839,7 +73839,7 @@
       }
     },
     {
-      "id": "b9a3f73b-ef41-4a2a-a792-44e05751fb98",
+      "id": "1016cd5b-9065-416e-b4b3-fa51101e06dc",
       "name": "Worg (Creature)",
       "type": "npc",
       "data": {
@@ -74091,7 +74091,7 @@
       }
     },
     {
-      "id": "eb92f28d-3caa-4296-8498-8eeadb488116",
+      "id": "fb906610-09e1-4731-a45e-ad1ed031ea90",
       "name": "Wraith",
       "type": "npc",
       "data": {
@@ -74343,7 +74343,7 @@
       }
     },
     {
-      "id": "30d24a1a-eaa6-44de-bd8b-9e29563bafbd",
+      "id": "1d0f7214-7a30-4aec-9e79-639b582b2e39",
       "name": "Wyrmling Black Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -74595,7 +74595,7 @@
       }
     },
     {
-      "id": "d9034e3a-2d36-46d0-a640-3f275a0c6aca",
+      "id": "571a4d82-efbe-482e-b865-d5a02a2deb51",
       "name": "Wyrmling Blue Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -74847,7 +74847,7 @@
       }
     },
     {
-      "id": "588415d0-498e-4759-ba31-c0b5144c928e",
+      "id": "ea114ce1-2e87-4ce6-81dc-8f69d7da256a",
       "name": "Wyrmling Brass Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -75099,7 +75099,7 @@
       }
     },
     {
-      "id": "63c1f9b7-5535-4aa6-8bed-ce87dec00b34",
+      "id": "16ce5d6f-aafc-4fb4-a2f7-67f119995cd4",
       "name": "Wyrmling Bronze Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -75351,7 +75351,7 @@
       }
     },
     {
-      "id": "30c37447-3658-427c-bf6d-a52dc3eeea94",
+      "id": "e4349055-5c28-45e5-8193-3b7f39cdb5f4",
       "name": "Wyrmling Copper Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -75603,7 +75603,7 @@
       }
     },
     {
-      "id": "4fa29951-e1ca-448a-9445-35c3686da1c5",
+      "id": "f7e0c854-0a93-4392-8229-50c96db1ee66",
       "name": "Wyrmling Gold Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -75855,7 +75855,7 @@
       }
     },
     {
-      "id": "5bf2e86a-ae7f-4a31-9193-45d9a4c37cde",
+      "id": "142f854b-e71a-41b7-8acb-29780e8c0ac6",
       "name": "Wyrmling Green Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -76107,7 +76107,7 @@
       }
     },
     {
-      "id": "eb073647-a139-4eef-8c14-27acf814833a",
+      "id": "b21dd3e6-3811-45b3-9316-a8a60d108320",
       "name": "Wyrmling Red Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -76359,7 +76359,7 @@
       }
     },
     {
-      "id": "8e14d7cc-20db-4e5d-848e-db91205844da",
+      "id": "483c6e92-f053-4d1c-8f43-0d862eddd636",
       "name": "Wyrmling Silver Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -76611,7 +76611,7 @@
       }
     },
     {
-      "id": "cb3e3c42-fb4f-4509-be35-1c6308c11c79",
+      "id": "91fd6958-1f7b-4c78-a3cb-ca9e706738f6",
       "name": "Wyrmling White Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -76863,7 +76863,7 @@
       }
     },
     {
-      "id": "be0ec5e9-1167-4be0-9808-e358739ca6ea",
+      "id": "87e93125-2c16-46f8-99d5-02516541d0a6",
       "name": "Wyvern",
       "type": "npc",
       "data": {
@@ -77115,7 +77115,7 @@
       }
     },
     {
-      "id": "b7e77fe3-999b-47ce-9a65-6221749d59fc",
+      "id": "66ae916a-7a8c-45d8-be3c-97667840d7fd",
       "name": "Xorn",
       "type": "npc",
       "data": {
@@ -77367,7 +77367,7 @@
       }
     },
     {
-      "id": "db87a029-eb98-427e-8921-6669a5668e37",
+      "id": "f101de51-e4b3-4598-88db-1af755695168",
       "name": "Young Black Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -77619,7 +77619,7 @@
       }
     },
     {
-      "id": "2395697b-d16f-440e-9135-2dac2fc1c677",
+      "id": "65c49ca5-a85e-4c30-9ded-c68537d98c32",
       "name": "Young Blue Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -77871,7 +77871,7 @@
       }
     },
     {
-      "id": "23bd9f19-e9b4-4cba-97e7-c7e1e08742a7",
+      "id": "f42df1a4-3513-46a4-9699-2b7999cbce69",
       "name": "Young Brass Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -78123,7 +78123,7 @@
       }
     },
     {
-      "id": "fa05838b-7549-4259-ad23-28504b8d9991",
+      "id": "e451d9ca-6599-49f8-a049-90f4a35b107c",
       "name": "Young Bronze Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -78375,7 +78375,7 @@
       }
     },
     {
-      "id": "7bdb9ef5-542a-43aa-ba71-f6e7916f3109",
+      "id": "624bb605-1f73-4b74-b88e-7d6102a5c327",
       "name": "Young Copper Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -78627,7 +78627,7 @@
       }
     },
     {
-      "id": "95e210e4-a1ac-426b-8ba9-b9ac966ba018",
+      "id": "a7dfa545-e0d9-47d8-83d5-d8ba8cb414f6",
       "name": "Young Gold Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -78879,7 +78879,7 @@
       }
     },
     {
-      "id": "249726e9-853d-40e2-bcd4-1c74c49b66ff",
+      "id": "3d7d1617-6d14-4ed3-a715-737bd1b7e8eb",
       "name": "Young Green Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -79131,7 +79131,7 @@
       }
     },
     {
-      "id": "6661a72f-3223-4115-bb37-8f20a4393154",
+      "id": "0d7db4cd-19e0-43cf-ba22-1b4277600d57",
       "name": "Young Red Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -79383,7 +79383,7 @@
       }
     },
     {
-      "id": "a1d87272-ed45-4236-a808-ad2543350e5f",
+      "id": "607794e2-cd27-4225-8104-b189ab0140b6",
       "name": "Young Silver Dragon (Metallic)",
       "type": "npc",
       "data": {
@@ -79635,7 +79635,7 @@
       }
     },
     {
-      "id": "f4efda1e-4b34-4552-8720-eaf486a6aa4b",
+      "id": "8945bd64-4829-4eab-ac5b-f93a78a3f9ac",
       "name": "Young White Dragon (Chromatic)",
       "type": "npc",
       "data": {
@@ -79887,7 +79887,7 @@
       }
     },
     {
-      "id": "36e67182-f4b6-494f-97f1-773d111fad30",
+      "id": "cf292f38-c3a7-4d98-ad3f-8248dd6c8711",
       "name": "Zombie",
       "type": "npc",
       "data": {

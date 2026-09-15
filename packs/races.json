@@ -3,7 +3,7 @@
   "type": "Item",
   "entries": [
     {
-      "id": "d840964e-8788-4e25-b040-a02d1baddd0b",
+      "id": "465b0ebb-a736-4a32-878a-8409aae865b1",
       "name": "Dragonborn",
       "type": "race",
       "data": {
@@ -26,7 +26,7 @@
       }
     },
     {
-      "id": "edadd1eb-965c-4e1a-8b33-8e31e1413e4e",
+      "id": "b1ee5888-5147-493d-971b-68bc32d99004",
       "name": "Dwarf",
       "type": "race",
       "data": {
@@ -49,7 +49,7 @@
       }
     },
     {
-      "id": "472a4a40-df44-46dc-8bd5-c024832aac3f",
+      "id": "f5dd2146-1b8c-4a54-adff-de8c56a34458",
       "name": "Dwarf (Hill Dwarf)",
       "type": "race",
       "data": {
@@ -72,7 +72,7 @@
       }
     },
     {
-      "id": "a3d4437d-191d-4c43-b97b-1313f49f1246",
+      "id": "13aa63ec-3a4b-42a2-96b0-dccec0c5b84d",
       "name": "Elf",
       "type": "race",
       "data": {
@@ -95,7 +95,7 @@
       }
     },
     {
-      "id": "8e97db02-cc88-4223-92c9-5f3abf97398f",
+      "id": "1105668c-84f7-43de-b631-ac119d61d38d",
       "name": "Elf (High Elf)",
       "type": "race",
       "data": {
@@ -118,7 +118,7 @@
       }
     },
     {
-      "id": "67ff8f94-b121-4e54-a6a1-fc999b34d6b9",
+      "id": "e476c3e5-9f00-4b0d-b4cc-65fbafe1aabd",
       "name": "Gnome",
       "type": "race",
       "data": {
@@ -141,7 +141,7 @@
       }
     },
     {
-      "id": "0b1e0a7c-b51a-4225-b0ce-bce4d6876ce1",
+      "id": "8ad78bdf-d9fc-48e7-94fc-e18435b4807e",
       "name": "Gnome (Rock Gnome)",
       "type": "race",
       "data": {
@@ -164,7 +164,7 @@
       }
     },
     {
-      "id": "531c482a-eb9e-4d97-b58d-9d7d3e96cf9d",
+      "id": "dac8962e-eb01-49c9-b200-5021a55e2d01",
       "name": "Half-Elf",
       "type": "race",
       "data": {
@@ -187,7 +187,7 @@
       }
     },
     {
-      "id": "96a937fc-7b0d-4beb-9477-590f20438963",
+      "id": "64687abe-273e-47f3-a2c4-395a7554eed8",
       "name": "Half-Orc",
       "type": "race",
       "data": {
@@ -210,7 +210,7 @@
       }
     },
     {
-      "id": "4a2af414-6bb6-491b-a9ca-5bbf05592b1f",
+      "id": "efebc546-5eba-45a8-aaa8-3674ba42f9f7",
       "name": "Halfling",
       "type": "race",
       "data": {
@@ -233,7 +233,7 @@
       }
     },
     {
-      "id": "0df5b78f-076a-4560-8e2b-0a20d215ed51",
+      "id": "7d64f905-37d6-40ee-a51d-1559cfad6b5c",
       "name": "Halfling (Lightfoot)",
       "type": "race",
       "data": {
@@ -256,7 +256,7 @@
       }
     },
     {
-      "id": "b748ee1f-6ce1-4ec9-b4ec-7ef5921828b5",
+      "id": "09c12210-9354-433a-92d8-e66366b7bfbc",
       "name": "Human",
       "type": "race",
       "data": {
@@ -279,7 +279,7 @@
       }
     },
     {
-      "id": "24c83139-82dc-4dc5-853a-1fa0d7ec79ed",
+      "id": "d640377c-37d8-42a2-ab54-99f44b4f0a23",
       "name": "Tiefling",
       "type": "race",
       "data": {

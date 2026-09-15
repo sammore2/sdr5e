@@ -3,7 +3,7 @@
   "type": "Item",
   "entries": [
     {
-      "id": "3b9eaed1-748a-4fc0-8e90-d07df33b2965",
+      "id": "7215909b-7fe8-47ed-aaf2-f7fef5748a85",
       "name": "Path of the Berserker",
       "type": "subclass",
       "data": {
@@ -24,7 +24,7 @@
       }
     },
     {
-      "id": "0a0b9a90-8098-4aa7-8c73-59d2b488eee4",
+      "id": "9eb00b73-dfd7-4b11-91e2-56ce621001c2",
       "name": "College of Lore",
       "type": "subclass",
       "data": {
@@ -45,7 +45,7 @@
       }
     },
     {
-      "id": "e1d1ca92-fdb7-4b23-9a66-1c5165312460",
+      "id": "14230df0-b268-462c-ac85-7b50ab4bf302",
       "name": "Life Domain",
       "type": "subclass",
       "data": {
@@ -66,7 +66,7 @@
       }
     },
     {
-      "id": "060c5266-9fac-4a0f-8c1e-99e8c0f13842",
+      "id": "8af53abb-37b7-4497-9a72-425955c38df5",
       "name": "Circle of the Land",
       "type": "subclass",
       "data": {
@@ -87,7 +87,7 @@
       }
     },
     {
-      "id": "5f4b6ba3-fffd-4e74-aa0f-63b45b1e34e0",
+      "id": "5048a789-daf2-4697-845d-012117468e21",
       "name": "Champion",
       "type": "subclass",
       "data": {
@@ -108,7 +108,7 @@
       }
     },
     {
-      "id": "aeea6174-50eb-46e0-8304-61730b26f807",
+      "id": "7a1d6aeb-71af-4d88-8a87-bbac7387bc54",
       "name": "Way of the Open Hand",
       "type": "subclass",
       "data": {
@@ -129,7 +129,7 @@
       }
     },
     {
-      "id": "4fb8ca04-786a-4f03-8ae1-c265d2502a66",
+      "id": "dfa11e79-826b-402f-8d79-2f13a16301c7",
       "name": "Oath of Devotion",
       "type": "subclass",
       "data": {
@@ -150,7 +150,7 @@
       }
     },
     {
-      "id": "2ee012c5-7ff0-4aa0-b36e-d0e703951af9",
+      "id": "b2aac1b9-9cfb-4c9e-802c-a88d690aa6dc",
       "name": "Hunter",
       "type": "subclass",
       "data": {
@@ -171,7 +171,7 @@
       }
     },
     {
-      "id": "bdc73b6e-86d7-45fb-a940-148791a36451",
+      "id": "a3eaee96-43b8-4c80-af31-a97c6a711de0",
       "name": "Thief",
       "type": "subclass",
       "data": {
@@ -192,7 +192,7 @@
       }
     },
     {
-      "id": "29c49b38-d62f-4bdb-a352-f39df5143654",
+      "id": "0a8a75aa-8c2a-4423-8fb0-414eda61142d",
       "name": "Draconic Bloodline",
       "type": "subclass",
       "data": {
@@ -213,7 +213,7 @@
       }
     },
     {
-      "id": "661050a2-27d4-4e80-b86a-170cec421e9a",
+      "id": "a2adaad1-ad19-4a51-a431-e664c20abbf7",
       "name": "The Fiend",
       "type": "subclass",
       "data": {
@@ -234,7 +234,7 @@
       }
     },
     {
-      "id": "e6490cd3-f48c-48b6-9a08-8b17a383fb85",
+      "id": "baa6e70c-845a-4ef9-a4be-33d853f04f42",
       "name": "School of Evocation",
       "type": "subclass",
       "data": {

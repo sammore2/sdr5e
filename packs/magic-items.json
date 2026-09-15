@@ -3,7 +3,7 @@
   "type": "Item",
   "entries": [
     {
-      "id": "4f3776f4-7e2f-4215-bade-57b282b48d56",
+      "id": "cfdfa053-ec19-4bb8-b2bb-f5e5e9a48e81",
       "name": "Adamantine Armor",
       "type": "item",
       "data": {
@@ -26,7 +26,7 @@
       }
     },
     {
-      "id": "ea7c52d3-2f0b-4897-849e-6c7c8103c667",
+      "id": "fb5b4b00-5eac-47da-b855-8d8010030fa6",
       "name": "Ammunition, +1, +2, or +3",
       "type": "item",
       "data": {
@@ -49,7 +49,7 @@
       }
     },
     {
-      "id": "335e49b2-9af8-4db2-9fcd-a67e9f5ed228",
+      "id": "6087b995-b794-42f3-986f-2fa00b3650ed",
       "name": "Amulet of Health",
       "type": "item",
       "data": {
@@ -72,7 +72,7 @@
       }
     },
     {
-      "id": "bad31147-cead-4f17-acb1-00c8f48decb7",
+      "id": "14c9f0fb-60e5-4ebe-844d-357a976f0db9",
       "name": "Amulet of Proof Against Detection and Location",
       "type": "item",
       "data": {
@@ -95,7 +95,7 @@
       }
     },
     {
-      "id": "05f261fb-ff4d-471a-bf08-78ae34ef612a",
+      "id": "183cf1d1-f83f-4568-acee-eeb3c01b56fe",
       "name": "Amulet of the Planes",
       "type": "item",
       "data": {
@@ -118,7 +118,7 @@
       }
     },
     {
-      "id": "10c54272-188a-483d-896f-f8f7a137de9d",
+      "id": "07cdbd9c-9c30-41b3-9635-49ad1d925610",
       "name": "Animated Shield",
       "type": "item",
       "data": {
@@ -141,7 +141,7 @@
       }
     },
     {
-      "id": "aca37bbe-a29f-425a-aa4c-62e70bf9ec30",
+      "id": "586399f6-f1b5-4434-bc10-664ef2028d35",
       "name": "Apparatus of the Crab",
       "type": "item",
       "data": {
@@ -164,7 +164,7 @@
       }
     },
     {
-      "id": "4acaa91b-04e3-40b7-9885-f153d51611d6",
+      "id": "71f34968-df5b-458e-a827-ef2fe3cda410",
       "name": "Armor of Invulnerability",
       "type": "item",
       "data": {
@@ -187,7 +187,7 @@
       }
     },
     {
-      "id": "0395c847-67c0-41fc-b4ea-414fc3b08e3c",
+      "id": "ebb46884-7106-4a20-b830-7beb695eca0c",
       "name": "Armor of Resistance",
       "type": "item",
       "data": {
@@ -210,7 +210,7 @@
       }
     },
     {
-      "id": "ddce1c20-6329-49f4-8122-6a6c21287183",
+      "id": "e58a5788-50eb-4249-800b-ac06a1d22156",
       "name": "Armor of Vulnerability",
       "type": "item",
       "data": {
@@ -233,7 +233,7 @@
       }
     },
     {
-      "id": "aafc99d3-9dc3-40ff-9bb9-e45e7c281567",
+      "id": "7405579a-0db1-4c1b-b8b1-d05d1ac32a12",
       "name": "Armor, +1, +2, or +3",
       "type": "item",
       "data": {
@@ -256,7 +256,7 @@
       }
     },
     {
-      "id": "697597d9-c2e8-4b98-9c85-c75c49f4fd44",
+      "id": "37caa3a0-3cfb-4416-926c-f471588c9252",
       "name": "Arrow of Slaying",
       "type": "item",
       "data": {
@@ -279,7 +279,7 @@
       }
     },
     {
-      "id": "f89f0154-68ee-4d1c-b24d-4fc180fd860d",
+      "id": "bde9a892-fda0-4c36-8e30-092bf6c3f035",
       "name": "Arrow-Catching Shield",
       "type": "item",
       "data": {
@@ -302,7 +302,7 @@
       }
     },
     {
-      "id": "2012f53f-9a6a-4ebb-8e12-2391d352d8ef",
+      "id": "cb2e2898-c411-45bf-b59c-aadc1e3c5747",
       "name": "Bag of Beans",
       "type": "item",
       "data": {
@@ -325,7 +325,7 @@
       }
     },
     {
-      "id": "d3c63731-8466-4cbd-8882-a388be6deb50",
+      "id": "c76f8738-864d-4bbd-a88b-47e59eaa8eeb",
       "name": "Bag of Devouring",
       "type": "item",
       "data": {
@@ -348,7 +348,7 @@
       }
     },
     {
-      "id": "0cdf3235-6516-489e-8bbb-43cd033d72c4",
+      "id": "ff930a03-644f-4bf9-85ca-b491d1ec0e63",
       "name": "Bag of Holding",
       "type": "item",
       "data": {
@@ -371,7 +371,7 @@
       }
     },
     {
-      "id": "c3f1b666-3c5e-4fe8-930c-08ed6cda5fc3",
+      "id": "7ee6cfd6-6ec8-473c-b87a-5a023415202c",
       "name": "Bag of Tricks",
       "type": "item",
       "data": {
@@ -394,7 +394,7 @@
       }
     },
     {
-      "id": "d50e7213-7aad-4c5a-b069-fdbe60c0d4b1",
+      "id": "582b63e0-d40e-4f40-a63c-9a937bee56d3",
       "name": "Bead of Force",
       "type": "item",
       "data": {
@@ -417,7 +417,7 @@
       }
     },
     {
-      "id": "8f375a2d-e0e7-45ab-a7b0-23f09921c48f",
+      "id": "d5707268-2a3c-48e1-81e3-790eced55397",
       "name": "Belt of Dwarvenkind",
       "type": "item",
       "data": {
@@ -440,7 +440,7 @@
       }
     },
     {
-      "id": "edcb7e75-f7af-45e7-9b16-22a7626cb41c",
+      "id": "5ea20964-0a61-4b5d-9532-ccd2abcc8d6d",
       "name": "Belt of Giant Strength",
       "type": "item",
       "data": {
@@ -463,7 +463,7 @@
       }
     },
     {
-      "id": "8ef621c4-2e18-4f73-8e28-2e02235c7f13",
+      "id": "6ecbb51a-7adf-413c-97e7-b80c264c73e0",
       "name": "Berserker Axe",
       "type": "item",
       "data": {
@@ -486,7 +486,7 @@
       }
     },
     {
-      "id": "48e0b6c9-5440-49fc-86ad-1304de348385",
+      "id": "884ef5db-d8aa-4795-92fe-ed7f3b97fc36",
       "name": "Boots of Elvenkind",
       "type": "item",
       "data": {
@@ -509,7 +509,7 @@
       }
     },
     {
-      "id": "4acbdb40-45ce-4e8e-b771-3670f6d22e37",
+      "id": "b6b4a2ab-556e-4156-84c8-6314e71b195e",
       "name": "Boots of Levitation",
       "type": "item",
       "data": {
@@ -532,7 +532,7 @@
       }
     },
     {
-      "id": "e7b427f3-7809-4150-8e16-21e2fe4ac0fb",
+      "id": "9382e808-a53b-407c-bfc6-3b72e668c138",
       "name": "Boots of Speed",
       "type": "item",
       "data": {
@@ -555,7 +555,7 @@
       }
     },
     {
-      "id": "9b737d9e-ecd0-4548-ac5c-9912a3ba9c02",
+      "id": "fb3863a3-d792-411c-91b0-5fdc76527996",
       "name": "Boots of Striding and Springing",
       "type": "item",
       "data": {
@@ -578,7 +578,7 @@
       }
     },
     {
-      "id": "f1591bca-1960-489a-b177-236215f2a6db",
+      "id": "49a5667f-45d0-4637-bdbf-3a6ad974ea45",
       "name": "Boots of the Winterlands",
       "type": "item",
       "data": {
@@ -601,7 +601,7 @@
       }
     },
     {
-      "id": "341ba815-9d1b-4d71-9ae7-0c6164520fdf",
+      "id": "8b9c5b27-720e-4ddb-be80-cd56569f6510",
       "name": "Bowl of Commanding Water Elementals",
       "type": "item",
       "data": {
@@ -624,7 +624,7 @@
       }
     },
     {
-      "id": "34117005-98a2-4414-9405-4b32ae735cef",
+      "id": "57b40845-5666-42ca-85de-2d834b9570da",
       "name": "Bracers of Archery",
       "type": "item",
       "data": {
@@ -647,7 +647,7 @@
       }
     },
     {
-      "id": "678d3406-da83-4bf9-abc4-f7bdc4b99247",
+      "id": "821e64bb-60db-41ed-a53a-0e664b696854",
       "name": "Bracers of Defense",
       "type": "item",
       "data": {
@@ -670,7 +670,7 @@
       }
     },
     {
-      "id": "6d58ea49-3407-4068-abe4-b780eca90de7",
+      "id": "05b0efdc-6166-4c14-bb00-2ae661f18f1f",
       "name": "Brazier of Commanding Fire Elementals",
       "type": "item",
       "data": {
@@ -693,7 +693,7 @@
       }
     },
     {
-      "id": "8d48a8a0-5c16-49b2-bb78-cc6b2c250bf6",
+      "id": "86632913-13b5-4478-9251-ac0207a22500",
       "name": "Brooch of Shielding",
       "type": "item",
       "data": {
@@ -716,7 +716,7 @@
       }
     },
     {
-      "id": "321aa490-e687-483b-a9da-da0c907e1fec",
+      "id": "3918f1a6-5bb3-42a5-8c5f-2aa6d24d319b",
       "name": "Broom of Flying",
       "type": "item",
       "data": {
@@ -739,7 +739,7 @@
       }
     },
     {
-      "id": "3aba7241-85b9-4725-9f46-a5acf0666577",
+      "id": "9c9a9e4f-e86b-4aaa-87ed-b58fac598974",
       "name": "Candle of Invocation",
       "type": "item",
       "data": {
@@ -762,7 +762,7 @@
       }
     },
     {
-      "id": "9f1bf276-b57e-4833-b897-76a62babf65f",
+      "id": "0273e50d-6320-47b2-8fe2-78f19e98f441",
       "name": "Cape of the Mountebank",
       "type": "item",
       "data": {
@@ -785,7 +785,7 @@
       }
     },
     {
-      "id": "89b5e422-0b9d-4106-8777-2fa40b5a7ef0",
+      "id": "84c5af87-1347-453a-b0d4-c15bc3301188",
       "name": "Carpet of Flying",
       "type": "item",
       "data": {
@@ -808,7 +808,7 @@
       }
     },
     {
-      "id": "a7631fce-e177-451c-848d-b9e823b11af3",
+      "id": "c848539b-3bed-4816-a6f6-35d27945d93a",
       "name": "Censer of Controlling Air Elementals",
       "type": "item",
       "data": {
@@ -831,7 +831,7 @@
       }
     },
     {
-      "id": "1a2a11cf-d5ee-4c5c-83aa-47c7953669a5",
+      "id": "bbab1b6f-2a9e-48e9-8079-bff4efe8d507",
       "name": "Chime of Opening",
       "type": "item",
       "data": {
@@ -854,7 +854,7 @@
       }
     },
     {
-      "id": "e54a54a6-43bd-4f49-87a3-e83a95dc9099",
+      "id": "afcc9ada-c393-4134-ac9c-6735ee136023",
       "name": "Circlet of Blasting",
       "type": "item",
       "data": {
@@ -877,7 +877,7 @@
       }
     },
     {
-      "id": "c861352f-6065-4f34-b7b7-2d45cb09ab8c",
+      "id": "c0f7aa21-0595-4b94-9220-f06c87ea3e0e",
       "name": "Cloak of Arachnida",
       "type": "item",
       "data": {
@@ -900,7 +900,7 @@
       }
     },
     {
-      "id": "1d79d2a1-be81-4fdb-b1a5-33ddef724d3b",
+      "id": "b7c123fa-02fe-4f1b-9cbf-e3724797b668",
       "name": "Cloak of Displacement",
       "type": "item",
       "data": {
@@ -923,7 +923,7 @@
       }
     },
     {
-      "id": "6f581788-05cc-4266-a8c0-60ce243feb42",
+      "id": "70189634-ca6e-4a94-a382-30019e2785aa",
       "name": "Cloak of Elvenkind",
       "type": "item",
       "data": {
@@ -946,7 +946,7 @@
       }
     },
     {
-      "id": "be4eaa66-757f-4ccb-8ffa-c19471d5fd85",
+      "id": "68cbb970-d969-4bf6-a0ba-fd97c01fbd93",
       "name": "Cloak of Protection",
       "type": "item",
       "data": {
@@ -969,7 +969,7 @@
       }
     },
     {
-      "id": "b8797137-52f3-4a15-b527-34884763b387",
+      "id": "53408acc-2777-4dbf-b384-434778472240",
       "name": "Cloak of the Bat",
       "type": "item",
       "data": {
@@ -992,7 +992,7 @@
       }
     },
     {
-      "id": "a7f314f7-50b6-4162-90c6-58fcd9e08c3e",
+      "id": "22b69e33-7052-442f-90bd-f60d3205c982",
       "name": "Cloak of the Manta Ray",
       "type": "item",
       "data": {
@@ -1015,7 +1015,7 @@
       }
     },
     {
-      "id": "7873900d-84a4-4903-8b3b-8400be0fa3f3",
+      "id": "1af5d631-25e8-4a98-99bc-6530bc7c5d83",
       "name": "Crystal Ball",
       "type": "item",
       "data": {
@@ -1038,7 +1038,7 @@
       }
     },
     {
-      "id": "85492f04-9209-416e-943f-fc5e55663143",
+      "id": "ea7d6e85-68f3-41e2-899e-5fcbf519bd2d",
       "name": "Cube of Force",
       "type": "item",
       "data": {
@@ -1061,7 +1061,7 @@
       }
     },
     {
-      "id": "d2a0a47b-fbec-4a58-a4f5-f123d932fc1f",
+      "id": "550b8faa-3589-47b9-a9d0-4b71c7e9ef36",
       "name": "Cubic Gate",
       "type": "item",
       "data": {
@@ -1084,7 +1084,7 @@
       }
     },
     {
-      "id": "d88522a0-4ec2-4e58-99d3-a5b68ecb208a",
+      "id": "228e4663-5376-4f8f-bc03-37f338564f7d",
       "name": "Dagger of Venom",
       "type": "item",
       "data": {
@@ -1107,7 +1107,7 @@
       }
     },
     {
-      "id": "816a451b-4025-46da-b1df-03d2366cde5b",
+      "id": "5369eee8-a0c3-4504-9738-5ebf6ca3ceb8",
       "name": "Dancing Sword",
       "type": "item",
       "data": {
@@ -1130,7 +1130,7 @@
       }
     },
     {
-      "id": "beb3eb86-3656-439f-8fe8-fb5675f02655",
+      "id": "bb9dfccb-4c89-443e-84d0-5a02028acb25",
       "name": "Decanter of Endless Water",
       "type": "item",
       "data": {
@@ -1153,7 +1153,7 @@
       }
     },
     {
-      "id": "b6e768d7-4a11-4ca3-bcc1-f5c69e8ad97f",
+      "id": "2c852073-89ae-4be3-8029-d8a23fdcadc5",
       "name": "Deck of Illusions",
       "type": "item",
       "data": {
@@ -1176,7 +1176,7 @@
       }
     },
     {
-      "id": "904dc260-1dc7-4dc6-87fa-9d18c915d446",
+      "id": "58f461f1-bfc5-4e8d-9026-dd36a85e53d6",
       "name": "Deck of Many Things",
       "type": "item",
       "data": {
@@ -1199,7 +1199,7 @@
       }
     },
     {
-      "id": "fcb413ef-2805-480d-bfca-03256025b9e6",
+      "id": "aab7b981-8a13-4317-80c8-615d60b8cc91",
       "name": "Defender",
       "type": "item",
       "data": {
@@ -1222,7 +1222,7 @@
       }
     },
     {
-      "id": "3d88e73f-9189-4cfc-b004-7afd428259b0",
+      "id": "15fb77c2-0ac3-4e58-9c8f-8027d220cb0c",
       "name": "Demon Armor",
       "type": "item",
       "data": {
@@ -1245,7 +1245,7 @@
       }
     },
     {
-      "id": "2a104d82-fe52-43bf-b38e-be55df66d417",
+      "id": "b9701cd4-7764-424c-ad10-4df5b68a07dc",
       "name": "Dimensional Shackles",
       "type": "item",
       "data": {
@@ -1268,7 +1268,7 @@
       }
     },
     {
-      "id": "5bbe952d-36da-46c5-bd67-9e2a306a8d7b",
+      "id": "e8c829a3-035e-4e4a-8ef4-2162df761914",
       "name": "Dragon Scale Mail",
       "type": "item",
       "data": {
@@ -1291,7 +1291,7 @@
       }
     },
     {
-      "id": "c1fa36c5-bd46-4d38-9204-99cd43326022",
+      "id": "026e7de0-3a6d-4ff1-a70c-c506d7260f73",
       "name": "Dragon Slayer",
       "type": "item",
       "data": {
@@ -1314,7 +1314,7 @@
       }
     },
     {
-      "id": "2d637740-3731-413c-8b45-e9980b666e6a",
+      "id": "54f45dfc-1d21-4cd9-999f-befec18e6168",
       "name": "Dust of Disappearance",
       "type": "item",
       "data": {
@@ -1337,7 +1337,7 @@
       }
     },
     {
-      "id": "2cc8ff5d-ace8-46ca-8607-e3dc65537cc1",
+      "id": "d43e3ae7-b30c-4fee-8c85-de73bf402f8c",
       "name": "Dust of Dryness",
       "type": "item",
       "data": {
@@ -1360,7 +1360,7 @@
       }
     },
     {
-      "id": "76cb3b45-7389-4547-a124-4f7090874248",
+      "id": "6ea20f45-b3f9-4acd-a516-b92a1e9f8cf7",
       "name": "Dust of Sneezing and Choking",
       "type": "item",
       "data": {
@@ -1383,7 +1383,7 @@
       }
     },
     {
-      "id": "512750f6-9dc5-4b96-b3db-a1283e769d44",
+      "id": "8442a701-cbef-471d-a17a-5050a0b6c86d",
       "name": "Dwarven Plate",
       "type": "item",
       "data": {
@@ -1406,7 +1406,7 @@
       }
     },
     {
-      "id": "ca725357-aed3-4de2-b3a1-535e87e405d6",
+      "id": "5b101742-28c5-4352-b267-1d229b115272",
       "name": "Dwarven Thrower",
       "type": "item",
       "data": {
@@ -1429,7 +1429,7 @@
       }
     },
     {
-      "id": "9b2b843b-5e94-49de-8eed-96c1c86a5f00",
+      "id": "594d3f0e-d8f7-429c-8270-7dd6661ce052",
       "name": "Efficient Quiver",
       "type": "item",
       "data": {
@@ -1452,7 +1452,7 @@
       }
     },
     {
-      "id": "904c504a-930a-4bfd-9839-afa834ddf000",
+      "id": "b37fb8d1-0907-4e75-b502-560a97144c50",
       "name": "Efreeti Bottle",
       "type": "item",
       "data": {
@@ -1475,7 +1475,7 @@
       }
     },
     {
-      "id": "3bf7b870-f4b4-4bfd-bb05-49e95bff371b",
+      "id": "c517c98e-09b2-48db-a15d-52866aecc098",
       "name": "Elemental Gem",
       "type": "item",
       "data": {
@@ -1498,7 +1498,7 @@
       }
     },
     {
-      "id": "f801fe5d-78b1-4f98-a4cf-d61b063d8c21",
+      "id": "6652d066-6838-4354-8471-d54bfb9dcfd6",
       "name": "Elven Chain",
       "type": "item",
       "data": {
@@ -1521,7 +1521,7 @@
       }
     },
     {
-      "id": "baed0c61-5ec6-4563-bff9-05844e5ed472",
+      "id": "2325e3fe-c6b8-4e84-a9de-c6f3089b1acb",
       "name": "Eversmoking Bottle",
       "type": "item",
       "data": {
@@ -1544,7 +1544,7 @@
       }
     },
     {
-      "id": "ebee493d-f275-4cc6-86ac-5065d67d5281",
+      "id": "d073291d-29e7-424c-ab89-15573cdfe0b5",
       "name": "Eyes of Charming",
       "type": "item",
       "data": {
@@ -1567,7 +1567,7 @@
       }
     },
     {
-      "id": "89f97181-ad19-41d1-ac4b-80b80eec8623",
+      "id": "3faf3520-9d65-4e91-97a0-3eabc31dc244",
       "name": "Eyes of Minute Seeing",
       "type": "item",
       "data": {
@@ -1590,7 +1590,7 @@
       }
     },
     {
-      "id": "751dc481-9d3e-45c8-8d3a-b51ae7bc0c04",
+      "id": "fcb17927-1067-44d7-a990-0dd5fb43ca9a",
       "name": "Eyes of the Eagle",
       "type": "item",
       "data": {
@@ -1613,7 +1613,7 @@
       }
     },
     {
-      "id": "0f7de764-7878-417c-b703-683078827667",
+      "id": "db7bba47-4699-4dd7-ad7c-3da156615665",
       "name": "Feather Token",
       "type": "item",
       "data": {
@@ -1636,7 +1636,7 @@
       }
     },
     {
-      "id": "a8e61c16-f152-4edb-adbd-7fa81529d852",
+      "id": "cb35597e-c7be-45f8-a406-6905efac986a",
       "name": "Figurine of Wondrous Power",
       "type": "item",
       "data": {
@@ -1659,7 +1659,7 @@
       }
     },
     {
-      "id": "20e43c7d-90b2-4aaf-bb84-d2ed5f64bdb9",
+      "id": "391bca2f-dc29-49c4-b37b-e5e2291dec25",
       "name": "Flame Tongue",
       "type": "item",
       "data": {
@@ -1682,7 +1682,7 @@
       }
     },
     {
-      "id": "5be35b54-343a-42e6-9556-dca88064930d",
+      "id": "655f2cae-682b-4bb2-972f-16e5a0377cc3",
       "name": "Folding Boat",
       "type": "item",
       "data": {
@@ -1705,7 +1705,7 @@
       }
     },
     {
-      "id": "328a40d3-15a2-4aec-8b2b-a1e0abf267e7",
+      "id": "f62ba3b5-2414-4d2b-9d86-4259d9a742cb",
       "name": "Frost Brand",
       "type": "item",
       "data": {
@@ -1728,7 +1728,7 @@
       }
     },
     {
-      "id": "a8f91bf9-0c30-4f67-805a-9a77e9bbea3b",
+      "id": "048bac0f-cdc0-405a-9d9a-bde0d11f2d03",
       "name": "Gauntlets of Ogre Power",
       "type": "item",
       "data": {
@@ -1751,7 +1751,7 @@
       }
     },
     {
-      "id": "fc106ea3-1be1-4b0a-b763-0779246ecab3",
+      "id": "a01aecd2-bc5c-4129-a1f1-ead4d2c37fe0",
       "name": "Gem of Brightness",
       "type": "item",
       "data": {
@@ -1774,7 +1774,7 @@
       }
     },
     {
-      "id": "308f2208-450b-40c8-b9df-f2e65d24f00e",
+      "id": "09d615f3-5fa2-4fc4-b1e8-3e9d04ca43b5",
       "name": "Gem of Seeing",
       "type": "item",
       "data": {
@@ -1797,7 +1797,7 @@
       }
     },
     {
-      "id": "2d88f20c-9bb3-49f4-a1e6-03703cd5b952",
+      "id": "55f750eb-f753-4753-970e-d93fdad42b24",
       "name": "Giant Slayer",
       "type": "item",
       "data": {
@@ -1820,7 +1820,7 @@
       }
     },
     {
-      "id": "a472f285-8100-47af-b576-b0616af52aa6",
+      "id": "348579a8-7a1f-439a-be1e-eee33d2f32b1",
       "name": "Glamoured Studded Leather",
       "type": "item",
       "data": {
@@ -1843,7 +1843,7 @@
       }
     },
     {
-      "id": "37706296-a13c-4228-bfbb-b34b291ff3a7",
+      "id": "a219a834-4a0e-4f3c-a42a-ce535348b5d3",
       "name": "Gloves of Missile Snaring",
       "type": "item",
       "data": {
@@ -1866,7 +1866,7 @@
       }
     },
     {
-      "id": "2bb2d05f-a150-49c4-9aa4-6efb5cb76418",
+      "id": "2cea597a-5cc8-4305-8bad-808c426fb974",
       "name": "Gloves of Swimming and Climbing",
       "type": "item",
       "data": {
@@ -1889,7 +1889,7 @@
       }
     },
     {
-      "id": "c41a347a-ff62-4ae1-97b6-d5b4c4333435",
+      "id": "21a92acb-4cee-4b0f-9c18-06d4b31d51c2",
       "name": "Goggles of Night",
       "type": "item",
       "data": {
@@ -1912,7 +1912,7 @@
       }
     },
     {
-      "id": "0a795056-c879-43d6-bc5a-cb916b76bb54",
+      "id": "4e3344cf-72b5-4452-a25b-63cf5c1ba490",
       "name": "Hammer of Thunderbolts",
       "type": "item",
       "data": {
@@ -1935,7 +1935,7 @@
       }
     },
     {
-      "id": "7c277684-71a3-4734-860c-034022fc661d",
+      "id": "6da032ec-32cf-457f-922b-13f5e8955f1f",
       "name": "Handy Haversack",
       "type": "item",
       "data": {
@@ -1958,7 +1958,7 @@
       }
     },
     {
-      "id": "ebcb5e26-982a-429e-9934-9a47f4565f18",
+      "id": "ea4e39a4-1f31-4478-b056-1feb365fc2d4",
       "name": "Hat of Disguise",
       "type": "item",
       "data": {
@@ -1981,7 +1981,7 @@
       }
     },
     {
-      "id": "a14087d2-7a73-4dfe-a3ea-7f892e2ee460",
+      "id": "1e3a46d7-699f-4a6c-bd23-5abc4b9b3ad7",
       "name": "Headband of Intellect",
       "type": "item",
       "data": {
@@ -2004,7 +2004,7 @@
       }
     },
     {
-      "id": "8c07dc6d-31d3-4bb1-a5ba-830032b2e389",
+      "id": "af6e5f5c-c1e9-40ff-b199-a3e71524c447",
       "name": "Helm of Brilliance",
       "type": "item",
       "data": {
@@ -2027,7 +2027,7 @@
       }
     },
     {
-      "id": "4c366ce3-2250-4f1e-8bcf-bff198f7d18f",
+      "id": "d40d371f-f3af-4160-97ca-fac412c09812",
       "name": "Helm of Comprehending Languages",
       "type": "item",
       "data": {
@@ -2050,7 +2050,7 @@
       }
     },
     {
-      "id": "dcc31da0-6e22-46f7-ac0b-73486dd51b40",
+      "id": "114498cc-a082-4207-a082-55ff7f8c55c7",
       "name": "Helm of Telepathy",
       "type": "item",
       "data": {
@@ -2073,7 +2073,7 @@
       }
     },
     {
-      "id": "c0c329e1-db41-4e05-b7ea-b0e74d0c014f",
+      "id": "bc59bd54-c5f4-4864-85df-96233e2ac46b",
       "name": "Helm of Teleportation",
       "type": "item",
       "data": {
@@ -2096,7 +2096,7 @@
       }
     },
     {
-      "id": "a889bb23-a5de-401a-b49e-9dd56b396505",
+      "id": "f7bd6ecd-76a8-4366-8028-dc1bcd67f341",
       "name": "Holy Avenger",
       "type": "item",
       "data": {
@@ -2119,7 +2119,7 @@
       }
     },
     {
-      "id": "989ba7f8-b535-4845-bb18-4c3fed3a7693",
+      "id": "e9a8c4b8-41ac-479d-aeb2-07ac744a889e",
       "name": "Horn of Blasting",
       "type": "item",
       "data": {
@@ -2142,7 +2142,7 @@
       }
     },
     {
-      "id": "b5d443d6-779e-4e9d-869d-48aa12bec710",
+      "id": "8a65a516-3d20-4dfe-afe9-8a93ce167931",
       "name": "Horn of Valhalla",
       "type": "item",
       "data": {
@@ -2165,7 +2165,7 @@
       }
     },
     {
-      "id": "86d4d976-5617-4bd6-a821-18b53bc18cfc",
+      "id": "52f60841-81c9-44ff-bab7-b8d5c7aa49f3",
       "name": "Horseshoes of a Zephyr",
       "type": "item",
       "data": {
@@ -2188,7 +2188,7 @@
       }
     },
     {
-      "id": "1b2ee146-4355-47de-87c7-70b2d5158871",
+      "id": "f24c698b-dd75-4c2e-a4a6-0cff9eb9932f",
       "name": "Horseshoes of Speed",
       "type": "item",
       "data": {
@@ -2211,7 +2211,7 @@
       }
     },
     {
-      "id": "420c46e3-2cd7-4935-8f75-0fc6c75c511d",
+      "id": "2d6a65ac-ffd3-448a-af9a-59164924bd45",
       "name": "Immovable Rod",
       "type": "item",
       "data": {
@@ -2234,7 +2234,7 @@
       }
     },
     {
-      "id": "35288610-290b-4075-95e6-5aab2a4497c8",
+      "id": "c9557434-c063-47c3-8b54-6f6e84b7069a",
       "name": "Instant Fortress",
       "type": "item",
       "data": {
@@ -2257,7 +2257,7 @@
       }
     },
     {
-      "id": "add96a2e-9755-40f2-a42e-e32e983f8b86",
+      "id": "d9054c84-cdce-4c95-9d9e-bb7399f09c10",
       "name": "Ioun Stone",
       "type": "item",
       "data": {
@@ -2280,7 +2280,7 @@
       }
     },
     {
-      "id": "18a9704a-53d4-4bc8-b768-b1bb512540ca",
+      "id": "a17d7ca5-d1a3-4525-9cf1-98344875bee8",
       "name": "Iron Bands of Binding",
       "type": "item",
       "data": {
@@ -2303,7 +2303,7 @@
       }
     },
     {
-      "id": "f1106f70-7388-48e9-89f8-7c29894b6148",
+      "id": "a0727f67-c940-420d-af92-6f123d53a348",
       "name": "Iron Flask",
       "type": "item",
       "data": {
@@ -2326,7 +2326,7 @@
       }
     },
     {
-      "id": "4424c188-2d81-4cf7-975d-0b117e1cd3e6",
+      "id": "9a3bee03-bcfe-4720-8fd2-3d7a9c3812f0",
       "name": "Javelin of Lightning",
       "type": "item",
       "data": {
@@ -2349,7 +2349,7 @@
       }
     },
     {
-      "id": "44421de8-192d-4011-9764-37e4b9744ea7",
+      "id": "a8e6099c-cbb8-49e2-b4d2-0abffc001b1b",
       "name": "Lantern of Revealing",
       "type": "item",
       "data": {
@@ -2372,7 +2372,7 @@
       }
     },
     {
-      "id": "cf73830e-7b89-432b-867d-c647e243974e",
+      "id": "1c27e4b4-8acd-4571-b427-fe3570430f97",
       "name": "Luck Blade",
       "type": "item",
       "data": {
@@ -2395,7 +2395,7 @@
       }
     },
     {
-      "id": "2c8052a6-7896-4144-89ed-fbaeb95f471b",
+      "id": "a154db25-263f-4ab2-9c32-581096a2c6c6",
       "name": "Mace of Disruption",
       "type": "item",
       "data": {
@@ -2418,7 +2418,7 @@
       }
     },
     {
-      "id": "186f78b2-5441-4ef3-9f4e-335c07a01d8e",
+      "id": "55dd3984-2583-4a25-a0c7-27b1fb8450d6",
       "name": "Mace of Smiting",
       "type": "item",
       "data": {
@@ -2441,7 +2441,7 @@
       }
     },
     {
-      "id": "b33b7420-ec60-4da6-a413-b6f42f777775",
+      "id": "296e0e4b-186e-4729-bc95-34fd0dfd1b30",
       "name": "Mace of Terror",
       "type": "item",
       "data": {
@@ -2464,7 +2464,7 @@
       }
     },
     {
-      "id": "13dd3a2f-4dcb-4f51-b6d7-3579659f90f4",
+      "id": "2e3f35a2-6b1e-4c46-9165-a04cdb072a0c",
       "name": "Mantle of Spell Resistance",
       "type": "item",
       "data": {
@@ -2487,7 +2487,7 @@
       }
     },
     {
-      "id": "541fd09d-13c9-4e45-8380-2764cd66d0b6",
+      "id": "991d8e4e-2543-42d5-8af2-55380ef8a122",
       "name": "Manual of Bodily Health",
       "type": "item",
       "data": {
@@ -2510,7 +2510,7 @@
       }
     },
     {
-      "id": "f97a38b3-566b-44a9-9ec7-53c0a8f9ab7e",
+      "id": "61ffce1c-a26d-4d81-a963-b06db83ecef3",
       "name": "Manual of Gainful Exercise",
       "type": "item",
       "data": {
@@ -2533,7 +2533,7 @@
       }
     },
     {
-      "id": "3f3e3707-6dfe-4080-8671-17ed66583287",
+      "id": "c0f7a5f8-4da5-417f-b713-400b617153ea",
       "name": "Manual of Golems",
       "type": "item",
       "data": {
@@ -2556,7 +2556,7 @@
       }
     },
     {
-      "id": "58f06135-4be4-4ac3-9dd2-00c4aeeba7c9",
+      "id": "ef176559-041c-40f9-bd23-c4524124cff9",
       "name": "Manual of Quickness of Action",
       "type": "item",
       "data": {
@@ -2579,7 +2579,7 @@
       }
     },
     {
-      "id": "6d640302-f98d-4fc3-8cb1-8fa96054c5b7",
+      "id": "72eb5cd0-45ef-4bde-aa61-a64faebb25b0",
       "name": "Marvelous Pigments",
       "type": "item",
       "data": {
@@ -2602,7 +2602,7 @@
       }
     },
     {
-      "id": "1d5841c2-efe0-4073-bc6f-151767d18c3c",
+      "id": "9b551db1-80d4-432b-b0da-3ca86b896591",
       "name": "Medallion of Thoughts",
       "type": "item",
       "data": {
@@ -2625,7 +2625,7 @@
       }
     },
     {
-      "id": "daaaae05-e8d7-497b-9e80-3bedd9b9f1e3",
+      "id": "cdf4cbf7-06b4-4588-b132-3549d779bcd5",
       "name": "Mirror of Life Trapping",
       "type": "item",
       "data": {
@@ -2648,7 +2648,7 @@
       }
     },
     {
-      "id": "30569486-91a1-457a-bef0-649e8ad4f545",
+      "id": "9d8d8720-90af-47be-bed5-527ba622003e",
       "name": "Mithral Armor",
       "type": "item",
       "data": {
@@ -2671,7 +2671,7 @@
       }
     },
     {
-      "id": "18cdc7be-e71a-449f-8a31-3fd0df8375c6",
+      "id": "1198f709-7e82-4062-afff-d1b68f4a9ae1",
       "name": "Necklace of Adaptation",
       "type": "item",
       "data": {
@@ -2694,7 +2694,7 @@
       }
     },
     {
-      "id": "e7f2bce4-e16e-446a-a168-ccdfdd1f1005",
+      "id": "f00bed64-3a8f-4f0d-bdbe-5884c68e78b6",
       "name": "Necklace of Fireballs",
       "type": "item",
       "data": {
@@ -2717,7 +2717,7 @@
       }
     },
     {
-      "id": "24485b4b-7d09-4045-baf3-c5ef5da4c0cb",
+      "id": "4b0167d9-07b0-4347-a72b-9c41d2356ab2",
       "name": "Necklace of Prayer Beads",
       "type": "item",
       "data": {
@@ -2740,7 +2740,7 @@
       }
     },
     {
-      "id": "9c71f8bf-9224-44c0-b116-a35ff48263a4",
+      "id": "5a7c50a6-8fc9-4d0a-8463-2a74c33bb201",
       "name": "Nine Lives Stealer",
       "type": "item",
       "data": {
@@ -2763,7 +2763,7 @@
       }
     },
     {
-      "id": "2214b7b5-54be-4fd2-a79c-1c0f9e202ee6",
+      "id": "bdb1ba83-8947-4c7d-8a5f-fefa4ab4add5",
       "name": "Oathbow",
       "type": "item",
       "data": {
@@ -2786,7 +2786,7 @@
       }
     },
     {
-      "id": "7de0af6e-9a23-4a68-bc46-784203552b1d",
+      "id": "50b144a4-edc4-4d75-8691-37381eca3b60",
       "name": "Oil of Etherealness",
       "type": "item",
       "data": {
@@ -2809,7 +2809,7 @@
       }
     },
     {
-      "id": "d1836111-f3e0-46fc-a212-566537c8f23c",
+      "id": "5b291a64-1a43-4db8-a905-3ff7dd670339",
       "name": "Oil of Sharpness",
       "type": "item",
       "data": {
@@ -2832,7 +2832,7 @@
       }
     },
     {
-      "id": "479c5248-bd60-4639-b48e-76231e329e72",
+      "id": "a41a4dce-6a97-4b8d-a29c-5c1b8aa0ba6a",
       "name": "Oil of Slipperiness",
       "type": "item",
       "data": {
@@ -2855,7 +2855,7 @@
       }
     },
     {
-      "id": "4ca11b7d-a21a-4406-acdd-4fa7d9c96232",
+      "id": "f25cc96e-4fa2-4207-9e97-d7a682076d31",
       "name": "Pearl of Power",
       "type": "item",
       "data": {
@@ -2878,7 +2878,7 @@
       }
     },
     {
-      "id": "38a3ae03-79f1-464d-a8d1-03987f2d6d6f",
+      "id": "84033f37-2382-43ef-a3c1-2b5d8b519a3a",
       "name": "Periapt of Health",
       "type": "item",
       "data": {
@@ -2901,7 +2901,7 @@
       }
     },
     {
-      "id": "98b56e8d-61ef-418c-b99e-8acbeba89e1d",
+      "id": "ed31a7c7-b12f-4e73-9e41-b181c11cf5c6",
       "name": "Periapt of Proof against Poison",
       "type": "item",
       "data": {
@@ -2924,7 +2924,7 @@
       }
     },
     {
-      "id": "57850324-2dd5-4d22-b7a9-0aa93ee43f8e",
+      "id": "9153d30d-2458-4471-8799-0b5ce9887d68",
       "name": "Periapt of Wound Closure",
       "type": "item",
       "data": {
@@ -2947,7 +2947,7 @@
       }
     },
     {
-      "id": "d77bef48-bebb-4bf4-adaf-0ff3bb0e82f5",
+      "id": "1193610a-3e78-42a5-a9d1-9245874e8178",
       "name": "Philter of Love",
       "type": "item",
       "data": {
@@ -2970,7 +2970,7 @@
       }
     },
     {
-      "id": "3d25acd8-2e61-46e0-84d4-175300fe064e",
+      "id": "5c910992-5af5-405c-9eff-e0e7f8d5de4f",
       "name": "Pipes of Haunting",
       "type": "item",
       "data": {
@@ -2993,7 +2993,7 @@
       }
     },
     {
-      "id": "927b0e47-7ae9-4378-97c7-3cdeb375a7a1",
+      "id": "ee549af1-b8b1-4df5-a73d-ce4ca546b6fd",
       "name": "Pipes of the Sewers",
       "type": "item",
       "data": {
@@ -3016,7 +3016,7 @@
       }
     },
     {
-      "id": "ecd01515-4e58-4b93-a977-640be6faad4f",
+      "id": "b8c8d9ec-d381-4201-b0e8-8634ecd0de86",
       "name": "Plate Armor of Etherealness",
       "type": "item",
       "data": {
@@ -3039,7 +3039,7 @@
       }
     },
     {
-      "id": "5a8311bb-4924-4199-969d-2ef6c9213c2d",
+      "id": "54769390-b908-42d1-9fe7-7de59683391b",
       "name": "Portable Hole",
       "type": "item",
       "data": {
@@ -3062,7 +3062,7 @@
       }
     },
     {
-      "id": "6312fa01-2a46-434a-8a8e-43b7f2b7469c",
+      "id": "d2967a74-ace6-448a-888e-4f2ca235002b",
       "name": "Potion of Animal Friendship",
       "type": "item",
       "data": {
@@ -3085,7 +3085,7 @@
       }
     },
     {
-      "id": "1268030c-ec9a-47d6-8b81-eec44c204749",
+      "id": "78f80fe2-a032-426c-9b50-87c77ddb492d",
       "name": "Potion of Clairvoyance",
       "type": "item",
       "data": {
@@ -3108,7 +3108,7 @@
       }
     },
     {
-      "id": "5b6746ff-6e32-4b81-9aec-be44bf26fac6",
+      "id": "fc196e6e-4c44-4368-b071-3929806b9870",
       "name": "Potion of Climbing",
       "type": "item",
       "data": {
@@ -3131,7 +3131,7 @@
       }
     },
     {
-      "id": "81c226c9-3c5e-473e-8a8d-1bed4bd78d4d",
+      "id": "085a64bd-88d9-43dc-b119-16938c996858",
       "name": "Potion of Diminution",
       "type": "item",
       "data": {
@@ -3154,7 +3154,7 @@
       }
     },
     {
-      "id": "f750bb70-6e29-4325-ac5e-01aef2e4ed3b",
+      "id": "f127a548-ed44-4f23-91f0-f23e790846ea",
       "name": "Potion of Flying",
       "type": "item",
       "data": {
@@ -3177,7 +3177,7 @@
       }
     },
     {
-      "id": "dee33510-9f5c-4488-a2e7-4d6fe012ed42",
+      "id": "28b235b0-00d0-4075-bd77-50fe7232785a",
       "name": "Potion of Gaseous Form",
       "type": "item",
       "data": {
@@ -3200,7 +3200,7 @@
       }
     },
     {
-      "id": "dd062506-cd48-4c00-82b1-96730bcf08e7",
+      "id": "13d950df-9b13-4a39-9a11-e1132fef29ef",
       "name": "Potion of Giant Strength",
       "type": "item",
       "data": {
@@ -3223,7 +3223,7 @@
       }
     },
     {
-      "id": "b8312d94-69f1-4afe-bf0d-22a7d003b26a",
+      "id": "ae1b98bc-2ba7-4bc2-b8e1-80cbcdb90bd6",
       "name": "Potion of Growth",
       "type": "item",
       "data": {
@@ -3246,7 +3246,7 @@
       }
     },
     {
-      "id": "91cb60cc-44a0-490a-a6e1-6ae019940d61",
+      "id": "ec1f7637-4232-4970-9db8-942232f24b8b",
       "name": "Potion of Healing",
       "type": "item",
       "data": {
@@ -3269,7 +3269,7 @@
       }
     },
     {
-      "id": "2b1929b1-9e53-4192-8890-f2595cdab37f",
+      "id": "b5239ff4-598d-4115-bad4-bf5a48690aea",
       "name": "Potion of Heroism",
       "type": "item",
       "data": {
@@ -3292,7 +3292,7 @@
       }
     },
     {
-      "id": "a6b415a1-3fa8-46bf-a893-7c1e3c19b0b5",
+      "id": "622992f3-739c-4153-b589-0c5c9314acc4",
       "name": "Potion of Invisibility",
       "type": "item",
       "data": {
@@ -3315,7 +3315,7 @@
       }
     },
     {
-      "id": "6c44292b-2e05-46fb-99bd-98c760301c94",
+      "id": "a0a8d1ad-f422-4709-bbae-8c5c760b63b8",
       "name": "Potion of Mind Reading",
       "type": "item",
       "data": {
@@ -3338,7 +3338,7 @@
       }
     },
     {
-      "id": "216d5d64-0080-4f39-8fb6-31cb797cfce2",
+      "id": "13c139a5-23be-4b15-b1cf-db819bb7ad1d",
       "name": "Potion of Poison",
       "type": "item",
       "data": {
@@ -3361,7 +3361,7 @@
       }
     },
     {
-      "id": "6ff732c2-65ff-4690-944c-9e0ef6574508",
+      "id": "95e39d6c-46e0-4728-a7ff-43f78020171b",
       "name": "Potion of Resistance",
       "type": "item",
       "data": {
@@ -3384,7 +3384,7 @@
       }
     },
     {
-      "id": "53de31c2-6f68-4a24-96c3-404a24104294",
+      "id": "5dac96da-0d67-4309-ba4d-398fb24d9bc1",
       "name": "Potion of Speed",
       "type": "item",
       "data": {
@@ -3407,7 +3407,7 @@
       }
     },
     {
-      "id": "063faa3e-4135-4124-853a-2cb9773e92be",
+      "id": "e8cfb7fe-b400-46cc-aea2-a299475b16e1",
       "name": "Potion of Water Breathing",
       "type": "item",
       "data": {
@@ -3430,7 +3430,7 @@
       }
     },
     {
-      "id": "a7a98999-015a-4337-81b5-9908619af355",
+      "id": "7b93418d-39f5-4721-a36e-d6d517f9ede6",
       "name": "Restorative Ointment",
       "type": "item",
       "data": {
@@ -3453,7 +3453,7 @@
       }
     },
     {
-      "id": "954436ee-ae3d-4ec7-99ea-cd53c1b9a6e4",
+      "id": "9303a1aa-b0d3-4011-862c-a7d0a849f65e",
       "name": "Ring of Animal Influence",
       "type": "item",
       "data": {
@@ -3476,7 +3476,7 @@
       }
     },
     {
-      "id": "4ad12700-090e-464d-8e38-a97bd82615c4",
+      "id": "7fc8b5c0-8ca5-4f85-8bad-00fcb4e1f93b",
       "name": "Ring of Djinni Summoning",
       "type": "item",
       "data": {
@@ -3499,7 +3499,7 @@
       }
     },
     {
-      "id": "740ab18d-f159-44aa-97a8-ca871fa4129e",
+      "id": "63f6572d-ff9e-48f5-b552-27ca7fcc2543",
       "name": "Ring of Elemental Command",
       "type": "item",
       "data": {
@@ -3522,7 +3522,7 @@
       }
     },
     {
-      "id": "21aab0bf-1e23-4ee7-b304-9afa760e311e",
+      "id": "0c87da47-77ce-4e2f-8c71-05c283d964d3",
       "name": "Ring of Evasion",
       "type": "item",
       "data": {
@@ -3545,7 +3545,7 @@
       }
     },
     {
-      "id": "92435ebd-147b-4542-b973-6f15ac6d4549",
+      "id": "938edae6-9d3e-4a11-98bf-b8031bc25762",
       "name": "Ring of Feather Falling",
       "type": "item",
       "data": {
@@ -3568,7 +3568,7 @@
       }
     },
     {
-      "id": "db9c6214-ddfc-4377-8ebd-6366de618eb7",
+      "id": "0cc56873-6e30-467a-a936-68367fd97440",
       "name": "Ring of Free Action",
       "type": "item",
       "data": {
@@ -3591,7 +3591,7 @@
       }
     },
     {
-      "id": "c1ea7d7d-30bb-4392-aed0-0500ab7a43fe",
+      "id": "e1c101d7-a03a-4c7a-8626-666a8e3b19b6",
       "name": "Ring of Invisibility",
       "type": "item",
       "data": {
@@ -3614,7 +3614,7 @@
       }
     },
     {
-      "id": "247b4435-51bc-4f3e-8688-2b8cbd8f580a",
+      "id": "54ee1fef-e1fa-458b-8dac-c0dcd4f2c041",
       "name": "Ring of Jumping",
       "type": "item",
       "data": {
@@ -3637,7 +3637,7 @@
       }
     },
     {
-      "id": "2fd431c6-36bc-4310-9abf-ff848738026b",
+      "id": "777be19a-3130-407f-b39c-3eb3c28850d0",
       "name": "Ring of Mind Shielding",
       "type": "item",
       "data": {
@@ -3660,7 +3660,7 @@
       }
     },
     {
-      "id": "7afe3886-6e0a-4623-8998-2a742311474b",
+      "id": "21dc59c6-bffc-44d0-baab-bbac0d60759e",
       "name": "Ring of Protection",
       "type": "item",
       "data": {
@@ -3683,7 +3683,7 @@
       }
     },
     {
-      "id": "f4a690cd-54d5-43ef-b950-6557485cde0f",
+      "id": "87a00245-19e4-4581-a8c9-55a9e03dd209",
       "name": "Ring of Regeneration",
       "type": "item",
       "data": {
@@ -3706,7 +3706,7 @@
       }
     },
     {
-      "id": "ef368696-d74b-4a5b-845f-0a2b189ca4c7",
+      "id": "2892b64d-07f6-4c48-8381-e2370fe5d335",
       "name": "Ring of Resistance",
       "type": "item",
       "data": {
@@ -3729,7 +3729,7 @@
       }
     },
     {
-      "id": "a46b2ef0-796e-48c4-a06f-25dd8a535e75",
+      "id": "8ec24ac4-17d2-491c-8d7d-80e7504f1721",
       "name": "Ring of Shooting Stars",
       "type": "item",
       "data": {
@@ -3752,7 +3752,7 @@
       }
     },
     {
-      "id": "6592297e-bced-4119-ad6a-4a3f845f1dba",
+      "id": "9db70f28-360b-46ef-bc06-503d794b6440",
       "name": "Ring of Spell Storing",
       "type": "item",
       "data": {
@@ -3775,7 +3775,7 @@
       }
     },
     {
-      "id": "032646b3-a438-4703-b64a-ba25f2b22489",
+      "id": "55a0a459-6ed9-4ea1-802d-9692e221b817",
       "name": "Ring of Spell Turning",
       "type": "item",
       "data": {
@@ -3798,7 +3798,7 @@
       }
     },
     {
-      "id": "64240f52-5498-4096-ba69-5ba3e4c41651",
+      "id": "d99e54ab-c43d-4110-a3bd-6edf5fc7904e",
       "name": "Ring of Swimming",
       "type": "item",
       "data": {
@@ -3821,7 +3821,7 @@
       }
     },
     {
-      "id": "56655bb2-7e5a-4d35-9446-6006115c18ba",
+      "id": "6f802618-1d49-4fc1-bf41-d48fcd07d79a",
       "name": "Ring of Telekinesis",
       "type": "item",
       "data": {
@@ -3844,7 +3844,7 @@
       }
     },
     {
-      "id": "770f2224-f438-45d3-9c55-8eac7a19a0d9",
+      "id": "431d28e7-fa7a-4861-9130-641e726e0bce",
       "name": "Ring of the Ram",
       "type": "item",
       "data": {
@@ -3867,7 +3867,7 @@
       }
     },
     {
-      "id": "ea1a59dd-cd7f-4830-bc8f-f6b9dc2f9a65",
+      "id": "68fe1a42-7b8f-4209-bbad-597f5d33025e",
       "name": "Ring of Three Wishes",
       "type": "item",
       "data": {
@@ -3890,7 +3890,7 @@
       }
     },
     {
-      "id": "6d4ecba8-fcaa-4705-836c-916557c42e30",
+      "id": "b5b18a96-50ca-42ce-826f-6ec8ab6f9cd0",
       "name": "Ring of Warmth",
       "type": "item",
       "data": {
@@ -3913,7 +3913,7 @@
       }
     },
     {
-      "id": "b4503217-1b75-424f-81b8-47d50c1bffe0",
+      "id": "fbc2573c-3a81-4e2c-be7b-13683d1ee9ab",
       "name": "Ring of Water Walking",
       "type": "item",
       "data": {
@@ -3936,7 +3936,7 @@
       }
     },
     {
-      "id": "958498b9-3273-4974-9e2d-63af604221b2",
+      "id": "3dc579d3-813c-4554-980c-560e6317f910",
       "name": "Ring of X-ray Vision",
       "type": "item",
       "data": {
@@ -3959,7 +3959,7 @@
       }
     },
     {
-      "id": "a7d01142-9bd5-4fe7-b103-c96dcbe97923",
+      "id": "dfa74f5a-17e6-495d-8c13-5715ea548cc0",
       "name": "Robe of Eyes",
       "type": "item",
       "data": {
@@ -3982,7 +3982,7 @@
       }
     },
     {
-      "id": "6cd500a4-4581-4441-b674-30941f73cb93",
+      "id": "90e028c5-bfc4-4e2d-afb7-d2f7013cd1c5",
       "name": "Robe of Scintillating Colors",
       "type": "item",
       "data": {
@@ -4005,7 +4005,7 @@
       }
     },
     {
-      "id": "f22bf986-e6e9-47e9-bc72-a8caa2aa8f77",
+      "id": "e53c35de-64f8-495e-ad69-7000d7dda4fb",
       "name": "Robe of Stars",
       "type": "item",
       "data": {
@@ -4028,7 +4028,7 @@
       }
     },
     {
-      "id": "4e402577-d247-4175-aded-066e24b687dc",
+      "id": "d8aefc07-170d-4bab-a3f8-e668911e4939",
       "name": "Robe of the Archmagi",
       "type": "item",
       "data": {
@@ -4051,7 +4051,7 @@
       }
     },
     {
-      "id": "748c3de5-f29a-490f-a7c0-40a5d764963e",
+      "id": "cbad8ea2-92c6-4e20-b8bc-ff19179c2e52",
       "name": "Robe of Useful Items",
       "type": "item",
       "data": {
@@ -4074,7 +4074,7 @@
       }
     },
     {
-      "id": "a7be7850-b444-44d5-bd5c-ff321cd54182",
+      "id": "a88dc686-a0be-4f9d-83a5-b3c8a3a4c51d",
       "name": "Rod of Absorption",
       "type": "item",
       "data": {
@@ -4097,7 +4097,7 @@
       }
     },
     {
-      "id": "55222318-11f0-49f9-8ae7-6058d0c7d9f1",
+      "id": "2e068dbe-b520-4e03-8d3a-ca21dc21d18c",
       "name": "Rod of Alertness",
       "type": "item",
       "data": {
@@ -4120,7 +4120,7 @@
       }
     },
     {
-      "id": "fb5ac733-cff9-4432-81e7-24f0a9d19637",
+      "id": "c9e46bc0-7bbe-4cfa-aa03-6519bc9b5026",
       "name": "Rod of Lordly Might",
       "type": "item",
       "data": {
@@ -4143,7 +4143,7 @@
       }
     },
     {
-      "id": "a7c87308-c0c5-4070-a7f7-fa012e6bb04f",
+      "id": "58757273-a24f-4a82-9422-ef153642e6d8",
       "name": "Rod of Rulership",
       "type": "item",
       "data": {
@@ -4166,7 +4166,7 @@
       }
     },
     {
-      "id": "be9e3799-14d0-4674-b23b-539373ea553c",
+      "id": "4bfb28ec-12cb-43a7-9e7d-ef883890aac6",
       "name": "Rod of Security",
       "type": "item",
       "data": {
@@ -4189,7 +4189,7 @@
       }
     },
     {
-      "id": "b5e75d00-f2a8-4b8c-9a76-9b3945fc6874",
+      "id": "6369821d-306b-483f-9aaa-c5b31603c184",
       "name": "Rope of Climbing",
       "type": "item",
       "data": {
@@ -4212,7 +4212,7 @@
       }
     },
     {
-      "id": "5a43cda8-298d-4240-b623-95c6bcb8b8e5",
+      "id": "52f8e214-8efb-4671-b974-a534df504893",
       "name": "Rope of Entanglement",
       "type": "item",
       "data": {
@@ -4235,7 +4235,7 @@
       }
     },
     {
-      "id": "70c88ce8-df68-4c16-89f8-c01ecf2768ab",
+      "id": "ea544fec-f7d1-41c8-a334-821660724d39",
       "name": "Scarab of Protection",
       "type": "item",
       "data": {
@@ -4258,7 +4258,7 @@
       }
     },
     {
-      "id": "ee7bdcc5-a011-46a6-bfcd-011745c249a9",
+      "id": "ca06d8ab-e0f3-4d70-b77e-4d9361dd24d1",
       "name": "Scimitar of Speed",
       "type": "item",
       "data": {
@@ -4281,7 +4281,7 @@
       }
     },
     {
-      "id": "6e6e0a40-e41b-4f80-862f-b4a4f9274cd6",
+      "id": "5dde1fd6-75aa-428e-a670-8b0b2aedfc11",
       "name": "Shield of Missile Attraction",
       "type": "item",
       "data": {
@@ -4304,7 +4304,7 @@
       }
     },
     {
-      "id": "5b9d7550-5fe0-4f09-aa40-936d03187519",
+      "id": "b0485b45-fe08-4943-85bb-ade2d1f699bc",
       "name": "Shield, +1, +2, or +3",
       "type": "item",
       "data": {
@@ -4327,7 +4327,7 @@
       }
     },
     {
-      "id": "ee1bed0f-923f-4ee4-8119-b0973ae59a1c",
+      "id": "b5d5da56-32f1-4b88-869d-aa94cbce5058",
       "name": "Slippers of Spider Climbing",
       "type": "item",
       "data": {
@@ -4350,7 +4350,7 @@
       }
     },
     {
-      "id": "96b7e4f7-9f7f-4b4e-9b7c-b18124ea3e54",
+      "id": "46618059-ec5c-41c1-85c2-c122ab2d425d",
       "name": "Sovereign Glue",
       "type": "item",
       "data": {
@@ -4373,7 +4373,7 @@
       }
     },
     {
-      "id": "f0aa979f-ecec-49a6-8f82-95c0b877e3fd",
+      "id": "70aa4faa-0b32-408a-860c-4c87230531c8",
       "name": "Spell Scroll",
       "type": "item",
       "data": {
@@ -4396,7 +4396,7 @@
       }
     },
     {
-      "id": "9d563f5d-32ea-4b9c-b304-4a5726864b33",
+      "id": "e63b9241-f32c-4f86-a372-caa8399cea95",
       "name": "Spellguard Shield",
       "type": "item",
       "data": {
@@ -4419,7 +4419,7 @@
       }
     },
     {
-      "id": "fa668a13-a78d-4e55-8618-63dc8d33d60f",
+      "id": "98a0ae42-9a9c-42d4-9014-01a414418ef2",
       "name": "Sphere of Annihilation",
       "type": "item",
       "data": {
@@ -4442,7 +4442,7 @@
       }
     },
     {
-      "id": "417cf3b8-228b-4449-9b61-af38d3b1445d",
+      "id": "8342ab0e-7148-4201-9e23-8901440d67d2",
       "name": "Staff of Charming",
       "type": "item",
       "data": {
@@ -4465,7 +4465,7 @@
       }
     },
     {
-      "id": "60795611-29d0-4288-99e3-c2b85aab3890",
+      "id": "cf52fbf1-166c-431c-a509-827548c344a5",
       "name": "Staff of Fire",
       "type": "item",
       "data": {
@@ -4488,7 +4488,7 @@
       }
     },
     {
-      "id": "b9682e25-5d34-46af-bae0-cfe97475c214",
+      "id": "ad667c99-37f8-4f07-9930-6d2333ce046a",
       "name": "Staff of Frost",
       "type": "item",
       "data": {
@@ -4511,7 +4511,7 @@
       }
     },
     {
-      "id": "80c9e007-71fa-4bdd-9c9b-c459af57482b",
+      "id": "837ab38d-07b8-46ea-83cb-7ae91e800dde",
       "name": "Staff of Healing",
       "type": "item",
       "data": {
@@ -4534,7 +4534,7 @@
       }
     },
     {
-      "id": "ef0a7194-33d1-465d-9991-18b80c2cc9bd",
+      "id": "c1260b75-aff9-487a-aaa2-69eb22fa4318",
       "name": "Staff of Power",
       "type": "item",
       "data": {
@@ -4557,7 +4557,7 @@
       }
     },
     {
-      "id": "48e772b4-6cfc-4253-8a28-7c6db611990d",
+      "id": "64b7c549-c6cf-469a-bcc0-c91600209c16",
       "name": "Staff of Striking",
       "type": "item",
       "data": {
@@ -4580,7 +4580,7 @@
       }
     },
     {
-      "id": "be3eb2df-20f3-4d61-8409-e60306e43909",
+      "id": "1df872f5-e6ff-4ca1-8b06-7c5b8321bf06",
       "name": "Staff of Swarming Insects",
       "type": "item",
       "data": {
@@ -4603,7 +4603,7 @@
       }
     },
     {
-      "id": "374f0bec-6068-4dc2-997c-7618379b0dfa",
+      "id": "1a6b3877-a1e1-402e-ac22-49ff9f5305ac",
       "name": "Staff of the Magi",
       "type": "item",
       "data": {
@@ -4626,7 +4626,7 @@
       }
     },
     {
-      "id": "39873e43-6afd-4010-9307-6a09dededa89",
+      "id": "b8c3924e-b034-4b8c-876d-88ee740ab663",
       "name": "Staff of the Python",
       "type": "item",
       "data": {
@@ -4649,7 +4649,7 @@
       }
     },
     {
-      "id": "ec644f47-473d-4bf8-a05f-35fc33463b0d",
+      "id": "d87a5b86-3ff3-4f5b-9a93-606bf6f65a8f",
       "name": "Staff of the Woodlands",
       "type": "item",
       "data": {
@@ -4672,7 +4672,7 @@
       }
     },
     {
-      "id": "63827717-d136-4a8b-bd2c-623615b33685",
+      "id": "f3bd3969-bc64-4f07-8c3a-5526058e3183",
       "name": "Staff of Thunder and Lightning",
       "type": "item",
       "data": {
@@ -4695,7 +4695,7 @@
       }
     },
     {
-      "id": "bef61c12-afa8-4c85-b0e5-7cd1cfde59b8",
+      "id": "c8928f47-35cd-4965-9e4d-53ff1426feb4",
       "name": "Staff of Withering",
       "type": "item",
       "data": {
@@ -4718,7 +4718,7 @@
       }
     },
     {
-      "id": "9ff7c16a-d51a-4f8d-968f-4e1178e3c68c",
+      "id": "66857644-7573-4ccf-a42b-7bad451245a9",
       "name": "Stone of Controlling Earth Elementals",
       "type": "item",
       "data": {
@@ -4741,7 +4741,7 @@
       }
     },
     {
-      "id": "05a9800b-4354-488f-ac45-488e374231b4",
+      "id": "86a6696d-a70f-4333-877d-5f8f04fdc64b",
       "name": "Stone of Good Luck (Luckstone)",
       "type": "item",
       "data": {
@@ -4764,7 +4764,7 @@
       }
     },
     {
-      "id": "5eb21747-d924-4a56-a20d-2f45b81652eb",
+      "id": "a32fbedb-3d64-44df-a175-838900d52b8b",
       "name": "Sun Blade",
       "type": "item",
       "data": {
@@ -4787,7 +4787,7 @@
       }
     },
     {
-      "id": "3b3bc37d-cbb7-40e8-a8e2-43760bf427f1",
+      "id": "ec74826d-ce62-4722-b519-01e48d1b2dbe",
       "name": "Sword of Life Stealing",
       "type": "item",
       "data": {
@@ -4810,7 +4810,7 @@
       }
     },
     {
-      "id": "f8e11d1e-1fad-4270-82be-b270fd7ae8f1",
+      "id": "10ebd88d-8714-4b20-9041-7c4620fa1f26",
       "name": "Sword of Sharpness",
       "type": "item",
       "data": {
@@ -4833,7 +4833,7 @@
       }
     },
     {
-      "id": "15a51e39-d87f-41d3-aff5-32cea8ef502b",
+      "id": "1915fd29-5ceb-45c6-bcd7-7187bdaec2b6",
       "name": "Sword of Wounding",
       "type": "item",
       "data": {
@@ -4856,7 +4856,7 @@
       }
     },
     {
-      "id": "4d38f81d-e143-43fb-8e40-323bc74f878f",
+      "id": "5e0611aa-6cd0-47d8-ab1a-086b1f069f26",
       "name": "Talisman of Pure Good",
       "type": "item",
       "data": {
@@ -4879,7 +4879,7 @@
       }
     },
     {
-      "id": "997124c2-50d0-491d-bb06-0962fcf2f491",
+      "id": "af71ab64-d8c6-4be3-983f-8493f9fbc889",
       "name": "Talisman of the Sphere",
       "type": "item",
       "data": {
@@ -4902,7 +4902,7 @@
       }
     },
     {
-      "id": "af34cb00-7621-4aee-bd42-b856689995c8",
+      "id": "574e65d5-84d7-49ae-b87f-d07a8ba992f1",
       "name": "Talisman of Ultimate Evil",
       "type": "item",
       "data": {
@@ -4925,7 +4925,7 @@
       }
     },
     {
-      "id": "bdd13085-8c71-436f-9fd6-8421bf39af62",
+      "id": "a1579b10-85f9-461b-a2a7-eb7598e78cac",
       "name": "Tome of Clear Thought",
       "type": "item",
       "data": {
@@ -4948,7 +4948,7 @@
       }
     },
     {
-      "id": "55dd4d74-074d-42be-8d03-225cfd85b7a6",
+      "id": "884649e7-431f-4cda-a7dd-69b0831d8837",
       "name": "Tome of Leadership and Influence",
       "type": "item",
       "data": {
@@ -4971,7 +4971,7 @@
       }
     },
     {
-      "id": "76463d6a-4c35-4d42-a0c4-bdabe4a96cfc",
+      "id": "ec8a6ffc-43c6-46c8-8005-1a9ee930b08f",
       "name": "Tome of Understanding",
       "type": "item",
       "data": {
@@ -4994,7 +4994,7 @@
       }
     },
     {
-      "id": "7dc8198e-93c3-495f-8e24-67fbcd2d465d",
+      "id": "d7ec410f-5c4e-4ef2-862a-ae45c4956940",
       "name": "Trident of Fish Command",
       "type": "item",
       "data": {
@@ -5017,7 +5017,7 @@
       }
     },
     {
-      "id": "0b56d997-a2c1-46e0-a67b-91e0c3aca1d2",
+      "id": "7830038b-e103-4535-9bad-3f806c434ced",
       "name": "Universal Solvent",
       "type": "item",
       "data": {
@@ -5040,7 +5040,7 @@
       }
     },
     {
-      "id": "1163218b-c843-4658-9b84-60dd1eaedca0",
+      "id": "74ffe6e8-9761-4564-8918-84beaf6d5e9b",
       "name": "Vicious Weapon",
       "type": "item",
       "data": {
@@ -5063,7 +5063,7 @@
       }
     },
     {
-      "id": "48a9fa58-c513-479f-b9d4-be6a3656d1b5",
+      "id": "38219d53-9bfd-4586-bc46-edf507026527",
       "name": "Vorpal Sword",
       "type": "item",
       "data": {
@@ -5086,7 +5086,7 @@
       }
     },
     {
-      "id": "649925e8-9778-4bea-859f-209f26b60c0d",
+      "id": "cc9ba357-03d9-4877-814c-8ccdb5cb08bf",
       "name": "Wand of Binding",
       "type": "item",
       "data": {
@@ -5109,7 +5109,7 @@
       }
     },
     {
-      "id": "185679a7-6aca-4c6e-9676-94be69fc54e0",
+      "id": "73d2a865-d223-4c57-b921-6d0bb3190fe6",
       "name": "Wand of Enemy Detection",
       "type": "item",
       "data": {
@@ -5132,7 +5132,7 @@
       }
     },
     {
-      "id": "90b51981-c8e4-4e23-93fe-15f7f7f30741",
+      "id": "e8fbd2dc-d23a-46bf-b2dc-158e57bd24dc",
       "name": "Wand of Fear",
       "type": "item",
       "data": {
@@ -5155,7 +5155,7 @@
       }
     },
     {
-      "id": "b2876d5e-90fe-495f-9e9e-7e6e44b1d86b",
+      "id": "13d912aa-919b-45f0-8e2c-642d506eb375",
       "name": "Wand of Fireballs",
       "type": "item",
       "data": {
@@ -5178,7 +5178,7 @@
       }
     },
     {
-      "id": "5f92238b-e9fa-463b-b80d-bdc4326191f1",
+      "id": "d7b2fa70-33b6-47a1-96a9-6d12b57fafbd",
       "name": "Wand of Lightning Bolts",
       "type": "item",
       "data": {
@@ -5201,7 +5201,7 @@
       }
     },
     {
-      "id": "4178b5ed-3710-43c5-9840-c8bafc4c25d1",
+      "id": "c61d8555-e805-4c1d-8568-60d54db8852c",
       "name": "Wand of Magic Detection",
       "type": "item",
       "data": {
@@ -5224,7 +5224,7 @@
       }
     },
     {
-      "id": "49d1c9a9-9a72-4f04-94ec-e5b8d2b75eda",
+      "id": "b19d6901-1db1-4385-899b-baed48e71a0b",
       "name": "Wand of Magic Missiles",
       "type": "item",
       "data": {
@@ -5247,7 +5247,7 @@
       }
     },
     {
-      "id": "e279934c-026f-4a33-bc12-2cd1000fa41b",
+      "id": "fcc26a14-2b72-47c8-80be-aa80c0339a51",
       "name": "Wand of Paralysis",
       "type": "item",
       "data": {
@@ -5270,7 +5270,7 @@
       }
     },
     {
-      "id": "6ddd1956-3650-4a3d-99a2-8c7318e238e3",
+      "id": "c92980ec-0b9b-419a-b521-4b06f8040bcd",
       "name": "Wand of Polymorph",
       "type": "item",
       "data": {
@@ -5293,7 +5293,7 @@
       }
     },
     {
-      "id": "a30c8fb3-903d-4188-9fe9-2ca955b3dc5b",
+      "id": "b9c0e1fb-8303-4019-b33e-bf3f9f325dd8",
       "name": "Wand of Secrets",
       "type": "item",
       "data": {
@@ -5316,7 +5316,7 @@
       }
     },
     {
-      "id": "e2b24298-e62f-4354-b64e-7c6e341cd82a",
+      "id": "a27443e4-34b5-452b-892a-a3f5a2afc8f0",
       "name": "Wand of the War Mage, +1, +2, or +3",
       "type": "item",
       "data": {
@@ -5339,7 +5339,7 @@
       }
     },
     {
-      "id": "911e98ff-c3cc-4be0-bae4-9bc0b6ce2fec",
+      "id": "48157339-fd61-4abb-8722-3bc956716319",
       "name": "Wand of Web",
       "type": "item",
       "data": {
@@ -5362,7 +5362,7 @@
       }
     },
     {
-      "id": "1da0657e-a006-4792-a408-640ad72a96e0",
+      "id": "08154bc7-5b77-4cda-9baa-e1d78452e657",
       "name": "Wand of Wonder",
       "type": "item",
       "data": {
@@ -5385,7 +5385,7 @@
       }
     },
     {
-      "id": "86d56aa8-f5a9-430c-b436-f3ccaf7aa15c",
+      "id": "3f134eb5-6100-4924-b0fd-051d2bd20ccb",
       "name": "Weapon, +1, +2, or +3",
       "type": "item",
       "data": {
@@ -5408,7 +5408,7 @@
       }
     },
     {
-      "id": "2d42cd0c-3585-492a-84c5-c7b36912ac56",
+      "id": "f940cd07-5b45-4581-ab39-c674d96998aa",
       "name": "Well of Many Worlds",
       "type": "item",
       "data": {
@@ -5431,7 +5431,7 @@
       }
     },
     {
-      "id": "bf4e2ec9-3b59-49ec-9388-0064d508d69d",
+      "id": "737e039d-75b7-44aa-8725-9177001f6aa8",
       "name": "Wind Fan",
       "type": "item",
       "data": {
@@ -5454,7 +5454,7 @@
       }
     },
     {
-      "id": "b33dab8e-2b43-4082-b24c-57b8482cdeb8",
+      "id": "de1c2704-ce88-4fce-9e4e-6d204efc3b58",
       "name": "Winged Boots",
       "type": "item",
       "data": {
@@ -5477,7 +5477,7 @@
       }
     },
     {
-      "id": "cd738303-ebae-4b65-8d84-6d632bc900bb",
+      "id": "fce50089-6ad4-4149-bb3c-9d5e2f41ca3e",
       "name": "Wings of Flying",
       "type": "item",
       "data": {
