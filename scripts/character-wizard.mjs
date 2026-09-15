@@ -176,8 +176,13 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
       // `api.get` returns the parsed body as-is, never `{data: ...}`-wrapped
       // (see client/core/api.ts's `request()`) — the entry's OWN `data` field
       // (its mechanical fields) is what becomes `compendiumData` below, the
-      // entry object itself (id/name/type/data) is `entry`.
-      entry = await api.get(`/compendium/browse/sources/${sourceId}/entries/${entryId}`);
+      // entry object itself (id/name/type/data) is `entry`. `sourceId` looks
+      // like `local::srd5e::packs/races.sqlite` — the embedded `/` splits an
+      // un-encoded URL into extra path segments Express's `:sourceId` never
+      // matches (404, found live) — encodeURIComponent it, same convention
+      // compendium-source-window.ts already uses everywhere it builds one of
+      // these URLs.
+      entry = await api.get(`/compendium/browse/sources/${encodeURIComponent(sourceId)}/entries/${entryId}`);
     } catch (err) {
       console.warn('[srd5e] Failed to fetch compendium entry:', err);
       showToast?.('Failed to load that entry.', 'error');
