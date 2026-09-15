@@ -15829,6 +15829,52 @@ input.sdrn-npc-sub-input:focus {
   margin-left: auto;
 }
 
+.sdrn-wizard-picked {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: rgba(201, 161, 90, 0.12);
+  border: 1px solid rgba(201, 161, 90, 0.3);
+  color: #d8cfc0;
+  margin-bottom: 10px;
+}
+
+.sdrn-wizard-picked .sdrn-wizard-btn {
+  margin-left: auto;
+}
+
+.sdrn-wizard-results {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 160px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  border: 1px solid rgba(201, 161, 90, 0.2);
+  border-radius: 4px;
+}
+
+.sdrn-wizard-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 6px 10px;
+  cursor: pointer;
+  color: #d8cfc0;
+  font-size: 12px;
+}
+
+.sdrn-wizard-result:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sdrn-wizard-result small {
+  color: #8a8272;
+  font-size: 10px;
+}
+
 /* ── Item "post to chat" card (sidebar-message-info-desc content) ───────── */
 .sdr5e-item-chat-subtitle {
   font-size: 10px;

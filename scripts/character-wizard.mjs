@@ -5,11 +5,18 @@
 // Guided character creation, matching the real dnd5e-Foundry flow's shape
 // (identity -> race -> class -> abilities -> review -> create) without any
 // Foundry code — a plain LoomHandlebarsMixin(BaseWindow), same pattern as
-// the sheets, just not bound to an existing document. Race/class content
-// isn't compendium-backed yet (deferred, per the conversion scope), so this
-// wizard creates freeform race/class items alongside the new actor instead
-// of picking from a list — still real automation (creates 3 linked
-// documents, seeds abilities), not a stub.
+// the sheets, just not bound to an existing document.
+//
+// Race/Class are picked from real compendium entries (GET /api/compendium/
+// browse/entries?entryType=race|class) instead of typed as free text — this
+// pulls the real item (hitDie/casterType/classIdentifier/speed/creatureType/
+// etc, whatever the picked entry's `data` actually has) onto the new actor.
+// The search fans out across EVERY currently loaded compendium source, not
+// one hardcoded sourceId — a third-party class/race pack installed later
+// shows up automatically, no code change here. If nothing is picked (no
+// matching pack installed, or the player wants pure homebrew), typing a
+// name still creates a blank freeform item — same fallback this wizard
+// always had, just no longer the only path.
 // ══════════════════════════════════════════════════════════════════════════
 
 import { LoomHandlebarsMixin, BaseWindow, api, windowManager, showToast } from '/_loom/sdk/index.js';
@@ -38,9 +45,20 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
   _data = {
     name: '',
     level: 1,
-    race: { name: '', size: 'med', speed: '9m', creatureType: 'humanoid' },
-    klass: { name: '', hitDie: 'd8' },
+    // `sourceId`/`entryId` are set once a compendium entry is picked (see
+    // `_pickCompendiumEntry`) — empty means "nothing picked yet, or typed
+    // freeform". `size`/`speed`/`creatureType`/`hitDie` stay as the editable
+    // defaults for the freeform fallback path.
+    race: { sourceId: '', entryId: '', name: '', size: 'med', speed: '9m', creatureType: 'humanoid', compendiumData: null },
+    klass: { sourceId: '', entryId: '', name: '', hitDie: 'd8', compendiumData: null },
     abilities: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
+  };
+
+  // Transient search UI state — not part of `_data`, never persisted to the
+  // actor. One query/results/timer pair per picker (race, klass).
+  _search = {
+    race: { query: '', results: [], timer: null },
+    klass: { query: '', results: [], timer: null },
   };
 
   async _prepareContext() {
@@ -63,11 +81,59 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
       _hitDice: ['d6', 'd8', 'd10', 'd12'].map((v) => ({ value: v, selected: v === this._data.klass.hitDie })),
       _abilities: ABILITY_KEYS.map((k) => ({ key: k, label: ABILITY_LABELS[k], value: this._data.abilities[k] })),
       _reviewAbilities: ABILITY_KEYS.map((k) => `${ABILITY_LABELS[k].slice(0, 3)} ${this._data.abilities[k]}`).join(' · '),
+      _racePicked: !!this._data.race.entryId,
+      _raceQuery: this._search.race.query,
+      _raceResults: this._search.race.results,
+      _klassPicked: !!this._data.klass.entryId,
+      _klassQuery: this._search.klass.query,
+      _klassResults: this._search.klass.results,
+      // Review step: prefer the picked compendium entry's real fields over
+      // the freeform fallback ones, which only apply to homebrew races/classes.
+      _reviewRaceInfo: this._data.race.compendiumData
+        ? `${this._data.race.compendiumData.size || this._data.race.size}, ${this._data.race.compendiumData.speed || this._data.race.speed}`
+        : `${this._data.race.size}, ${this._data.race.speed}`,
+      _reviewHitDie: this._data.klass.compendiumData?.hitDie || this._data.klass.hitDie,
     };
+  }
+
+  /**
+   * `_onChangeForm` below is never invoked on its own — `document-sheet.ts`
+   * is what wires `input`/`change` listeners to it, but this wizard extends
+   * `LoomHandlebarsMixin(BaseWindow)` directly (no document, nothing to
+   * sheet), so nothing ever called it. Every keystroke updated the DOM
+   * input but never `this._data`, so `this._data.name` stayed `''` forever
+   * and "Give the character a name first" fired no matter what was typed
+   * (found live). Wired here instead of in the shared engine (application.ts)
+   * because that same mount() is shared with `LoomDocumentSheet`, which
+   * already attaches its own `input`/`change` listeners — adding another
+   * pair there would double-fire `_onChangeForm` on every actor/item sheet
+   * keystroke (the exact "two auto-save triggers, one save" bug already
+   * described in base-window.ts's `wireSubmitOnChange`). `this.element`
+   * persists across `rerenderBody()` (only `.sheet-part` children are
+   * swapped), so a listener attached once here at first mount keeps
+   * catching bubbled events from every step's re-rendered content.
+   */
+  async mount() {
+    await super.mount();
+    if (this._changeListenerWired) return;
+    this._changeListenerWired = true;
+    this.element.addEventListener('input', (e) => this._onChangeForm(e));
+    this.element.addEventListener('change', (e) => this._onChangeForm(e));
   }
 
   _onChangeForm(event) {
     const target = event.target;
+    // Search boxes are marked with `data-wizard-search="race"|"klass"` instead
+    // of a `w:` name — they drive a debounced compendium search, not a plain
+    // `_data` write.
+    const searchKind = target?.dataset?.wizardSearch;
+    if (searchKind && this._search[searchKind]) {
+      const bucket = this._search[searchKind];
+      bucket.query = target.value;
+      clearTimeout(bucket.timer);
+      bucket.timer = setTimeout(() => void this._runSearch(searchKind), 300);
+      return;
+    }
     if (!target?.name?.startsWith('w:')) return;
     const path = target.name.slice(2);
     const value = target.type === 'number' ? Number(target.value) : target.value;
@@ -77,11 +143,78 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
     obj[keys[keys.length - 1]] = value;
   }
 
+  /** entryType: 'race' | 'class' — the entry's own `type` field, not the
+   * pack's (see the note on GET /compendium/browse/entries, compendium.ts). */
+  async _searchEntries(entryType, query) {
+    const params = new URLSearchParams({ entryType });
+    if (query) params.set('search', query);
+    try {
+      const res = await api.get(`/compendium/browse/entries?${params}`);
+      return res?.entries ?? [];
+    } catch (err) {
+      console.warn('[srd5e] Compendium search failed:', err);
+      return [];
+    }
+  }
+
+  async _runSearch(kind) {
+    const entryType = kind === 'klass' ? 'class' : 'race';
+    const queryAtRequest = this._search[kind].query;
+    const results = await this._searchEntries(entryType, queryAtRequest);
+    // The query may have changed again while this request was in flight — a
+    // stale response landing after a newer one would flash the wrong list.
+    // Only apply it if the query is still the one that sent it.
+    if (this._search[kind].query !== queryAtRequest) return;
+    this._search[kind].results = results;
+    await this.render();
+  }
+
+  async _pickCompendiumEntry(kind, sourceId, entryId) {
+    if (!sourceId || !entryId) return;
+    let entry;
+    try {
+      // `api.get` returns the parsed body as-is, never `{data: ...}`-wrapped
+      // (see client/core/api.ts's `request()`) — the entry's OWN `data` field
+      // (its mechanical fields) is what becomes `compendiumData` below, the
+      // entry object itself (id/name/type/data) is `entry`.
+      entry = await api.get(`/compendium/browse/sources/${sourceId}/entries/${entryId}`);
+    } catch (err) {
+      console.warn('[srd5e] Failed to fetch compendium entry:', err);
+      showToast?.('Failed to load that entry.', 'error');
+      return;
+    }
+    if (!entry) return;
+
+    const bucket = kind === 'klass' ? this._data.klass : this._data.race;
+    bucket.sourceId = sourceId;
+    bucket.entryId = entryId;
+    bucket.name = entry.name;
+    bucket.compendiumData = entry.data || {};
+    this._search[kind].results = [];
+    this._search[kind].query = entry.name;
+    await this.render();
+  }
+
+  async _clearPick(kind) {
+    const bucket = kind === 'klass' ? this._data.klass : this._data.race;
+    bucket.sourceId = '';
+    bucket.entryId = '';
+    bucket.name = '';
+    bucket.compendiumData = null;
+    this._search[kind].query = '';
+    this._search[kind].results = [];
+    await this.render();
+  }
+
   onAction(action, id, target) {
     if (action === 'wizard-next') { this._goStep(this._step + 1); return; }
     if (action === 'wizard-back') { this._goStep(this._step - 1); return; }
     if (action === 'wizard-standard-array') { void this._fillStandardArray(); return; }
     if (action === 'wizard-create') { void this._create(); return; }
+    if (action === 'wizard-pick-race') { void this._pickCompendiumEntry('race', target.dataset.sourceId, id); return; }
+    if (action === 'wizard-pick-klass') { void this._pickCompendiumEntry('klass', target.dataset.sourceId, id); return; }
+    if (action === 'wizard-clear-race') { void this._clearPick('race'); return; }
+    if (action === 'wizard-clear-klass') { void this._clearPick('klass'); return; }
     if (typeof super.onAction === 'function') super.onAction(action, id, target);
   }
 
@@ -104,13 +237,19 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
     const worldId = window.Loom?.world?.id;
     if (!worldId) return;
 
+    // The real class's own hitDie (from its compendium data) wins over the
+    // wizard's freeform picker field — resolved BEFORE `charData` is built
+    // and posted, so the actor is created with the right die the first time
+    // instead of needing a second update after the fact.
+    const hitDie = this._data.klass.compendiumData?.hitDie || this._data.klass.hitDie || 'd8';
+
     const charData = getDefaultData('character');
     for (const k of ABILITY_KEYS) charData.abilities[k].value = this._data.abilities[k] || 10;
     charData.details.level = this._data.level || 1;
     charData.attributes.prof.value = Math.floor(((this._data.level || 1) - 1) / 4) + 2;
     charData.resources.hitDice.max = this._data.level || 1;
     charData.resources.hitDice.value = this._data.level || 1;
-    charData.resources.hitDice.die = this._data.klass.hitDie || 'd8';
+    charData.resources.hitDice.die = hitDie;
 
     const actorRes = await api.post('/actors', {
       worldId, name: this._data.name.trim() || 'New Character', type: 'character', systemData: charData,
@@ -118,14 +257,23 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
     const actorId = actorRes?.data?.id || actorRes?.id;
     if (!actorId) { showToast?.('Failed to create character.', 'error'); return; }
 
-    if (this._data.race.name.trim()) {
+    if (this._data.race.entryId && this._data.race.compendiumData) {
+      // Real compendium entry: its own `data` already has the mechanical
+      // fields (size/speed/creatureType/etc) filled in for real — nothing
+      // to overlay from the wizard's freeform fields.
+      await api.post('/items', { worldId, name: this._data.race.name, type: 'race', data: this._data.race.compendiumData, actorId });
+    } else if (this._data.race.name.trim()) {
+      // Homebrew fallback: no matching compendium entry picked, but a name
+      // was typed — same blank-item behavior this wizard always had.
       const raceData = getDefaultData('race');
       raceData.size = this._data.race.size;
       raceData.speed = this._data.race.speed;
       raceData.creatureType = this._data.race.creatureType;
       await api.post('/items', { worldId, name: this._data.race.name.trim(), type: 'race', data: raceData, actorId });
     }
-    if (this._data.klass.name.trim()) {
+    if (this._data.klass.entryId && this._data.klass.compendiumData) {
+      await api.post('/items', { worldId, name: this._data.klass.name, type: 'class', data: this._data.klass.compendiumData, actorId });
+    } else if (this._data.klass.name.trim()) {
       const classData = getDefaultData('class');
       classData.hitDie = this._data.klass.hitDie;
       classData.levels = this._data.level || 1;

@@ -14,8 +14,24 @@
 
     {{#if _stepRace}}
     <h3>Race</h3>
-    <p class="sdrn-wizard-hint">No race compendium yet — this creates a race item from scratch, linked to the character.</p>
-    <div class="sdrn-bio-field"><label>Race Name</label><input type="text" name="w:race.name" value="{{_data.race.name}}" placeholder="e.g. Human" /></div>
+    {{#if _racePicked}}
+    <div class="sdrn-wizard-picked">
+      <strong>{{_data.race.name}}</strong> <span class="sdrn-wizard-hint">(from compendium)</span>
+      <button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-race">Change</button>
+    </div>
+    {{else}}
+    <div class="sdrn-bio-field"><label>Search Race</label><input type="text" data-wizard-search="race" value="{{_raceQuery}}" placeholder="e.g. Human" /></div>
+    {{#if _raceResults}}
+    <div class="sdrn-wizard-results">
+      {{#each _raceResults}}
+      <div class="sdrn-wizard-result" data-action="wizard-pick-race" data-id="{{id}}" data-source-id="{{sourceId}}">
+        <span>{{name}}</span> <small>{{sourceName}}</small>
+      </div>
+      {{/each}}
+    </div>
+    {{/if}}
+    <p class="sdrn-wizard-hint">No match? Fill in below to create a homebrew race instead.</p>
+    <div class="sdrn-bio-field"><label>Race Name (homebrew)</label><input type="text" name="w:race.name" value="{{_data.race.name}}" placeholder="e.g. Human" /></div>
     <div class="sdrn-bio-field">
       <label>Size</label>
       <select name="w:race.size">
@@ -25,17 +41,35 @@
     <div class="sdrn-bio-field"><label>Speed</label><input type="text" name="w:race.speed" value="{{_data.race.speed}}" /></div>
     <div class="sdrn-bio-field"><label>Creature Type</label><input type="text" name="w:race.creatureType" value="{{_data.race.creatureType}}" /></div>
     {{/if}}
+    {{/if}}
 
     {{#if _stepClass}}
     <h3>Class</h3>
-    <p class="sdrn-wizard-hint">No class compendium yet — this creates a class item from scratch, linked to the character.</p>
-    <div class="sdrn-bio-field"><label>Class Name</label><input type="text" name="w:klass.name" value="{{_data.klass.name}}" placeholder="e.g. Fighter" /></div>
+    {{#if _klassPicked}}
+    <div class="sdrn-wizard-picked">
+      <strong>{{_data.klass.name}}</strong> <span class="sdrn-wizard-hint">(from compendium)</span>
+      <button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-klass">Change</button>
+    </div>
+    {{else}}
+    <div class="sdrn-bio-field"><label>Search Class</label><input type="text" data-wizard-search="klass" value="{{_klassQuery}}" placeholder="e.g. Fighter" /></div>
+    {{#if _klassResults}}
+    <div class="sdrn-wizard-results">
+      {{#each _klassResults}}
+      <div class="sdrn-wizard-result" data-action="wizard-pick-klass" data-id="{{id}}" data-source-id="{{sourceId}}">
+        <span>{{name}}</span> <small>{{sourceName}}</small>
+      </div>
+      {{/each}}
+    </div>
+    {{/if}}
+    <p class="sdrn-wizard-hint">No match? Fill in below to create a homebrew class instead.</p>
+    <div class="sdrn-bio-field"><label>Class Name (homebrew)</label><input type="text" name="w:klass.name" value="{{_data.klass.name}}" placeholder="e.g. Fighter" /></div>
     <div class="sdrn-bio-field">
       <label>Hit Die</label>
       <select name="w:klass.hitDie">
         {{#each _hitDice}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>{{/each}}
       </select>
     </div>
+    {{/if}}
     {{/if}}
 
     {{#if _stepAbilities}}
@@ -52,8 +86,8 @@
     <h3>Review</h3>
     <div class="sdrn-wizard-review">
       <div><strong>{{_data.name}}</strong> — Level {{_data.level}}</div>
-      {{#if _data.race.name}}<div>Race: {{_data.race.name}} ({{_data.race.size}}, {{_data.race.speed}})</div>{{/if}}
-      {{#if _data.klass.name}}<div>Class: {{_data.klass.name}} ({{_data.klass.hitDie}} Hit Die)</div>{{/if}}
+      {{#if _data.race.name}}<div>Race: {{_data.race.name}} ({{_reviewRaceInfo}})</div>{{/if}}
+      {{#if _data.klass.name}}<div>Class: {{_data.klass.name}} ({{_reviewHitDie}} Hit Die)</div>{{/if}}
       <div>Abilities: {{_reviewAbilities}}</div>
     </div>
     {{/if}}
