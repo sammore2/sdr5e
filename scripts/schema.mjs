@@ -371,6 +371,11 @@ export function getDefaultData(type) {
         concentration: false,
         ritual: false,
         prepared: false,
+        // Which classes' spell lists this spell belongs to — array of
+        // classIdentifier values (see CLASS_IDENTIFIER_LABELS, config.mjs).
+        // Empty by default; populated from the real SRD 5.1 class spell
+        // lists for the bundled compendium (see packs/spells-*.json).
+        classes: [],
         damage: { formula: '', type: '' },
         // Mechanical effect this spell grants for `durationRounds` (e.g.
         // Shield of Faith's +2 AC) — same shape as weapon/armor `bonuses`,

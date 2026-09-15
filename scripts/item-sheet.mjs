@@ -114,16 +114,31 @@ export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
     this._formSaveTimer = setTimeout(() => void this._flushPendingFields(), 300);
   }
 
+  /** Fields declared `type: 'csv'` in ITEM_SHEET_SCHEMAS (e.g. spell.classes)
+   * render as a plain comma-separated text input, but store an array —
+   * `_prepareContext` joins the array for display, this parses it back on
+   * save. Kept out of `_onChangeForm`/setPathValue's generic path, which
+   * only knows plain scalars, so an array-shaped field doesn't need its own
+   * DOM input `type` to round-trip correctly. */
+  _csvFieldKeys() {
+    const schema = ITEM_SHEET_SCHEMAS[this.document?.type];
+    const fields = schema?.tabs?.[0]?.fields || [];
+    return new Set(fields.filter((f) => f.type === 'csv').map((f) => f.key));
+  }
+
   async _flushPendingFields() {
     if (!this.document || this._pendingFields.size === 0) return;
     const pending = this._pendingFields;
     this._pendingFields = new Map();
 
     const data = this.document.data || {};
+    const csvKeys = this._csvFieldKeys();
     let name;
     for (const [key, value] of pending) {
-      if (key === 'name') name = value;
-      else setPathValue(data, key.slice(3), value);
+      if (key === 'name') { name = value; continue; }
+      const path = key.slice(3);
+      const parsed = csvKeys.has(path) ? String(value).split(',').map((s) => s.trim()).filter(Boolean) : value;
+      setPathValue(data, path, parsed);
     }
     const submitData = { data };
     if (name !== undefined) submitData.name = name;
@@ -153,7 +168,7 @@ export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
         isNumber: f.type === 'number',
         isSelect: f.type === 'select',
         options: f.options?.map((o) => ({ ...o, selected: o.value === getVal(f.key) })),
-        value: getVal(f.key),
+        value: f.type === 'csv' ? (getVal(f.key) || []).join(', ') : getVal(f.key),
       }));
 
     const tags = [];

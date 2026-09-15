@@ -194,6 +194,7 @@ export const ITEM_SHEET_SCHEMAS = {
     { key: 'duration', label: 'Duration', type: 'text' },
     { key: 'concentration', label: 'Concentration', type: 'boolean' },
     { key: 'ritual', label: 'Ritual', type: 'boolean' },
+    { key: 'classes', label: 'Classes (comma-separated identifiers, e.g. "wizard, sorcerer")', type: 'csv' },
     { key: 'damage.formula', label: 'Damage Formula', type: 'text' },
     { key: 'damage.type', label: 'Damage Type', type: 'text' },
     { key: 'durationRounds', label: 'Effect Duration (rounds, 0 = none)', type: 'number' },
