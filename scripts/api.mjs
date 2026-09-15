@@ -17,14 +17,14 @@
 
 import { windowManager } from '/_loom/sdk/index.js';
 import {
-  sdr5eRoll, applyHeal, applyDamage, rollConcentrationSave, applyDamageToTargets,
+  sdr5eRoll, applyHeal, applyDamage, applyTempHp, rollConcentrationSave, applyDamageToTargets,
   rollWeaponAttack, rollWeaponDamage, rollSpellAttack, rollSpellDamage, castSpell,
-  rollDeathSave, spendHitDie, spendClassResource, activateFeature,
+  rollDeathSave, spendHitDie, spendClassResource, activateFeature, consumeUse, rollRecharge,
   toggleInspiration, setExhaustion, getActorConditions, getSaveConditionOutcome,
   applyAbilityCheckConditionModifiers, applyWeaponAttackConditionModifiers,
   postItemToChat,
 } from './roll-engine.mjs';
-import { applyItemEffect, removeItemEffects } from './effects.mjs';
+import { applyItemEffect, removeItemEffects, applyTemporaryEffect } from './effects.mjs';
 import { Sdr5eCharacterWizard } from './character-wizard.mjs';
 
 export const SDR5EApi = {
@@ -33,10 +33,10 @@ export const SDR5EApi = {
   rollWeaponAttack, rollWeaponDamage, rollSpellAttack, rollSpellDamage, castSpell,
   rollDeathSave, rollConcentrationSave,
   // Damage / healing
-  applyHeal, applyDamage, applyDamageToTargets,
+  applyHeal, applyDamage, applyTempHp, applyDamageToTargets,
   // Resources (Hit Dice, the generic class-resource pool ported from the
   // original's "Route D: Flow Modifiers (Agnostic Pools)" — codex-api.mjs:651)
-  spendHitDie, spendClassResource, activateFeature,
+  spendHitDie, spendClassResource, activateFeature, consumeUse, rollRecharge,
   // Toggles
   toggleInspiration, setExhaustion,
   // Conditions (poisoned/restrained/paralyzed/etc — SRD 5.1 advantage/
@@ -45,7 +45,7 @@ export const SDR5EApi = {
   applyAbilityCheckConditionModifiers, applyWeaponAttackConditionModifiers,
   // Active Effects (equip/unequip buffs — ported from EffectAutomation.mjs,
   // scoped down to what doesn't need a combat tracker)
-  applyItemEffect, removeItemEffects,
+  applyItemEffect, removeItemEffects, applyTemporaryEffect,
   // Chat
   postItemToChat,
   // Character creation

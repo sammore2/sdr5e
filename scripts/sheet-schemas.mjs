@@ -119,10 +119,12 @@ export const ITEM_SHEET_SCHEMAS = {
     { key: 'source', label: 'Source (groups the Features tab, e.g. "Wizard")', type: 'text' },
     { key: 'featureType', label: 'Feature Type', type: 'text' },
     { key: 'tier', label: 'Tier', type: 'number' },
+    { key: 'uses.value', label: 'Uses (current)', type: 'number' },
     { key: 'uses.max', label: 'Uses (max)', type: 'text' },
     { key: 'uses.recovery', label: 'Recovery', type: 'select', options: [
       { value: 'none', label: 'None' }, { value: 'sr', label: 'Short Rest' }, { value: 'lr', label: 'Long Rest' },
     ] },
+    { key: 'uses.recharge', label: 'Recharge (0 = none, e.g. 5 = "Recharge 5-6")', type: 'number' },
     { key: 'resourceCost', label: 'Class Resource Cost (0 = free)', type: 'number' },
   ] }] },
   item: { tabs: [{ id: 'main', label: 'Item', fields: [
@@ -131,6 +133,12 @@ export const ITEM_SHEET_SCHEMAS = {
     { key: 'quantity', label: 'Quantity', type: 'number' },
     { key: 'weight', label: 'Weight', type: 'number' },
     { key: 'price.gp', label: 'Price (gp)', type: 'number' },
+    { key: 'uses.value', label: 'Uses (current)', type: 'number' },
+    { key: 'uses.max', label: 'Uses (max, 0 = unlimited)', type: 'number' },
+    { key: 'uses.recovery', label: 'Recovery', type: 'select', options: [
+      { value: 'none', label: 'None' }, { value: 'sr', label: 'Short Rest' }, { value: 'lr', label: 'Long Rest' },
+    ] },
+    { key: 'uses.recharge', label: 'Recharge (0 = none, e.g. 5 = "Recharge 5-6")', type: 'number' },
   ] }] },
   language: { tabs: [{ id: 'main', label: 'Language', fields: [
     { key: 'description', label: 'Description', type: 'textarea' },
@@ -188,6 +196,11 @@ export const ITEM_SHEET_SCHEMAS = {
     { key: 'ritual', label: 'Ritual', type: 'boolean' },
     { key: 'damage.formula', label: 'Damage Formula', type: 'text' },
     { key: 'damage.type', label: 'Damage Type', type: 'text' },
+    { key: 'durationRounds', label: 'Effect Duration (rounds, 0 = none)', type: 'number' },
+    { key: 'bonuses.da', label: 'Effect: AC Bonus', type: 'number' },
+    { key: 'bonuses.attack.melee', label: 'Effect: Melee Attack Bonus', type: 'number' },
+    { key: 'bonuses.attack.ranged', label: 'Effect: Ranged Attack Bonus', type: 'number' },
+    { key: 'bonuses.hp', label: 'Effect: HP Bonus', type: 'number' },
   ] }] },
 };
 

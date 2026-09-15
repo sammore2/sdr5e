@@ -11,10 +11,11 @@
 // (module functions), never `this.document.rollAbilityTest(...)`.
 // ══════════════════════════════════════════════════════════════════════════
 
-import { LoomHandlebarsMixin, LoomActorSheet, effects, api, windowManager, showToast } from '/_loom/sdk/index.js';
+import { LoomHandlebarsMixin, LoomActorSheet, effects, api, windowManager, showToast, LoomDialog } from '/_loom/sdk/index.js';
 import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON, ITEM_TYPE_LABEL, ITEM_TYPE_SINGULAR, SIZE_LABELS, SIZE_CARRY_MULTIPLIER, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, DAMAGE_TYPES, DAMAGE_TYPE_LABELS, KNOWN_SPELLS_TABLE, KNOWN_CANTRIPS_TABLE } from './config.mjs';
 import { fmtMod, setPathValue, currentAdvantageMode } from './utils.mjs';
 import { sdr5eRoll, rollDeathSave, toggleInspiration, setExhaustion, rollWeaponAttack, rollWeaponDamage, rollUnarmedStrike, rollUnarmedDamage, castSpell, rollSpellAttack, rollSpellDamage, spendHitDie, postItemToChat, getActorConditions, applyAbilityCheckConditionModifiers, getSaveConditionOutcome, getSkillConditionOutcome, activateFeature } from './roll-engine.mjs';
+import { removeItemEffects } from './effects.mjs';
 import { getDefaultData } from './schema.mjs';
 import { Sdr5eItemSheet } from './item-sheet.mjs';
 
@@ -114,7 +115,12 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (!this.document) return;
     const sd = this.document.systemData;
     const next = !sd.resources?.concentrating;
-    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, resources: { ...sd.resources, concentrating: next } } });
+    const concentratingOn = sd.resources?.concentratingOn;
+    // Manually ending concentration is the same as failing the save (Passo
+    // 4): drop whatever temporary effect it was holding up, same as
+    // rollConcentrationSave does on a failed roll.
+    if (!next && concentratingOn) await removeItemEffects({ id: concentratingOn });
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, resources: { ...sd.resources, concentrating: next, concentratingOn: next ? concentratingOn : '' } } });
     await this._reloadDocument();
   }
 
@@ -1049,15 +1055,83 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     await this._reloadDocument();
   }
 
+  // Restores limited-use items/features whose `uses.recovery` matches this
+  // rest: 'sr' recovers on both short and long rest, 'lr' only on long rest.
+  async _restoreItemUses(kind) {
+    const items = this.document?.items || [];
+    const restored = [];
+    for (const it of items) {
+      const idata = it.system || it.data || {};
+      const uses = idata.uses;
+      const max = Number(uses?.max) || 0;
+      if (!uses || max <= 0) continue;
+      const matches = uses.recovery === 'lr' ? kind === 'long' : uses.recovery === 'sr';
+      if (!matches) continue;
+      const value = Number(uses.value) || 0;
+      if (value >= max) continue;
+      await api.put(`/items/${it.id}`, { data: { ...idata, uses: { ...uses, value: max } } });
+      restored.push(it.name);
+    }
+    return restored;
+  }
+
+  // Prompts how many Hit Dice (0..max) to spend, capped by what's left.
+  async _promptHitDiceToSpend(max) {
+    if (max <= 0) return 0;
+    const container = document.createElement('div');
+    container.className = 'sdrn-rest-dialog';
+    container.innerHTML = `
+      <label>Hit Dice to spend (0-${max})</label>
+      <input type="number" class="sdrn-rest-hd-input" min="0" max="${max}" value="0" />
+    `;
+    const input = container.querySelector('.sdrn-rest-hd-input');
+    const result = await LoomDialog.wait({
+      window: { title: 'Short Rest — Spend Hit Dice' },
+      content: container,
+      width: 320,
+      buttons: [
+        { action: 'confirm', label: 'Rest', variant: 'primary', callback: () => Math.max(0, Math.min(max, Number(input?.value) || 0)) },
+      ],
+    });
+    return result ?? 0;
+  }
+
   // Rest rules are PROVISIONAL (see the note at the top of schema.mjs — final
-  // numbers come from the SRD the user is transposing). Short: only frees up
-  // resources with reset:'short'. Long: full HP, full hit dice, 'short'+'long'
-  // resources, resets the short-rest counter.
+  // numbers come from the SRD the user is transposing). Short: spends 0..N
+  // Hit Dice (reusing spendHitDie, which rolls+heals+persists each die one at
+  // a time) then frees up resources with reset:'short'. Long: full HP, half
+  // of total Hit Dice (SRD: "up to half your total number of them, round
+  // down, minimum 1"), 'short'+'long' resources, resets the short-rest counter.
   async _takeRest(kind) {
     if (!this.document) return;
+
+    let hitDiceSpent = 0;
+    let hitDiceHealed = 0;
+    if (kind === 'short') {
+      const hdAvailable = this.document.systemData?.resources?.hitDice?.value ?? 0;
+      const toSpend = await this._promptHitDiceToSpend(hdAvailable);
+      for (let i = 0; i < toSpend; i++) {
+        const result = await spendHitDie(this.document);
+        if (!result) break;
+        hitDiceSpent += 1;
+        hitDiceHealed += result.healAmount;
+        // Each spendHitDie() call persists via actor.update() but doesn't
+        // mutate this.document locally — reload so the next iteration (and
+        // the hitDice.value check below) reads the post-spend state, not a
+        // stale copy that would let every iteration decrement from the same
+        // starting value.
+        await this._reloadDocument();
+      }
+    }
+
+    const itemsRestored = await this._restoreItemUses(kind);
+    if (itemsRestored.length) await this._reloadDocument();
+
     const sd = this.document.systemData;
     const res = sd.resources || {};
     const recovered = [];
+    if (hitDiceSpent > 0) recovered.push(`${hitDiceSpent} Hit Die spent (+${hitDiceHealed} HP)`);
+    if (itemsRestored.length) recovered.push(`Uses restored: ${itemsRestored.join(', ')}`);
 
     if (res.racial?.reset === 'short' || kind === 'long') {
       if (res.racial && res.racial.value < res.racial.max) recovered.push(`${res.racial.label || 'Racial'} (${res.racial.max - res.racial.value})`);
@@ -1075,8 +1149,13 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       if (res.health && longRestCap > hpBefore) recovered.unshift(`HP +${longRestCap - hpBefore}`);
 
       const hdBefore = res.hitDice?.value ?? 0;
-      if (res.hitDice) res.hitDice.value = res.hitDice.max;
-      if (res.hitDice && res.hitDice.max > hdBefore) recovered.push(`Hit Dice +${res.hitDice.max - hdBefore}`);
+      if (res.hitDice) {
+        // SRD (Adventuring.md, "Long Rest"): recover up to half your total
+        // Hit Dice (round down, minimum 1), not all of them.
+        const hdRecoverAmount = Math.max(1, Math.floor((res.hitDice.max || 0) / 2));
+        res.hitDice.value = Math.min(res.hitDice.max, hdBefore + hdRecoverAmount);
+      }
+      if (res.hitDice && res.hitDice.value > hdBefore) recovered.push(`Hit Dice +${res.hitDice.value - hdBefore}`);
 
       let slotsRestored = 0;
       for (const lvl of Object.keys(res.spellSlots || {})) {

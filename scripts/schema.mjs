@@ -142,6 +142,10 @@ export function getDefaultData(type) {
           exhaustion: 0,
           inspiration: false,
           concentrating: false,
+          // Item id of the spell currently being concentrated on, '' when
+          // not concentrating. Lets rollConcentrationSave() find and remove
+          // the right temporary effect on a failed save (see roll-engine.mjs).
+          concentratingOn: '',
         },
         traits: { di: [], dr: [], dv: [], ci: [] },
         proficiencies: { weapons: [], armor: [], tools: [] },
@@ -247,7 +251,11 @@ export function getDefaultData(type) {
         meta: { isMetamagic: false, slotModifier: 0, effectTag: '' },
         actions: { costOverride: '' },
         flags: { isTWF: false, isImprovedTWF: false, isGreaterTWF: false, isFinesse: false },
-        uses: { value: 0, max: '0', recovery: 'none', amount: 0, type: 'none' },
+        // recovery: 'none' | 'sr' | 'lr' — checked by _takeRest (character-sheet.mjs).
+        // recharge: 0 = no recharge, 1-6 = recharges at start of the holder's
+        // turn on a 1d6 >= this (monster "Recharge 5-6" abilities). Checked
+        // by consumeUse()/rollRecharge() in roll-engine.mjs.
+        uses: { value: 0, max: '0', recovery: 'none', amount: 0, type: 'none', recharge: 0 },
         // Generic class-resource cost — ported from the original system's
         // "Route D: Flow Modifiers (Agnostic Pools)" (codex-api.mjs:651),
         // real working code there. Spends from `resources.primary` on the
@@ -270,6 +278,12 @@ export function getDefaultData(type) {
         ...defaultAction(),
         quantity: 1,
         charges: { value: 0, max: 0 },
+        // Same shape/semantics as `feature.uses` below — limited uses that
+        // consumeUse()/rollRecharge() (roll-engine.mjs) check and decrement.
+        // recovery: 'none' | 'sr' | 'lr' (matches feature.uses.recovery, and
+        // _takeRest's short/long reset branches). recharge: 0 = no recharge,
+        // 1-6 = recharges at the start of the holder's turn on a 1d6 >= this.
+        uses: { value: 0, max: 0, recovery: 'none', recharge: 0 },
         consumable: false,
         magical: false,
         identified: true,
@@ -347,10 +361,23 @@ export function getDefaultData(type) {
         range: '',
         components: { v: false, s: false, m: false, material: '' },
         duration: 'Instantaneous',
+        // Numeric duration in COMBAT ROUNDS, separate from the free-text
+        // `duration` above (kept as flavor text — "1 minute", "Until
+        // dispelled" — too irregular to parse reliably). 0 = no mechanical
+        // temporary effect on cast (most spells: damage/save/utility only).
+        // Only spells with both `concentration` and `durationRounds` > 0
+        // apply a temporary effect via applyTemporaryEffect() in castSpell().
+        durationRounds: 0,
         concentration: false,
         ritual: false,
         prepared: false,
         damage: { formula: '', type: '' },
+        // Mechanical effect this spell grants for `durationRounds` (e.g.
+        // Shield of Faith's +2 AC) — same shape as weapon/armor `bonuses`,
+        // flattened by effects.mjs's existing bonusesToChanges(). Zero
+        // values (the default) produce no changes, so this is a no-op for
+        // every spell until a GM fills it in.
+        bonuses: defaultBonuses(),
       };
 
     default:

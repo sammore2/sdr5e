@@ -16,6 +16,7 @@
 
 import { currentAdvantageMode, isCriticalHeld } from './utils.mjs';
 import { getSetting } from './settings.mjs';
+import { bonusesToChanges, applyTemporaryEffect, removeItemEffects } from './effects.mjs';
 
 /**
  * Conditions live on Cast (token) records, not the Actor (`statusMarkers:
@@ -446,6 +447,37 @@ export async function applyHeal(actor, amount, options = {}) {
   });
 }
 
+/**
+ * Grants temporary hit points. SRD (Combat.md, "Temporary Hit Points"):
+ * "if you have temporary hit points and receive more, you decide whether to
+ * keep the ones you have or to gain the new ones" — modeled as "keep the
+ * higher value" (the common table ruling and what dnd5e itself defaults to),
+ * warning in chat when the new grant is ignored because it's lower.
+ */
+export async function applyTempHp(actor, amount) {
+  if (!actor || amount <= 0) return null;
+  const sd = actor.systemData;
+  const hp = getHealthPool(sd, actor.type);
+  if (!hp) return null;
+
+  const current = hp.temp || 0;
+  if (amount <= current) {
+    return window.Loom.ChatMessage.create({
+      speaker: window.Loom.ChatMessage.getSpeaker({ actor }),
+      content: `Temporary HP ignored (${amount} ≤ current ${current})`,
+      flags: { srd5e: { name: `${actor.name} — Temporary HP`, description: `<span>New ${amount} temp HP ignored — already has ${current}</span>` } },
+    });
+  }
+
+  await actor.update({ 'system.resources.health.temp': amount });
+
+  return window.Loom.ChatMessage.create({
+    speaker: window.Loom.ChatMessage.getSpeaker({ actor }),
+    content: `Temporary HP: ${amount}`,
+    flags: { srd5e: { name: `${actor.name} — Temporary HP`, amount, description: `<span style="color:#10b981">${amount} Temporary HP</span>` } },
+  });
+}
+
 export async function applyDamage(actor, amount, type = '') {
   if (!actor) return null;
   const sd = actor.systemData;
@@ -511,12 +543,39 @@ export async function applyDamage(actor, amount, type = '') {
  * borrows the `prepareData` prototype method (see the architecture note at
  * the top of actor-sheet.mjs), so the legacy per-instance roll methods on
  * `SDR5EActor` are never actually reachable from here.
+ *
+ * Rolled LOCALLY (not via `sdr5eRoll`/`dispatchRoll`, both fire-and-forget —
+ * see the note on `rollDeathSave`) because the outcome has to be known
+ * synchronously: a failed save immediately drops whatever effect
+ * `resources.concentratingOn` points at (Handout — SRD5E automação básica,
+ * Passo 4). Trades away the advantage/situational-bonus dialog other saves
+ * get; every other save in this file keeps using `sdr5eRoll`.
  */
 export async function rollConcentrationSave(actor, damage) {
   if (!actor) return null;
   const dc = Math.max(10, Math.floor(damage / 2));
-  const parts = [{ label: 'CON Save', value: actor.systemData?.saves?.con?.total ?? 0 }];
-  return sdr5eRoll({ label: 'Concentration Save', parts, actor, dc });
+  const conTotal = actor.systemData?.saves?.con?.total ?? 0;
+  const roll = 1 + Math.floor(Math.random() * 20);
+  const total = roll + conTotal;
+  const success = total >= dc;
+
+  window.Loom.dispatchRoll({
+    formula: String(total),
+    actorId: actor.id,
+    mode: 'public',
+    meta: { label: `Concentration Save (DC ${dc}) — ${success ? 'Success' : 'Failed'}` },
+  });
+
+  if (!success) {
+    const origin = actor.systemData?.resources?.concentratingOn;
+    if (origin) await removeItemEffects({ id: origin });
+    await actor.update({
+      'system.resources.concentrating': false,
+      'system.resources.concentratingOn': '',
+    });
+  }
+
+  return { roll, total, dc, success };
 }
 
 /**
@@ -811,6 +870,12 @@ export async function castSpell(actor, item) {
     return null;
   }
 
+  // No-op today (spell items don't carry a `uses` field in the schema), but
+  // wired the same way as activateFeature so a future limited-use spell item
+  // (e.g. a spell scroll) is gated for free.
+  const usable = await consumeUse(actor, item);
+  if (!usable) return null;
+
   // SRD (Spellcasting, "Rituals"): magia ritual preparada não gasta slot
   // (leva 10min a mais, não rastreado aqui — narrativo). Simplificação
   // assumida: usa a regra geral (precisa `prepared: true`), não replica a
@@ -824,6 +889,23 @@ export async function castSpell(actor, item) {
       return null;
     }
     await actor.update({ [`system.resources.spellSlots.${level}.value`]: slot.value - 1 });
+  }
+
+  // Concentration + a mechanical effect (Passo 4 — see schema.mjs's note on
+  // `durationRounds`/`bonuses` on the spell item): applies the effect for
+  // `durationRounds` rounds and remembers which spell it came from so a
+  // failed concentration save (rollConcentrationSave) can find and remove
+  // it. Every other spell (durationRounds === 0, i.e. every spell until a
+  // GM fills those fields in) is unaffected — same as before this existed.
+  if (idata.concentration && Number(idata.durationRounds) > 0) {
+    const changes = bonusesToChanges(idata.bonuses);
+    if (changes.length) {
+      await applyTemporaryEffect(actor, { changes, duration: Number(idata.durationRounds), origin: item.id, label: `${item.name} (Concentration)` });
+      await actor.update({
+        'system.resources.concentrating': true,
+        'system.resources.concentratingOn': item.id,
+      });
+    }
   }
 
   const dc = sd.attributes?.spellcasting?.dc ?? 0;
@@ -953,14 +1035,71 @@ export async function spendClassResource(actor, cost) {
 }
 
 /**
+ * Checks and spends one limited use off `item.uses` (shared shape on both
+ * `feature` and `item` types — see schema.mjs). Items with no `uses.max`
+ * (or `max` <= 0) are unlimited and always pass through. Shared by
+ * `activateFeature` and `castSpell` so the "out of uses" check and the
+ * decrement only exist in one place.
+ */
+export async function consumeUse(actor, item) {
+  if (!item) return true;
+  const idata = item.system || item.data || {};
+  const uses = idata.uses;
+  const max = Number(uses?.max) || 0;
+  if (!uses || max <= 0) return true;
+
+  const value = Number(uses.value) || 0;
+  if (value <= 0) {
+    window.Loom?.showToast?.(`${item.name}: no uses remaining.`, 'warning');
+    return false;
+  }
+
+  await window.Loom.api.put(`/items/${item.id}`, { data: { ...idata, uses: { ...uses, value: value - 1 } } });
+  return true;
+}
+
+/**
+ * Start-of-turn recharge roll (monster "Recharge 5-6" abilities): 1d6, item
+ * refills to `uses.max` on a roll >= `uses.recharge`. No-op for items with
+ * `recharge` 0 (not a rechargeable ability) or already at full uses.
+ */
+export async function rollRecharge(actor, item) {
+  if (!item) return null;
+  const idata = item.system || item.data || {};
+  const uses = idata.uses;
+  const threshold = Number(uses?.recharge) || 0;
+  const max = Number(uses?.max) || 0;
+  if (!uses || threshold <= 0 || max <= 0) return null;
+  if ((Number(uses.value) || 0) >= max) return null;
+
+  const roll = 1 + Math.floor(Math.random() * 6);
+  const success = roll >= threshold;
+  if (success) {
+    await window.Loom.api.put(`/items/${item.id}`, { data: { ...idata, uses: { ...uses, value: max } } });
+  }
+
+  await window.Loom.ChatMessage.create({
+    speaker: actor ? window.Loom.ChatMessage.getSpeaker({ actor }) : undefined,
+    content: `${item.name} Recharge: ${roll} (needs ${threshold}+)`,
+    flags: { srd5e: { name: `${item.name} — Recharge`, description: `<span>${roll} vs ${threshold}+ — ${success ? 'Recharged' : 'No recharge'}</span>` } },
+  });
+  return { roll, success };
+}
+
+/**
  * Activates a feature that costs class-resource points (Rage, Channel
- * Divinity, etc.) — spends the cost (if any), then posts the same kind of
- * item chat card `postItemToChat` already builds for a plain "post to
- * chat" click, so an activated feature shows up the same way in the log.
+ * Divinity, etc.) — spends the cost (if any) and a limited use (if any),
+ * then posts the same kind of item chat card `postItemToChat` already
+ * builds for a plain "post to chat" click, so an activated feature shows
+ * up the same way in the log.
  */
 export async function activateFeature(actor, item) {
   if (!actor || !item) return false;
   const idata = item.system || item.data || {};
+
+  const usable = await consumeUse(actor, item);
+  if (!usable) return false;
+
   const cost = Number(idata.resourceCost) || 0;
   if (cost > 0) {
     const ok = await spendClassResource(actor, cost);

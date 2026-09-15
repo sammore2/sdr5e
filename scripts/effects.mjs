@@ -90,6 +90,33 @@ export async function syncEquippedEffect(item) {
  * `item.deleted`, não `item.updated` (ver Handout 11). */
 const PERMANENT_BONUS_TYPES = ['feature', 'background', 'race', 'class', 'subclass', 'feat'];
 
+/**
+ * Applies a temporary, duration-based effect (a concentration spell's buff, a
+ * potion's condition, etc.) — same `effects.create()` the permanent/equip
+ * helpers above already use, just with a finite `duration` (in ROUNDS). The
+ * engine ticks this down automatically: `tickBuffDurations` (server
+ * combat.ts) decrements every active buff's `duration` by 1 on every combat
+ * round that completes and deletes it at 0 — no client-side tick loop
+ * needed here, so there's no `tickEffects()` duplicating that.
+ *
+ * `itemId` is set to `origin` (not left blank) so the *existing*
+ * `removeItemEffects()` — which looks buffs up by itemId via
+ * `effects.forItem()` — can tear this down early (e.g. a failed
+ * concentration save), reusing that function instead of adding a
+ * parallel origin-based lookup.
+ */
+export async function applyTemporaryEffect(actor, { changes, duration, origin = '', label = 'Effect' }) {
+  if (!actor?.id || !changes?.length) return null;
+  return effects.create({
+    actorId: actor.id,
+    itemId: origin,
+    name: label,
+    origin,
+    duration: Number(duration) > 0 ? Number(duration) : 1,
+    changes,
+  });
+}
+
 /** Cria o efeito de um item permanente (feature/background/raça/classe/
  * subclasse/feat) assim que ele é adicionado ao personagem — idempotente
  * (não duplica se já existir um efeito pra esse item). Chamado em
