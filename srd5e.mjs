@@ -22,7 +22,7 @@ import { getDefaultData } from './scripts/schema.mjs';
 import { mergeDefaults } from './scripts/utils.mjs';
 import { prepCharacter, prepNpc } from './scripts/prepare-data.mjs';
 import { getSheetSchema, getItemSheetSchema } from './scripts/sheet-schemas.mjs';
-import { applyDamageToTargets, rollWeaponAttack, rollWeaponDamage, rollSpellAttack, rollSpellDamage, rollUnarmedDamage } from './scripts/roll-engine.mjs';
+import { applyDamageToTargets, rollWeaponAttack, rollWeaponDamage, rollSpellAttack, rollSpellDamage, rollUnarmedDamage, castSpell, activateFeature, postItemToChat } from './scripts/roll-engine.mjs';
 import { syncEquippedEffect, syncPermanentBonusEffect, removeItemEffects } from './scripts/effects.mjs';
 import { Sdr5eCharacterSheet } from './scripts/character-sheet.mjs';
 import { Sdr5eNpcSheet } from './scripts/npc-sheet.mjs';
@@ -60,6 +60,38 @@ function prepareData(row) {
 
 registerSettings();
 
+/**
+ * `LoomSystem.useItem` — the generic entry point a ruleset-agnostic caller
+ * (the macro hotbar's `use-item` macro, macro-runner.ts) invokes without
+ * knowing SDR5E exists by name. Dispatches by item type to whatever
+ * "using" that item already means on the sheet (same functions the sheet's
+ * own `data-action` buttons call) — weapon attacks, casts a spell,
+ * activates a feature (spends its resource/use), otherwise just posts the
+ * item's card to chat (armor/race/class/etc aren't really "usable").
+ * Fetches fresh actor/item by id, same reasoning as the card-attack chat
+ * button listener below: whoever triggers this isn't necessarily the one
+ * with the sheet open.
+ */
+async function useItem(actorId, itemId) {
+  const actor = await window.Loom.api.get(`/actors/${actorId}`);
+  if (!actor) return;
+  const item = await window.Loom.api.get(`/items/${itemId}`);
+  if (!item) return;
+  switch (item.type) {
+    case 'weapon':
+      await rollWeaponAttack(actor, item);
+      break;
+    case 'spell':
+      await castSpell(actor, item);
+      break;
+    case 'feature':
+      await activateFeature(actor, item);
+      break;
+    default:
+      await postItemToChat(actor, item);
+  }
+}
+
 SystemRegistry.register(defineSystem({
   id: 'srd5e',
   title: 'SDR5E (Modern SRD)',
@@ -70,6 +102,7 @@ SystemRegistry.register(defineSystem({
   getSheetSchema,
   getItemSheetSchema,
   prepareData,
+  useItem,
 }));
 
 // Core already ships 5 generic token status markers (blinded/poisoned/

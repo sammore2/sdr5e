@@ -392,7 +392,7 @@
       <div class="sdrn-box">
         <div class="sdrn-box-title">{{icon}} {{label}}</div>
         {{#each items}}
-        <div class="sdrn-item-row">
+        <div class="sdrn-item-row" draggable="true" data-drag-item-id="{{id}}" data-drag-item-name="{{name}}" data-drag-item-img="{{imgUrl}}">
           <button type="button" class="sdrn-item-icon sdrn-item-icon-btn" data-action="post-item-chat" data-id="{{id}}" title="Post to Chat">{{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}{{icon}}{{/if}}</button>
           <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
           {{#if isWeapon}}
@@ -443,7 +443,7 @@
           <span class="sdrn-feature-col-recovery">Recovery</span>
         </div>
         {{#each items}}
-        <div class="sdrn-item-row sdrn-feature-row">
+        <div class="sdrn-item-row sdrn-feature-row" draggable="true" data-drag-item-id="{{id}}" data-drag-item-name="{{name}}" data-drag-item-img="{{imgUrl}}">
           <button type="button" class="sdrn-item-icon sdrn-item-icon-btn" data-action="post-item-chat" data-id="{{id}}" title="Post to Chat">{{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}{{icon}}{{/if}}</button>
           <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
           {{#if resourceCost}}
@@ -475,7 +475,7 @@
           {{#if slots}}<span class="sdrn-empty">&nbsp;— {{slots.value}}/{{slots.max}} slots</span>{{/if}}
         </div>
         {{#each spells}}
-        <div class="sdrn-item-row">
+        <div class="sdrn-item-row" draggable="true" data-drag-item-id="{{id}}" data-drag-item-name="{{name}}" data-drag-item-img="{{imgUrl}}">
           <span class="sdrn-item-icon">{{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}{{icon}}{{/if}}</span>
           <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
           <button type="button" class="sdrn-item-roll-btn" data-action="cast-spell" data-id="{{id}}" title="Cast (consumes a slot)">Cast</button>

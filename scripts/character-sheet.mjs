@@ -254,6 +254,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     this._applyActiveTab();
     this._detachSideTabs();
     this._attachDropListener();
+    this._attachDragListener();
   }
 
   _postRender() {
@@ -261,6 +262,31 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     this._applyActiveTab();
     this._detachSideTabs();
     this._attachDropListener();
+    this._attachDragListener();
+  }
+
+  // Lets a `[data-drag-item-id]` row (inventory/feature/spell — always an
+  // item already embedded on THIS actor, never a bare compendium/world
+  // item) be dragged onto the macro hotbar to build a "use this item"
+  // macro (macro-hotbar.ts's `Item` drop type -> `use-item` macro ->
+  // LoomSystem.useItem, srd5e.mjs). Delegated on `this.element` (Rule 3),
+  // same idempotent-guard pattern as `_attachDropListener` right above.
+  _hasDragListener = false;
+  _attachDragListener() {
+    if (!this.element || this._hasDragListener) return;
+    this._hasDragListener = true;
+    this.element.addEventListener('dragstart', (e) => {
+      const row = e.target instanceof HTMLElement ? e.target.closest('[data-drag-item-id]') : null;
+      if (!row || !this.document) return;
+      const payload = {
+        type: 'Item',
+        actorId: this.document.id,
+        itemId: row.dataset.dragItemId,
+        name: row.dataset.dragItemName || '',
+        imgUrl: row.dataset.dragItemImg || '',
+      };
+      e.dataTransfer?.setData('text/plain', JSON.stringify(payload));
+    });
   }
 
   _hasDropListener = false;
