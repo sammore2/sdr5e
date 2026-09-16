@@ -20,17 +20,18 @@
       <button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-race">Change</button>
     </div>
     {{else}}
-    <div class="sdrn-bio-field"><label>Search Race</label><input type="text" data-wizard-search="race" value="{{_raceQuery}}" placeholder="e.g. Human" /></div>
+    <div class="sdrn-bio-field"><label>Filter</label><input type="text" data-wizard-search="race" value="{{_raceQuery}}" placeholder="Type to filter, or pick below" /></div>
     {{#if _raceResults}}
     <div class="sdrn-wizard-results">
       {{#each _raceResults}}
-      <div class="sdrn-wizard-result" data-action="wizard-pick-race" data-id="{{id}}" data-source-id="{{sourceId}}">
+      <button type="button" class="sdrn-wizard-result" data-action="wizard-pick-race" data-id="{{id}}" data-source-id="{{sourceId}}">
         <span>{{name}}</span> <small>{{sourceName}}</small>
-      </div>
+      </button>
       {{/each}}
     </div>
+    {{else}}
+    <p class="sdrn-wizard-hint">No compendium race packs found. Fill in below to create a homebrew race instead.</p>
     {{/if}}
-    <p class="sdrn-wizard-hint">No match? Fill in below to create a homebrew race instead.</p>
     <div class="sdrn-bio-field"><label>Race Name (homebrew)</label><input type="text" name="w:race.name" value="{{_data.race.name}}" placeholder="e.g. Human" /></div>
     <div class="sdrn-bio-field">
       <label>Size</label>
@@ -51,17 +52,18 @@
       <button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-klass">Change</button>
     </div>
     {{else}}
-    <div class="sdrn-bio-field"><label>Search Class</label><input type="text" data-wizard-search="klass" value="{{_klassQuery}}" placeholder="e.g. Fighter" /></div>
+    <div class="sdrn-bio-field"><label>Filter</label><input type="text" data-wizard-search="klass" value="{{_klassQuery}}" placeholder="Type to filter, or pick below" /></div>
     {{#if _klassResults}}
     <div class="sdrn-wizard-results">
       {{#each _klassResults}}
-      <div class="sdrn-wizard-result" data-action="wizard-pick-klass" data-id="{{id}}" data-source-id="{{sourceId}}">
+      <button type="button" class="sdrn-wizard-result" data-action="wizard-pick-klass" data-id="{{id}}" data-source-id="{{sourceId}}">
         <span>{{name}}</span> <small>{{sourceName}}</small>
-      </div>
+      </button>
       {{/each}}
     </div>
+    {{else}}
+    <p class="sdrn-wizard-hint">No compendium class packs found. Fill in below to create a homebrew class instead.</p>
     {{/if}}
-    <p class="sdrn-wizard-hint">No match? Fill in below to create a homebrew class instead.</p>
     <div class="sdrn-bio-field"><label>Class Name (homebrew)</label><input type="text" name="w:klass.name" value="{{_data.klass.name}}" placeholder="e.g. Fighter" /></div>
     <div class="sdrn-bio-field">
       <label>Hit Die</label>

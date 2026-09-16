@@ -15846,28 +15846,34 @@ input.sdrn-npc-sub-input:focus {
 }
 
 .sdrn-wizard-results {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  max-height: 160px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 6px;
+  max-height: 220px;
   overflow-y: auto;
   margin-bottom: 10px;
-  border: 1px solid rgba(201, 161, 90, 0.2);
-  border-radius: 4px;
+  padding: 2px;
 }
 
 .sdrn-wizard-result {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 6px 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 8px 10px;
   cursor: pointer;
   color: #d8cfc0;
   font-size: 12px;
+  font-family: inherit;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(201, 161, 90, 0.25);
+  border-radius: 6px;
 }
 
 .sdrn-wizard-result:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(201, 161, 90, 0.15);
+  border-color: rgba(201, 161, 90, 0.5);
 }
 
 .sdrn-wizard-result small {
