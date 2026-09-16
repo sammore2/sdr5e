@@ -43,15 +43,88 @@
     {{/if}}
 
     {{#if _asiModeFeat}}
-    <p class="sdrn-wizard-hint">No feat compendium yet — this creates a freeform Feat item on the character (same pattern as Race/Class in character creation).</p>
-    <div class="sdrn-bio-field"><label>Feat Name</label><input type="text" name="w:featName" value="{{_featName}}" placeholder="e.g. Great Weapon Master" /></div>
+    {{#if _featPicked}}
+    <div class="sdrn-wizard-picked">
+      <strong>{{_featName}}</strong> <span class="sdrn-wizard-hint">(from compendium)</span>
+      <button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-feat">Change</button>
+    </div>
+    {{else}}
+    <div class="sdrn-bio-field"><label>Filter</label><input type="text" data-wizard-search="feat" value="{{_featQuery}}" placeholder="Type to filter, or pick below" /></div>
+    {{#if _featResults}}
+    <div class="sdrn-wizard-results">
+      {{#each _featResults}}
+      <button type="button" class="sdrn-wizard-result" data-action="wizard-pick-feat" data-id="{{id}}">
+        <span>{{name}}</span> <small>{{sourceName}}</small>
+      </button>
+      {{/each}}
+    </div>
+    {{else}}
+    <p class="sdrn-wizard-hint">No compendium feat packs found. Ask your GM to install a feat pack.</p>
+    {{/if}}
+    {{/if}}
     {{/if}}
     {{/if}}
 
     {{#if _stepSubclass}}
     <h3>Choose your Subclass</h3>
-    <p class="sdrn-wizard-hint">No subclass compendium yet — this just labels the class item (matches how {{_className}} is stored).</p>
-    <div class="sdrn-bio-field"><label>Subclass Name</label><input type="text" name="w:subclassName" value="{{_subclassName}}" placeholder="e.g. Battle Master" /></div>
+    {{#if _subclassPicked}}
+    <div class="sdrn-wizard-picked">
+      <strong>{{_subclassName}}</strong> <span class="sdrn-wizard-hint">(from compendium)</span>
+      <button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-subclass">Change</button>
+    </div>
+    {{else}}
+    <div class="sdrn-bio-field"><label>Filter</label><input type="text" data-wizard-search="subclass" value="{{_subclassQuery}}" placeholder="Type to filter, or pick below" /></div>
+    {{#if _subclassResults}}
+    <div class="sdrn-wizard-results">
+      {{#each _subclassResults}}
+      <button type="button" class="sdrn-wizard-result" data-action="wizard-pick-subclass" data-id="{{id}}">
+        <span>{{name}}</span> <small>{{sourceName}}</small>
+      </button>
+      {{/each}}
+    </div>
+    {{else}}
+    <p class="sdrn-wizard-hint">No {{_className}} subclass packs found. Ask your GM to install a subclass pack.</p>
+    {{/if}}
+    {{/if}}
+    {{/if}}
+
+    {{#if _stepSpells}}
+    <h3>New Spells</h3>
+    {{#if _isKnownCaster}}
+    <p class="sdrn-wizard-hint">Pick {{_newSpellsRequired}} new spell(s){{#if _newCantripsRequired}} and {{_newCantripsRequired}} new cantrip(s){{/if}} — picked so far: {{_spellLeveledCount}}/{{_newSpellsRequired}} spells, {{_spellCantripCount}}/{{_newCantripsRequired}} cantrips.</p>
+    {{else}}
+    <p class="sdrn-wizard-hint">{{_className}} prepares from its full spell list — add any spells you want available to prepare (optional, no fixed count).</p>
+    {{/if}}
+    <div class="sdrn-bio-field"><label>Filter</label><input type="text" data-wizard-search="spell" value="{{_spellQuery}}" placeholder="Type to filter" /></div>
+    {{#if _spellPicksLeveled}}
+    <div class="sdrn-wizard-results">
+      {{#each _spellPicksLeveled}}
+      <button type="button" class="sdrn-wizard-result sdrn-wizard-result-picked" data-action="wizard-toggle-spell" data-id="{{id}}">
+        <span>✓ {{name}}</span> <small>Level {{data.spellLevel}}</small>
+      </button>
+      {{/each}}
+    </div>
+    {{/if}}
+    {{#if _spellPicksCantrips}}
+    <div class="sdrn-wizard-results">
+      {{#each _spellPicksCantrips}}
+      <button type="button" class="sdrn-wizard-result sdrn-wizard-result-picked" data-action="wizard-toggle-spell" data-id="{{id}}">
+        <span>✓ {{name}}</span> <small>Cantrip</small>
+      </button>
+      {{/each}}
+    </div>
+    {{/if}}
+    {{#if _spellResults}}
+    <div class="sdrn-wizard-results">
+      {{#each _spellResults}}
+      <button type="button" class="sdrn-wizard-result" data-action="wizard-toggle-spell" data-id="{{id}}">
+        <span>{{name}}</span> <small>{{#if data.spellLevel}}Level {{data.spellLevel}}{{else}}Cantrip{{/if}}</small>
+      </button>
+      {{/each}}
+    </div>
+    {{else}}
+    <p class="sdrn-wizard-hint">No more matching spells found for {{_className}}.</p>
+    {{/if}}
     {{/if}}
 
     {{#if _stepReview}}
@@ -61,6 +134,8 @@
       <div>HP: +{{_hpGain}}</div>
       {{#if _subclassName}}<div>Subclass: {{_subclassName}}</div>{{/if}}
       {{#if _featName}}<div>Feat: {{_featName}}</div>{{/if}}
+      {{#if _spellLeveledCount}}<div>New spells: {{_spellLeveledCount}}</div>{{/if}}
+      {{#if _spellCantripCount}}<div>New cantrips: {{_spellCantripCount}}</div>{{/if}}
     </div>
     {{/if}}
   </div>

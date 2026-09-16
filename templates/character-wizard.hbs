@@ -30,17 +30,8 @@
       {{/each}}
     </div>
     {{else}}
-    <p class="sdrn-wizard-hint">No compendium race packs found. Fill in below to create a homebrew race instead.</p>
+    <p class="sdrn-wizard-hint">No compendium race packs found. Ask your GM to install a race pack.</p>
     {{/if}}
-    <div class="sdrn-bio-field"><label>Race Name (homebrew)</label><input type="text" name="w:race.name" value="{{_data.race.name}}" placeholder="e.g. Human" /></div>
-    <div class="sdrn-bio-field">
-      <label>Size</label>
-      <select name="w:race.size">
-        {{#each _sizes}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
-      </select>
-    </div>
-    <div class="sdrn-bio-field"><label>Speed</label><input type="text" name="w:race.speed" value="{{_data.race.speed}}" /></div>
-    <div class="sdrn-bio-field"><label>Creature Type</label><input type="text" name="w:race.creatureType" value="{{_data.race.creatureType}}" /></div>
     {{/if}}
     {{/if}}
 
@@ -62,15 +53,8 @@
       {{/each}}
     </div>
     {{else}}
-    <p class="sdrn-wizard-hint">No compendium class packs found. Fill in below to create a homebrew class instead.</p>
+    <p class="sdrn-wizard-hint">No compendium class packs found. Ask your GM to install a class pack.</p>
     {{/if}}
-    <div class="sdrn-bio-field"><label>Class Name (homebrew)</label><input type="text" name="w:klass.name" value="{{_data.klass.name}}" placeholder="e.g. Fighter" /></div>
-    <div class="sdrn-bio-field">
-      <label>Hit Die</label>
-      <select name="w:klass.hitDie">
-        {{#each _hitDice}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>{{/each}}
-      </select>
-    </div>
     {{/if}}
     {{/if}}
 
