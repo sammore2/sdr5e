@@ -20,7 +20,7 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 import { LoomHandlebarsMixin, BaseWindow, api, windowManager, showToast } from '/_loom/sdk/index.js';
-import { ABILITY_KEYS, ABILITY_LABELS, SIZE_LABELS } from './config.mjs';
+import { ABILITY_KEYS, ABILITY_LABELS } from './config.mjs';
 import { getDefaultData } from './schema.mjs';
 
 const STANDARD_ARRAY = [15, 14, 13, 12, 10, 8];
@@ -77,8 +77,6 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
       _isFirst: this._step === 0,
       _isLast: this._step === STEPS.length - 1,
       _data: this._data,
-      _sizes: Object.entries(SIZE_LABELS).map(([value, label]) => ({ value, label, selected: value === this._data.race.size })),
-      _hitDice: ['d6', 'd8', 'd10', 'd12'].map((v) => ({ value: v, selected: v === this._data.klass.hitDie })),
       _abilities: ABILITY_KEYS.map((k) => ({ key: k, label: ABILITY_LABELS[k], value: this._data.abilities[k] })),
       _reviewAbilities: ABILITY_KEYS.map((k) => `${ABILITY_LABELS[k].slice(0, 3)} ${this._data.abilities[k]}`).join(' · '),
       _racePicked: !!this._data.race.entryId,
@@ -87,12 +85,8 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
       _klassPicked: !!this._data.klass.entryId,
       _klassQuery: this._search.klass.query,
       _klassResults: this._search.klass.results,
-      // Review step: prefer the picked compendium entry's real fields over
-      // the freeform fallback ones, which only apply to homebrew races/classes.
-      _reviewRaceInfo: this._data.race.compendiumData
-        ? `${this._data.race.compendiumData.size || this._data.race.size}, ${this._data.race.compendiumData.speed || this._data.race.speed}`
-        : `${this._data.race.size}, ${this._data.race.speed}`,
-      _reviewHitDie: this._data.klass.compendiumData?.hitDie || this._data.klass.hitDie,
+      _reviewRaceInfo: this._data.race.compendiumData ? `${this._data.race.compendiumData.size || ''}, ${this._data.race.compendiumData.speed || ''}` : '',
+      _reviewHitDie: this._data.klass.compendiumData?.hitDie || '',
     };
   }
 
@@ -252,11 +246,10 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
     const worldId = window.Loom?.world?.id;
     if (!worldId) return;
 
-    // The real class's own hitDie (from its compendium data) wins over the
-    // wizard's freeform picker field — resolved BEFORE `charData` is built
-    // and posted, so the actor is created with the right die the first time
-    // instead of needing a second update after the fact.
-    const hitDie = this._data.klass.compendiumData?.hitDie || this._data.klass.hitDie || 'd8';
+    // Resolved BEFORE `charData` is built and posted, so the actor is
+    // created with the right die the first time instead of needing a second
+    // update after the fact.
+    const hitDie = this._data.klass.compendiumData?.hitDie || 'd8';
 
     const charData = getDefaultData('character');
     for (const k of ABILITY_KEYS) charData.abilities[k].value = this._data.abilities[k] || 10;
@@ -273,26 +266,12 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
     if (!actorId) { showToast?.('Failed to create character.', 'error'); return; }
 
     if (this._data.race.entryId && this._data.race.compendiumData) {
-      // Real compendium entry: its own `data` already has the mechanical
-      // fields (size/speed/creatureType/etc) filled in for real — nothing
-      // to overlay from the wizard's freeform fields.
+      // Compendium entry only — its own `data` already has the mechanical
+      // fields (size/speed/creatureType/etc) filled in for real.
       await api.post('/items', { worldId, name: this._data.race.name, type: 'race', data: this._data.race.compendiumData, actorId });
-    } else if (this._data.race.name.trim()) {
-      // Homebrew fallback: no matching compendium entry picked, but a name
-      // was typed — same blank-item behavior this wizard always had.
-      const raceData = getDefaultData('race');
-      raceData.size = this._data.race.size;
-      raceData.speed = this._data.race.speed;
-      raceData.creatureType = this._data.race.creatureType;
-      await api.post('/items', { worldId, name: this._data.race.name.trim(), type: 'race', data: raceData, actorId });
     }
     if (this._data.klass.entryId && this._data.klass.compendiumData) {
       await api.post('/items', { worldId, name: this._data.klass.name, type: 'class', data: this._data.klass.compendiumData, actorId });
-    } else if (this._data.klass.name.trim()) {
-      const classData = getDefaultData('class');
-      classData.hitDie = this._data.klass.hitDie;
-      classData.levels = this._data.level || 1;
-      await api.post('/items', { worldId, name: this._data.klass.name.trim(), type: 'class', data: classData, actorId });
     }
 
     const { Sdr5eCharacterSheet } = await import('./character-sheet.mjs');
