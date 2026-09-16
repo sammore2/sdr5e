@@ -1105,6 +1105,23 @@ export async function activateFeature(actor, item) {
     const ok = await spendClassResource(actor, cost);
     if (!ok) return false;
   }
+
+  // Generic "heal yourself with a class die" mechanic (Second Wind is the
+  // SRD's only Fighter example, but the shape isn't Fighter-specific — any
+  // future feature with the same `selfHeal: {die, addLevel}` data gets the
+  // same automation for free). Same average-roll convention as spendHitDie
+  // (die/2 rounded up) — dispatchRoll is fire-and-forget, see that
+  // function's comment for why the mechanical amount doesn't wait on it.
+  if (idata.selfHeal?.die) {
+    const level = Number(actor.systemData?.details?.level) || 1;
+    const bonus = idata.selfHeal.addLevel ? level : 0;
+    const formula = bonus !== 0 ? `1${idata.selfHeal.die} + ${bonus}` : `1${idata.selfHeal.die}`;
+    window.Loom?.dispatchRoll?.({ formula, actorId: actor.id, mode: 'public', meta: { label: item.name } });
+    const dieMax = Number(idata.selfHeal.die.replace(/\D/g, '')) || 8;
+    const avgRoll = Math.ceil((dieMax + 1) / 2);
+    await applyHeal(actor, Math.max(1, avgRoll + bonus));
+  }
+
   await postItemToChat(actor, item);
   return true;
 }

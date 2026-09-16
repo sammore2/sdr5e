@@ -1,0 +1,141 @@
+{
+  "name": "Features de Classe (SRD 5.2)",
+  "type": "Item",
+  "entries": [
+    {
+      "id": "f1a1a001-0000-4000-8000-000000000001",
+      "name": "Fighting Style",
+      "type": "feature",
+      "data": {
+        "identifier": "fighting-style",
+        "description": "You adopt a particular style of fighting as your specialty. Choose one option (Archery, Defense, Dueling, Great Weapon Fighting, Protection, or Two-Weapon Fighting). You can't take a Fighting Style option more than once, even if you later get to choose again.\n\nEdit this item's Style field to record which one you picked — its mechanical bonus isn't auto-applied yet.",
+        "weight": 0, "quantity": 1, "rarity": "common", "isBindOnEquip": false, "attunement": "none",
+        "source": "SRD 5.2 (CC-BY-4.0)", "price": { "gp": 0, "sp": 0, "cp": 0 },
+        "classIdentifier": "fighter", "levelGained": 1
+      }
+    },
+    {
+      "id": "f1a1a001-0000-4000-8000-000000000002",
+      "name": "Second Wind",
+      "type": "feature",
+      "data": {
+        "identifier": "second-wind",
+        "description": "You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
+        "weight": 0, "quantity": 1, "rarity": "common", "isBindOnEquip": false, "attunement": "none",
+        "source": "SRD 5.2 (CC-BY-4.0)", "price": { "gp": 0, "sp": 0, "cp": 0 },
+        "classIdentifier": "fighter", "levelGained": 1,
+        "uses": { "max": 1, "value": 1, "recovery": "sr" },
+        "selfHeal": { "die": "d10", "addLevel": true }
+      }
+    },
+    {
+      "id": "f1a1a001-0000-4000-8000-000000000003",
+      "name": "Action Surge",
+      "type": "feature",
+      "data": {
+        "identifier": "action-surge",
+        "description": "Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action on top of your regular action and a possible bonus action. Once you use this feature, you must finish a short or long rest before you can use it again.",
+        "weight": 0, "quantity": 1, "rarity": "common", "isBindOnEquip": false, "attunement": "none",
+        "source": "SRD 5.2 (CC-BY-4.0)", "price": { "gp": 0, "sp": 0, "cp": 0 },
+        "classIdentifier": "fighter", "levelGained": 2,
+        "uses": { "max": 1, "value": 1, "recovery": "sr" }
+      }
+    },
+    {
+      "id": "f1a1a001-0000-4000-8000-000000000004",
+      "name": "Extra Attack",
+      "type": "feature",
+      "data": {
+        "identifier": "extra-attack",
+        "description": "Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.",
+        "weight": 0, "quantity": 1, "rarity": "common", "isBindOnEquip": false, "attunement": "none",
+        "source": "SRD 5.2 (CC-BY-4.0)", "price": { "gp": 0, "sp": 0, "cp": 0 },
+        "classIdentifier": "fighter", "levelGained": 5,
+        "attacksPerAction": 2
+      }
+    },
+    {
+      "id": "f1a1a001-0000-4000-8000-000000000005",
+      "name": "Indomitable",
+      "type": "feature",
+      "data": {
+        "identifier": "indomitable",
+        "description": "Beginning at 9th level, you can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can't use this feature again until you finish a long rest.",
+        "weight": 0, "quantity": 1, "rarity": "common", "isBindOnEquip": false, "attunement": "none",
+        "source": "SRD 5.2 (CC-BY-4.0)", "price": { "gp": 0, "sp": 0, "cp": 0 },
+        "classIdentifier": "fighter", "levelGained": 9,
+        "uses": { "max": 1, "value": 1, "recovery": "lr" }
+      }
+    },
+    {
+      "id": "f1a1a001-0000-4000-8000-000000000006",
+      "name": "Indomitable (2 uses)",
+      "type": "feature",
+      "data": {
+        "identifier": "indomitable-2",
+        "description": "You can use Indomitable twice between long rests.",
+        "weight": 0, "quantity": 1, "rarity": "common", "isBindOnEquip": false, "attunement": "none",
+        "source": "SRD 5.2 (CC-BY-4.0)", "price": { "gp": 0, "sp": 0, "cp": 0 },
+        "classIdentifier": "fighter", "levelGained": 13,
+        "uses": { "max": 2, "value": 2, "recovery": "lr" },
+        "supersedesName": "Indomitable"
+      }
+    },
+    {
+      "id": "f1a1a001-0000-4000-8000-000000000007",
+      "name": "Action Surge (2 uses)",
+      "type": "feature",
+      "data": {
+        "identifier": "action-surge-2",
+        "description": "You can use Action Surge twice before a rest, but only once on the same turn.",
+        "weight": 0, "quantity": 1, "rarity": "common", "isBindOnEquip": false, "attunement": "none",
+        "source": "SRD 5.2 (CC-BY-4.0)", "price": { "gp": 0, "sp": 0, "cp": 0 },
+        "classIdentifier": "fighter", "levelGained": 17,
+        "uses": { "max": 2, "value": 2, "recovery": "sr" },
+        "supersedesName": "Action Surge"
+      }
+    },
+    {
+      "id": "f1a1a001-0000-4000-8000-000000000008",
+      "name": "Indomitable (3 uses)",
+      "type": "feature",
+      "data": {
+        "identifier": "indomitable-3",
+        "description": "You can use Indomitable three times between long rests.",
+        "weight": 0, "quantity": 1, "rarity": "common", "isBindOnEquip": false, "attunement": "none",
+        "source": "SRD 5.2 (CC-BY-4.0)", "price": { "gp": 0, "sp": 0, "cp": 0 },
+        "classIdentifier": "fighter", "levelGained": 17,
+        "uses": { "max": 3, "value": 3, "recovery": "lr" },
+        "supersedesName": "Indomitable (2 uses)"
+      }
+    },
+    {
+      "id": "f1a1a001-0000-4000-8000-000000000009",
+      "name": "Extra Attack (3)",
+      "type": "feature",
+      "data": {
+        "identifier": "extra-attack-3",
+        "description": "You can attack three times whenever you take the Attack action on your turn.",
+        "weight": 0, "quantity": 1, "rarity": "common", "isBindOnEquip": false, "attunement": "none",
+        "source": "SRD 5.2 (CC-BY-4.0)", "price": { "gp": 0, "sp": 0, "cp": 0 },
+        "classIdentifier": "fighter", "levelGained": 11,
+        "attacksPerAction": 3,
+        "supersedesName": "Extra Attack"
+      }
+    },
+    {
+      "id": "f1a1a001-0000-4000-8000-00000000000a",
+      "name": "Extra Attack (4)",
+      "type": "feature",
+      "data": {
+        "identifier": "extra-attack-4",
+        "description": "You can attack four times whenever you take the Attack action on your turn.",
+        "weight": 0, "quantity": 1, "rarity": "common", "isBindOnEquip": false, "attunement": "none",
+        "source": "SRD 5.2 (CC-BY-4.0)", "price": { "gp": 0, "sp": 0, "cp": 0 },
+        "classIdentifier": "fighter", "levelGained": 20,
+        "attacksPerAction": 4,
+        "supersedesName": "Extra Attack (3)"
+      }
+    }
+  ]
+}

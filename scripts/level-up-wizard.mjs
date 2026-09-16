@@ -18,6 +18,7 @@
 
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager, showToast } from '/_loom/sdk/index.js';
 import { ABILITY_KEYS, ABILITY_LABELS, ASI_LEVELS, SUBCLASS_LEVEL, SPELL_SLOT_TABLE, KNOWN_SPELLS_TABLE, KNOWN_CANTRIPS_TABLE } from './config.mjs';
+import { grantClassFeatures } from './class-features.mjs';
 
 const STEPS = ['class', 'hp', 'asi', 'subclass', 'spells', 'review'];
 
@@ -388,6 +389,13 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
     for (const entry of [...this._spellPicks.leveled, ...this._spellPicks.cantrips]) {
       await api.post('/items', { worldId, name: entry.name, type: 'spell', data: entry.data, actorId: this.document.id });
     }
+
+    // 6) Features de classe desbloqueadas neste(s) nível(is) — Second Wind,
+    // Action Surge, Extra Attack, Indomitable etc, puxadas do compendium
+    // (ver class-features.mjs). Passa a própria lista de items já carregada
+    // como base pro matching de `supersedesName` (tiers de escala).
+    const existingFeatures = items.filter((i) => i.type === 'feature').map((i) => ({ id: i.id, name: i.name }));
+    await grantClassFeatures(worldId, this.document.id, idata.classIdentifier, currentClassLevel, nextClassLevel, existingFeatures);
 
     await this.document.update(patch);
     showToast?.(`Leveled up to ${nextClassLevel}!`, 'success');
