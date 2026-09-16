@@ -895,11 +895,6 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       return;
     }
 
-    if (action === 'new-character-wizard') {
-      void this._openWizard();
-      return;
-    }
-
     if (action === 'level-up-wizard') {
       void this._openLevelUpWizard();
       return;
@@ -996,12 +991,6 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const data = { ...(item.system || item.data || {}), equipped: !current };
     await api.put(`/items/${itemId}`, { data });
     await this._reloadDocument();
-  }
-
-  async _openWizard() {
-    const { Sdr5eCharacterWizard } = await import('./character-wizard.mjs');
-    const id = `sdr5e-wizard-${Math.random().toString(36).slice(2, 9)}`;
-    windowManager.open(id, Sdr5eCharacterWizard, { id });
   }
 
   async _openLevelUpWizard() {
