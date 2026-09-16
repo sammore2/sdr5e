@@ -22,6 +22,7 @@
 import { LoomHandlebarsMixin, BaseWindow, api, windowManager, showToast } from '/_loom/sdk/index.js';
 import { ABILITY_KEYS, ABILITY_LABELS } from './config.mjs';
 import { getDefaultData } from './schema.mjs';
+import { grantClassFeatures } from './class-features.mjs';
 
 const STANDARD_ARRAY = [15, 14, 13, 12, 10, 8];
 const STEPS = ['identity', 'race', 'class', 'abilities', 'review'];
@@ -271,7 +272,12 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
       await api.post('/items', { worldId, name: this._data.race.name, type: 'race', data: this._data.race.compendiumData, actorId });
     }
     if (this._data.klass.entryId && this._data.klass.compendiumData) {
-      await api.post('/items', { worldId, name: this._data.klass.name, type: 'class', data: this._data.klass.compendiumData, actorId });
+      const classData = { ...this._data.klass.compendiumData, levels: this._data.level || 1 };
+      await api.post('/items', { worldId, name: this._data.klass.name, type: 'class', data: classData, actorId });
+      // Starting above level 1 (e.g. a mid-campaign join) grants every
+      // feature the class would already have by that level — same
+      // compendium-driven grant the Level Up wizard uses, just from 0.
+      await grantClassFeatures(worldId, actorId, classData.classIdentifier, 0, this._data.level || 1);
     }
 
     const { Sdr5eCharacterSheet } = await import('./character-sheet.mjs');
