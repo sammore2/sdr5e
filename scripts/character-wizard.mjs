@@ -231,6 +231,16 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
     }
     this._step = next;
     void this.render();
+    // Race/Class show up as a browsable grid of compendium options, not a
+    // type-to-search box — load the full list the moment the step is
+    // entered so there's something to click without typing anything first.
+    // The search input still narrows this list live; it just isn't required
+    // to populate it.
+    const stepId = STEPS[next];
+    const kind = stepId === 'race' ? 'race' : stepId === 'class' ? 'klass' : null;
+    if (kind && !this._data[kind].entryId && !this._search[kind].results.length && !this._search[kind].query) {
+      void this._runSearch(kind);
+    }
   }
 
   async _fillStandardArray() {
