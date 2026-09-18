@@ -61,6 +61,7 @@
     "packs/races.sqlite",
     "packs/classes.sqlite",
     "packs/subclasses.sqlite",
+    "packs/backgrounds.sqlite",
     "packs/feats.sqlite",
     "packs/features.sqlite",
     "packs/magic-items.sqlite",

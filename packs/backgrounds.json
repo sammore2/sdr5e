@@ -1,0 +1,246 @@
+{
+    "name":  "Backgrounds (SRD 5.1)",
+    "type":  "Item",
+    "entries":  [
+                    {
+                        "id":  "bg-acolyte-0001-0000-4000-8000-000000000001",
+                        "name":  "Acolyte",
+                        "type":  "background",
+                        "data":  {
+                                     "identifier":  "acolyte",
+                                     "description":  "You were raised in temple service, gaining proficiency in Insight and Religion plus two extra languages of your choice. You start with ceremonial vestments, a holy emblem, devotional writings, a common outfit, and a small coin purse. Feature: Shelter of the Faithful â€” priests of your faith will grant you and your companions free shelter, basic care, and discreet assistance at their temples.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               }
+                                 }
+                    },
+                    {
+                        "id":  "bg-charlatan-0002-0000-4000-8000-000000000002",
+                        "name":  "Charlatan",
+                        "type":  "background",
+                        "data":  {
+                                     "identifier":  "charlatan",
+                                     "description":  "You live by scams and misdirection, gaining proficiency in Deception and Sleight of Hand plus a disguise kit and a forgery kit. You start with elegant clothing, a disguise set, trick accessories, and a coin purse. Feature: False Identity â€” you maintain a second believable persona with forged papers and established contacts that holds up under routine inspection.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               }
+                                 }
+                    },
+                    {
+                        "id":  "bg-criminal-0003-0000-4000-8000-000000000003",
+                        "name":  "Criminal",
+                        "type":  "background",
+                        "data":  {
+                                     "identifier":  "criminal",
+                                     "description":  "You grew up in an illicit crew, gaining proficiency in Deception and Stealth plus thieves\u0027 tools and one gaming set of your choice. You start with a pry bar, dark common garb, and a coin purse. Feature: Criminal Contact â€” you know a reliable underworld go-between who can discreetly pass messages and arrange minor illicit dealings for you.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               }
+                                 }
+                    },
+                    {
+                        "id":  "bg-entertainer-0004-0000-4000-8000-000000000004",
+                        "name":  "Entertainer",
+                        "type":  "background",
+                        "data":  {
+                                     "identifier":  "entertainer",
+                                     "description":  "You earn applause on stage, gaining proficiency in Acrobatics and Performance plus a disguise kit and one musical instrument of your choice. You start with an instrument, a stage costume, a common outfit, and a coin purse. Feature: By Popular Demand â€” where your talent is known, venues offer you free lodging and meals in exchange for nightly performances.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               }
+                                 }
+                    },
+                    {
+                        "id":  "bg-folkhero-0001-0000-4000-8000-000000000001",
+                        "name":  "Folk Hero",
+                        "type":  "background",
+                        "data":  {
+                                     "identifier":  "folk-hero",
+                                     "description":  "Raised among working villagers, you gain proficiency in Animal Handling and Survival, plus one artisan\u0027s tool and land vehicles. You start with artisan tools, a shovel, an iron pot, common clothes and a small purse of coins. Your feature, Rustic Hospitality, means ordinary folk will offer you food, rest and hiding from authorities when it does not endanger them.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               }
+                                 }
+                    },
+                    {
+                        "id":  "bg-guildartisan-0002-0000-4000-8000-000000000002",
+                        "name":  "Guild Artisan",
+                        "type":  "background",
+                        "data":  {
+                                     "identifier":  "guild-artisan",
+                                     "description":  "Trained as a guild craftsperson and trader, you gain proficiency in Insight and Persuasion, plus one set of artisan\u0027s tools and one extra language. You begin with your tools, a guild introduction letter, traveler\u0027s clothes and a modest coin purse. Your feature, Guild Membership, lets you claim lodging, meeting halls and basic aid from your guild and allied guildhalls.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               }
+                                 }
+                    },
+                    {
+                        "id":  "bg-hermit-0003-0000-4000-8000-000000000003",
+                        "name":  "Hermit",
+                        "type":  "background",
+                        "data":  {
+                                     "identifier":  "hermit",
+                                     "description":  "After years of secluded contemplation, you gain proficiency in Medicine and Religion, plus an herbalism kit and one extra language. You carry a scroll case of studies, a winter blanket, common clothes, an herbalism kit and a few coins. Your feature, Discovery, means you hold a unique secret or revelation that could reshape the world once fully uncovered.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               }
+                                 }
+                    },
+                    {
+                        "id":  "bg-noble-0004-0000-4000-8000-000000000004",
+                        "name":  "Noble",
+                        "type":  "background",
+                        "data":  {
+                                     "identifier":  "noble",
+                                     "description":  "Born to a privileged house, you gain proficiency in History and Persuasion, plus one gaming set and one extra language. You start with fine clothes, a signet ring, a pedigree scroll and a purse of gold. Your feature, Position of Privilege, ensures nobles treat you as a peer and you can easily obtain audiences and basic hospitality among high society.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               }
+                                 }
+                    },
+                    {
+                        "id":  "bg-outlander-0001-0000-4000-8000-000000000001",
+                        "name":  "Outlander",
+                        "type":  "background",
+                        "data":  {
+                                     "identifier":  "outlander",
+                                     "description":  "Raised in the wilds, you gain proficiency in Athletics and Survival, plus one musical instrument and one additional language. You start with a walking staff, a hunting snare, a beast trophy, travel garments and a small purse of gold. Your Wanderer feature lets you reliably locate fresh food and water for your party while traveling in the wilderness.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               }
+                                 }
+                    },
+                    {
+                        "id":  "bg-sage-0002-0000-4000-8000-000000000002",
+                        "name":  "Sage",
+                        "type":  "background",
+                        "data":  {
+                                     "identifier":  "sage",
+                                     "description":  "Devoted to study, you gain proficiency in Arcana and History, plus two additional languages of your choice. You begin with writing supplies including ink, quill and a small blade, an unsolved letter from a late peer, everyday clothes and a small purse of gold. Your Researcher feature means you generally know which library, archive or scholar could hold obscure lore you seek.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               }
+                                 }
+                    },
+                    {
+                        "id":  "bg-soldier-0003-0000-4000-8000-000000000003",
+                        "name":  "Soldier",
+                        "type":  "background",
+                        "data":  {
+                                     "identifier":  "soldier",
+                                     "description":  "Trained for service, you gain proficiency in Athletics and Intimidation, plus one gaming set and land vehicles. You carry a rank badge, a keepsake taken from a defeated foe, a game set, plain clothes and a small purse of gold. Your Military Rank feature lets you call on allied soldiers for shelter, simple aid and access to military camps.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               }
+                                 }
+                    },
+                    {
+                        "id":  "bg-urchin-0004-0000-4000-8000-000000000004",
+                        "name":  "Urchin",
+                        "type":  "background",
+                        "data":  {
+                                     "identifier":  "urchin",
+                                     "description":  "Grown up on the streets, you gain proficiency in Sleight of Hand and Stealth, plus a disguise kit and thieves\u0027 tools. You start with a small blade, a hand-drawn map of your home city, a pet mouse, a sentimental keepsake, plain clothes and a small purse of gold. Your City Secrets feature lets you move through urban areas twice as fast as others when you are not being pursued.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               }
+                                 }
+                    }
+                ]
+}
