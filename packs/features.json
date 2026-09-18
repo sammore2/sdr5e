@@ -8,7 +8,7 @@
                         "type":  "feature",
                         "data":  {
                                      "identifier":  "fighting-style",
-                                     "description":  "You adopt a particular style of fighting as your specialty. Choose one option (Archery, Defense, Dueling, Great Weapon Fighting, Protection, or Two-Weapon Fighting). You can\u0027t take a Fighting Style option more than once, even if you later get to choose again.\n\nEdit this item\u0027s Style field to record which one you picked Ã¢â‚¬â€ its mechanical bonus isn\u0027t auto-applied yet.",
+                                     "description":  "You adopt a particular style of fighting as your specialty. Choose one option (Archery, Defense, Dueling, Great Weapon Fighting, Protection, or Two-Weapon Fighting). You can\u0027t take a Fighting Style option more than once, even if you later get to choose again.\n\nEdit this item\u0027s Style field to record which one you picked ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â its mechanical bonus isn\u0027t auto-applied yet.",
                                      "weight":  0,
                                      "quantity":  1,
                                      "rarity":  "common",
@@ -3221,6 +3221,1287 @@
                                      "max":  2,
                                      "value":  2,
                                      "recovery":  "sr"
+                                 }
+                    },
+                    {
+                        "id":  "sub-berserk-frenzy-0001-0000-4000-8000-000000000001",
+                        "name":  "Frenzy",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "frenzy",
+                                     "description":  "When you enter this path, you can push your rage beyond its normal limits. While raging, you can make one additional melee weapon attack as a bonus action on each of your turns, but you suffer one level of exhaustion when the rage ends.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "barbarian",
+                                     "levelGained":  3
+                                 }
+                    },
+                    {
+                        "id":  "sub-berserk-mindless-rage-0001-0000-4000-8000-000000000002",
+                        "name":  "Mindless Rage",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "mindless-rage",
+                                     "description":  "Your rage shields your mind from fear and manipulation. While raging, you cannot become charmed or frightened, and any such condition already affecting you is suspended for the duration of the rage.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "barbarian",
+                                     "levelGained":  6
+                                 }
+                    },
+                    {
+                        "id":  "sub-berserk-intimidating-presence-0001-0000-4000-8000-000000000003",
+                        "name":  "Intimidating Presence",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "intimidating-presence",
+                                     "description":  "You can use your action to menace one creature within 30 feet that can see you, forcing it to make a Wisdom saving throw against a DC of 8 plus your proficiency bonus plus your Charisma modifier or become frightened of you until the end of your next turn. You can extend this effect by spending your action again on later turns.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "barbarian",
+                                     "levelGained":  10
+                                 }
+                    },
+                    {
+                        "id":  "sub-berserk-retaliation-0001-0000-4000-8000-000000000004",
+                        "name":  "Retaliation",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "retaliation",
+                                     "description":  "Your battle reflexes let you punish nearby attackers instantly. When you take damage from a creature within 5 feet of you, you can use your reaction to make one melee weapon attack against that creature.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "barbarian",
+                                     "levelGained":  14
+                                 }
+                    },
+                    {
+                        "id":  "sub-lore-bonus-proficiencies-0001-0000-4000-8000-000000000005",
+                        "name":  "Bonus Proficiencies",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "bonus-proficiencies",
+                                     "description":  "Your broad studies grant you wider practical training than most performers. When you join this college, you gain proficiency in any three skills of your choice.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "bard",
+                                     "levelGained":  3
+                                 }
+                    },
+                    {
+                        "id":  "sub-lore-cutting-words-0001-0000-4000-8000-000000000006",
+                        "name":  "Cutting Words",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "cutting-words",
+                                     "description":  "You can use sharp mockery to undermine a foe within 60 feet that can hear you. As a reaction when that creature makes an attack roll, ability check, or damage roll, you expend one Bardic Inspiration die and subtract the number rolled from its total; the target is unaffected if it cannot hear you or is immune to being charmed.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "bard",
+                                     "levelGained":  3
+                                 }
+                    },
+                    {
+                        "id":  "sub-lore-additional-magical-secrets-0001-0000-4000-8000-000000000007",
+                        "name":  "Additional Magical Secrets",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "additional-magical-secrets",
+                                     "description":  "Your research uncovers magic outside the usual bardic repertoire. You learn two spells of your choice from any class list, of a level you can cast, and they count as bard spells for you.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "bard",
+                                     "levelGained":  6
+                                 }
+                    },
+                    {
+                        "id":  "sub-lore-peerless-skill-0001-0000-4000-8000-000000000008",
+                        "name":  "Peerless Skill",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "peerless-skill",
+                                     "description":  "Your mastery lets you turn inspiration inward with remarkable reliability. When you make an ability check, you can expend one Bardic Inspiration die and add the number rolled to your result.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "bard",
+                                     "levelGained":  14
+                                 }
+                    },
+                    {
+                        "id":  "life-bonus-proficiency",
+                        "name":  "Bonus Proficiency",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "bonus-proficiency-life",
+                                     "description":  "You gain training in heavy armor and can wear it effectively in combat and while casting.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "cleric",
+                                     "levelGained":  1
+                                 }
+                    },
+                    {
+                        "id":  "disciple-of-life",
+                        "name":  "Disciple of Life",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "disciple-of-life",
+                                     "description":  "Whenever you use a spell to restore hit points, the recipient regains additional hit points equal to 2 plus the spell\u0027s level.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "cleric",
+                                     "levelGained":  1
+                                 }
+                    },
+                    {
+                        "id":  "preserve-life",
+                        "name":  "Channel Divinity: Preserve Life",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "preserve-life",
+                                     "description":  "As an action, you distribute a pool of healing equal to five times your cleric level among wounded creatures within 30 feet. A creature already at more than half its maximum hit points cannot benefit from this healing.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "cleric",
+                                     "levelGained":  2,
+                                     "uses":  {
+                                                  "max":  1,
+                                                  "value":  1,
+                                                  "recovery":  "sr"
+                                              }
+                                 }
+                    },
+                    {
+                        "id":  "blessed-healer",
+                        "name":  "Blessed Healer",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "blessed-healer",
+                                     "description":  "When you cast a spell that restores hit points to another creature, you also regain hit points equal to 2 plus the spell\u0027s level.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "cleric",
+                                     "levelGained":  6
+                                 }
+                    },
+                    {
+                        "id":  "divine-strike-life",
+                        "name":  "Divine Strike",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "divine-strike-life",
+                                     "description":  "Once on each of your turns when you hit with a weapon attack, you can add 1d8 radiant damage to the damage roll.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "cleric",
+                                     "levelGained":  8
+                                 }
+                    },
+                    {
+                        "id":  "supreme-healing",
+                        "name":  "Supreme Healing",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "supreme-healing",
+                                     "description":  "Whenever you roll dice to restore hit points, treat every die as if it had rolled its highest possible value.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "cleric",
+                                     "levelGained":  17
+                                 }
+                    },
+                    {
+                        "id":  "land-bonus-cantrip",
+                        "name":  "Bonus Cantrip",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "bonus-cantrip-land",
+                                     "description":  "You learn one extra druid cantrip of your choice beyond your normal known limit.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "druid",
+                                     "levelGained":  2
+                                 }
+                    },
+                    {
+                        "id":  "natural-recovery",
+                        "name":  "Natural Recovery",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "natural-recovery",
+                                     "description":  "During a short rest, you can recover expended spell slots with a combined level up to half your druid level, rounded up. Recovered slots cannot be of 6th level or higher, and you must finish a long rest before using this benefit again.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "druid",
+                                     "levelGained":  2
+                                 }
+                    },
+                    {
+                        "id":  "circle-spells-land",
+                        "name":  "Circle Spells",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "circle-spells-land",
+                                     "description":  "You always have extra spells prepared based on your chosen land terrain. These count as druid spells and do not use up your daily prepared slots.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "druid",
+                                     "levelGained":  3
+                                 }
+                    },
+                    {
+                        "id":  "lands-stride",
+                        "name":  "Land\u0027s Stride",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "lands-stride",
+                                     "description":  "You ignore extra movement costs from nonmagical difficult terrain and move through nonmagical plants without harm or hindrance. You also have advantage on saving throws against plants created or manipulated by magic.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "druid",
+                                     "levelGained":  6
+                                 }
+                    },
+                    {
+                        "id":  "natures-ward",
+                        "name":  "Nature\u0027s Ward",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "natures-ward",
+                                     "description":  "You become immune to poison and disease. Fey and elementals also cannot charm or frighten you.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "druid",
+                                     "levelGained":  10
+                                 }
+                    },
+                    {
+                        "id":  "natures-sanctuary",
+                        "name":  "Nature\u0027s Sanctuary",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "natures-sanctuary",
+                                     "description":  "Beasts and plants must succeed on a Wisdom saving throw to attack you and remain hesitant while you refrain from harming them. The effect ends against a creature if you attack it, cast a harmful spell on it, or deal damage to it.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "druid",
+                                     "levelGained":  14
+                                 }
+                    },
+                    {
+                        "id":  "champion-improved-critical",
+                        "name":  "Improved Critical",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "improved-critical",
+                                     "description":  "Your weapon blows land on vital spots more often. You score a critical hit with attack rolls on a d20 result of 19 or 20.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "fighter",
+                                     "levelGained":  3
+                                 }
+                    },
+                    {
+                        "id":  "champion-remarkable-athlete",
+                        "name":  "Remarkable Athlete",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "remarkable-athlete",
+                                     "description":  "You add half your proficiency bonus, rounded up, to any Strength, Dexterity, or Constitution check that does not already include it. Your running long jump distance also increases by a number of feet equal to your Strength modifier.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "fighter",
+                                     "levelGained":  7
+                                 }
+                    },
+                    {
+                        "id":  "champion-additional-fighting-style",
+                        "name":  "Additional Fighting Style",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "additional-fighting-style",
+                                     "description":  "You master a second method of combat. Choose one more option from the Fighter fighting style list.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "fighter",
+                                     "levelGained":  10
+                                 }
+                    },
+                    {
+                        "id":  "champion-superior-critical",
+                        "name":  "Superior Critical",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "superior-critical",
+                                     "description":  "Your strikes find weak points with exceptional consistency. You now score a critical hit on an attack roll of 18, 19, or 20.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "fighter",
+                                     "levelGained":  15
+                                 }
+                    },
+                    {
+                        "id":  "champion-survivor",
+                        "name":  "Survivor",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "survivor",
+                                     "description":  "Your endurance lets you recover mid-battle. At the start of each of your turns while conscious and at half hit points or fewer, you regain hit points equal to 5 plus your Constitution modifier.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "fighter",
+                                     "levelGained":  18
+                                 }
+                    },
+                    {
+                        "id":  "open-hand-technique",
+                        "name":  "Open Hand Technique",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "open-hand-technique",
+                                     "description":  "Your Flurry of Blows can manipulate the target. Each hit may add one rider: knock prone on a failed Strength save, push up to 15 feet on a failed Strength save, or block reactions until your next turn on a failed Dexterity save.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "monk",
+                                     "levelGained":  3
+                                 }
+                    },
+                    {
+                        "id":  "open-hand-wholeness-of-body",
+                        "name":  "Wholeness of Body",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "wholeness-of-body",
+                                     "description":  "As an action, you restore your own vitality for hit points equal to three times your monk level. You must finish a long rest before using this again.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "monk",
+                                     "levelGained":  6
+                                 }
+                    },
+                    {
+                        "id":  "open-hand-tranquility",
+                        "name":  "Tranquility",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "tranquility",
+                                     "description":  "After finishing a long rest, you are warded as if by sanctuary. The ward ends early if you attack, cast a spell, or begin another long rest.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "monk",
+                                     "levelGained":  11
+                                 }
+                    },
+                    {
+                        "id":  "open-hand-quivering-palm",
+                        "name":  "Quivering Palm",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "quivering-palm",
+                                     "description":  "For 3 ki as an action after hitting with an unarmed strike, you set lethal vibrations in the target. While they last, you can use an action to force a Constitution save, dropping the target to 0 hit points on failure or dealing 10d10 necrotic damage on success.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "monk",
+                                     "levelGained":  17
+                                 }
+                    },
+                    {
+                        "id":  "devotion-sacred-weapon",
+                        "name":  "Sacred Weapon",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "sacred-weapon",
+                                     "description":  "As an action, you infuse a weapon you hold with holy power for 1 minute, adding your Charisma modifier to its attack rolls and making it shed bright and dim light. This use of Channel Divinity recharges on a short rest.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "paladin",
+                                     "levelGained":  3
+                                 }
+                    },
+                    {
+                        "id":  "devotion-turn-the-unholy",
+                        "name":  "Turn the Unholy",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "turn-the-unholy",
+                                     "description":  "As an action, you present your holy symbol to repel fiends and undead within 30 feet, forcing a Wisdom save or making them flee for 1 minute or until harmed. This use of Channel Divinity recharges on a short rest.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "paladin",
+                                     "levelGained":  3
+                                 }
+                    },
+                    {
+                        "id":  "devotion-aura-of-devotion",
+                        "name":  "Aura of Devotion",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "aura-of-devotion",
+                                     "description":  "Your presence shields allies from beguilement. Friendly creatures inside your protective aura cannot become charmed while you are conscious.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "paladin",
+                                     "levelGained":  7
+                                 }
+                    },
+                    {
+                        "id":  "devotion-purity-of-spirit",
+                        "name":  "Purity of Spirit",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "purity-of-spirit",
+                                     "description":  "Your devotion keeps you permanently warded as if under protection from evil and good. The effect applies to you alone at all times.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "paladin",
+                                     "levelGained":  15
+                                 }
+                    },
+                    {
+                        "id":  "devotion-holy-nimbus",
+                        "name":  "Holy Nimbus",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "holy-nimbus",
+                                     "description":  "As a bonus action, you radiate blinding sunlight for 1 minute, imposing disadvantage on enemy attacks against you and searing nearby fiends and undead. You also gain advantage on saving throws and attacks against fiends and undead during this time, and must finish a long rest before using it again.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "paladin",
+                                     "levelGained":  20
+                                 }
+                    },
+                    {
+                        "id":  "ranger-hunter-colossus-slayer",
+                        "name":  "Colossus Slayer",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "colossus-slayer",
+                                     "description":  "Once on each of your turns when you hit a creature that is already below its full hit points, you can add an extra 1d8 damage to that weapon hit.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "ranger",
+                                     "levelGained":  3
+                                 }
+                    },
+                    {
+                        "id":  "ranger-hunter-giant-killer",
+                        "name":  "Giant Killer",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "giant-killer",
+                                     "description":  "When a Large or larger enemy misses you with a melee attack, you can spend your reaction to strike it back immediately.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "ranger",
+                                     "levelGained":  3
+                                 }
+                    },
+                    {
+                        "id":  "ranger-hunter-horde-breaker",
+                        "name":  "Horde Breaker",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "horde-breaker",
+                                     "description":  "Once per turn when you make a weapon attack, you can make an additional attack against a different creature within reach of your first target.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "ranger",
+                                     "levelGained":  3
+                                 }
+                    },
+                    {
+                        "id":  "ranger-hunter-escape-the-horde",
+                        "name":  "Escape the Horde",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "escape-the-horde",
+                                     "description":  "Enemy strikes made against you when you leave their reach are made with disadvantage.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "ranger",
+                                     "levelGained":  7
+                                 }
+                    },
+                    {
+                        "id":  "ranger-hunter-multiattack-defense",
+                        "name":  "Multiattack Defense",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "multiattack-defense",
+                                     "description":  "After a creature hits you with an attack, you gain a +4 bonus to your armor class against later attacks from that same creature until the next turn.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "ranger",
+                                     "levelGained":  7
+                                 }
+                    },
+                    {
+                        "id":  "ranger-hunter-steel-will",
+                        "name":  "Steel Will",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "steel-will",
+                                     "description":  "You have advantage on saving throws made to resist becoming frightened.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "ranger",
+                                     "levelGained":  7
+                                 }
+                    },
+                    {
+                        "id":  "ranger-hunter-volley",
+                        "name":  "Volley",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "volley",
+                                     "description":  "Using your action with a ranged weapon, you can attack any number of creatures inside a 10-foot radius point you can see. You make a separate attack roll for each target.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "ranger",
+                                     "levelGained":  11
+                                 }
+                    },
+                    {
+                        "id":  "ranger-hunter-whirlwind-attack",
+                        "name":  "Whirlwind Attack",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "whirlwind-attack",
+                                     "description":  "Using your action with a melee weapon, you can attack any number of creatures within 5 feet of you. You make a separate attack roll for each target.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "ranger",
+                                     "levelGained":  11
+                                 }
+                    },
+                    {
+                        "id":  "ranger-hunter-stand-against-the-tide",
+                        "name":  "Stand Against the Tide",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "stand-against-the-tide",
+                                     "description":  "When a melee attack misses you, you can force the attacker to repeat that attack against another creature of your choice within its reach.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "ranger",
+                                     "levelGained":  15
+                                 }
+                    },
+                    {
+                        "id":  "ranger-hunter-evasion",
+                        "name":  "Evasion",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "evasion-hunter",
+                                     "description":  "When you must make a Dexterity saving throw to avoid damage, you take no damage on a success and only half damage on a failure.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "ranger",
+                                     "levelGained":  15
+                                 }
+                    },
+                    {
+                        "id":  "ranger-hunter-uncanny-dodge",
+                        "name":  "Uncanny Dodge",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "uncanny-dodge-hunter",
+                                     "description":  "When an attacker you can see hits you, you can use your reaction to halve the damage of that attack.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "ranger",
+                                     "levelGained":  15
+                                 }
+                    },
+                    {
+                        "id":  "rogue-thief-fast-hands",
+                        "name":  "Fast Hands",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "fast-hands",
+                                     "description":  "You can use your bonus action to handle objects, pick locks or pockets, and disable traps with thieves\u0027 tools or sleight of hand.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "rogue",
+                                     "levelGained":  3
+                                 }
+                    },
+                    {
+                        "id":  "rogue-thief-second-story-work",
+                        "name":  "Second-Story Work",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "second-story-work",
+                                     "description":  "Climbing no longer costs you extra movement, and you add your Dexterity modifier to the distance covered by a running jump.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "rogue",
+                                     "levelGained":  3
+                                 }
+                    },
+                    {
+                        "id":  "rogue-thief-supreme-sneak",
+                        "name":  "Supreme Sneak",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "supreme-sneak",
+                                     "description":  "While you move at half speed or slower, you gain advantage on Dexterity checks made to hide.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "rogue",
+                                     "levelGained":  9
+                                 }
+                    },
+                    {
+                        "id":  "rogue-thief-use-magic-device",
+                        "name":  "Use Magic Device",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "use-magic-device",
+                                     "description":  "You ignore class, race, and level requirements when attuning to or activating magic items.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "rogue",
+                                     "levelGained":  13
+                                 }
+                    },
+                    {
+                        "id":  "rogue-thief-thiefs-reflexes",
+                        "name":  "Thief\u0027s Reflexes",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "thiefs-reflexes",
+                                     "description":  "During the first round of combat, you take an additional full turn at your initiative total minus 10.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "rogue",
+                                     "levelGained":  17
+                                 }
+                    },
+                    {
+                        "id":  "sorcerer-dragon-ancestor",
+                        "name":  "Dragon Ancestor",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "dragon-ancestor",
+                                     "description":  "Choose one dragon kind as the source of your bloodline and learn the Draconic language. You apply twice your proficiency bonus to Charisma checks made when interacting with dragons.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "sorcerer",
+                                     "levelGained":  1
+                                 }
+                    },
+                    {
+                        "id":  "sorcerer-draconic-resilience",
+                        "name":  "Draconic Resilience",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "draconic-resilience",
+                                     "description":  "Draconic vigor increases your hit point maximum by 1 for every sorcerer level you have. While wearing no armor, your Armor Class equals 13 plus your Dexterity modifier.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "sorcerer",
+                                     "levelGained":  1
+                                 }
+                    },
+                    {
+                        "id":  "sorcerer-elemental-affinity",
+                        "name":  "Elemental Affinity",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "elemental-affinity",
+                                     "description":  "You bond with the damage type tied to your ancestor, adding your Charisma modifier to one damage roll of a spell of that type. You can spend 1 sorcery point to gain resistance to that damage type for 1 hour.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "sorcerer",
+                                     "levelGained":  6
+                                 }
+                    },
+                    {
+                        "id":  "sorcerer-dragon-wings",
+                        "name":  "Dragon Wings",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "dragon-wings",
+                                     "description":  "You can sprout spectral dragon wings as a bonus action, gaining a flying speed of 60 feet while they persist. The wings last until you dismiss them or fall unconscious.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "sorcerer",
+                                     "levelGained":  14
+                                 }
+                    },
+                    {
+                        "id":  "sorcerer-draconic-presence",
+                        "name":  "Draconic Presence",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "draconic-presence",
+                                     "description":  "You can spend 5 sorcery points to project an aura of draconic awe or fear out to 60 feet for 1 minute. Each hostile creature in the aura must succeed on a Wisdom saving throw or become charmed or frightened by you.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "sorcerer",
+                                     "levelGained":  18
+                                 }
+                    },
+                    {
+                        "id":  "warlock-dark-ones-blessing",
+                        "name":  "Dark One\u0027s Blessing",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "dark-ones-blessing",
+                                     "description":  "When you reduce a hostile creature to 0 hit points, you gain temporary hit points equal to your Charisma modifier plus your warlock level. This boon reflects your patron claiming a slain soul.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "warlock",
+                                     "levelGained":  1
+                                 }
+                    },
+                    {
+                        "id":  "warlock-dark-ones-own-luck",
+                        "name":  "Dark One\u0027s Own Luck",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "dark-ones-own-luck",
+                                     "description":  "You can call on your patron to twist fate, adding a d10 to one ability check or saving throw you make. Once used, you must finish a short or long rest before calling on this luck again.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "warlock",
+                                     "levelGained":  6
+                                 }
+                    },
+                    {
+                        "id":  "warlock-fiendish-resilience",
+                        "name":  "Fiendish Resilience",
+                        "type":  "feature",
+                        "data":  {
+                                     "identifier":  "fiendish-resilience",
+                                     "description":  "You can select one damage type and gain resistance to it until you choose a different one. Selecting a new resistance requires finishing a short or long rest.",
+                                     "weight":  0,
+                                     "quantity":  1,
+                                     "rarity":  "common",
+                                     "isBindOnEquip":  false,
+                                     "attunement":  "none",
+                                     "source":  "SRD 5.1 (CC-BY-4.0)",
+                                     "price":  {
+                                                   "gp":  0,
+                                                   "sp":  0,
+                                                   "cp":  0
+                                               },
+                                     "classIdentifier":  "warlock",
+                                     "levelGained":  10
                                  }
                     }
                 ]
