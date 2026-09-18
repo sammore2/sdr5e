@@ -1,7 +1,7 @@
 {
-  "name": "the-codex",
+  "name": "srd5e",
   "version": "0.1.0",
-  "description": "Sistema original de fantasia sombria para Foundry VTT — Dark Fantasy com mecânicas de Ressonância",
+  "description": "SDR5E — D20 fantasy ruleset for LoomVTT built on SRD mechanics (CC-BY-4.0)",
   "scripts": {
     "gulp": "gulp",
     "eslint": "eslint scripts/ the-codex.mjs",
@@ -21,20 +21,20 @@
   "private": true,
   "type": "module",
   "keywords": [
-    "dark-fantasy",
-    "foundryvtt",
-    "foundryvtt-system",
+    "fantasy",
+    "loomvtt",
+    "loomvtt-ruleset",
     "rpg",
-    "ressonancia"
+    "srd"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/sammore2/the-codex"
+    "url": "https://github.com/RobSammore/srd5e"
   },
   "bugs": {
-    "url": "https://github.com/sammore2/the-codex/issues"
+    "url": "https://github.com/RobSammore/srd5e/issues"
   },
-  "homepage": "https://github.com/sammore2/the-codex#readme",
+  "homepage": "https://github.com/RobSammore/srd5e#readme",
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@babel/eslint-parser": "^7.28.6",

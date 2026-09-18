@@ -54,5 +54,5 @@ Para desenvolvedores trabalhando no sistema:
 ## 📜 License
 
 Code is **MIT** (free to use/modify). Game mechanics derived from the SRD are
-**OGL 1.0a**. Product Identity (name, art, lore, "Resonance"/"Grimdark" narrative)
+**CC-BY-4.0** (SRD 5.2.1, © Wizards of the Coast LLC). Product Identity (name, art, lore, "Resonance"/"Grimdark" narrative)
 stays proprietary. Full breakdown in [`LICENSE`](LICENSE).
