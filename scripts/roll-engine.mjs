@@ -344,6 +344,23 @@ export function showFloatingDamageOrHeal(targetId, amount, isHeal = false) {
  * live sheet's `actor` object, and keeps the same Cast-vs-Actor branch
  * `apply-to-targets.ts` and CLAUDE.md's Rule 6 both require.
  */
+/**
+ * Owned items for trait lookup in `applyDamageToTargets`. Linked actors
+ * keep items on the actor record (`GET /actors/:id/items`); unlinked cast
+ * snapshots own none, so they resolve to `[]`. Best-effort: any failure
+ * means damage falls back to actor-level traits only, never blocks.
+ */
+async function getRecordItems(isLinked, cast) {
+  if (!isLinked || !cast?.actorId) return [];
+  try {
+    const items = await window.Loom.api.get(`/actors/${cast.actorId}/items`);
+    return Array.isArray(items) ? items : [];
+  } catch (e) {
+    console.error('[srd5e] getRecordItems failed (actor traits only):', e);
+    return [];
+  }
+}
+
 export async function applyDamageToTargets(amount, type) {
   const worldId = window.Loom?.world?.id;
   const targets = window.Loom?.user?.targets || [];
@@ -370,7 +387,7 @@ export async function applyDamageToTargets(amount, type) {
       const hp = getHealthPool(sd, actorType);
       if (!hp) continue;
 
-      const traits = getTraits(sd, actorType) || {};
+      const traits = getTraits(sd, actorType, await getRecordItems(isLinked, cast)) || {};
       const t = (type || '').toLowerCase();
       const has = (cat) => (traits[cat] || []).map((v) => String(v).toLowerCase()).includes(t);
       let multiplier = 1;
@@ -412,9 +429,47 @@ export async function applyDamageToTargets(amount, type) {
   return results;
 }
 
-export function getTraits(sd, actorType) {
+export function getTraits(sd, actorType, items = []) {
   // character: traits.{di,dr,dv} · npc: details.traits.{di,dr,dv}
-  return actorType === 'npc' ? sd.details?.traits : sd.traits;
+  const base = actorType === 'npc' ? sd.details?.traits : sd.traits;
+  const itemTraits = getItemTraits(items);
+  if (!itemTraits) return base;
+  // Union actor-level traits with item-granted ones (resistance rings,
+  // racial traits, class features...). Engine buffs are numeric-only
+  // (effects.ts `add` does base + Number), so arrays can't ride a buff —
+  // they resolve here, at damage time, instead.
+  const out = {};
+  for (const cat of ['di', 'dr', 'dv', 'ci']) {
+    const merged = [...(base?.[cat] || []), ...(itemTraits[cat] || [])];
+    if (merged.length) out[cat] = [...new Set(merged.map((v) => String(v)))];
+  }
+  return out;
+}
+
+/**
+ * Item-granted damage/condition traits (`bonuses.traits` on the item schema).
+ * Only counts when the item is actually "active" on the actor: equipped
+ * gear (weapon/armor with `equipped`), or permanent types whose bonus
+ * applies from ownership alone (feature/race/class/subclass/background/
+ * feat — same set `syncPermanentBonusEffect` listens to in effects.mjs).
+ */
+export function getItemTraits(items = []) {
+  const out = { di: [], dr: [], dv: [], ci: [] };
+  let found = false;
+  for (const item of items || []) {
+    const idata = item?.system ?? item?.data ?? {};
+    const active =
+      ((item?.type === 'weapon' || item?.type === 'armor') && !!idata.equipped) ||
+      ['feature', 'race', 'class', 'subclass', 'background', 'feat'].includes(item?.type);
+    if (!active) continue;
+    for (const cat of ['di', 'dr', 'dv', 'ci']) {
+      for (const v of idata?.bonuses?.traits?.[cat] || []) {
+        out[cat].push(String(v));
+        found = true;
+      }
+    }
+  }
+  return found ? out : null;
 }
 
 export async function applyHeal(actor, amount, options = {}) {
@@ -484,7 +539,7 @@ export async function applyDamage(actor, amount, type = '') {
   const hp = getHealthPool(sd, actor.type);
   if (!hp) return null;
 
-  const traits = getTraits(sd, actor.type) || {};
+  const traits = getTraits(sd, actor.type, actor.items) || {};
   const t = (type || '').toLowerCase();
   // traits.{di,dr,dv} is a flat array on the schema (schema.mjs's
   // getDefaultData, and both sheets' `_traits` context read it the same
