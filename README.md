@@ -10,7 +10,7 @@ run natively on the Loom engine (no Foundry runtime dependency).
 
 ## 🌒 Overview
 
-**SDR5E** is designed to provide a high-stakes, atmospheric experience. It blends classic D20 mechanics with modern design principles and a unique aesthetic.
+**SDR5E** is designed to provide a high-stakes, atmospheric experience. It blends classic d20 mechanics with modern design principles and a unique aesthetic.
 
 ### Key Features:
 
@@ -51,8 +51,11 @@ Para desenvolvedores trabalhando no sistema:
 
 ---
 
-## 📜 License
+## 📜 License and attribution
 
-Code is **MIT** (free to use/modify). Game mechanics derived from the SRD are
-**CC-BY-4.0** (SRD 5.2.1, © Wizards of the Coast LLC). Product Identity (name, art, lore, "Resonance"/"Grimdark" narrative)
-stays proprietary. Full breakdown in [`LICENSE`](LICENSE).
+SDR5E is an independent, free third-party ruleset for LoomVTT. Its original
+code is licensed under **MIT**. Content derived from SRD 5.2.1 is licensed
+under **CC-BY-4.0**. SDR5E is not approved, endorsed, or sponsored by Wizards
+of the Coast LLC. Product Identity (name, art, lore, and the
+"Resonance"/"Grimdark" narrative) remains proprietary to SDR5E. See
+[`LICENSE`](LICENSE) for the complete breakdown and attribution.
