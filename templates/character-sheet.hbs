@@ -87,10 +87,11 @@
                   <svg class="sdrn-stat-svg" viewBox="0 0 44 32" preserveAspectRatio="none">
                     <polygon points="8,1 36,1 43,16 36,31 8,31 1,16" fill="#fcf9f2" stroke="#8c734b" stroke-width="1.5" stroke-linejoin="round" />
                   </svg>
-                  <span class="sdrn-mini-stat-num">{{_speed}}</span>
+                  <span class="sdrn-mini-stat-num" title="{{_movement.walkTitle}}">{{_speed}}</span>
                 </div>
                 <div class="sdrn-mini-stat-label">WALK</div>
               </div>
+              <div class="sdrn-movement-tags">{{#each _movement.others}}<span class="sdrn-tag" title="{{title}}">{{label}} {{value}}</span>{{/each}}{{#if _movement.hover}}<span class="sdrn-tag">Hover</span>{{/if}}</div>
 
               <div class="sdrn-mini-stat">
                 <div class="sdrn-stat-polygon-wrap">
@@ -389,7 +390,7 @@
       </div>
       {{#each _inventory}}
       <div class="sdrn-box">
-        <div class="sdrn-box-title">{{icon}} {{label}}</div>
+        <div class="sdrn-box-title">{{icon}} {{label}}{{#if lootTotal}} — {{lootTotal}}{{/if}}</div>
         {{#each items}}
         <div class="sdrn-item-row" draggable="true" data-drag-item-id="{{id}}" data-drag-item-name="{{name}}" data-drag-item-img="{{imgUrl}}">
           <button type="button" class="sdrn-item-icon sdrn-item-icon-btn" data-action="post-item-chat" data-id="{{id}}" title="Post to Chat">{{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}{{icon}}{{/if}}</button>
@@ -398,17 +399,53 @@
           <button type="button" class="sdrn-item-roll-btn" data-action="roll-attack" data-id="{{id}}" title="Roll Attack"><i class="fas fa-sword"></i> Atk</button>
           <button type="button" class="sdrn-item-roll-btn" data-action="roll-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
           {{/if}}
+          {{#if isConsumable}}
+          <button type="button" class="sdrn-item-roll-btn" data-action="use-consumable" data-id="{{id}}" title="Use">Use</button>
+          {{#if usesLabel}}<span class="sdrn-empty">{{usesLabel}}</span>{{/if}}
+          {{/if}}
+          {{#if isTool}}
+          <button type="button" class="sdrn-item-roll-btn" data-action="roll-tool" data-id="{{id}}" title="Tool Check"><i class="fas fa-screwdriver-wrench"></i> Check</button>
+          <span class="sdrn-dot {{#if proficient}}filled{{/if}}" title="{{#if proficient}}Proficient{{else}}Not proficient{{/if}}"></span>
+          <button type="button" class="sdrn-item-roll-btn" data-action="toggle-tool-prof" data-id="{{id}}" title="Toggle proficiency">{{#if proficient}}Proficient{{else}}Not Prof.{{/if}}</button>
+          {{/if}}
           {{#if hasQuantity}}<input type="number" min="0" class="sdrn-item-qty" data-action="set-quantity" data-id="{{id}}" value="{{quantity}}" title="Quantity" />{{/if}}
           {{#if attunementRequired}}
           <button type="button" class="sdrn-item-attune {{#if attuned}}active{{/if}}" data-action="toggle-attune" data-id="{{id}}" title="Requires Attunement">
             <i class="fas fa-sun"></i>
           </button>
           {{/if}}
+          {{#if showEquip}}
           <button type="button" class="sdrn-item-equip {{#if equipped}}active{{/if}}" data-action="toggle-equip" data-id="{{id}}">
             {{#if equipped}}Equipped{{else}}Equip{{/if}}
           </button>
+          {{/if}}
+          {{#if isMovable}}<button type="button" class="sdrn-item-roll-btn" data-action="move-to-container" data-id="{{id}}" title="Move to container"><i class="fas fa-box"></i> Move</button>{{/if}}
           <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}" title="Delete">&times;</button>
         </div>
+        {{#if isContainer}}
+        <div class="sdrn-container-meta">
+          {{#if capacityLabel}}<span class="sdrn-container-cap {{#if capacityOver}}over{{/if}}">{{capacityLabel}}</span>{{/if}}
+          <button type="button" class="sdrn-item-roll-btn" data-action="toggle-container" data-id="{{id}}">{{#if containerOpen}}Collapse{{else}}Expand{{/if}} ({{containerContents.length}})</button>
+        </div>
+        {{#if containerOpen}}
+        <div class="sdrn-container-contents" style="margin-left:16px;">
+          {{#each containerContents}}
+          <div class="sdrn-item-row sdrn-item-nested" draggable="true" data-drag-item-id="{{id}}" data-drag-item-name="{{name}}" data-drag-item-img="{{imgUrl}}" style="margin-left: {{depth}}em;">
+            <button type="button" class="sdrn-item-icon sdrn-item-icon-btn" data-action="post-item-chat" data-id="{{id}}">{{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}{{icon}}{{/if}}</button>
+            <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
+            {{#if isWeapon}}<button type="button" class="sdrn-item-roll-btn" data-action="roll-attack" data-id="{{id}}">Atk</button><button type="button" class="sdrn-item-roll-btn" data-action="roll-damage" data-id="{{id}}">Dmg</button>{{/if}}
+            {{#if isConsumable}}<button type="button" class="sdrn-item-roll-btn" data-action="use-consumable" data-id="{{id}}">Use</button>{{/if}}
+            {{#if isTool}}<button type="button" class="sdrn-item-roll-btn" data-action="roll-tool" data-id="{{id}}">Check</button>{{/if}}
+            {{#if hasQuantity}}<span class="sdrn-empty">x{{quantity}}</span>{{/if}}
+            {{#if isContainer}}<span class="sdrn-empty">{{capacityLabel}}</span><button type="button" data-action="toggle-container" data-id="{{id}}">{{#if containerOpen}}Collapse{{else}}Expand{{/if}}</button>{{/if}}
+            <button type="button" class="sdrn-item-roll-btn" data-action="move-to-container" data-id="{{id}}">Move</button>
+            <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}">&times;</button>
+          </div>
+          {{/each}}
+          {{#unless containerContents.length}}<div class="sdrn-empty-row">Empty</div>{{/unless}}
+        </div>
+        {{/if}}
+        {{/if}}
         {{else}}
         <div class="sdrn-empty-row">No {{label}} yet.</div>
         {{/each}}

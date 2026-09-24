@@ -58,6 +58,29 @@
     {{/if}}
     {{/if}}
 
+    {{#if _stepSubclass}}
+    <h3>Subclass</h3>
+    {{#if _subclassPicked}}
+    <div class="sdrn-wizard-picked">
+      <strong>{{_data.subclass.name}}</strong> <span class="sdrn-wizard-hint">(from compendium)</span>
+      <button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-subclass">Change</button>
+    </div>
+    {{else}}
+    <div class="sdrn-bio-field"><label>Filter</label><input type="text" data-wizard-search="subclass" value="{{_subclassQuery}}" placeholder="Type to filter, or pick below" /></div>
+    {{#if _subclassResults}}
+    <div class="sdrn-wizard-results">
+      {{#each _subclassResults}}
+      <button type="button" class="sdrn-wizard-result" data-action="wizard-pick-subclass" data-id="{{id}}" data-source-id="{{sourceId}}">
+        <span>{{name}}</span> <small>{{sourceName}}</small>
+      </button>
+      {{/each}}
+    </div>
+    {{else}}
+    <p class="sdrn-wizard-hint">No subclass packs found for this class. Ask your GM to install a subclass pack or continue without.</p>
+    {{/if}}
+    {{/if}}
+    {{/if}}
+
     {{#if _stepAbilities}}
     <h3>Ability Scores</h3>
     <button type="button" class="sdrn-wizard-btn" data-action="wizard-standard-array">Use Standard Array (15/14/13/12/10/8)</button>
@@ -74,6 +97,7 @@
       <div><strong>{{_data.name}}</strong> — Level {{_data.level}}</div>
       {{#if _data.race.name}}<div>Race: {{_data.race.name}} ({{_reviewRaceInfo}})</div>{{/if}}
       {{#if _data.klass.name}}<div>Class: {{_data.klass.name}} ({{_reviewHitDie}} Hit Die)</div>{{/if}}
+      {{#if _data.subclass.name}}<div>Subclass: {{_data.subclass.name}}</div>{{/if}}
       <div>Abilities: {{_reviewAbilities}}</div>
     </div>
     {{/if}}

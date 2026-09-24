@@ -1,0 +1,29 @@
+<div class="sdrn-encounter-root">
+  <div class="sdrn-box">
+    <div class="sdrn-box-title">Encounter: {{name}}</div>
+    <input type="text" name="name" value="{{name}}" />
+    <textarea name="sd:description" rows="3" placeholder="Description">{{_description}}</textarea>
+  </div>
+  <div class="sdrn-box">
+    <div class="sdrn-box-title">Members</div>
+    {{#each _members}}
+    <div class="sdrn-item-row">
+      {{#if missing}}<span>Member removed ({{actorId}})</span>
+      {{else}}<span>{{name}} CR {{cr}} XP {{xp}} x <input type="number" name="sd:members.{{@index}}.quantity.value" value="{{quantity.value}}" style="width:50px;" /> {{#if quantity.formula}}<span>({{quantity.formula}})</span>{{/if}} = {{totalXp}} XP</span>
+      {{/if}}
+      <input type="text" name="sd:members.{{@index}}.quantity.formula" value="{{quantity.formula}}" placeholder="1d4+1" style="width:80px;" />
+      <button type="button" data-action="remove-member" data-id="{{actorId}}">Remove</button>
+    </div>
+    {{/each}}
+    <div class="sdrn-empty-row">Drag NPCs from sidebar here</div>
+  </div>
+  <div class="sdrn-box">
+    <div>Total XP: {{_totalXp}}</div>
+    {{#if _budget}}<div>Budget Low {{_budget.low}} · Moderate {{_budget.moderate}} · High {{_budget.high}} — <strong>{{_difficulty}}</strong></div>
+    {{else}}<div>{{_difficulty}}</div>{{/if}}
+  </div>
+  <div class="sdrn-box">
+    <button type="button" data-action="roll-quantities">Roll quantities</button>
+    {{#if _isGM}}<button type="button" data-action="place-on-stage">Place on Stage</button>{{/if}}
+  </div>
+</div>

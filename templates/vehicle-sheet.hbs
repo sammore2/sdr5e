@@ -1,0 +1,50 @@
+<div class="sdrn-vehicle-root">
+  <div class="sdrn-box">
+    <div class="sdrn-box-title">Vehicle: {{name}}</div>
+    <input type="text" name="name" value="{{name}}" placeholder="Vehicle name" />
+    <label>Type <select name="sd:vehicleType"><option value="water" {{#if (eq _vehicleType "water")}}selected{{/if}}>Water</option><option value="air" {{#if (eq _vehicleType "air")}}selected{{/if}}>Air</option><option value="land" {{#if (eq _vehicleType "land")}}selected{{/if}}>Land</option></select></label>
+    <label>AC <input type="number" name="sd:attributes.ac" value="{{_ac}}" /></label>
+    <label>HP <input type="number" name="sd:resources.health.value" value="{{_health.value}}" /> / <input type="number" name="sd:resources.health.max" value="{{_health.max}}" /></label>
+    <label>Damage Threshold <input type="number" name="sd:attributes.damageThreshold" value="{{_damageThreshold}}" /></label>
+    <label>Travel Speed (mph) <input type="number" name="sd:attributes.travelSpeed" value="{{_travelSpeed}}" /></label>
+    <div>Movement: {{#each _movementTags}}<span class="sdrn-tag">{{mode}} {{value}}</span> {{else}}<span class="sdrn-empty">None</span>{{/each}} {{#if _hover}}<span class="sdrn-tag">Hover</span>{{/if}}</div>
+  </div>
+  <div class="sdrn-box">
+    <div class="sdrn-box-title">Crew ({{_crew.count}}/{{_crew.max}})</div>
+    <div data-drop-target="crew" style="min-height:40px;border:1px dashed #ccc;padding:4px;">Drop crew here
+      {{#each _crew.members}}
+      <div class="sdrn-item-row">{{#if missing}}Missing {{id}}{{else}}{{name}} ({{type}})<button type="button" data-action="open-member" data-id="{{id}}">Open</button>{{/if}} <button type="button" data-action="remove-crew" data-id="{{id}}">Remove</button></div>
+      {{/each}}
+    </div>
+  </div>
+  <div class="sdrn-box">
+    <div class="sdrn-box-title">Passengers ({{_passengers.count}}/{{_passengers.max}})</div>
+    <div data-drop-target="passengers" style="min-height:40px;border:1px dashed #ccc;padding:4px;">Drop passengers here
+      {{#each _passengers.members}}
+      <div class="sdrn-item-row">{{#if missing}}Missing {{id}}{{else}}{{name}} ({{type}})<button type="button" data-action="open-member" data-id="{{id}}">Open</button>{{/if}} <button type="button" data-action="remove-passenger" data-id="{{id}}">Remove</button></div>
+      {{/each}}
+    </div>
+  </div>
+  <div class="sdrn-box">
+    <div class="sdrn-box-title">Cargo: {{_cargo.value}} / {{_cargo.max}} t</div>
+    <label>Current <input type="number" name="sd:cargo.value" value="{{_cargo.value}}" /></label>
+    <label>Max <input type="number" name="sd:cargo.max" value="{{_cargo.max}}" /></label>
+  </div>
+  <div class="sdrn-box">
+    <div class="sdrn-box-title">Traits</div>
+    {{#each _damageTraits}}
+    <div>{{label}}: {{#each types}}<button type="button" class="sdrn-tag {{#if active}}active{{/if}}" data-action="toggle-damage-trait" data-cat="{{../cat}}" data-type="{{type}}">{{label}}</button> {{/each}}</div>
+    {{/each}}
+  </div>
+  <div class="sdrn-box">
+    <div class="sdrn-box-title">Weapons/Features</div>
+    {{#each _weapons}}
+    <div class="sdrn-item-row"><span>{{name}} ({{type}})</span> <button type="button" data-action="post-item-chat" data-id="{{id}}">Chat</button> <button type="button" data-action="delete-item" data-id="{{id}}">Delete</button></div>
+    {{/each}}
+    <button type="button" data-action="create-item" data-item-type="weapon">+ Add Weapon</button>
+  </div>
+  <div class="sdrn-box">
+    <div class="sdrn-box-title">Description</div>
+    <textarea name="sd:description" rows="4">{{_description}}</textarea>
+  </div>
+</div>
