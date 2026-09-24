@@ -18,17 +18,19 @@
 //   - full spellcasting (slots exist on the schema, no auto-calc from class)
 
 import { SystemRegistry, defineSystem, sheets, statusEffects } from '/_loom/sdk/index.js';
-import { getDefaultData } from './scripts/schema.mjs';
-import { mergeDefaults } from './scripts/utils.mjs';
-import { prepCharacter, prepNpc } from './scripts/prepare-data.mjs';
+import { prepareActorRow } from './scripts/prepare-data.mjs';
 import { getSheetSchema, getItemSheetSchema } from './scripts/sheet-schemas.mjs';
-import { applyDamageToTargets, rollWeaponAttack, rollWeaponDamage, rollSpellAttack, rollSpellDamage, rollUnarmedDamage, castSpell, activateFeature, postItemToChat } from './scripts/roll-engine.mjs';
+import { applyDamageToTargets, rollWeaponAttack, rollWeaponDamage, rollSpellAttack, rollSpellDamage, rollUnarmedDamage, castSpell, activateFeature, postItemToChat, useConsumable, rollToolCheck } from './scripts/roll-engine.mjs';
 import { syncEquippedEffect, syncPermanentBonusEffect, removeItemEffects } from './scripts/effects.mjs';
 import { Sdr5eCharacterSheet } from './scripts/character-sheet.mjs';
 import { Sdr5eNpcSheet } from './scripts/npc-sheet.mjs';
+import { Sdr5eGroupSheet } from './scripts/group-sheet.mjs';
+import { Sdr5eVehicleSheet } from './scripts/vehicle-sheet.mjs';
+import { Sdr5eEncounterSheet } from './scripts/encounter-sheet.mjs';
 import { Sdr5eItemSheet } from './scripts/item-sheet.mjs';
 import { SDR5EApi } from './scripts/api.mjs';
 import { registerSettings } from './scripts/settings.mjs';
+import { CONDITIONS } from './scripts/config.mjs';
 
 // ── System registration ──────────────────────────────────────────────────
 
@@ -43,19 +45,7 @@ import { registerSettings } from './scripts/settings.mjs';
 // `prepareData` is missing as an own property — never true here. Removed
 // per the project rule against Foundry compatibility/emulation surface.
 function prepareData(row) {
-  const sd = row?.systemData;
-  if (!sd) return row;
-  // Backfills any schema field added after this actor was first created —
-  // including a COMPLETELY empty systemData (e.g. an actor whose create
-  // request never sent one) — never overwrites data that's actually there.
-  // Runs before the `abilities` check below: bailing out first would leave
-  // an empty actor permanently blank instead of self-healing on the next
-  // render, which is the whole point of mergeDefaults (see its doc comment).
-  mergeDefaults(sd, getDefaultData(row.type));
-  if (!sd.abilities) return row;
-  if (row.type === 'npc') prepNpc(sd);
-  else prepCharacter(sd, row.items || []);
-  return row;
+  return prepareActorRow(row);
 }
 
 registerSettings();
@@ -73,7 +63,7 @@ registerSettings();
  * with the sheet open.
  */
 async function useItem(actorId, itemId) {
-  const actor = await window.Loom.api.get(`/actors/${actorId}`);
+  const actor = await window.Loom.api.get(`/actors/${actorId}?populate=true`);
   if (!actor) return;
   const item = await window.Loom.api.get(`/items/${itemId}`);
   if (!item) return;
@@ -87,6 +77,12 @@ async function useItem(actorId, itemId) {
     case 'feature':
       await activateFeature(actor, item);
       break;
+    case 'consumable':
+      await useConsumable(actor, item);
+      break;
+    case 'tool':
+      await rollToolCheck(actor, item);
+      break;
     default:
       await postItemToChat(actor, item);
   }
@@ -96,8 +92,8 @@ SystemRegistry.register(defineSystem({
   id: 'srd5e',
   title: 'SDR5E (Modern SRD)',
   version: '0.6.0',
-  actorTypes: ['character', 'npc'],
-  itemTypes: ['weapon', 'armor', 'feature', 'item', 'language', 'race', 'class', 'subclass', 'background', 'feat', 'spell'],
+  actorTypes: ['character', 'npc', 'group', 'vehicle', 'encounter'],
+  itemTypes: ['weapon', 'armor', 'feature', 'item', 'language', 'race', 'class', 'subclass', 'background', 'feat', 'spell', 'consumable', 'tool', 'loot', 'container'],
   getDefaultData,
   getSheetSchema,
   getItemSheetSchema,
@@ -105,29 +101,7 @@ SystemRegistry.register(defineSystem({
   useItem,
 }));
 
-// Core already ships 5 generic token status markers (blinded/poisoned/
-// stunned/prone/invisible) — the full SRD 5.1 condition list has 14. The
-// other 9 were simply never registered by anyone; `register()` is additive
-// (confirmed via `statusEffects.getAll()` before adding these — no
-// duplicate/overwrite risk). This only adds the marker (id/label/color) a
-// GM can drop on a token from the core's own status UI — the mechanical
-// side (poisoned -> disadvantage, restrained/paralyzed/stunned/unconscious/
-// exhaustion rules) is wired separately in roll-engine.mjs's condition
-// modifier functions, checked from every attack/ability-check/save roll.
-const SRD_CONDITIONS = [
-  { id: 'charmed', label: 'Charmed', color: 0xe91e8c },
-  { id: 'deafened', label: 'Deafened', color: 0x8a8a8a },
-  { id: 'frightened', label: 'Frightened', color: 0x9b59b6 },
-  { id: 'grappled', label: 'Grappled', color: 0x795548 },
-  { id: 'incapacitated', label: 'Incapacitated', color: 0x607d8b },
-  { id: 'paralyzed', label: 'Paralyzed', color: 0xffc107 },
-  { id: 'petrified', label: 'Petrified', color: 0x9e9e9e },
-  { id: 'restrained', label: 'Restrained', color: 0x8b4513 },
-  { id: 'unconscious', label: 'Unconscious', color: 0x1a1614 },
-  { id: 'cover-half', label: 'Half Cover (+2 AC/DEX)', color: 0x4a90d9 },
-  { id: 'cover-3q', label: 'Three-Quarters Cover (+5 AC/DEX)', color: 0x2c5f8a },
-];
-for (const cond of SRD_CONDITIONS) {
+for (const cond of CONDITIONS) {
   if (!statusEffects.get?.(cond.id)) statusEffects.register(cond);
 }
 
@@ -167,7 +141,7 @@ document.addEventListener('click', async (event) => {
   if (!actorId) return;
   btn.disabled = true;
   try {
-    const actor = await window.Loom.api.get(`/actors/${actorId}`);
+    const actor = await window.Loom.api.get(`/actors/${actorId}?populate=true`);
     if (!actor) return;
     const action = btn.dataset.srd5eAction;
     if (action === 'card-unarmed-damage') {
@@ -350,4 +324,7 @@ window.Loom.socket.on('item.deleted', (item) => { void removeItemEffects(item); 
 
 sheets.catalog('actor', 'character', Sdr5eCharacterSheet);
 sheets.catalog('actor', 'npc', Sdr5eNpcSheet);
+sheets.catalog('actor', 'group', Sdr5eGroupSheet);
+sheets.catalog('actor', 'vehicle', Sdr5eVehicleSheet);
+sheets.catalog('actor', 'encounter', Sdr5eEncounterSheet);
 sheets.catalog('item', '*', Sdr5eItemSheet);

@@ -339,12 +339,17 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _ac: attrs.da?.value ?? 10,
       _acBase: attrs.da?.base ?? 10,
       _initiative: fmtMod(attrs.initiative?.total ?? 0),
-      _speed: attrs.speed?.value ?? '9m',
-      _speeds: {
-        fly: attrs.speed?.fly || '',
-        swim: attrs.speed?.swim || '',
-        climb: attrs.speed?.climb || '',
-        burrow: attrs.speed?.burrow || '',
+      _speed: `${attrs.movement?.effective?.walk ?? attrs.movement?.walk ?? 9} m`,
+      _movement: (() => {
+        const mv = attrs.movement || { walk: 9, fly: 0, swim: 0, climb: 0, burrow: 0, hover: false };
+        const eff = mv.effective || mv;
+        return {
+          walk: eff.walk ?? 9, fly: eff.fly ?? 0, swim: eff.swim ?? 0, climb: eff.climb ?? 0, burrow: eff.burrow ?? 0, hover: !!eff.hover,
+          walkLabel: `${eff.walk ?? 9} m`, walkTitle: eff.walk !== mv.walk ? `Base ${mv.walk} m` : '',
+        };
+      })(),
+      _movementInputs: {
+        walk: attrs.movement?.walk ?? 9, fly: attrs.movement?.fly ?? 0, swim: attrs.movement?.swim ?? 0, climb: attrs.movement?.climb ?? 0, burrow: attrs.movement?.burrow ?? 0, hover: !!attrs.movement?.hover,
       },
       _health: { value: res.health?.value ?? 0, max: healthMax, pct: healthPct, temp: res.health?.temp ?? 0 },
       _hpFormula: attrs.hp?.formula || '',
@@ -357,8 +362,10 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _type: details.type?.value || (typeof details.type === 'string' ? details.type : ''),
       _subtype: details.type?.subtype || details.subtype || '',
       _source: details.source || '',
-      _senses: details.senses?.value || [],
+      _senses: [...((() => { const se = attrs.senses || {}; const eff = se.effective || se; const l=[]; for(const s of ['darkvision','blindsight','tremorsense','truesight']) if(eff[s]>0) l.push(`${s.charAt(0).toUpperCase()+s.slice(1)} ${eff[s]} m`); return l; })()), ...(details.senses?.value || [])],
+      _sensesRaw: details.senses?.value || [],
       _sensesCustom: details.senses?.custom || '',
+      _sensesInputs: (() => { const se = attrs.senses || {}; return { darkvision: se.darkvision ?? 0, blindsight: se.blindsight ?? 0, tremorsense: se.tremorsense ?? 0, truesight: se.truesight ?? 0 }; })(),
       _passivePerception,
       _languages,
       _languagesCustom: details.languages?.custom || '',

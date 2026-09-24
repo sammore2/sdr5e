@@ -17,8 +17,9 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager, showToast } from '/_loom/sdk/index.js';
-import { ABILITY_KEYS, ABILITY_LABELS, ASI_LEVELS, SUBCLASS_LEVEL, SPELL_SLOT_TABLE, KNOWN_SPELLS_TABLE, KNOWN_CANTRIPS_TABLE } from './config.mjs';
+import { ABILITY_KEYS, ABILITY_LABELS, ASI_LEVELS, subclassLevelFor, SPELL_SLOT_TABLE, KNOWN_SPELLS_TABLE, KNOWN_CANTRIPS_TABLE } from './config.mjs';
 import { grantClassFeatures } from './class-features.mjs';
+import { searchCompendiumEntries } from './utils.mjs';
 
 const STEPS = ['class', 'hp', 'asi', 'subclass', 'spells', 'review'];
 
@@ -116,7 +117,7 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
     const hpGain = Math.max(1, avgRoll + conMod);
 
     const showAsi = ASI_LEVELS.includes(nextClassLevel);
-    const showSubclass = nextClassLevel === SUBCLASS_LEVEL && !idata?.subclassName;
+    const showSubclass = nextClassLevel >= subclassLevelFor(classIdentifier) && !idata?.subclassName;
 
     // Step de magias: aparece sempre que a classe tem alguma conjuração E
     // este nível concede slot/cantrip novo de verdade.
@@ -240,19 +241,9 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
 
   /** `entryType` é o mesmo nome do `kind` aqui (feat/subclass/spell).
    * `includeData: true` é necessário pro subclass (filtrado por
-   * `classIdentifier`) e spell (filtrado por `classes[]`/`spellLevel`) —
-   * ver o comentário de querySourceEntries em compendium-source.ts pra saber
-   * por que isso não é o padrão da rota. */
+   * `classIdentifier`) e spell (filtrado por `classes[]`/`spellLevel`). */
   async _searchEntries(entryType, query) {
-    const params = new URLSearchParams({ entryType, includeData: 'true' });
-    if (query) params.set('search', query);
-    try {
-      const res = await api.get(`/compendium/browse/entries?${params}`);
-      return res?.entries ?? [];
-    } catch (err) {
-      console.warn('[srd5e] level-up compendium search failed:', err);
-      return [];
-    }
+    return searchCompendiumEntries(entryType, query, true);
   }
 
   async _runSearch(kind) {

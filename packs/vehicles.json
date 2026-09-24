@@ -1,0 +1,363 @@
+{
+  "name": "Vehicles (SRD 5.2)",
+  "type": "Actor",
+  "entries": [
+    {
+      "id": "d325324f-f980-4188-b0d6-18391b5f8996",
+      "name": "Airship",
+      "type": "vehicle",
+      "data": {
+        "vehicleType": "air",
+        "attributes": {
+          "ac": 13,
+          "damageThreshold": 0,
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "travelSpeed": 8
+        },
+        "resources": {
+          "health": {
+            "value": 300,
+            "max": 300,
+            "bonus": 0,
+            "temp": 0
+          }
+        },
+        "traits": {
+          "di": [
+            "poison",
+            "psychic"
+          ],
+          "dr": [],
+          "dv": [],
+          "ci": []
+        },
+        "crew": {
+          "max": 10,
+          "members": []
+        },
+        "passengers": {
+          "max": 20,
+          "members": []
+        },
+        "cargo": {
+          "value": 0,
+          "max": 1
+        },
+        "description": "Airship — air vehicle, 8 mph, AC 13, HP 300, Threshold —"
+      }
+    },
+    {
+      "id": "1d876789-f9da-43a2-9a37-14ddd411163e",
+      "name": "Galley",
+      "type": "vehicle",
+      "data": {
+        "vehicleType": "water",
+        "attributes": {
+          "ac": 15,
+          "damageThreshold": 20,
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "travelSpeed": 4
+        },
+        "resources": {
+          "health": {
+            "value": 500,
+            "max": 500,
+            "bonus": 0,
+            "temp": 0
+          }
+        },
+        "traits": {
+          "di": [
+            "poison",
+            "psychic"
+          ],
+          "dr": [],
+          "dv": [],
+          "ci": []
+        },
+        "crew": {
+          "max": 80,
+          "members": []
+        },
+        "passengers": {
+          "max": 0,
+          "members": []
+        },
+        "cargo": {
+          "value": 0,
+          "max": 150
+        },
+        "description": "Galley — water vehicle, 4 mph, AC 15, HP 500, Threshold 20"
+      }
+    },
+    {
+      "id": "4ba42f9d-eb0a-4663-99c2-a83a4b7469fa",
+      "name": "Keelboat",
+      "type": "vehicle",
+      "data": {
+        "vehicleType": "water",
+        "attributes": {
+          "ac": 15,
+          "damageThreshold": 10,
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "travelSpeed": 1
+        },
+        "resources": {
+          "health": {
+            "value": 100,
+            "max": 100,
+            "bonus": 0,
+            "temp": 0
+          }
+        },
+        "traits": {
+          "di": [
+            "poison",
+            "psychic"
+          ],
+          "dr": [],
+          "dv": [],
+          "ci": []
+        },
+        "crew": {
+          "max": 1,
+          "members": []
+        },
+        "passengers": {
+          "max": 6,
+          "members": []
+        },
+        "cargo": {
+          "value": 0,
+          "max": 0.5
+        },
+        "description": "Keelboat — water vehicle, 1 mph, AC 15, HP 100, Threshold 10"
+      }
+    },
+    {
+      "id": "76c0bc9e-ce65-469a-9669-6b3bac0f206f",
+      "name": "Longship",
+      "type": "vehicle",
+      "data": {
+        "vehicleType": "water",
+        "attributes": {
+          "ac": 15,
+          "damageThreshold": 15,
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "travelSpeed": 3
+        },
+        "resources": {
+          "health": {
+            "value": 300,
+            "max": 300,
+            "bonus": 0,
+            "temp": 0
+          }
+        },
+        "traits": {
+          "di": [
+            "poison",
+            "psychic"
+          ],
+          "dr": [],
+          "dv": [],
+          "ci": []
+        },
+        "crew": {
+          "max": 40,
+          "members": []
+        },
+        "passengers": {
+          "max": 150,
+          "members": []
+        },
+        "cargo": {
+          "value": 0,
+          "max": 10
+        },
+        "description": "Longship — water vehicle, 3 mph, AC 15, HP 300, Threshold 15"
+      }
+    },
+    {
+      "id": "37823b22-968b-4afc-bf90-85ae568c7b8e",
+      "name": "Rowboat",
+      "type": "vehicle",
+      "data": {
+        "vehicleType": "water",
+        "attributes": {
+          "ac": 11,
+          "damageThreshold": 0,
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "travelSpeed": 1.5
+        },
+        "resources": {
+          "health": {
+            "value": 50,
+            "max": 50,
+            "bonus": 0,
+            "temp": 0
+          }
+        },
+        "traits": {
+          "di": [
+            "poison",
+            "psychic"
+          ],
+          "dr": [],
+          "dv": [],
+          "ci": []
+        },
+        "crew": {
+          "max": 1,
+          "members": []
+        },
+        "passengers": {
+          "max": 3,
+          "members": []
+        },
+        "cargo": {
+          "value": 0,
+          "max": 0
+        },
+        "description": "Rowboat — water vehicle, 1.5 mph, AC 11, HP 50, Threshold —"
+      }
+    },
+    {
+      "id": "cb084dc7-5b6a-4986-ae9a-faebfdc280d6",
+      "name": "Sailing Ship",
+      "type": "vehicle",
+      "data": {
+        "vehicleType": "water",
+        "attributes": {
+          "ac": 15,
+          "damageThreshold": 15,
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "travelSpeed": 2
+        },
+        "resources": {
+          "health": {
+            "value": 300,
+            "max": 300,
+            "bonus": 0,
+            "temp": 0
+          }
+        },
+        "traits": {
+          "di": [
+            "poison",
+            "psychic"
+          ],
+          "dr": [],
+          "dv": [],
+          "ci": []
+        },
+        "crew": {
+          "max": 20,
+          "members": []
+        },
+        "passengers": {
+          "max": 20,
+          "members": []
+        },
+        "cargo": {
+          "value": 0,
+          "max": 100
+        },
+        "description": "Sailing Ship — water vehicle, 2 mph, AC 15, HP 300, Threshold 15"
+      }
+    },
+    {
+      "id": "6c833ecc-8e54-4cfc-be8b-b80553ee9855",
+      "name": "Warship",
+      "type": "vehicle",
+      "data": {
+        "vehicleType": "water",
+        "attributes": {
+          "ac": 15,
+          "damageThreshold": 20,
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "travelSpeed": 2.5
+        },
+        "resources": {
+          "health": {
+            "value": 500,
+            "max": 500,
+            "bonus": 0,
+            "temp": 0
+          }
+        },
+        "traits": {
+          "di": [
+            "poison",
+            "psychic"
+          ],
+          "dr": [],
+          "dv": [],
+          "ci": []
+        },
+        "crew": {
+          "max": 60,
+          "members": []
+        },
+        "passengers": {
+          "max": 60,
+          "members": []
+        },
+        "cargo": {
+          "value": 0,
+          "max": 200
+        },
+        "description": "Warship — water vehicle, 2.5 mph, AC 15, HP 500, Threshold 20"
+      }
+    }
+  ]
+}

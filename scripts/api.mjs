@@ -22,7 +22,8 @@ import {
   rollDeathSave, spendHitDie, spendClassResource, activateFeature, consumeUse, rollRecharge,
   toggleInspiration, setExhaustion, getActorConditions, getSaveConditionOutcome,
   applyAbilityCheckConditionModifiers, applyWeaponAttackConditionModifiers,
-  postItemToChat,
+  isToolProficient, rollToolCheck,
+  postItemToChat, useConsumable,
 } from './roll-engine.mjs';
 import { applyItemEffect, removeItemEffects, applyTemporaryEffect } from './effects.mjs';
 import { Sdr5eCharacterWizard } from './character-wizard.mjs';
@@ -43,11 +44,12 @@ export const SDR5EApi = {
   // disadvantage rules, not Foundry's condition system)
   getActorConditions, getSaveConditionOutcome,
   applyAbilityCheckConditionModifiers, applyWeaponAttackConditionModifiers,
+  isToolProficient, rollToolCheck,
   // Active Effects (equip/unequip buffs — ported from EffectAutomation.mjs,
   // scoped down to what doesn't need a combat tracker)
   applyItemEffect, removeItemEffects, applyTemporaryEffect,
   // Chat
-  postItemToChat,
+  postItemToChat, useConsumable, rollToolCheck,
   // Character creation
   openCharacterWizard: () => {
     const wid = `sdr5e-wizard-${Math.random().toString(36).slice(2, 9)}`;

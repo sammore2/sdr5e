@@ -77,6 +77,14 @@ export const SDR5E_SETTINGS = [
       '555': '5/5/5 ft (Equidistante - Padrão)',
       '5105': '5/10/5 ft (Variante DMG)'
     }
+  },
+  {
+    key: 'primaryParty',
+    name: 'Grupo Principal',
+    hint: 'Ator do tipo Grupo usado como referência de dificuldade de encontros.',
+    scope: 'world',
+    type: String,
+    default: ''
   }
 ];
 
@@ -105,5 +113,14 @@ export function getSetting(key, fallback = undefined) {
     return val !== undefined ? val : fallback;
   } catch {
     return fallback;
+  }
+}
+
+export async function setSetting(key, value) {
+  try {
+    if (window.Loom?.settings?.set) return await window.Loom.settings.set('srd5e', key, value);
+    console.warn('[srd5e] settings.set not available for', key);
+  } catch (e) {
+    console.warn('[srd5e] setSetting failed', e);
   }
 }

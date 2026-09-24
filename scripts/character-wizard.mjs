@@ -20,12 +20,13 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 import { LoomHandlebarsMixin, BaseWindow, api, windowManager, showToast } from '/_loom/sdk/index.js';
-import { ABILITY_KEYS, ABILITY_LABELS } from './config.mjs';
+import { ABILITY_KEYS, ABILITY_LABELS, subclassLevelFor } from './config.mjs';
+import { searchCompendiumEntries } from './utils.mjs';
 import { getDefaultData } from './schema.mjs';
 import { grantClassFeatures } from './class-features.mjs';
 
 const STANDARD_ARRAY = [15, 14, 13, 12, 10, 8];
-const STEPS = ['identity', 'race', 'class', 'abilities', 'review'];
+const BASE_STEPS = ['identity', 'race', 'class', 'subclass', 'abilities', 'review'];
 
 export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
   static DEFAULT_OPTIONS = { position: { width: 480, height: 560 } };
@@ -52,31 +53,42 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
     // defaults for the freeform fallback path.
     race: { sourceId: '', entryId: '', name: '', size: 'med', speed: '9m', creatureType: 'humanoid', compendiumData: null },
     klass: { sourceId: '', entryId: '', name: '', hitDie: 'd8', compendiumData: null },
+    subclass: { sourceId: '', entryId: '', name: '', compendiumData: null },
     abilities: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
   };
 
   // Transient search UI state — not part of `_data`, never persisted to the
-  // actor. One query/results/timer pair per picker (race, klass).
+  // actor. One query/results/timer pair per picker (race, klass, subclass).
   _search = {
     race: { query: '', results: [], timer: null },
     klass: { query: '', results: [], timer: null },
+    subclass: { query: '', results: [], timer: null },
   };
+
+  _activeSteps() {
+    const classId = this._data.klass?.compendiumData?.classIdentifier || '';
+    const needsSubclass = classId && classId !== 'none' && subclassLevelFor(classId) === 1;
+    return BASE_STEPS.filter((s) => s !== 'subclass' || needsSubclass);
+  }
 
   async _prepareContext() {
     const context = await super._prepareContext();
-    const step = STEPS[this._step];
+    const activeSteps = this._activeSteps();
+    const step = activeSteps[this._step] || activeSteps[activeSteps.length - 1];
     return {
       ...context,
-      _steps: STEPS.map((s, i) => ({ id: s, active: i === this._step, done: i < this._step })),
+      _steps: activeSteps.map((s, i) => ({ id: s, active: i === this._step, done: i < this._step })),
       // No `eq` helper exists in this project's Handlebars setup — precompute
       // one boolean per step instead of comparing `_step` in the template.
       _stepIdentity: step === 'identity',
       _stepRace: step === 'race',
       _stepClass: step === 'class',
+      _stepSubclass: step === 'subclass',
       _stepAbilities: step === 'abilities',
       _stepReview: step === 'review',
       _isFirst: this._step === 0,
-      _isLast: this._step === STEPS.length - 1,
+      _isLast: this._step === activeSteps.length - 1,
+      _activeSteps: activeSteps,
       _data: this._data,
       _abilities: ABILITY_KEYS.map((k) => ({ key: k, label: ABILITY_LABELS[k], value: this._data.abilities[k] })),
       _reviewAbilities: ABILITY_KEYS.map((k) => `${ABILITY_LABELS[k].slice(0, 3)} ${this._data.abilities[k]}`).join(' · '),
@@ -86,8 +98,12 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
       _klassPicked: !!this._data.klass.entryId,
       _klassQuery: this._search.klass.query,
       _klassResults: this._search.klass.results,
-      _reviewRaceInfo: this._data.race.compendiumData ? `${this._data.race.compendiumData.size || ''}, ${this._data.race.compendiumData.speed || ''}` : '',
+      _subclassPicked: !!this._data.subclass.entryId,
+      _subclassQuery: this._search.subclass.query,
+      _subclassResults: this._search.subclass.results,
+      _reviewRaceInfo: this._data.race.compendiumData ? `${this._data.race.compendiumData.size || ''}, ${this._data.race.compendiumData.movement?.walk ?? ''} m` : '',
       _reviewHitDie: this._data.klass.compendiumData?.hitDie || '',
+      _reviewSubclass: this._data.subclass.name || '',
     };
   }
 
@@ -138,27 +154,17 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
     obj[keys[keys.length - 1]] = value;
   }
 
-  /** entryType: 'race' | 'class' — the entry's own `type` field, not the
-   * pack's (see the note on GET /compendium/browse/entries, compendium.ts). */
-  async _searchEntries(entryType, query) {
-    const params = new URLSearchParams({ entryType });
-    if (query) params.set('search', query);
-    try {
-      const res = await api.get(`/compendium/browse/entries?${params}`);
-      return res?.entries ?? [];
-    } catch (err) {
-      console.warn('[srd5e] Compendium search failed:', err);
-      return [];
-    }
-  }
-
   async _runSearch(kind) {
-    const entryType = kind === 'klass' ? 'class' : 'race';
+    const entryType = kind === 'klass' ? 'class' : kind;
+    const includeData = kind === 'subclass';
     const queryAtRequest = this._search[kind].query;
-    const results = await this._searchEntries(entryType, queryAtRequest);
+    let results = await searchCompendiumEntries(entryType, queryAtRequest, includeData);
+    if (kind === 'subclass') {
+      const classIdentifier = this._data.klass?.compendiumData?.classIdentifier || '';
+      if (classIdentifier) results = results.filter((e) => (e.data?.classIdentifier || '') === classIdentifier);
+    }
     // The query may have changed again while this request was in flight — a
     // stale response landing after a newer one would flash the wrong list.
-    // Only apply it if the query is still the one that sent it.
     if (this._search[kind].query !== queryAtRequest) return;
     this._search[kind].results = results;
     await this.render();
@@ -185,18 +191,28 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
     }
     if (!entry) return;
 
-    const bucket = kind === 'klass' ? this._data.klass : this._data.race;
+    const map = { klass: this._data.klass, race: this._data.race, subclass: this._data.subclass };
+    const bucket = map[kind];
+    if (!bucket) return;
     bucket.sourceId = sourceId;
     bucket.entryId = entryId;
     bucket.name = entry.name;
     bucket.compendiumData = entry.data || {};
     this._search[kind].results = [];
     this._search[kind].query = entry.name;
+    // Changing class invalidates a previously picked subclass from another class.
+    if (kind === 'klass' && this._data.subclass.entryId) {
+      const newId = entry.data?.classIdentifier || '';
+      const subId = this._data.subclass.compendiumData?.classIdentifier || '';
+      if (newId !== subId) await this._clearPick('subclass');
+    }
     await this.render();
   }
 
   async _clearPick(kind) {
-    const bucket = kind === 'klass' ? this._data.klass : this._data.race;
+    const map = { klass: this._data.klass, race: this._data.race, subclass: this._data.subclass };
+    const bucket = map[kind];
+    if (!bucket) return;
     bucket.sourceId = '';
     bucket.entryId = '';
     bucket.name = '';
@@ -213,27 +229,31 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
     if (action === 'wizard-create') { void this._create(); return; }
     if (action === 'wizard-pick-race') { void this._pickCompendiumEntry('race', target.dataset.sourceId, id); return; }
     if (action === 'wizard-pick-klass') { void this._pickCompendiumEntry('klass', target.dataset.sourceId, id); return; }
+    if (action === 'wizard-pick-subclass') { void this._pickCompendiumEntry('subclass', target.dataset.sourceId, id); return; }
     if (action === 'wizard-clear-race') { void this._clearPick('race'); return; }
     if (action === 'wizard-clear-klass') { void this._clearPick('klass'); return; }
+    if (action === 'wizard-clear-subclass') { void this._clearPick('subclass'); return; }
     if (typeof super.onAction === 'function') super.onAction(action, id, target);
   }
 
   _goStep(next) {
-    if (next < 0 || next >= STEPS.length) return;
-    if (next > this._step && STEPS[this._step] === 'identity' && !this._data.name.trim()) {
+    const activeSteps = this._activeSteps();
+    if (next < 0 || next >= activeSteps.length) return;
+    if (next > this._step && activeSteps[this._step] === 'identity' && !this._data.name.trim()) {
       showToast?.('Give the character a name first.', 'warning');
       return;
     }
+    // If class changed to one that no longer needs subclass, clear stale pick.
+    const stillNeeds = activeSteps.includes('subclass');
+    if (!stillNeeds && this._data.subclass.entryId) {
+      void this._clearPick('subclass');
+    }
     this._step = next;
     void this.render();
-    // Race/Class show up as a browsable grid of compendium options, not a
-    // type-to-search box — load the full list the moment the step is
-    // entered so there's something to click without typing anything first.
-    // The search input still narrows this list live; it just isn't required
-    // to populate it.
-    const stepId = STEPS[next];
-    const kind = stepId === 'race' ? 'race' : stepId === 'class' ? 'klass' : null;
-    if (kind && !this._data[kind].entryId && !this._search[kind].results.length && !this._search[kind].query) {
+    // Race/Class/Subclass show up as a browsable grid of compendium options.
+    const stepId = activeSteps[next];
+    const kind = stepId === 'race' ? 'race' : stepId === 'class' ? 'klass' : stepId === 'subclass' ? 'subclass' : null;
+    if (kind && !this._data[kind === 'klass' ? 'klass' : kind].entryId && !this._search[kind].results.length && !this._search[kind].query) {
       void this._runSearch(kind);
     }
   }
@@ -273,7 +293,13 @@ export class Sdr5eCharacterWizard extends LoomHandlebarsMixin(BaseWindow) {
     }
     if (this._data.klass.entryId && this._data.klass.compendiumData) {
       const classData = { ...this._data.klass.compendiumData, levels: this._data.level || 1 };
+      if (this._data.subclass.entryId && this._data.subclass.compendiumData) {
+        classData.subclassName = this._data.subclass.name;
+      }
       await api.post('/items', { worldId, name: this._data.klass.name, type: 'class', data: classData, actorId });
+      if (this._data.subclass.entryId && this._data.subclass.compendiumData) {
+        await api.post('/items', { worldId, name: this._data.subclass.name, type: 'subclass', data: this._data.subclass.compendiumData, actorId });
+      }
       // Starting above level 1 (e.g. a mid-campaign join) grants every
       // feature the class would already have by that level — same
       // compendium-driven grant the Level Up wizard uses, just from 0.
