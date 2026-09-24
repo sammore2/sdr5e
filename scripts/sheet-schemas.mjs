@@ -13,7 +13,7 @@
 // can reference any derived path via @.
 // ══════════════════════════════════════════════════════════════════════════
 
-import { ABILITY_KEYS, ABILITY_LABELS, SKILL_ABILITIES, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, SIZE_LABELS, CLASS_IDENTIFIER_LABELS } from './config.mjs';
+import { ABILITY_KEYS, ABILITY_LABELS, SKILL_ABILITIES, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, SIZE_LABELS, CLASS_IDENTIFIER_LABELS, DAMAGE_TYPES } from './config.mjs';
 
 export function characterSheetSchema() {
   return {
@@ -144,6 +144,56 @@ export const ITEM_SHEET_SCHEMAS = {
     { key: 'description', label: 'Description', type: 'textarea' },
     { key: 'script', label: 'Script', type: 'text' },
   ] }] },
+  consumable: { tabs: [{ id: 'main', label: 'Consumable', fields: [
+    { key: 'description', label: 'Description', type: 'textarea' },
+    { key: 'consumableType', label: 'Consumable Type', type: 'select', options: [
+      { value: 'potion', label: 'Potion' }, { value: 'scroll', label: 'Scroll' }, { value: 'ammo', label: 'Ammunition' },
+      { value: 'poison', label: 'Poison' }, { value: 'food', label: 'Food' }, { value: 'other', label: 'Other' },
+    ] },
+    { key: 'quantity', label: 'Quantity', type: 'number' },
+    { key: 'weight', label: 'Weight', type: 'number' },
+    { key: 'rarity', label: 'Rarity', type: 'text' },
+    { key: 'uses.value', label: 'Uses (current)', type: 'number' },
+    { key: 'uses.max', label: 'Uses (max)', type: 'number' },
+    { key: 'destroyOnEmpty', label: 'Destroy when empty', type: 'boolean' },
+    { key: 'healing.formula', label: 'Healing Formula', type: 'text' },
+    { key: 'damage.formula', label: 'Damage Formula', type: 'text' },
+    { key: 'damage.type', label: 'Damage Type', type: 'select', options: DAMAGE_TYPES.map((t) => ({ value: t, label: t })) },
+    { key: 'spell.name', label: 'Spell Name (for scrolls)', type: 'text' },
+    { key: 'spell.level', label: 'Spell Level', type: 'number' },
+  ] }] },
+  tool: { tabs: [{ id: 'main', label: 'Tool', fields: [
+    { key: 'description', label: 'Description', type: 'textarea' },
+    { key: 'toolType', label: 'Tool Type', type: 'select', options: [
+      { value: 'artisan', label: 'Artisan' }, { value: 'gaming', label: 'Gaming' }, { value: 'musical', label: 'Musical' }, { value: 'kit', label: 'Kit' }, { value: 'other', label: 'Other' },
+    ] },
+    { key: 'ability', label: 'Ability', type: 'select', options: ABILITY_KEYS.map((k) => ({ value: k, label: ABILITY_LABELS[k] })) },
+    { key: 'bonus', label: 'Bonus', type: 'number' },
+    { key: 'quantity', label: 'Quantity', type: 'number' },
+    { key: 'weight', label: 'Weight', type: 'number' },
+    { key: 'price.gp', label: 'Price (gp)', type: 'number' },
+  ] }] },
+  loot: { tabs: [{ id: 'main', label: 'Loot', fields: [
+    { key: 'description', label: 'Description', type: 'textarea' },
+    { key: 'lootType', label: 'Loot Type', type: 'select', options: [
+      { value: 'gem', label: 'Gem' }, { value: 'art', label: 'Art' }, { value: 'tradegood', label: 'Trade Good' }, { value: 'junk', label: 'Junk' }, { value: 'other', label: 'Other' },
+    ] },
+    { key: 'quantity', label: 'Quantity', type: 'number' },
+    { key: 'weight', label: 'Weight', type: 'number' },
+    { key: 'price.gp', label: 'Price (gp)', type: 'number' },
+    { key: 'price.sp', label: 'Price (sp)', type: 'number' },
+    { key: 'price.cp', label: 'Price (cp)', type: 'number' },
+    { key: 'rarity', label: 'Rarity', type: 'text' },
+  ] }] },
+  container: { tabs: [{ id: 'main', label: 'Container', fields: [
+    { key: 'description', label: 'Description', type: 'textarea' },
+    { key: 'capacity.type', label: 'Capacity Type', type: 'select', options: [{ value: 'weight', label: 'Weight' }, { value: 'items', label: 'Items' }] },
+    { key: 'capacity.value', label: 'Capacity Value (0 = unlimited)', type: 'number' },
+    { key: 'weightlessContents', label: 'Extradimensional (contents weightless)', type: 'boolean' },
+    { key: 'weight', label: 'Weight', type: 'number' },
+    { key: 'price.gp', label: 'Price (gp)', type: 'number' },
+    { key: 'rarity', label: 'Rarity', type: 'text' },
+  ] }] },
   race: { tabs: [{ id: 'main', label: 'Race', fields: [
     { key: 'description', label: 'Description', type: 'textarea' },
     { key: 'creatureType', label: 'Creature Type', type: 'text' },
@@ -152,7 +202,13 @@ export const ITEM_SHEET_SCHEMAS = {
     // med/lg/huge/garg), so typing "Medium" fell back to a 1x multiplier
     // with no error. Locking it to the same codes fixes that at the source.
     { key: 'size', label: 'Size', type: 'select', options: Object.keys(SIZE_LABELS).map((v) => ({ value: v, label: SIZE_LABELS[v] })) },
-    { key: 'speed', label: 'Speed', type: 'text' },
+    { key: 'movement.walk', label: 'Walk Speed (m)', type: 'number' },
+    { key: 'movement.fly', label: 'Fly Speed (m)', type: 'number' },
+    { key: 'movement.swim', label: 'Swim Speed (m)', type: 'number' },
+    { key: 'movement.climb', label: 'Climb Speed (m)', type: 'number' },
+    { key: 'movement.burrow', label: 'Burrow Speed (m)', type: 'number' },
+    { key: 'movement.hover', label: 'Hover', type: 'boolean' },
+    { key: 'senses.darkvision', label: 'Darkvision (m)', type: 'number' },
   ] }] },
   class: { tabs: [{ id: 'main', label: 'Class', fields: [
     { key: 'description', label: 'Description', type: 'textarea' },

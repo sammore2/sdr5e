@@ -14,7 +14,10 @@
 import { LoomHandlebarsMixin, LoomActorSheet, effects, api, windowManager, showToast, LoomDialog } from '/_loom/sdk/index.js';
 import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON, ITEM_TYPE_LABEL, ITEM_TYPE_SINGULAR, SIZE_LABELS, SIZE_CARRY_MULTIPLIER, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, DAMAGE_TYPES, DAMAGE_TYPE_LABELS, KNOWN_SPELLS_TABLE, KNOWN_CANTRIPS_TABLE } from './config.mjs';
 import { fmtMod, setPathValue, currentAdvantageMode } from './utils.mjs';
-import { sdr5eRoll, rollDeathSave, toggleInspiration, setExhaustion, rollWeaponAttack, rollWeaponDamage, rollUnarmedStrike, rollUnarmedDamage, castSpell, rollSpellAttack, rollSpellDamage, spendHitDie, postItemToChat, getActorConditions, applyAbilityCheckConditionModifiers, getSaveConditionOutcome, getSkillConditionOutcome, activateFeature } from './roll-engine.mjs';
+import { computeCarriedWeight } from './prepare-data.mjs';
+import { sdr5eRoll, rollDeathSave, toggleInspiration, setExhaustion, rollWeaponAttack, rollWeaponDamage, rollUnarmedStrike, rollUnarmedDamage, castSpell, rollSpellAttack, rollSpellDamage, spendHitDie, postItemToChat, getActorConditions, applyAbilityCheckConditionModifiers, getSaveConditionOutcome, getSkillConditionOutcome, activateFeature, useConsumable, isToolProficient, rollToolCheck } from './roll-engine.mjs';
+import { takeRest } from './rest.mjs';
+import { getContents, isDescendant, containerLoad } from './containers.mjs';
 import { removeItemEffects } from './effects.mjs';
 import { getDefaultData } from './schema.mjs';
 import { Sdr5eItemSheet } from './item-sheet.mjs';
@@ -58,6 +61,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   // (a single shared timer only remembered the last field touched within
   // the debounce window and silently dropped the rest).
   _pendingFields = new Map();
+  _openContainers = new Set();
 
   static PARTS = { main: { template: '/marketplace/rulesets/srd5e/templates/character-sheet.hbs' } };
 
@@ -99,6 +103,28 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const current = sd.proficiencies?.weapons || [];
     const next = current.includes(code) ? current.filter((w) => w !== code) : [...current, code];
     await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, proficiencies: { ...sd.proficiencies, weapons: next } } });
+    await this._reloadDocument();
+  }
+
+  async _toggleToolProf(itemId) {
+    if (!itemId || !this.document) return;
+    const item = (this.document.items || []).find((i) => i.id === itemId);
+    if (!item) return;
+    const sd = this.document.systemData;
+    const name = String(item.name || '').trim();
+    const id = String(item.system?.identifier || item.data?.identifier || '').trim();
+    const tools = sd.proficiencies?.tools || [];
+    const norm = (v) => String(v).trim().toLowerCase();
+    const hasByName = tools.some((t) => norm(t) === norm(name));
+    const hasById = id ? tools.some((t) => norm(t) === norm(id)) : false;
+    const has = hasByName || hasById;
+    let next;
+    if (has) {
+      next = tools.filter((t) => norm(t) !== norm(name) && (!id || norm(t) !== norm(id)));
+    } else {
+      next = [...tools, name];
+    }
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, proficiencies: { ...sd.proficiencies, tools: next } } });
     await this._reloadDocument();
   }
 
@@ -471,22 +497,85 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     })).sort((a, b) => a.label.localeCompare(b.label));
 
     const items = this.document?.items || [];
-    const byType = (type) => items.filter((i) => i.type === type).map((i) => {
+    const isRoot = (it) => {
+      const cid = (it.system || it.data || {}).container;
+      return !cid || !items.some((x) => x.id === cid);
+    };
+    const byType = (type) => items.filter((i) => i.type === type && isRoot(i)).map((i) => {
       const idata = i.system || i.data || {};
+      const isContainer = type === 'container';
+      const load = isContainer ? containerLoad(items, i.id) : null;
+      // Flatten nested containers with depth, only if ancestors are open
+      function flattenContents(containerId, depth, out){
+        const direct = getContents(items, containerId);
+        for(const c of direct){
+          const cdata = c.system || c.data || {};
+          const isCont = c.type === 'container';
+          out.push({
+            ...c,
+            icon: ITEM_TYPE_ICON[c.type] || '📦',
+            hasQuantity: c.type !== 'container',
+            quantity: cdata.quantity ?? 1,
+            isWeapon: c.type === 'weapon',
+            isConsumable: c.type === 'consumable',
+            isTool: c.type === 'tool',
+            isContainer: isCont,
+            proficient: c.type === 'tool' ? isToolProficient(sd, c) : false,
+            showEquip: c.type === 'weapon' || c.type === 'armor',
+            usesLabel: cdata.uses?.max > 1 ? `${cdata.uses.value ?? 0}/${cdata.uses.max}` : '',
+            isMovable: ['weapon','armor','item','consumable','tool','loot','container'].includes(c.type),
+            depth,
+            containerOpen: isCont ? this._openContainers.has(c.id) : false,
+            containerLoad: isCont ? containerLoad(items, c.id) : null,
+            capacityLabel: isCont && cdata.capacity?.value > 0 ? (cdata.capacity.type === 'weight' ? `${containerLoad(items, c.id).weight} / ${cdata.capacity.value} lb` : `${containerLoad(items, c.id).count} / ${cdata.capacity.value} items`) : '',
+            capacityOver: isCont && cdata.capacity?.value > 0 ? (cdata.capacity.type === 'weight' ? containerLoad(items, c.id).weight > cdata.capacity.value : containerLoad(items, c.id).count > cdata.capacity.value) : false,
+          });
+          if(isCont && this._openContainers.has(c.id)){
+            flattenContents.call(this, c.id, depth+1, out);
+          }
+        }
+      }
+      const contents = isContainer ? (()=>{ const out=[]; flattenContents.call(this, i.id, 1, out); return out; })() : null;
       return {
         ...i,
         icon: ITEM_TYPE_ICON[type] || '📦',
         equipped: !!idata.equipped,
-        hasQuantity: type === 'item' || type === 'weapon' || type === 'armor',
+        hasQuantity: type !== 'container' && (type === 'item' || type === 'weapon' || type === 'armor' || type === 'consumable' || type === 'tool' || type === 'loot'),
         quantity: idata.quantity ?? 1,
         attunementRequired: idata.attunement === 'required' || idata.attunement === 'attuned',
         attuned: idata.attunement === 'attuned',
         isWeapon: type === 'weapon',
+        isConsumable: type === 'consumable',
+        isTool: type === 'tool',
+        isContainer: isContainer,
+        isMovable: ['weapon','armor','item','consumable','tool','loot','container'].includes(type),
+        proficient: type === 'tool' ? isToolProficient(sd, i) : false,
+        usesLabel: idata.uses?.max > 1 ? `${idata.uses.value ?? 0}/${idata.uses.max}` : '',
+        showEquip: type === 'weapon' || type === 'armor',
+        containerLoad: load,
+        containerContents: contents,
+        containerOpen: isContainer ? this._openContainers.has(i.id) : false,
+        capacityLabel: isContainer && idata.capacity?.value > 0 ? (idata.capacity.type === 'weight' ? `${load.weight} / ${idata.capacity.value} lb` : `${load.count} / ${idata.capacity.value} items`) : '',
+        capacityOver: isContainer && idata.capacity?.value > 0 ? (idata.capacity.type === 'weight' ? load.weight > idata.capacity.value : load.count > idata.capacity.value) : false,
       };
     });
-    const _inventory = ['weapon', 'armor', 'item', 'language']
-      .map((type) => ({ type, label: ITEM_TYPE_LABEL[type], icon: ITEM_TYPE_ICON[type], items: byType(type) }))
-      .filter((g) => g.items.length > 0 || ['weapon', 'armor', 'item'].includes(g.type));
+    const _inventory = ['weapon', 'armor', 'item', 'consumable', 'tool', 'loot', 'container', 'language']
+      .map((type) => {
+        const group = { type, label: ITEM_TYPE_LABEL[type], icon: ITEM_TYPE_ICON[type], items: byType(type) };
+        if (type === 'loot' && group.items.length) {
+          const totalGp = group.items.reduce((sum, it) => {
+            const d = it.system || it.data || {};
+            const qty = Number(d.quantity) || 1;
+            const gp = Number(d.price?.gp) || 0;
+            const sp = Number(d.price?.sp) || 0;
+            const cp = Number(d.price?.cp) || 0;
+            return sum + (gp + sp / 10 + cp / 100) * qty;
+          }, 0);
+          group.lootTotal = totalGp % 1 === 0 ? `${totalGp} gp` : `${totalGp.toFixed(2)} gp`;
+        }
+        return group;
+      })
+      .filter((g) => g.items.length > 0 || ['weapon', 'armor', 'item', 'consumable', 'tool'].includes(g.type));
     const _features = byType('feature');
     // Grouped by `source` to match the real dnd5e-Foundry Features tab
     // ("Wizard Features" / "Background Features" as separate header bars,
@@ -594,12 +683,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
     const raceSize = raceItem?.system?.size || raceItem?.data?.size || 'med';
     const strScore = abilities.str?.value ?? 10;
-    const carriedWeight = items
-      .filter((i) => ['weapon', 'armor', 'item'].includes(i.type))
-      .reduce((sum, i) => {
-        const idata = i.system || i.data || {};
-        return sum + (Number(idata.weight) || 0) * (Number(idata.quantity) || 1);
-      }, 0);
+    const carriedWeight = computeCarriedWeight(items);
     const sizeMultiplier = SIZE_CARRY_MULTIPLIER[raceSize] ?? 1;
     const _carrying = {
       weight: Math.round(carriedWeight * 10) / 10,
@@ -683,7 +767,21 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _ac: attrs.da?.value ?? 10,
       _acBase: attrs.da?.base ?? 10,
       _initiative: fmtMod(attrs.initiative?.total ?? 0),
-      _speed: attrs.speed?.value ?? '9m',
+      _speed: `${attrs.movement?.effective?.walk ?? attrs.movement?.walk ?? 9} m`,
+      _movement: (() => {
+        const mv = attrs.movement || { walk: 9, fly: 0, swim: 0, climb: 0, burrow: 0, hover: false };
+        const eff = mv.effective || mv;
+        const base = mv;
+        const others = [];
+        for (const mode of ['fly', 'swim', 'climb', 'burrow']) {
+          if (eff[mode] > 0) {
+            const title = eff[mode] !== base[mode] ? `Base ${base[mode]} m` : '';
+            others.push({ mode, label: mode.charAt(0).toUpperCase() + mode.slice(1), value: `${eff[mode]} m`, title });
+          }
+        }
+        const walkTitle = eff.walk !== base.walk ? `Base ${base.walk} m` : '';
+        return { walk: `${eff.walk ?? 9} m`, walkTitle, others, hover: !!eff.hover };
+      })(),
       _health: { value: res.health?.value ?? 0, max: healthMax, effectiveMax, pct: healthPct, temp: res.health?.temp ?? 0 },
       _hitDice: { ...hitDice, pct: hitDicePct },
       _carrying,
@@ -725,7 +823,8 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         active: (sd.proficiencies?.weapons || []).includes(code),
       })),
       _namedWeaponProfs: (sd.proficiencies?.weapons || []).filter((w) => !WEAPON_CATEGORY_CODES.includes(w)),
-      _senses: details.senses?.value || [],
+      _senses: [...((() => { const se = attrs.senses || {}; const eff = se.effective || se; const l=[]; for(const s of ['darkvision','blindsight','tremorsense','truesight']) if(eff[s]>0) l.push(`${s.charAt(0).toUpperCase()+s.slice(1)} ${eff[s]} m`); return l; })()), ...(details.senses?.value || [])],
+      _sensesRaw: details.senses?.value || [],
       _identity,
       _multiclassQualifies: multiclassQualifies,
     };
@@ -840,6 +939,23 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       return;
     }
 
+    if (action === 'use-consumable') {
+      const item = (this.document.items || []).find((i) => i.id === id);
+      if (item) void useConsumable(this.document, item).then(() => this._reloadDocument());
+      return;
+    }
+
+    if (action === 'roll-tool') {
+      const item = (this.document.items || []).find((i) => i.id === id);
+      if (item) void rollToolCheck(this.document, item);
+      return;
+    }
+
+    if (action === 'toggle-tool-prof') {
+      void this._toggleToolProf(id);
+      return;
+    }
+
     if (action === 'add-class-resource') {
       void this._addClassResource();
       return;
@@ -847,6 +963,18 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
     if (action === 'delete-item') {
       void this._deleteItem(id);
+      return;
+    }
+
+    if (action === 'toggle-container') {
+      if (this._openContainers.has(id)) this._openContainers.delete(id);
+      else this._openContainers.add(id);
+      void this.render();
+      return;
+    }
+
+    if (action === 'move-to-container') {
+      void this._moveToContainer(id);
       return;
     }
 
@@ -1047,7 +1175,52 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
   async _deleteItem(itemId) {
     if (!itemId) return;
+    const item = (this.document.items || []).find((i) => i.id === itemId);
+    if (item?.type === 'container') {
+      const children = getContents(this.document.items, itemId);
+      for (const ch of children) {
+        const cdata = ch.system || ch.data || {};
+        await api.put(`/items/${ch.id}`, { data: { ...cdata, container: '' } });
+      }
+    }
     await api.delete(`/items/${itemId}`);
+    await this._reloadDocument();
+  }
+
+  async _moveToContainer(itemId) {
+    if (!itemId || !this.document) return;
+    const item = (this.document.items || []).find((i) => i.id === itemId);
+    if (!item) return;
+    const currentContainer = (item.system || item.data || {}).container || '';
+    const containers = (this.document.items || []).filter((it) => it.type === 'container' && it.id !== itemId && !isDescendant(this.document.items, itemId, it.id));
+    const containerEl = document.createElement('div');
+    containerEl.className = 'sdrn-move-dialog';
+    const optionsHtml = ['<option value=\"\">Inventory (root)</option>'].concat(containers.map((c) => `<option value=\"${c.id}\" ${c.id===currentContainer?'selected':''}>${c.name}</option>`)).join('');
+    containerEl.innerHTML = `<label>Move <strong>${item.name}</strong> to:</label><select class=\"sdrn-move-select\">${optionsHtml}</select>`;
+    const sel = containerEl.querySelector('.sdrn-move-select');
+    const chosen = await LoomDialog.wait({
+      window: { title: 'Move to Container' },
+      content: containerEl,
+      width: 360,
+      buttons: [{ action: 'confirm', label: 'Move', variant: 'primary', callback: () => sel?.value ?? '' }],
+    });
+    if (chosen === null || chosen === undefined) return;
+    const newContainer = String(chosen);
+    if (newContainer === currentContainer) return;
+    // Capacity check (warn but allow)
+    if (newContainer) {
+      const target = containers.find((c) => c.id === newContainer);
+      const tdata = target ? (target.system || target.data || {}) : null;
+      if (tdata?.capacity?.value > 0) {
+        const load = containerLoad(this.document.items, newContainer);
+        const itemWeight = Number((item.system || item.data || {}).weight) || 0;
+        const itemQty = Number((item.system || item.data || {}).quantity) || 1;
+        const over = tdata.capacity.type === 'weight' ? (load.weight + itemWeight * itemQty > tdata.capacity.value) : (load.count + itemQty > tdata.capacity.value);
+        if (over) window.Loom?.showToast?.('Container over capacity!', 'warning');
+      }
+    }
+    const idata = item.system || item.data || {};
+    await api.put(`/items/${itemId}`, { data: { ...idata, container: newContainer } });
     await this._reloadDocument();
   }
 
@@ -1068,26 +1241,6 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (!effectId) return;
     await effects.delete(effectId);
     await this._reloadDocument();
-  }
-
-  // Restores limited-use items/features whose `uses.recovery` matches this
-  // rest: 'sr' recovers on both short and long rest, 'lr' only on long rest.
-  async _restoreItemUses(kind) {
-    const items = this.document?.items || [];
-    const restored = [];
-    for (const it of items) {
-      const idata = it.system || it.data || {};
-      const uses = idata.uses;
-      const max = Number(uses?.max) || 0;
-      if (!uses || max <= 0) continue;
-      const matches = uses.recovery === 'lr' ? kind === 'long' : uses.recovery === 'sr';
-      if (!matches) continue;
-      const value = Number(uses.value) || 0;
-      if (value >= max) continue;
-      await api.put(`/items/${it.id}`, { data: { ...idata, uses: { ...uses, value: max } } });
-      restored.push(it.name);
-    }
-    return restored;
   }
 
   // Prompts how many Hit Dice (0..max) to spend, capped by what's left.
@@ -1119,100 +1272,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   // down, minimum 1"), 'short'+'long' resources, resets the short-rest counter.
   async _takeRest(kind) {
     if (!this.document) return;
-
-    let hitDiceSpent = 0;
-    let hitDiceHealed = 0;
-    if (kind === 'short') {
-      const hdAvailable = this.document.systemData?.resources?.hitDice?.value ?? 0;
-      const toSpend = await this._promptHitDiceToSpend(hdAvailable);
-      for (let i = 0; i < toSpend; i++) {
-        const result = await spendHitDie(this.document);
-        if (!result) break;
-        hitDiceSpent += 1;
-        hitDiceHealed += result.healAmount;
-        // Each spendHitDie() call persists via actor.update() but doesn't
-        // mutate this.document locally — reload so the next iteration (and
-        // the hitDice.value check below) reads the post-spend state, not a
-        // stale copy that would let every iteration decrement from the same
-        // starting value.
-        await this._reloadDocument();
-      }
-    }
-
-    const itemsRestored = await this._restoreItemUses(kind);
-    if (itemsRestored.length) await this._reloadDocument();
-
-    const sd = this.document.systemData;
-    const res = sd.resources || {};
-    const recovered = [];
-    if (hitDiceSpent > 0) recovered.push(`${hitDiceSpent} Hit Die spent (+${hitDiceHealed} HP)`);
-    if (itemsRestored.length) recovered.push(`Uses restored: ${itemsRestored.join(', ')}`);
-
-    if (res.racial?.reset === 'short' || kind === 'long') {
-      if (res.racial && res.racial.value < res.racial.max) recovered.push(`${res.racial.label || 'Racial'} (${res.racial.max - res.racial.value})`);
-      if (res.racial) res.racial.value = res.racial.max;
-    }
-    if (res.primary?.reset === 'short' || kind === 'long') {
-      if (res.primary && res.primary.value < res.primary.max) recovered.push(`${res.primary.label || 'Resource'} (${res.primary.max - res.primary.value})`);
-      if (res.primary) res.primary.value = res.primary.max;
-    }
-
-    if (kind === 'long') {
-      const hpBefore = res.health?.value ?? 0;
-      const longRestCap = res.health?.effectiveMax ?? res.health?.max ?? 0;
-      if (res.health) { res.health.value = longRestCap; res.health.temp = 0; }
-      if (res.health && longRestCap > hpBefore) recovered.unshift(`HP +${longRestCap - hpBefore}`);
-
-      const hdBefore = res.hitDice?.value ?? 0;
-      if (res.hitDice) {
-        // SRD (Adventuring.md, "Long Rest"): recover up to half your total
-        // Hit Dice (round down, minimum 1), not all of them.
-        const hdRecoverAmount = Math.max(1, Math.floor((res.hitDice.max || 0) / 2));
-        res.hitDice.value = Math.min(res.hitDice.max, hdBefore + hdRecoverAmount);
-      }
-      if (res.hitDice && res.hitDice.value > hdBefore) recovered.push(`Hit Dice +${res.hitDice.value - hdBefore}`);
-
-      let slotsRestored = 0;
-      for (const lvl of Object.keys(res.spellSlots || {})) {
-        const slot = res.spellSlots[lvl];
-        if (slot && slot.value < slot.max) { slotsRestored += slot.max - slot.value; slot.value = slot.max; }
-      }
-      if (slotsRestored > 0) recovered.push(`${slotsRestored} spell slot${slotsRestored === 1 ? '' : 's'}`);
-
-      if (res.deathSaves) { res.deathSaves.successes = 0; res.deathSaves.failures = 0; }
-      const exhaustionBefore = res.exhaustion || 0;
-      res.exhaustion = Math.max(0, exhaustionBefore - 1);
-      if (exhaustionBefore > 0) recovered.push('Exhaustion -1');
-      res.shortRestsDone = 0;
-    } else {
-      res.shortRestsDone = (res.shortRestsDone || 0) + 1;
-
-      // SRD (Classes/Warlock.md, "Pact Magic"): "you regain all expended
-      // spell slots when you finish a short or long rest" — exceção real,
-      // só o Warlock recupera magia em descanso CURTO. Multiclasse com
-      // Warlock + outra classe conjuradora fica fora (mesma limitação do
-      // Handout 08 — um bucket de slot só, não dois grupos separados).
-      const classItem = (this.document.items || []).find((i) => i.type === 'class');
-      const cdata = classItem ? (classItem.system || classItem.data || {}) : null;
-      if (cdata?.casterType === 'pact') {
-        let pactSlotsRestored = 0;
-        for (const lvl of Object.keys(res.spellSlots || {})) {
-          const slot = res.spellSlots[lvl];
-          if (slot && slot.value < slot.max) { pactSlotsRestored += slot.max - slot.value; slot.value = slot.max; }
-        }
-        if (pactSlotsRestored > 0) recovered.push(`${pactSlotsRestored} Pact Magic slot${pactSlotsRestored === 1 ? '' : 's'}`);
-      }
-    }
-
-    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: sd });
+    await takeRest(this.document, kind, { promptHitDice: (n) => this._promptHitDiceToSpend(n) });
     await this._reloadDocument();
-
-    const label = kind === 'long' ? 'Long Rest' : 'Short Rest';
-    const summary = recovered.length ? recovered.join(' &middot; ') : 'Nothing to recover.';
-    await window.Loom.ChatMessage.create({
-      speaker: window.Loom.ChatMessage.getSpeaker({ actor: this.document }),
-      content: `${label} complete`,
-      flags: { srd5e: { name: `${this.document.name} — ${label}`, isRest: true, description: `<div>${summary}</div>` } },
-    });
   }
 }

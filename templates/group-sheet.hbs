@@ -1,0 +1,35 @@
+<div class="sdrn-group-root">
+  <div class="sdrn-box">
+    <div class="sdrn-box-title">Group: {{name}} {{#if _isPrimary}}<span class="sdrn-tag sdrn-tag-highlight">Primary</span>{{/if}}</div>
+    <textarea name="sd:description" rows="3" placeholder="Description">{{_description}}</textarea>
+  </div>
+  <div class="sdrn-box">
+    <div class="sdrn-box-title">Vault</div>
+    <div style="display:flex;gap:8px;">
+      <label>PP <input type="number" name="sd:currency.pp" value="{{_currency.pp}}" /></label>
+      <label>GP <input type="number" name="sd:currency.gp" value="{{_currency.gp}}" /></label>
+      <label>EP <input type="number" name="sd:currency.ep" value="{{_currency.ep}}" /></label>
+      <label>SP <input type="number" name="sd:currency.sp" value="{{_currency.sp}}" /></label>
+      <label>CP <input type="number" name="sd:currency.cp" value="{{_currency.cp}}" /></label>
+    </div>
+  </div>
+  <div class="sdrn-box">
+    <div class="sdrn-box-header">
+      <div class="sdrn-box-title">Members ({{_members.length}})</div>
+      <button type="button" class="sdrn-item-roll-btn" data-action="set-primary-party">Set Primary</button>
+    </div>
+    {{#each _members}}
+    <div class="sdrn-item-row">
+      {{#if missing}}<span class="sdrn-empty">Member removed ({{id}})</span> <button type="button" class="sdrn-item-del" data-action="remove-member" data-id="{{id}}">Remove</button>
+      {{else}}<button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-member" data-id="{{id}}">{{name}} ({{type}})</button> <button type="button" class="sdrn-item-del" data-action="remove-member" data-id="{{id}}">Remove</button>
+      {{/if}}
+    </div>
+    {{/each}}
+    <div class="sdrn-empty-row">Drag characters/NPCs from sidebar here</div>
+  </div>
+  <div class="sdrn-box">
+    <button type="button" class="sdrn-item-roll-btn" data-action="short-rest-all">Short Rest All</button>
+    <button type="button" class="sdrn-item-roll-btn" data-action="long-rest-all">Long Rest All</button>
+    <button type="button" class="sdrn-item-roll-btn" data-action="award">Award XP/Treasure</button>
+  </div>
+</div>

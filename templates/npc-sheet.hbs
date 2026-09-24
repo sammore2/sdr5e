@@ -91,7 +91,7 @@
                 <svg class="sdrn-stat-svg" viewBox="0 0 44 32" preserveAspectRatio="none">
                   <polygon points="8,1 36,1 43,16 36,31 8,31 1,16" fill="#fcf9f2" stroke="#8c734b" stroke-width="1.5" stroke-linejoin="round" />
                 </svg>
-                <span class="sdrn-mini-stat-num">{{_speed}}</span>
+                <span class="sdrn-mini-stat-num" title="{{_movement.walkTitle}}">{{_speed}}</span>
               </div>
               <div class="sdrn-mini-stat-label">SPEED</div>
             </div>
@@ -306,6 +306,10 @@
               {{/each}}
             </div>
             <input type="text" class="sdrn-npc-custom-field" name="sd:details.senses.custom" value="{{_sensesCustom}}" placeholder="+ Custom sense..." />
+            <div class="sdrn-npc-field-row"><label>Darkvision (m)</label><input type="number" name="sd:attributes.senses.darkvision" value="{{_sensesInputs.darkvision}}" placeholder="0" /></div>
+            <div class="sdrn-npc-field-row"><label>Blindsight (m)</label><input type="number" name="sd:attributes.senses.blindsight" value="{{_sensesInputs.blindsight}}" placeholder="0" /></div>
+            <div class="sdrn-npc-field-row"><label>Tremorsense (m)</label><input type="number" name="sd:attributes.senses.tremorsense" value="{{_sensesInputs.tremorsense}}" placeholder="0" /></div>
+            <div class="sdrn-npc-field-row"><label>Truesight (m)</label><input type="number" name="sd:attributes.senses.truesight" value="{{_sensesInputs.truesight}}" placeholder="0" /></div>
           </div>
 
           <!-- Resistances & Immunities -->
@@ -453,24 +457,28 @@
           <div class="sdrn-npc-config-box">
             <div class="sdrn-box-title"><i class="fas fa-person-running"></i> Movement Speeds</div>
             <div class="sdrn-npc-field-row">
-              <label>Walking</label>
-              <input type="text" name="sd:attributes.speed.value" value="{{_speed}}" placeholder="9m" />
+              <label>Walking (m)</label>
+              <input type="number" name="sd:attributes.movement.walk" value="{{_movementInputs.walk}}" placeholder="9" />
             </div>
             <div class="sdrn-npc-field-row">
-              <label>Fly</label>
-              <input type="text" name="sd:attributes.speed.fly" value="{{_speeds.fly}}" placeholder="e.g. 18m" />
+              <label>Fly (m)</label>
+              <input type="number" name="sd:attributes.movement.fly" value="{{_movementInputs.fly}}" placeholder="0" />
             </div>
             <div class="sdrn-npc-field-row">
-              <label>Swim</label>
-              <input type="text" name="sd:attributes.speed.swim" value="{{_speeds.swim}}" placeholder="e.g. 9m" />
+              <label>Swim (m)</label>
+              <input type="number" name="sd:attributes.movement.swim" value="{{_movementInputs.swim}}" placeholder="0" />
             </div>
             <div class="sdrn-npc-field-row">
-              <label>Climb</label>
-              <input type="text" name="sd:attributes.speed.climb" value="{{_speeds.climb}}" placeholder="e.g. 9m" />
+              <label>Climb (m)</label>
+              <input type="number" name="sd:attributes.movement.climb" value="{{_movementInputs.climb}}" placeholder="0" />
             </div>
             <div class="sdrn-npc-field-row">
-              <label>Burrow</label>
-              <input type="text" name="sd:attributes.speed.burrow" value="{{_speeds.burrow}}" placeholder="e.g. 6m" />
+              <label>Burrow (m)</label>
+              <input type="number" name="sd:attributes.movement.burrow" value="{{_movementInputs.burrow}}" placeholder="0" />
+            </div>
+            <div class="sdrn-npc-field-row">
+              <label>Hover</label>
+              <input type="checkbox" name="sd:attributes.movement.hover" {{#if _movementInputs.hover}}checked{{/if}} />
             </div>
           </div>
         </div>

@@ -17,6 +17,7 @@
 import { currentAdvantageMode, isCriticalHeld } from './utils.mjs';
 import { getSetting } from './settings.mjs';
 import { bonusesToChanges, applyTemporaryEffect, removeItemEffects } from './effects.mjs';
+import { ITEM_TYPE_SINGULAR } from './config.mjs';
 
 /**
  * Conditions live on Cast (token) records, not the Actor (`statusMarkers:
@@ -221,6 +222,37 @@ export function getSaveConditionOutcome(abilityKey, conditions, exhaustionLevel 
 export function getSkillConditionOutcome(skillKey, conditions) {
   const autoFail = skillKey === 'perception' && !!conditions?.includes('deafened');
   return { autoFail };
+}
+
+export function isToolProficient(sd, item) {
+  const profs = sd.proficiencies?.tools || [];
+  if (!profs.length) return false;
+  const idata = item?.system || item?.data || {};
+  const identifier = String(idata.identifier || '').trim().toLowerCase();
+  const name = String(item?.name || '').trim().toLowerCase();
+  return profs.some((p) => {
+    const v = String(p).trim().toLowerCase();
+    return v === identifier || v === name;
+  });
+}
+
+export async function rollToolCheck(actor, item) {
+  if (!actor || !item) return null;
+  const sd = actor.systemData;
+  const idata = item.system || item.data || {};
+  const abilityKey = (idata.ability || 'dex').toLowerCase();
+  const abilityMod = sd.abilities?.[abilityKey]?.modifier ?? 0;
+  const prof = sd.attributes?.prof?.value ?? 0;
+  const proficient = isToolProficient(sd, item);
+  const bonus = Number(idata.bonus) || 0;
+  const parts = [
+    { label: abilityKey.toUpperCase(), value: abilityMod },
+    { label: 'Proficiency', value: proficient ? prof : 0 },
+    { label: 'Tool', value: bonus },
+  ];
+  const conditions = await getActorConditions(actor.id);
+  const advantage = applyAbilityCheckConditionModifiers(currentAdvantageMode(), conditions, sd.resources?.exhaustion ?? 0, !!sd.attributes?.armor?.penalty && (abilityKey === 'str' || abilityKey === 'dex'));
+  return sdr5eRoll({ label: `Tool Check: ${item.name}`, parts, actor, advantage });
 }
 
 /**
@@ -555,7 +587,13 @@ export async function applyDamage(actor, amount, type = '') {
   else if (t && has('dr')) { multiplier = 0.5; traitLabel = 'Resistant'; }
   else if (t && has('dv')) { multiplier = 2; traitLabel = 'Vulnerable'; }
 
-  const finalAmount = Math.floor(amount * multiplier);
+  let finalAmount = Math.floor(amount * multiplier);
+  // SRD vehicle Damage Threshold: damage below threshold is ignored entirely
+  const threshold = Number(sd.attributes?.damageThreshold) || 0;
+  if (actor.type === 'vehicle' && threshold > 0 && finalAmount > 0 && finalAmount < threshold) {
+    finalAmount = 0;
+    traitLabel = `below damage threshold (${threshold})`;
+  }
   // SRD (Combat.md, "Temporary Hit Points"): "the temporary hit points are
   // lost first, and any leftover damage carries over to your normal hit
   // points" — desconta de `temp` até zerar, só o excedente vai pro `value`.
@@ -914,7 +952,7 @@ export async function rollSpellDamage(actor, item) {
  * ("cast at a higher level") aren't modeled yet — always consumes at the
  * spell's own level.
  */
-export async function castSpell(actor, item) {
+export async function castSpell(actor, item, options = {}) {
   if (!actor || !item) return null;
   const sd = actor.systemData;
   const idata = item.system || item.data || {};
@@ -936,8 +974,9 @@ export async function castSpell(actor, item) {
   // assumida: usa a regra geral (precisa `prepared: true`), não replica a
   // exceção do Wizard (ritual direto do grimório sem preparar).
   const isFreeRitual = idata.ritual && idata.prepared;
+  const isFreeScroll = !!options.free;
 
-  if (level > 0 && !isFreeRitual) {
+  if (level > 0 && !isFreeRitual && !isFreeScroll) {
     const slot = sd.resources?.spellSlots?.[level];
     if (!slot || (slot.value ?? 0) <= 0) {
       globalThis.Loom?.showToast?.(`No level ${level} spell slots remaining.`, 'warning');
@@ -1035,7 +1074,7 @@ export async function postItemToChat(actor, item) {
   if (item.type === 'weapon') {
     pills.push(isWeaponProficient(actor.systemData, item, idata) ? 'Proficient' : 'Not Proficient');
   }
-  const subtitleParts = [ITEM_TYPE_SINGULAR_LABEL(item.type)];
+  const subtitleParts = [ITEM_TYPE_SINGULAR[item.type] || 'Item'];
   if (idata.rarity && idata.rarity !== 'common') subtitleParts.push(idata.rarity);
   // The generic chat renderer (chat-message-card.ts:136-154) only reads
   // `flags.<x>.{name,img,description}` off an info card — no `subtitle`
@@ -1059,10 +1098,6 @@ export async function postItemToChat(actor, item) {
       },
     },
   });
-}
-
-function ITEM_TYPE_SINGULAR_LABEL(type) {
-  return type ? type[0].toUpperCase() + type.slice(1) : 'Item';
 }
 
 /**
@@ -1178,5 +1213,61 @@ export async function activateFeature(actor, item) {
   }
 
   await postItemToChat(actor, item);
+  return true;
+}
+
+export async function useConsumable(actor, item) {
+  if (!actor || !item) return null;
+  const idata = item.system || item.data || {};
+  // 1) uses
+  const uses = idata.uses;
+  const max = Number(uses?.max) || 0;
+  if (max > 0) {
+    const ok = await consumeUse(actor, item);
+    if (!ok) return null;
+  }
+  // 2) healing
+  if (idata.healing?.formula) {
+    const total = evaluateDamageFormula(idata.healing.formula);
+    await applyHeal(actor, total);
+    window.Loom.dispatchRoll({ formula: String(total), actorId: actor.id, mode: 'public', meta: { label: `Healing: ${item.name}` } });
+  }
+  // 3) damage
+  if (idata.damage?.formula) {
+    const type = idata.damage?.type || '';
+    const total = evaluateDamageFormula(idata.damage.formula);
+    window.Loom.dispatchRoll({ formula: String(total), actorId: actor.id, mode: 'public', meta: { label: `Damage: ${item.name}${type ? ` (${type})` : ''}`, srd5eDamage: { amount: total, type } } });
+  }
+  // 4) spell (scroll)
+  if (idata.spell?.name) {
+    const spellName = String(idata.spell.name).trim().toLowerCase();
+    const spellItem = (actor.items || []).find((i) => i.type === 'spell' && String(i.name || '').toLowerCase() === spellName);
+    if (spellItem) {
+      await castSpell(actor, spellItem, { free: true });
+    }
+  }
+  // 5-6) quantity / destroy and post card (post before delete so card has data)
+  await postItemToChat(actor, item);
+  // Determine if empty: uses reached 0 or no uses at all (always consumes quantity)
+  const wasMax = Number(idata.uses?.max) || 0;
+  const wasValue = Number(idata.uses?.value) || 0;
+  const nowValue = wasMax > 0 ? wasValue - 1 : 0;
+  const isEmpty = wasMax > 0 ? nowValue <= 0 : true;
+  if (isEmpty) {
+    const qty = Number(idata.quantity) || 1;
+    const destroyOnEmpty = !!idata.destroyOnEmpty;
+    if (qty > 1) {
+      const newQty = qty - 1;
+      const resetUses = wasMax > 0 ? { ...idata.uses, value: wasMax } : idata.uses;
+      const newData = { ...idata, quantity: newQty, ...(wasMax > 0 ? { uses: resetUses } : {}) };
+      await window.Loom.api.put(`/items/${item.id}`, { data: newData });
+    } else if (destroyOnEmpty) {
+      await window.Loom.api.delete(`/items/${item.id}`);
+    } else if (wasMax > 0) {
+      // refill uses without destroying (e.g. wand with destroyOnEmpty false)
+      const newData = { ...idata, uses: { ...idata.uses, value: wasMax } };
+      await window.Loom.api.put(`/items/${item.id}`, { data: newData });
+    }
+  }
   return true;
 }

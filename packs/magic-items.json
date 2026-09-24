@@ -28,7 +28,7 @@
     {
       "id": "fb5b4b00-5eac-47da-b855-8d8010030fa6",
       "name": "Ammunition, +1, +2, or +3",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "You have a bonus to attack and damage rolls made with this piece of magic ammunition. The bonus is determined by the rarity of the ammunition. Once it hits a target, the ammunition is no longer magical.",
@@ -43,9 +43,86 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "ammo",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
@@ -258,7 +335,7 @@
     {
       "id": "37caa3a0-3cfb-4416-926c-f471588c9252",
       "name": "Arrow of Slaying",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "An arrow of slaying is a magic weapon meant to slay a particular kind of creature. Some are more focused than others; for example, there are both arrows of dragon slaying and arrows of blue dragon slaying. If a creature belonging to the type, race, or group associated with an arrow of slaying takes damage from the arrow, the creature must make a DC 17 Constitution saving throw, taking an extra 6d10 piercing damage on a failed save, or half as much extra damage on a successful one.\n\nOnce an arrow of slaying deals its extra damage to a creature, it becomes a nonmagical arrow.\n\nOther types of magic ammunition of this kind exist, such as bolts of slaying meant for a crossbow, though arrows are most common.",
@@ -273,9 +350,86 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "ammo",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
@@ -350,7 +504,7 @@
     {
       "id": "ff930a03-644f-4bf9-85ca-b491d1ec0e63",
       "name": "Bag of Holding",
-      "type": "item",
+      "type": "container",
       "data": {
         "identifier": "",
         "description": "This bag has an interior space considerably larger than its outside dimensions, roughly 2 feet in diameter at the mouth and 4 feet deep. The bag can hold up to 500 pounds, not exceeding a volume of 64 cubic feet. The bag weighs 15 pounds, regardless of its contents. Retrieving an item from the bag requires an action.\n\nIf the bag is overloaded, pierced, or torn, it ruptures and is destroyed, and its contents are scattered in the Astral Plane. If the bag is turned inside out, its contents spill forth, unharmed, but the bag must be put right before it can be used again. Breathing creatures inside the bag can survive up to a number of minutes equal to 10 divided by the number of creatures (minimum 1 minute), after which time they begin to suffocate.\n\nPlacing a bag of holding inside an extradimensional space created by a handy haversack, portable hole, or similar item instantly destroys both items and opens a gate to the Astral Plane. The gate originates where the one item was placed inside the other. Any creature within 10 feet of the gate is sucked through it to a random location on the Astral Plane. The gate then closes. The gate is one-way only and can't be reopened.",
@@ -365,9 +519,12 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "container": "",
+        "capacity": {
+          "type": "weight",
+          "value": 500
+        },
+        "weightlessContents": true
       }
     },
     {
@@ -1937,7 +2094,7 @@
     {
       "id": "6da032ec-32cf-457f-922b-13f5e8955f1f",
       "name": "Handy Haversack",
-      "type": "item",
+      "type": "container",
       "data": {
         "identifier": "",
         "description": "This backpack has a central pouch and two side pouches, each of which is an extradimensional space. Each side pouch can hold up to 20 pounds of material, not exceeding a volume of 2 cubic feet. The large central pouch can hold up to 8 cubic feet or 80 pounds of material. The backpack always weighs 5 pounds, regardless of its contents.\n\nPlacing an object in the haversack follows the normal rules for interacting with objects. Retrieving an item from the haversack requires you to use an action. When you reach into the haversack for a specific item, the item is always magically on top.\n\nThe haversack has a few limitations. If it is overloaded, or if a sharp object pierces it or tears it, the haversack ruptures and is destroyed. If the haversack is destroyed, its contents are lost forever, although an artifact always turns up again somewhere. If the haversack is turned inside out, its contents spill forth, unharmed, and the haversack must be put right before it can be used again. If a breathing creature is placed within the haversack, the creature can survive for up to 10 minutes, after which time it begins to suffocate.\n\nPlacing the haversack inside an extradimensional space created by a bag of holding, portable hole, or similar item instantly destroys both items and opens a gate to the Astral Plane. The gate originates where the one item was placed inside the other. Any creature within 10 feet of the gate is sucked through it and deposited in a random location on the Astral Plane. The gate then closes. The gate is one-way only and can't be reopened.",
@@ -1952,9 +2109,12 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "container": "",
+        "capacity": {
+          "type": "weight",
+          "value": 120
+        },
+        "weightlessContents": true
       }
     },
     {
@@ -2788,7 +2948,7 @@
     {
       "id": "50b144a4-edc4-4d75-8691-37381eca3b60",
       "name": "Oil of Etherealness",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "Beads of this cloudy gray oil form on the outside of its container and quickly evaporate. The oil can cover a Medium or smaller creature, along with the equipment it's wearing and carrying (one additional vial is required for each size category above Medium). Applying the oil takes 10 minutes. The affected creature then gains the effect of the etherealness spell for 1 hour.",
@@ -2803,15 +2963,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "5b291a64-1a43-4db8-a905-3ff7dd670339",
       "name": "Oil of Sharpness",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "This clear, gelatinous oil sparkles with tiny, ultrathin silver shards. The oil can coat one slashing or piercing weapon or up to 5 pieces of slashing or piercing ammunition. Applying the oil takes 1 minute. For 1 hour, the coated item is magical and has a +3 bonus to attack and damage rolls.",
@@ -2826,15 +3063,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "a41a4dce-6a97-4b8d-a29c-5c1b8aa0ba6a",
       "name": "Oil of Slipperiness",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "This sticky black unguent is thick and heavy in the container, but it flows quickly when poured. The oil can cover a Medium or smaller creature, along with the equipment it's wearing and carrying (one additional vial is required for each size category above Medium). Applying the oil takes 10 minutes. The affected creature then gains the effect of a freedom of movement spell for 8 hours.\n\nAlternatively, the oil can be poured on the ground as an action, where it covers a 10-foot square, duplicating the effect of the grease spell in that area for 8 hours.",
@@ -2849,9 +3163,86 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
@@ -2949,7 +3340,7 @@
     {
       "id": "1193610a-3e78-42a5-a9d1-9245874e8178",
       "name": "Philter of Love",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "The next time you see a creature within 10 minutes after drinking this philter, you become charmed by that creature for 1 hour. If the creature is of a species and gender you are normally attracted to, you regard it as your true love while you are charmed. This potion's rose-hued, effervescent liquid contains one easy-to-miss bubble shaped like a heart.",
@@ -2964,9 +3355,86 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
@@ -3041,7 +3509,7 @@
     {
       "id": "54769390-b908-42d1-9fe7-7de59683391b",
       "name": "Portable Hole",
-      "type": "item",
+      "type": "container",
       "data": {
         "identifier": "",
         "description": "This fine black cloth, soft as silk, is folded up to the dimensions of a handkerchief. It unfolds into a circular sheet 6 feet in diameter.\n\nYou can use an action to unfold a portable hole and place it on or against a solid surface, whereupon the portable hole creates an extradimensional hole 10 feet deep. The cylindrical space within the hole exists on a different plane, so it can't be used to create open passages. Any creature inside an open portable hole can exit the hole by climbing out of it.\n\nYou can use an action to close a portable hole by taking hold of the edges of the cloth and folding it up. Folding the cloth closes the hole, and any creatures or objects within remain in the extradimensional space. No matter what's in it, the hole weighs next to nothing.\n\nIf the hole is folded up, a creature within the hole's extradimensional space can use an action to make a DC 10 Strength check. On a successful check, the creature forces its way out and appears within 5 feet of the portable hole or the creature carrying it. A breathing creature within a closed portable hole can survive for up to 10 minutes, after which time it begins to suffocate.\n\nPlacing a portable hole inside an extradimensional space created by a bag of holding, handy haversack, or similar item instantly destroys both items and opens a gate to the Astral Plane. The gate originates where the one item was placed inside the other. Any creature within 10 feet of the gate is sucked through it and deposited in a random location on the Astral Plane. The gate then closes. The gate is one-way only and can't be reopened.",
@@ -3056,15 +3524,18 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "container": "",
+        "capacity": {
+          "type": "weight",
+          "value": 0
+        },
+        "weightlessContents": true
       }
     },
     {
       "id": "d2967a74-ace6-448a-888e-4f2ca235002b",
       "name": "Potion of Animal Friendship",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "When you drink this potion, you can cast the animal friendship spell (save DC 13) for 1 hour at will. Agitating this muddy liquid brings little bits into view: a fish scale, a hummingbird tongue, a cat claw, or a squirrel hair.",
@@ -3079,15 +3550,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "78f80fe2-a032-426c-9b50-87c77ddb492d",
       "name": "Potion of Clairvoyance",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "When you drink this potion, you gain the effect of the clairvoyance spell. An eyeball bobs in this yellowish liquid but vanishes when the potion is opened.",
@@ -3102,15 +3650,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "fc196e6e-4c44-4368-b071-3929806b9870",
       "name": "Potion of Climbing",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "When you drink this potion, you gain a climbing speed equal to your walking speed for 1 hour. During this time, you have advantage on Strength (Athletics) checks you make to climb. The potion is separated into brown, silver, and gray layers resembling bands of stone. Shaking the bottle fails to mix the colors.",
@@ -3125,15 +3750,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "085a64bd-88d9-43dc-b119-16938c996858",
       "name": "Potion of Diminution",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "When you drink this potion, you gain the \"reduce\" effect of the enlarge/reduce spell for 1d4 hours (no concentration required). The red in the potion's liquid continuously contracts to a tiny bead and then expands to color the clear liquid around it. Shaking the bottle fails to interrupt this process.",
@@ -3148,15 +3850,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "f127a548-ed44-4f23-91f0-f23e790846ea",
       "name": "Potion of Flying",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "When you drink this potion, you gain a flying speed equal to your walking speed for 1 hour and can hover. If you're in the air when the potion wears off, you fall unless you have some other means of staying aloft. This potion's clear liquid floats at the top of its container and has cloudy white impurities drifting in it.",
@@ -3171,15 +3950,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "28b235b0-00d0-4075-bd77-50fe7232785a",
       "name": "Potion of Gaseous Form",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "When you drink this potion, you gain the effect of the gaseous form spell for 1 hour (no concentration required) or until you end the effect as a bonus action. This potion's container seems to hold fog that moves and pours like water.",
@@ -3194,15 +4050,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "13d950df-9b13-4a39-9a11-e1132fef29ef",
       "name": "Potion of Giant Strength",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "When you drink this potion, your Strength score changes for 1 hour. The type of giant determines the score (see the table below). The potion has no effect on you if your Strength is equal to or greater than that score.\n\nThis potion's transparent liquid has floating in it a sliver of fingernail from a giant of the appropriate type. The potion of frost giant strength and the potion of stone giant strength have the same effect.\n\nTable- Potion of Giant Strength\n\nType of Giant  |  Strength  |  Rarity\n\nHill giant  |  21  |  Uncommon\n\nFrost/stone giant  |  23  |  Rare\n\nFire giant  |  25  |  Rare\n\nCloud giant  |  27  |  Very rare\n\nStorm giant  |  29  |  Legendary",
@@ -3217,15 +4150,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "ae1b98bc-2ba7-4bc2-b8e1-80cbcdb90bd6",
       "name": "Potion of Growth",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "When you drink this potion, you gain the \"enlarge\" effect of the enlarge/reduce spell for 1d4 hours (no concentration required). The red in the potion's liquid continuously expands from a tiny bead to color the clear liquid around it and then contracts. Shaking the bottle fails to interrupt this process.",
@@ -3240,15 +4250,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "ec1f7637-4232-4970-9db8-942232f24b8b",
       "name": "Potion of Healing",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "You regain hit points when you drink this potion. The number of hit points depends on the potion's rarity, as shown in the Potions of Healing table. Whatever its potency, the potion's red liquid glimmers when agitated.\n\nTable- Potions of Healing\n\nPotion of ...  |  Rarity  |  HP Regained\n\nHealing  |  Common  |  2d4+2\n\nGreater healing  |  Uncommon  |  4d4+4\n\nSuperior healing  |  Rare  |  8d4+8\n\nSupreme healing  |  Very rare  |  10d4+20",
@@ -3263,15 +4350,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": "2d4+2"
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "b5239ff4-598d-4115-bad4-bf5a48690aea",
       "name": "Potion of Heroism",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "For 1 hour after drinking it, you gain 10 temporary hit points that last for 1 hour. For the same duration, you are under the effect of the bless spell (no concentration required). This blue potion bubbles and steams as if boiling.",
@@ -3286,15 +4450,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "622992f3-739c-4153-b589-0c5c9314acc4",
       "name": "Potion of Invisibility",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "This potion's container looks empty but feels as though it holds liquid. When you drink it, you become invisible for 1 hour. Anything you wear or carry is invisible with you. The effect ends early if you attack or cast a spell.",
@@ -3309,15 +4550,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "a0a8d1ad-f422-4709-bbae-8c5c760b63b8",
       "name": "Potion of Mind Reading",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "When you drink this potion, you gain the effect of the detect thoughts spell (save DC 13). The potion's dense, purple liquid has an ovoid cloud of pink floating in it.",
@@ -3332,15 +4650,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "13c139a5-23be-4b15-b1cf-db819bb7ad1d",
       "name": "Potion of Poison",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "This concoction looks, smells, and tastes like a potion of healing or other beneficial potion. However, it is actually poison masked by illusion magic. An identify spell reveals its true nature.\n\nIf you drink it, you take 3d6 poison damage, and you must succeed on a DC 13 Constitution saving throw or be poisoned. At the start of each of your turns while you are poisoned in this way, you take 3d6 poison damage. At the end of each of your turns, you can repeat the saving throw. On a successful save, the poison damage you take on your subsequent turns decreases by 1d6. The poison ends when the damage decreases to 0.",
@@ -3355,15 +4750,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "95e39d6c-46e0-4728-a7ff-43f78020171b",
       "name": "Potion of Resistance",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "When you drink this potion, you gain resistance to one type of damage for 1 hour. The GM chooses the type or determines it randomly from the options below.\n\nTable- Potion of Resistance\n\nd10  |  Damage Type\n\n1  |  Acid\n\n2  |  Cold\n\n3  |  Fire\n\n4  |  Force\n\n5  |  Lightning\n\n6  |  Necrotic\n\n7  |  Poison\n\n8  |  Psychic\n\n9  |  Radiant\n\n10  |  Thunder",
@@ -3378,15 +4850,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "5dac96da-0d67-4309-ba4d-398fb24d9bc1",
       "name": "Potion of Speed",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "When you drink this potion, you gain the effect of the haste spell for 1 minute (no concentration required). The potion's yellow fluid is streaked with black and swirls on its own.",
@@ -3401,15 +4950,92 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
       "id": "e8cfb7fe-b400-46cc-aea2-a299475b16e1",
       "name": "Potion of Water Breathing",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "You can breathe underwater for 1 hour after drinking this potion. Its cloudy green fluid smells of the sea and has a jellyfish-like bubble floating in it.",
@@ -3424,9 +5050,86 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "potion",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {
@@ -4375,7 +6078,7 @@
     {
       "id": "70aa4faa-0b32-408a-860c-4c87230531c8",
       "name": "Spell Scroll",
-      "type": "item",
+      "type": "consumable",
       "data": {
         "identifier": "",
         "description": "A spell scroll bears the words of a single spell, written in a mystical cipher. If the spell is on your class's spell list, you can use an action to read the scroll and cast its spell without having to provide any of the spell's components. Otherwise, the scroll is unintelligible.\n\nIf the spell is on your class's spell list but of a higher level than you can normally cast, you must make an ability check using your spellcasting ability to determine whether you cast it successfully. The DC equals 10+the spell's level. On a failed check, the spell disappears from the scroll with no other effect. Once the spell is cast, the words on the scroll fade, and the scroll itself crumbles to dust.\n\nThe level of the spell on the scroll determines the spell's saving throw DC and attack bonus, as well as the scroll's rarity, as shown in the Spell Scroll table.\n\nTable- Spell Scroll\n\nSpell Level  |  Rarity  |  Save DC  |  Attack Bonus\n\nCantrip  |  Common  |  13  |  +5\n\n1st  |  Common  |  13  |  +5\n\n2nd  |  Uncommon  |  13  |  +5\n\n3rd  |  Uncommon  |  15  |  +7\n\n4th  |  Rare  |  15  |  +7\n\n5th  |  Rare  |  17  |  +9\n\n6th  |  Very rare  |  17  |  +9\n\n7th  |  Very rare  |  18  |  +10\n\n8th  |  Very rare  |  18  |  +10\n\n9th  |  Legendary  |  19  |  +11\n\nA wizard spell on a spell scroll can be copied just as spells in spellbooks can be copied. When a spell is copied from a the copier must succeed on an Intelligence (Arcana) check with a DC equal to 10+the spell's level. If the check succeeds, the spell is successfully copied. Whether the check succeeds or fails, the spell scroll is destroyed.",
@@ -4390,9 +6093,86 @@
           "sp": 0,
           "cp": 0
         },
-        "category": "gear",
-        "magical": true,
-        "identified": true
+        "consumableType": "scroll",
+        "uses": {
+          "value": 1,
+          "max": 1,
+          "recovery": "none",
+          "recharge": 0
+        },
+        "destroyOnEmpty": true,
+        "healing": {
+          "formula": ""
+        },
+        "damage": {
+          "formula": "",
+          "type": ""
+        },
+        "spell": {
+          "name": "",
+          "level": 0
+        },
+        "bonuses": {
+          "abilities": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "saves": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0,
+            "all": 0
+          },
+          "da": 0,
+          "baseAC": 0,
+          "bonusAC": 0,
+          "prof": 0,
+          "spellDC": 0,
+          "rm": 0,
+          "attack": {
+            "melee": 0,
+            "ranged": 0
+          },
+          "speed": 0,
+          "initiative": 0,
+          "weaponProficiencies": [],
+          "armorProficiencies": [],
+          "hp": 0,
+          "hpFormula": "",
+          "damage": {
+            "all": 0,
+            "cantrip": 0,
+            "weapon": 0,
+            "spell": 0,
+            "formula": "",
+            "globalAttack": "",
+            "globalSave": ""
+          },
+          "skills": [],
+          "skillMultipliers": [],
+          "trainedSkill": "",
+          "crit": {
+            "modifiesCrit": false,
+            "rangeMultiplier": 1,
+            "fixedReduction": 0,
+            "multiplierBonus": 0
+          },
+          "traits": {
+            "di": [],
+            "dr": [],
+            "dv": [],
+            "ci": []
+          },
+          "fullOffHandDamage": false,
+          "isAdeptWeapon": false
+        }
       }
     },
     {

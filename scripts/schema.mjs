@@ -98,6 +98,7 @@ function defaultBaseItem() {
     attunement: 'none', // 'none' | 'required' | 'attuned'
     source: '',
     price: { gp: 0, sp: 0, cp: 0 },
+    container: '',
   };
 }
 
@@ -121,7 +122,8 @@ export function getDefaultData(type) {
           // prepEncumbrance() (prepare-data.mjs), nunca editados na mão.
           encumbrance: { enabled: false, weight: 0, capacity: 0, tier: 'none', overCapacity: false },
           initiative: { value: 0, total: 0 },
-          speed: { value: '9m' },
+          movement: { walk: 0, fly: 0, swim: 0, climb: 0, burrow: 0, hover: false },
+          senses: { darkvision: 0, blindsight: 0, tremorsense: 0, truesight: 0 },
           meleeBonus: 0, rangedBonus: 0, rm: 0,
           featureDamageBonus: 0, featureDamageFormula: '',
           featureAttackMelee: 0, featureAttackRanged: 0,
@@ -181,7 +183,8 @@ export function getDefaultData(type) {
           da: { value: 10, base: null, magic: 0, bonus: 0 },
           prof: { value: 2 },
           initiative: { value: 0, bonus: 0, total: 0 },
-          speed: { value: '9m' },
+          movement: { walk: 9, fly: 0, swim: 0, climb: 0, burrow: 0, hover: false },
+          senses: { darkvision: 0, blindsight: 0, tremorsense: 0, truesight: 0 },
         },
         resources: { health: { value: 10, max: 10, bonus: 0, temp: 0 } },
         skills: defaultSkills(),
@@ -194,6 +197,36 @@ export function getDefaultData(type) {
           traits: { di: [], dr: [], dv: [], ci: [] },
           languages: { value: [], custom: '' },
         },
+      };
+
+    case 'group':
+      return {
+        members: [],
+        description: '',
+        currency: { pp: 0, gp: 0, ep: 0, sp: 0, cp: 0 },
+      };
+
+    case 'vehicle':
+      return {
+        vehicleType: 'water',
+        attributes: {
+          ac: 10,
+          damageThreshold: 0,
+          movement: { walk: 0, fly: 0, swim: 0, climb: 0, burrow: 0, hover: false },
+          travelSpeed: 0,
+        },
+        resources: { health: { value: 10, max: 10, bonus: 0, temp: 0 } },
+        traits: { di: ['poison', 'psychic'], dr: [], dv: [], ci: [] },
+        crew: { max: 0, members: [] },
+        passengers: { max: 0, members: [] },
+        cargo: { value: 0, max: 0 },
+        description: '',
+      };
+
+    case 'encounter':
+      return {
+        members: [],
+        description: '',
       };
 
     case 'weapon':
@@ -300,6 +333,42 @@ export function getDefaultData(type) {
         script: '',
       };
 
+    case 'consumable':
+      return {
+        ...defaultBaseItem(),
+        // 'potion' | 'scroll' | 'ammo' | 'poison' | 'food' | 'other'
+        consumableType: 'potion',
+        uses: { value: 1, max: 1, recovery: 'none', recharge: 0 },
+        destroyOnEmpty: true,
+        healing: { formula: '' },
+        damage: { formula: '', type: '' },
+        spell: { name: '', level: 0 },
+        bonuses: defaultBonuses(),
+      };
+
+    case 'tool':
+      return {
+        ...defaultBaseItem(),
+        // 'artisan' | 'gaming' | 'musical' | 'kit' | 'other'
+        toolType: 'artisan',
+        ability: 'dex',
+        bonus: 0,
+      };
+
+    case 'loot':
+      return {
+        ...defaultBaseItem(),
+        // 'gem' | 'art' | 'tradegood' | 'junk' | 'other'
+        lootType: 'gem',
+      };
+
+    case 'container':
+      return {
+        ...defaultBaseItem(),
+        capacity: { type: 'weight', value: 0 },
+        weightlessContents: false,
+      };
+
     // Race/Class/Background — items embedded on the actor (real dnd5e pattern:
     // see templates/actors/parts/actor-classes.hbs from the abandoned port,
     // which reads `actor.itemTypes.class` instead of a loose field). Ready-made
@@ -310,7 +379,8 @@ export function getDefaultData(type) {
         ...defaultBaseItem(),
         creatureType: 'humanoid',
         size: 'med',
-        speed: '9m',
+        movement: { walk: 9, fly: 0, swim: 0, climb: 0, burrow: 0, hover: false },
+        senses: { darkvision: 0, blindsight: 0, tremorsense: 0, truesight: 0 },
       };
 
     case 'class':

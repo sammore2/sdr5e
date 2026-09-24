@@ -77,3 +77,93 @@ export function currentAdvantageMode() {
 export function isCriticalHeld() {
   return _altDown;
 }
+
+// ── Compendium search helper (shared by character-wizard and level-up-wizard) ──
+// Extracted so subclass search is not duplicated between the two wizards.
+// `includeData` is true for subclass/spell (filtered by classIdentifier/classes).
+export async function searchCompendiumEntries(entryType, query, includeData = false) {
+  const { api } = await import('/_loom/sdk/index.js');
+  const params = new URLSearchParams({ entryType });
+  if (query) params.set('search', query);
+  if (includeData) params.set('includeData', 'true');
+  try {
+    const res = await api.get(`/compendium/browse/entries?${params}`);
+    return res?.entries ?? [];
+  } catch (err) {
+    console.warn('[srd5e] compendium search failed:', err);
+    return [];
+  }
+}
+
+// ── Shared form saver for group/vehicle/encounter sheets (A1) ──
+function setPathValueArrayAware(obj, path, value) {
+  const parts = path.split('.');
+  let target = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    const key = parts[i];
+    const nextKey = parts[i + 1];
+    const isIndex = /^\d+$/.test(key);
+    const nextIsIndex = /^\d+$/.test(nextKey);
+    if (isIndex) {
+      const idx = Number(key);
+      if (!Array.isArray(target)) target = [];
+      if (target[idx] == null || typeof target[idx] !== 'object') target[idx] = nextIsIndex ? [] : {};
+      target = target[idx];
+    } else {
+      if (!target[key] || typeof target[key] !== 'object') {
+        target[key] = nextIsIndex ? [] : {};
+      }
+      target = target[key];
+    }
+  }
+  const last = parts[parts.length - 1];
+  if (/^\d+$/.test(last) && Array.isArray(target)) {
+    target[Number(last)] = value;
+  } else {
+    target[last] = value;
+  }
+}
+
+export function attachFormSaver(sheet) {
+  sheet._pendingFields = new Map();
+  sheet._formSaveTimer = null;
+  sheet._onChangeForm = function(event) {
+    const target = event?.target;
+    if (!target) return;
+    if (!target.name) return;
+    if (target.name !== 'name' && !target.name.startsWith('sd:') && !target.name.startsWith('systemData.')) return;
+    const value = target.type === 'checkbox' ? target.checked
+      : target.type === 'number' ? Number(target.value)
+      : target.value;
+    sheet._pendingFields.set(target.name, value);
+    clearTimeout(sheet._formSaveTimer);
+    sheet._formSaveTimer = setTimeout(() => sheet._flushPendingFields(), 300);
+  };
+  sheet._flushPendingFields = async function() {
+    if (!sheet.document || sheet._pendingFields.size === 0) return;
+    const pending = sheet._pendingFields;
+    sheet._pendingFields = new Map();
+    const sd = sheet.document.systemData || {};
+    let name;
+    for (const [key, value] of pending) {
+      if (key === 'name') name = value;
+      else if (key.startsWith('sd:')) setPathValueArrayAware(sd, key.slice(3), value);
+      else if (key.startsWith('systemData.')) setPathValueArrayAware(sd, key.slice('systemData.'.length), value);
+    }
+    const submitData = { systemData: sd };
+    if (name !== undefined) submitData.name = name;
+    const { api } = await import('/_loom/sdk/index.js');
+    await api.put(`${sheet.apiRoute}/${sheet.document.id}`, submitData);
+    if (typeof sheet._reloadDocument === 'function') await sheet._reloadDocument();
+  };
+}
+
+// ── Drop payload helper (B11) ──
+export function readDropPayload(event) {
+  let data = null;
+  try {
+    const raw = event.dataTransfer?.getData('application/json') || event.dataTransfer?.getData('text/plain');
+    if (raw) data = JSON.parse(raw);
+  } catch {}
+  return data;
+}
