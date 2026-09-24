@@ -86,8 +86,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 0,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -338,8 +349,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -590,8 +612,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -842,8 +875,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 9,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -1094,8 +1138,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 9,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -1346,8 +1401,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -1598,8 +1664,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 12,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -1850,8 +1927,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -2102,8 +2190,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -2354,8 +2453,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 12,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -2606,8 +2716,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -2858,8 +2979,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 9,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -3110,8 +3242,19 @@
             "bonus": 0,
             "total": 5
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 27,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": true
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -3362,8 +3505,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -3614,8 +3768,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 12,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -3866,8 +4031,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 12,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -4118,8 +4294,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -4370,8 +4557,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 12,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -4622,8 +4820,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -4874,8 +5083,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -5126,8 +5346,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 12,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -5378,8 +5609,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -5630,8 +5872,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 12,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -5882,8 +6135,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 36
           }
         },
         "resources": {
@@ -6134,8 +6398,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "8m"
+          "movement": {
+            "walk": 8,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -6386,8 +6661,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 3,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 18,
+            "truesight": 0
           }
         },
         "resources": {
@@ -6638,8 +6924,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -6890,8 +7187,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -7142,8 +7450,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -7394,8 +7713,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -7646,8 +7976,19 @@
             "bonus": 0,
             "total": -2
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -7898,8 +8239,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -8150,8 +8502,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -8402,8 +8765,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -8654,8 +9028,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 2,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 9,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -8906,8 +9291,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 36
           }
         },
         "resources": {
@@ -9158,8 +9554,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -9410,8 +9817,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -9662,8 +10080,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -9914,8 +10343,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -10166,8 +10606,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "2m"
+          "movement": {
+            "walk": 2,
+            "fly": 9,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -10418,8 +10869,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -10670,8 +11132,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 12,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 27,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -10922,8 +11395,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -11174,8 +11658,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -11426,8 +11921,19 @@
             "bonus": 0,
             "total": -3
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 6,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -11678,8 +12184,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -11930,8 +12447,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -12182,8 +12710,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -12434,8 +12973,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 12,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -12686,8 +13236,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -12938,8 +13499,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -13190,8 +13762,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 12,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 18,
+            "truesight": 0
           }
         },
         "resources": {
@@ -13442,8 +14025,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -13694,8 +14288,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -13946,8 +14551,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -14198,8 +14814,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -14450,8 +15077,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -14702,8 +15340,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -14954,8 +15603,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -15206,8 +15866,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 12,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -15458,8 +16129,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -15710,8 +16392,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 12,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -15962,8 +16655,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -16214,8 +16918,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -16466,8 +17181,19 @@
             "bonus": 0,
             "total": 5
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 27,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 36
           }
         },
         "resources": {
@@ -16718,8 +17444,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 6,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -16970,8 +17707,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -17222,8 +17970,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -17474,8 +18233,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -17726,8 +18496,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -17978,8 +18759,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 9,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -18230,8 +19022,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -18482,8 +19285,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -18734,8 +19548,19 @@
             "bonus": 0,
             "total": 4
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 27,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -18986,8 +19811,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -19238,8 +20074,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 27,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -19490,8 +20337,19 @@
             "bonus": 0,
             "total": 4
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -19742,8 +20600,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -19994,8 +20863,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -20246,8 +21126,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -20498,8 +21389,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -20750,8 +21652,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -21002,8 +21915,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -21254,8 +22178,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "8m"
+          "movement": {
+            "walk": 8,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -21506,8 +22441,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 9,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -21758,8 +22704,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -22010,8 +22967,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 9,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 18,
+            "truesight": 0
           }
         },
         "resources": {
@@ -22262,8 +23230,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -22514,8 +23493,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -22766,8 +23756,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -23018,8 +24019,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -23270,8 +24282,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 36
           }
         },
         "resources": {
@@ -23522,8 +24545,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -23774,8 +24808,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -24026,8 +25071,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -24278,8 +25334,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -24530,8 +25597,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -24782,8 +25860,19 @@
             "bonus": 0,
             "total": 4
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -25034,8 +26123,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 15,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": true
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -25286,8 +26386,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 6,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 9,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -25538,8 +26649,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -25790,8 +26912,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -26042,8 +27175,19 @@
             "bonus": 0,
             "total": -4
           },
-          "speed": {
-            "value": "5m"
+          "movement": {
+            "walk": 5,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -26294,8 +27438,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -26546,8 +27701,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 12,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": true
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -26798,8 +27964,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -27050,8 +28227,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 12,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -27302,8 +28490,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 3,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 9,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -27554,8 +28753,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -27806,8 +29016,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -28058,8 +29279,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -28310,8 +29542,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -28562,8 +29805,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -28814,8 +30068,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 15,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -29066,8 +30331,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 24,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -29318,8 +30594,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "18m"
+          "movement": {
+            "walk": 18,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -29570,8 +30857,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -29822,8 +31120,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 9,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -30074,8 +31383,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -30326,8 +31646,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -30578,8 +31909,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 9,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -30830,8 +32172,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 0,
+            "swim": 18,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -31082,8 +32435,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "2m"
+          "movement": {
+            "walk": 2,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -31334,8 +32698,19 @@
             "bonus": 0,
             "total": 4
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -31586,8 +32961,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -31838,8 +33224,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -32090,8 +33487,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -32342,8 +33750,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 15,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -32594,8 +34013,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -32846,8 +34276,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 9,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -33098,8 +34539,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -33350,8 +34802,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 15,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -33602,8 +35065,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -33854,8 +35328,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 12,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -34106,8 +35591,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 0,
+            "swim": 3,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -34358,8 +35854,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 36
           }
         },
         "resources": {
@@ -34610,8 +36117,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -34862,8 +36380,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -35114,8 +36643,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -35366,8 +36906,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -35618,8 +37169,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -35870,8 +37432,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -36122,8 +37695,19 @@
             "bonus": 0,
             "total": -2
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 0,
+            "swim": 0,
+            "climb": 3,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -36374,8 +37958,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -36626,8 +38221,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -36878,8 +38484,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 24,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -37130,8 +38747,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -37382,8 +39010,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -37634,8 +39273,19 @@
             "bonus": 0,
             "total": 4
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -37886,8 +39536,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 36
           }
         },
         "resources": {
@@ -38138,8 +39799,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -38390,8 +40062,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 12,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -38642,8 +40325,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -38894,8 +40588,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -39146,8 +40851,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -39398,8 +41114,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -39650,8 +41377,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -39902,8 +41640,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -40154,8 +41903,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 12,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -40406,8 +42166,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -40658,8 +42429,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -40910,8 +42692,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -41162,8 +42955,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -41414,8 +43218,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -41666,8 +43481,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 9,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -41918,8 +43744,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 12,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -42170,8 +44007,19 @@
             "bonus": 0,
             "total": 4
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 15,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": true
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -42422,8 +44270,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -42674,8 +44533,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -42926,8 +44796,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 18,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 36,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -43178,8 +45059,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -43430,8 +45322,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -43682,8 +45585,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 18,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 36
           }
         },
         "resources": {
@@ -43934,8 +45848,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -44186,8 +46111,19 @@
             "bonus": 0,
             "total": -3
           },
-          "speed": {
-            "value": "5m"
+          "movement": {
+            "walk": 5,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -44438,8 +46374,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 36
           }
         },
         "resources": {
@@ -44690,8 +46637,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -44942,8 +46900,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 6,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 9,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -45194,8 +47163,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -45446,8 +47426,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -45698,8 +47689,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 9,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -45950,8 +47952,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -46202,8 +48215,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -46454,8 +48478,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 15,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -46706,8 +48741,19 @@
             "bonus": 0,
             "total": 5
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 36
           }
         },
         "resources": {
@@ -46958,8 +49004,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -47210,8 +49267,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -47462,8 +49530,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 0,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -47714,8 +49793,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 0,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -47966,8 +50056,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "5m"
+          "movement": {
+            "walk": 5,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -48218,8 +50319,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -48470,8 +50582,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -48722,8 +50845,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -48974,8 +51108,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -49226,8 +51371,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -49478,8 +51634,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 9,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 36
           }
         },
         "resources": {
@@ -49730,8 +51897,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -49982,8 +52160,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "18m"
+          "movement": {
+            "walk": 18,
+            "fly": 27,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -50234,8 +52423,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -50486,8 +52686,19 @@
             "bonus": 0,
             "total": -2
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 0,
+            "swim": 0,
+            "climb": 3,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -50738,8 +52949,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "2m"
+          "movement": {
+            "walk": 2,
+            "fly": 0,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 9,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -50990,8 +53212,19 @@
             "bonus": 0,
             "total": -2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -51242,8 +53475,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -51494,8 +53738,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 9,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -51746,8 +54001,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -51998,8 +54264,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -52250,8 +54527,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "2m"
+          "movement": {
+            "walk": 2,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -52502,8 +54790,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -52754,8 +55053,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 12,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -53006,8 +55316,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "18m"
+          "movement": {
+            "walk": 18,
+            "fly": 27,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -53258,8 +55579,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -53510,8 +55842,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 36
           }
         },
         "resources": {
@@ -53762,8 +56105,19 @@
             "bonus": 0,
             "total": 5
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 36,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 36
           }
         },
         "resources": {
@@ -54014,8 +56368,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -54266,8 +56631,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -54518,8 +56894,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -54770,8 +57157,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -55022,8 +57420,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -55274,8 +57683,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "5m"
+          "movement": {
+            "walk": 5,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -55526,8 +57946,19 @@
             "bonus": 0,
             "total": -2
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 9,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 9,
+            "tremorsense": 18,
+            "truesight": 0
           }
         },
         "resources": {
@@ -55778,8 +58209,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -56030,8 +58472,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -56282,8 +58735,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -56534,8 +58998,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 9,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -56786,8 +59261,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 15,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -57038,8 +59524,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -57290,8 +59787,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 6,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 18,
+            "truesight": 0
           }
         },
         "resources": {
@@ -57542,8 +60050,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -57794,8 +60313,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "18m"
+          "movement": {
+            "walk": 18,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -58046,8 +60576,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 36,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -58298,8 +60839,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 0,
+            "swim": 0,
+            "climb": 3,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -58550,8 +61102,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -58802,8 +61365,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -59054,8 +61628,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -59306,8 +61891,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -59558,8 +62154,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -59810,8 +62417,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -60062,8 +62680,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -60314,8 +62943,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -60566,8 +63206,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -60818,8 +63469,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 6,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -61070,8 +63732,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -61322,8 +63995,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 6,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -61574,8 +64258,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -61826,8 +64521,19 @@
             "bonus": 0,
             "total": -5
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -62078,8 +64784,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -62330,8 +65047,19 @@
             "bonus": 0,
             "total": 6
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 45,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 36
           }
         },
         "resources": {
@@ -62582,8 +65310,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 15,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": true
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -62834,8 +65573,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 6,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 9,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -63086,8 +65836,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -63338,8 +66099,19 @@
             "bonus": 0,
             "total": 4
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 12,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -63590,8 +66362,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -63842,8 +66625,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 9,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -64094,8 +66888,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 12,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -64346,8 +67151,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -64598,8 +67414,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -64850,8 +67677,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 15,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -65102,8 +67940,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -65354,8 +68203,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 9,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 18,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -65606,8 +68466,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 6,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -65858,8 +68729,19 @@
             "bonus": 0,
             "total": 4
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -66110,8 +68992,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 0,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -66362,8 +69255,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 9,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -66614,8 +69518,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 15,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -66866,8 +69781,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 36,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -67118,8 +70044,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -67370,8 +70307,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -67622,8 +70570,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -67874,8 +70833,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -68126,8 +71096,19 @@
             "bonus": 0,
             "total": -1
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -68378,8 +71359,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -68630,8 +71622,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -68882,8 +71885,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -69134,8 +72148,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -69386,8 +72411,19 @@
             "bonus": 0,
             "total": 4
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -69638,8 +72674,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -69890,8 +72937,19 @@
             "bonus": 0,
             "total": -5
           },
-          "speed": {
-            "value": "2m"
+          "movement": {
+            "walk": 2,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -70142,8 +73200,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -70394,8 +73463,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "3m"
+          "movement": {
+            "walk": 3,
+            "fly": 15,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -70646,8 +73726,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "18m"
+          "movement": {
+            "walk": 18,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -70898,8 +73989,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "18m"
+          "movement": {
+            "walk": 18,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -71150,8 +74252,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 27,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -71402,8 +74515,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -71654,8 +74778,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -71906,8 +75041,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -72158,8 +75304,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -72410,8 +75567,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -72662,8 +75830,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -72914,8 +76093,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -73166,8 +76356,19 @@
             "bonus": 0,
             "total": 9
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 15,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": true
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -73418,8 +76619,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -73670,8 +76882,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 0,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -73922,8 +77145,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "15m"
+          "movement": {
+            "walk": 15,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -74174,8 +77408,19 @@
             "bonus": 0,
             "total": 3
           },
-          "speed": {
-            "value": "0m"
+          "movement": {
+            "walk": 0,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": true
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -74426,8 +77671,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -74678,8 +77934,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 5,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -74930,8 +78197,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 5,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -75182,8 +78460,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -75434,8 +78723,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -75686,8 +78986,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -75938,8 +79249,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -76190,8 +79512,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 0,
+            "climb": 9,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -76442,8 +79775,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -76694,8 +80038,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "9m"
+          "movement": {
+            "walk": 9,
+            "fly": 18,
+            "swim": 9,
+            "climb": 0,
+            "burrow": 5,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 3,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -76946,8 +80301,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 24,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -77198,8 +80564,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 6,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 18,
+            "truesight": 0
           }
         },
         "resources": {
@@ -77450,8 +80827,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -77702,8 +81090,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 6,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -77954,8 +81353,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 6,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -78206,8 +81616,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -78458,8 +81879,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 12,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -78710,8 +82142,19 @@
             "bonus": 0,
             "total": 2
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -78962,8 +82405,19 @@
             "bonus": 0,
             "total": 1
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -79214,8 +82668,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 12,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -79466,8 +82931,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -79718,8 +83194,19 @@
             "bonus": 0,
             "total": 0
           },
-          "speed": {
-            "value": "12m"
+          "movement": {
+            "walk": 12,
+            "fly": 24,
+            "swim": 12,
+            "climb": 0,
+            "burrow": 6,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 36,
+            "blindsight": 9,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {
@@ -79970,8 +83457,19 @@
             "bonus": 0,
             "total": -2
           },
-          "speed": {
-            "value": "6m"
+          "movement": {
+            "walk": 6,
+            "fly": 0,
+            "swim": 0,
+            "climb": 0,
+            "burrow": 0,
+            "hover": false
+          },
+          "senses": {
+            "darkvision": 18,
+            "blindsight": 0,
+            "tremorsense": 0,
+            "truesight": 0
           }
         },
         "resources": {

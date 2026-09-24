@@ -2,7 +2,10 @@
   "TYPES": {
     "Actor": {
       "character": "Character",
-      "npc": "NPC"
+      "npc": "NPC",
+      "group": "Group",
+      "vehicle": "Vehicle",
+      "encounter": "Encounter"
     },
     "Armor": {
       "AC": "AC",

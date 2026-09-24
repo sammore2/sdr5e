@@ -22,7 +22,20 @@
         },
         "creatureType": "humanoid",
         "size": "med",
-        "speed": "9m"
+        "movement": {
+          "walk": 9,
+          "fly": 0,
+          "swim": 0,
+          "climb": 0,
+          "burrow": 0,
+          "hover": false
+        },
+        "senses": {
+          "darkvision": 0,
+          "blindsight": 0,
+          "tremorsense": 0,
+          "truesight": 0
+        }
       }
     },
     {
@@ -45,7 +58,20 @@
         },
         "creatureType": "humanoid",
         "size": "med",
-        "speed": "8m"
+        "movement": {
+          "walk": 8,
+          "fly": 0,
+          "swim": 0,
+          "climb": 0,
+          "burrow": 0,
+          "hover": false
+        },
+        "senses": {
+          "darkvision": 18,
+          "blindsight": 0,
+          "tremorsense": 0,
+          "truesight": 0
+        }
       }
     },
     {
@@ -68,7 +94,20 @@
         },
         "creatureType": "humanoid",
         "size": "med",
-        "speed": "8m"
+        "movement": {
+          "walk": 8,
+          "fly": 0,
+          "swim": 0,
+          "climb": 0,
+          "burrow": 0,
+          "hover": false
+        },
+        "senses": {
+          "darkvision": 18,
+          "blindsight": 0,
+          "tremorsense": 0,
+          "truesight": 0
+        }
       }
     },
     {
@@ -91,7 +130,20 @@
         },
         "creatureType": "humanoid",
         "size": "med",
-        "speed": "9m"
+        "movement": {
+          "walk": 9,
+          "fly": 0,
+          "swim": 0,
+          "climb": 0,
+          "burrow": 0,
+          "hover": false
+        },
+        "senses": {
+          "darkvision": 18,
+          "blindsight": 0,
+          "tremorsense": 0,
+          "truesight": 0
+        }
       }
     },
     {
@@ -114,7 +166,20 @@
         },
         "creatureType": "humanoid",
         "size": "med",
-        "speed": "9m"
+        "movement": {
+          "walk": 9,
+          "fly": 0,
+          "swim": 0,
+          "climb": 0,
+          "burrow": 0,
+          "hover": false
+        },
+        "senses": {
+          "darkvision": 18,
+          "blindsight": 0,
+          "tremorsense": 0,
+          "truesight": 0
+        }
       }
     },
     {
@@ -137,7 +202,20 @@
         },
         "creatureType": "humanoid",
         "size": "sm",
-        "speed": "8m"
+        "movement": {
+          "walk": 8,
+          "fly": 0,
+          "swim": 0,
+          "climb": 0,
+          "burrow": 0,
+          "hover": false
+        },
+        "senses": {
+          "darkvision": 18,
+          "blindsight": 0,
+          "tremorsense": 0,
+          "truesight": 0
+        }
       }
     },
     {
@@ -160,7 +238,20 @@
         },
         "creatureType": "humanoid",
         "size": "sm",
-        "speed": "8m"
+        "movement": {
+          "walk": 8,
+          "fly": 0,
+          "swim": 0,
+          "climb": 0,
+          "burrow": 0,
+          "hover": false
+        },
+        "senses": {
+          "darkvision": 18,
+          "blindsight": 0,
+          "tremorsense": 0,
+          "truesight": 0
+        }
       }
     },
     {
@@ -183,7 +274,20 @@
         },
         "creatureType": "humanoid",
         "size": "med",
-        "speed": "9m"
+        "movement": {
+          "walk": 9,
+          "fly": 0,
+          "swim": 0,
+          "climb": 0,
+          "burrow": 0,
+          "hover": false
+        },
+        "senses": {
+          "darkvision": 18,
+          "blindsight": 0,
+          "tremorsense": 0,
+          "truesight": 0
+        }
       }
     },
     {
@@ -206,7 +310,20 @@
         },
         "creatureType": "humanoid",
         "size": "med",
-        "speed": "9m"
+        "movement": {
+          "walk": 9,
+          "fly": 0,
+          "swim": 0,
+          "climb": 0,
+          "burrow": 0,
+          "hover": false
+        },
+        "senses": {
+          "darkvision": 18,
+          "blindsight": 0,
+          "tremorsense": 0,
+          "truesight": 0
+        }
       }
     },
     {
@@ -229,7 +346,20 @@
         },
         "creatureType": "humanoid",
         "size": "sm",
-        "speed": "8m"
+        "movement": {
+          "walk": 8,
+          "fly": 0,
+          "swim": 0,
+          "climb": 0,
+          "burrow": 0,
+          "hover": false
+        },
+        "senses": {
+          "darkvision": 0,
+          "blindsight": 0,
+          "tremorsense": 0,
+          "truesight": 0
+        }
       }
     },
     {
@@ -252,7 +382,20 @@
         },
         "creatureType": "humanoid",
         "size": "sm",
-        "speed": "8m"
+        "movement": {
+          "walk": 8,
+          "fly": 0,
+          "swim": 0,
+          "climb": 0,
+          "burrow": 0,
+          "hover": false
+        },
+        "senses": {
+          "darkvision": 0,
+          "blindsight": 0,
+          "tremorsense": 0,
+          "truesight": 0
+        }
       }
     },
     {
@@ -275,7 +418,20 @@
         },
         "creatureType": "humanoid",
         "size": "med",
-        "speed": "9m"
+        "movement": {
+          "walk": 9,
+          "fly": 0,
+          "swim": 0,
+          "climb": 0,
+          "burrow": 0,
+          "hover": false
+        },
+        "senses": {
+          "darkvision": 0,
+          "blindsight": 0,
+          "tremorsense": 0,
+          "truesight": 0
+        }
       }
     },
     {
@@ -298,7 +454,20 @@
         },
         "creatureType": "humanoid",
         "size": "med",
-        "speed": "9m"
+        "movement": {
+          "walk": 9,
+          "fly": 0,
+          "swim": 0,
+          "climb": 0,
+          "burrow": 0,
+          "hover": false
+        },
+        "senses": {
+          "darkvision": 18,
+          "blindsight": 0,
+          "tremorsense": 0,
+          "truesight": 0
+        }
       }
     }
   ]

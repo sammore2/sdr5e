@@ -9,8 +9,81 @@
 // include these fields in an `api.put` payload — that's the sheet's job).
 // ══════════════════════════════════════════════════════════════════════════
 
-import { ABILITY_KEYS, SPELL_SLOT_TABLE, SIZE_CARRY_MULTIPLIER } from './config.mjs';
+import { ABILITY_KEYS, SPELL_SLOT_TABLE, SIZE_CARRY_MULTIPLIER, MOVEMENT_TYPES, SENSE_TYPES, feetToMeters } from './config.mjs';
 import { getSetting } from './settings.mjs';
+import { getDefaultData } from './schema.mjs';
+import { mergeDefaults } from './utils.mjs';
+
+export function parseDistance(text) {
+  const raw = String(text || '').trim().toLowerCase();
+  if (!raw) return 0;
+  const m = raw.match(/^([\d.]+)\s*(ft\.?|feet|m)?\.?\s*$/i);
+  if (!m) {
+    const num = Number(raw.replace(/[^0-9.]/g, ''));
+    if (!Number.isFinite(num)) return 0;
+    if (raw.includes('ft') || raw.includes('feet')) return feetToMeters(num);
+    return Math.round(num);
+  }
+  const num = Number(m[1]) || 0;
+  const unit = (m[2] || '').toLowerCase();
+  if (unit.startsWith('ft') || unit === 'feet') return feetToMeters(num);
+  if (unit === 'm') return Math.round(num);
+  return Math.round(num);
+}
+
+export function migrateLegacyMovement(target, actorType) {
+  if (!target || target.movement) return;
+  const sp = target.speed;
+  let walk = 0; let fly = 0; let swim = 0; let climb = 0; let burrow = 0; let hover = false;
+  const isCharacter = actorType === 'character';
+  if (typeof sp === 'string') {
+    walk = parseDistance(sp);
+    if (isCharacter && walk === 9 && sp.trim().toLowerCase() === '9m' && !fly && !swim && !climb && !burrow) {
+      walk = 0;
+    }
+  } else if (sp && typeof sp === 'object') {
+    walk = parseDistance(sp.value ?? sp.walk ?? '');
+    fly = parseDistance(sp.fly ?? 0);
+    swim = parseDistance(sp.swim ?? 0);
+    climb = parseDistance(sp.climb ?? 0);
+    burrow = parseDistance(sp.burrow ?? 0);
+    hover = !!sp.hover;
+    if (isCharacter && walk === 9 && String(sp.value||'').trim().toLowerCase() === '9m' && !fly && !swim && !climb && !burrow) {
+      walk = 0;
+    }
+  }
+  if (!walk && !fly && !swim && !climb && !burrow && !sp) {
+    walk = isCharacter ? 0 : 9;
+  }
+  target.movement = { walk, fly, swim, climb, burrow, hover };
+}
+
+export function migrateLegacySenses(attributes, details) {
+  if (!attributes || attributes.senses) return;
+  const out = { darkvision: 0, blindsight: 0, tremorsense: 0, truesight: 0 };
+  const sources = [];
+  if (details?.senses?.custom) sources.push(String(details.senses.custom));
+  if (Array.isArray(details?.senses?.value)) sources.push(...details.senses.value.map(String));
+  const re = /(darkvision|blindsight|tremorsense|truesight)\s+(\d+)\s*(ft\.?|feet|m)?/gi;
+  for (const src of sources) {
+    let m;
+    re.lastIndex = 0;
+    while ((m = re.exec(src)) !== null) {
+      const key = m[1].toLowerCase();
+      const num = Number(m[2]) || 0;
+      const unit = (m[3] || '').toLowerCase();
+      let meters = 0;
+      if (unit.startsWith('ft') || unit === 'feet') meters = feetToMeters(num);
+      else if (unit === 'm') meters = Math.round(num);
+      else {
+        if (num >= 10 && num % 5 === 0) meters = feetToMeters(num);
+        else meters = Math.round(num);
+      }
+      if (SENSE_TYPES.includes(key)) out[key] = Math.max(out[key], meters);
+    }
+  }
+  attributes.senses = out;
+}
 
 export function prepAbilities(sd) {
   for (const k of ABILITY_KEYS) {
@@ -120,7 +193,36 @@ export function prepInitiative(sd) {
 // Tipos de item que contam peso físico de verdade — feature/spell/race/
 // class/etc também herdam `weight` do schema base, mas não são objetos
 // carregados; incluir eles inflaria o peso à toa.
-const PHYSICAL_ITEM_TYPES = ['weapon', 'armor', 'item'];
+const PHYSICAL_ITEM_TYPES = ['weapon', 'armor', 'item', 'consumable', 'tool', 'loot', 'container'];
+
+// Total carried weight of physical items. Items anywhere inside an extradimensional
+// container (weightlessContents: true, e.g. Bag of Holding) don't count; the
+// container's own weight does. Shared by prepEncumbrance and the sheet's carrying display.
+export function computeCarriedWeight(items) {
+  const map = new Map((items || []).map((it) => [it.id, it]));
+  function isInsideWeightless(item) {
+    let cid = (item.system || item.data || {}).container;
+    const seen = new Set();
+    while (cid && !seen.has(cid)) {
+      seen.add(cid);
+      const cont = map.get(cid);
+      if (!cont) break;
+      const cdata = cont.system || cont.data || {};
+      if (cdata.weightlessContents) return true;
+      cid = cdata.container;
+    }
+    return false;
+  }
+  return (items || [])
+    .filter((i) => PHYSICAL_ITEM_TYPES.includes(i.type))
+    .filter((i) => !isInsideWeightless(i))
+    .reduce((sum, i) => {
+      const idata = i.system || i.data || {};
+      const w = Number(idata.weight) || 0;
+      const qty = Number(idata.quantity) || 1;
+      return sum + w * qty;
+    }, 0);
+}
 
 /**
  * Calcula `sd.attributes.encumbrance` (peso carregado, capacidade, e o
@@ -143,14 +245,7 @@ export function prepEncumbrance(sd, items) {
     return;
   }
 
-  const weight = (items || [])
-    .filter((i) => PHYSICAL_ITEM_TYPES.includes(i.type))
-    .reduce((sum, i) => {
-      const idata = i.system || i.data || {};
-      const w = Number(idata.weight) || 0;
-      const qty = Number(idata.quantity) || 1;
-      return sum + w * qty;
-    }, 0);
+  const weight = computeCarriedWeight(items);
 
   const str = sd.abilities.str.total || 10;
   // Tamanho fica no item 'race' (não existe campo de tamanho solto no
@@ -292,6 +387,46 @@ export function prepSpellSlots(sd, items) {
   applySingleClassSlots(slots, idata);
 }
 
+export function prepMovement(sd, items) {
+  if (!sd.attributes) return;
+  if (!sd.attributes.movement) sd.attributes.movement = { walk: 9, fly: 0, swim: 0, climb: 0, burrow: 0, hover: false };
+  if (!sd.attributes.senses) sd.attributes.senses = { darkvision: 0, blindsight: 0, tremorsense: 0, truesight: 0 };
+  const mv = sd.attributes.movement;
+  const se = sd.attributes.senses;
+  let raceMv = null; let raceSe = null;
+  if (items) {
+    const raceItem = items.find((i) => i.type === 'race');
+    if (raceItem) {
+      const rdata = raceItem.system || raceItem.data || {};
+      migrateLegacyMovement(rdata);
+      if (rdata.movement) raceMv = rdata.movement;
+      if (rdata.senses) raceSe = rdata.senses;
+    }
+  }
+  const effective = {};
+  const sensesEffective = {};
+  const exhaustion = Number(sd.resources?.exhaustion) || 0;
+  const hasSpeedPenalty = !!sd.attributes.armor?.speedPenalty;
+  for (const mode of MOVEMENT_TYPES) {
+    let base = Number(mv[mode]) || 0;
+    if (base === 0 && raceMv) base = Number(raceMv[mode]) || 0;
+    if (mode === 'walk' && base === 0) base = 9;
+    let val = base;
+    if (hasSpeedPenalty && val > 0) val = Math.max(0, val - 3);
+    if (exhaustion >= 5) val = 0;
+    else if (exhaustion >= 2) val = Math.floor(val / 2);
+    effective[mode] = val;
+  }
+  effective.hover = !!mv.hover || !!(raceMv?.hover);
+  for (const s of SENSE_TYPES) {
+    let base = Number(se[s]) || 0;
+    if (base === 0 && raceSe) base = Number(raceSe[s]) || 0;
+    sensesEffective[s] = base;
+  }
+  mv.effective = effective;
+  se.effective = sensesEffective;
+}
+
 export function prepCharacter(sd, items) {
   prepAbilities(sd);
   const level = Number(sd.details?.level) || 1;
@@ -325,6 +460,7 @@ export function prepCharacter(sd, items) {
   prepInitiative(sd);
   prepSpellSlots(sd, items);
   prepEncumbrance(sd, items);
+  prepMovement(sd, items);
 
   const sc = sd.attributes.spellcasting;
   if (sc) {
@@ -357,4 +493,38 @@ export function prepNpc(sd) {
     const mod = sd.abilities[k]?.modifier || 0;
     save.total = mod + (save.proficient ? prof : 0);
   }
+  prepMovement(sd, null);
 }
+// Full derived-data pass for one actor row (the ruleset's prepareData hook).
+// Legacy migration must run BEFORE mergeDefaults creates defaults, otherwise the
+// existence check (target.movement) would see the default and never migrate.
+export function prepareActorRow(row) {
+  const sd = row?.systemData;
+  if (!sd) return row;
+  if (sd.attributes) {
+    migrateLegacyMovement(sd.attributes, row.type);
+    migrateLegacySenses(sd.attributes, sd.details);
+  }
+  mergeDefaults(sd, getDefaultData(row.type));
+  if (row.type === 'vehicle') {
+    sd.attributes.da = { value: sd.attributes?.ac ?? 10, base: sd.attributes?.ac ?? 10, magic: 0, bonus: 0 };
+    sd.attributes.hp = sd.resources?.health;
+    return row;
+  }
+  if (!sd.abilities) return row;
+  if (row.type === 'npc') prepNpc(sd);
+  else prepCharacter(sd, row.items || []);
+  return row;
+}
+
+// Fetches an actor WITH its embedded items (the API only includes them with
+// ?populate=true) and runs the derived-data pass on a clone.
+export async function fetchPreparedActor(id) {
+  const { api } = await import('/_loom/sdk/index.js');
+  const raw = await api.get(`/actors/${id}?populate=true`);
+  if (!raw) return null;
+  const row = JSON.parse(JSON.stringify(raw));
+  row.items = raw.items || [];
+  return prepareActorRow(row);
+}
+
