@@ -1302,6 +1302,7 @@
   line-height: 1 !important;
   -webkit-appearance: none;
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .sdrn-ac-shield-num::-webkit-outer-spin-button,
@@ -1379,6 +1380,7 @@
   margin: 0 !important;
   -webkit-appearance: none;
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .sdrn-hp-cur::-webkit-outer-spin-button,
@@ -1668,6 +1670,7 @@
   line-height: 1.2 !important;
   -webkit-appearance: none;
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .sdrn-ability-pill-score::-webkit-outer-spin-button,
