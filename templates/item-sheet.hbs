@@ -1,62 +1,118 @@
-<div class="sdrn-item-root">
+<div class="sdrn-root sdrn-item-root">
 
-  <div class="sdrn-item-header">
-    <button type="button" class="sdrn-item-icon-lg" data-action="pick-icon" title="Click to set a custom icon image">
-      {{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}{{icon}}{{/if}}
-    </button>
-    <div class="sdrn-item-header-main">
-      <input type="text" class="sdrn-name-input sdrn-item-name-input" name="name" value="{{name}}" placeholder="Item Name" />
-      <div class="sdrn-item-header-row">
-        <label>Rarity</label>
-        <input type="text" name="sd:rarity" value="{{rarity}}" />
-        <label>Weight</label>
-        <input type="number" name="sd:weight" value="{{weight}}" step="0.1" /> <span class="sdrn-empty">lb</span>
-        <label>Price</label>
-        <input type="number" name="sd:price.gp" value="{{priceGp}}" /> <span class="sdrn-empty">gp</span>
-        {{#if hasQuantity}}
-        <label>Qty</label>
-        <input type="number" name="sd:quantity" value="{{quantity}}" />
-        {{/if}}
+  <div class="sdrn-item-container">
+
+    <!-- Header do Item com Ícone Flutuante e Chips ReUI -->
+    <header class="sdrn-item-header-v3">
+      <div class="sdrn-item-icon-col">
+        <button type="button" class="sdrn-item-icon-picker" data-action="pick-icon" title="Click to change item icon">
+          {{#if imgUrl}}
+          <img src="{{imgUrl}}" alt="" class="sdrn-item-icon-img" />
+          {{else}}
+          <span class="sdrn-item-icon-symbol">{{icon}}</span>
+          {{/if}}
+          <div class="sdrn-item-icon-overlay"><i class="fas fa-camera"></i></div>
+        </button>
       </div>
-    </div>
-  </div>
 
-  <nav class="sdrn-item-tabs">
-    <button type="button" class="sdrn-item-tab-btn active" data-action="item-tab" data-tab="description">Description</button>
-    <button type="button" class="sdrn-item-tab-btn" data-action="item-tab" data-tab="details">Details</button>
-  </nav>
+      <div class="sdrn-item-header-main">
+        <input type="text" class="sdrn-name-input sdrn-item-name-input" name="name" value="{{name}}" placeholder="Item Name" />
 
-  <div data-item-tab-content="description" class="sdrn-item-tab-panel">
-    <div class="sdrn-item-section">
-      <div class="sdrn-item-section-title">Description</div>
-      <textarea name="sd:description" rows="8" placeholder="No description yet.">{{description}}</textarea>
-    </div>
-    <div class="sdrn-item-tags">
-      {{#each tags}}<span class="sdrn-tag sdrn-item-tag">{{this}}</span>{{/each}}
-    </div>
-  </div>
+        <!-- Metric Chips no Estilo ReUI / Foundry v3 -->
+        <div class="sdrn-item-metric-chips">
+          <div class="sdrn-metric-chip rarity" title="Item Rarity">
+            <span class="sdrn-chip-label">RARITY</span>
+            <input type="text" name="sd:rarity" value="{{rarity}}" placeholder="Common" class="sdrn-chip-input" />
+          </div>
 
-  <div data-item-tab-content="details" class="sdrn-item-tab-panel" style="display:none">
-    <div class="sdrn-item-fields">
-      {{#each fields}}
-      <div class="sdrn-item-field sdrn-item-field-{{type}}">
-        <label>{{label}}</label>
-        {{#if isTextarea}}
-        <textarea name="sd:{{key}}" rows="3">{{value}}</textarea>
-        {{else if isBoolean}}
-        <input type="checkbox" name="sd:{{key}}" {{#if value}}checked{{/if}} />
-        {{else if isNumber}}
-        <input type="number" name="sd:{{key}}" value="{{value}}" />
-        {{else if isSelect}}
-        <select name="sd:{{key}}">
-          {{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
-        </select>
-        {{else}}
-        <input type="text" name="sd:{{key}}" value="{{value}}" />
-        {{/if}}
+          <div class="sdrn-metric-chip weight" title="Weight in pounds">
+            <span class="sdrn-chip-label"><i class="fas fa-weight-hanging"></i> WT</span>
+            <input type="number" name="sd:weight" value="{{weight}}" step="0.1" placeholder="0" class="sdrn-chip-input" />
+            <span class="sdrn-chip-unit">lb</span>
+          </div>
+
+          <div class="sdrn-metric-chip price" title="Price in Gold Pieces">
+            <span class="sdrn-chip-label"><i class="fas fa-coins"></i> VAL</span>
+            <input type="number" name="sd:price.gp" value="{{priceGp}}" placeholder="0" class="sdrn-chip-input" />
+            <span class="sdrn-chip-unit">gp</span>
+          </div>
+
+          {{#if hasQuantity}}
+          <div class="sdrn-metric-chip qty" title="Quantity">
+            <span class="sdrn-chip-label"><i class="fas fa-layer-group"></i> QTY</span>
+            <input type="number" name="sd:quantity" value="{{quantity}}" min="1" class="sdrn-chip-input" />
+          </div>
+          {{/if}}
+        </div>
       </div>
-      {{/each}}
+    </header>
+
+    <!-- Sub-Abas de Navegação -->
+    <nav class="sdrn-item-tabs">
+      <button type="button" class="sdrn-item-tab-btn active" data-action="item-tab" data-tab="description">
+        <i class="fas fa-file-alt"></i> DESCRIPTION
+      </button>
+      <button type="button" class="sdrn-item-tab-btn" data-action="item-tab" data-tab="details">
+        <i class="fas fa-sliders-h"></i> PROPERTIES &amp; DETAILS
+      </button>
+    </nav>
+
+    <!-- Conteúdo das Abas -->
+    <div class="sdrn-item-body">
+
+      <!-- Aba 1: Descrição e Tags -->
+      <div data-item-tab-content="description" class="sdrn-item-tab-panel">
+        <div class="sdrn-card-block">
+          <div class="sdrn-box-title"><i class="fas fa-scroll"></i> ITEM DESCRIPTION &amp; EFFECTS</div>
+          <textarea class="sdrn-dark-textarea" name="sd:description" rows="9" placeholder="Detailed magical properties, lore, activation triggers, restrictions, or combat features...">{{description}}</textarea>
+        </div>
+
+        <div class="sdrn-item-tags-wrap">
+          <span class="sdrn-tags-label"><i class="fas fa-tags"></i> TAGS:</span>
+          <div class="sdrn-item-tags-list">
+            {{#each tags}}
+            <span class="sdrn-tag sdrn-item-tag">{{this}}</span>
+            {{else}}
+            <span class="sdrn-empty-tag">No tags</span>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba 2: Campos de Detalhes e Regras Dinâmicas -->
+      <div data-item-tab-content="details" class="sdrn-item-tab-panel" style="display:none">
+        <div class="sdrn-card-block">
+          <div class="sdrn-box-title"><i class="fas fa-cogs"></i> TECHNICAL SPECIFICATIONS</div>
+          <div class="sdrn-item-fields-grid">
+            {{#each fields}}
+            <div class="sdrn-item-field-row sdrn-field-{{type}}">
+              <label class="sdrn-field-label">{{label}}</label>
+              <div class="sdrn-field-control">
+                {{#if isTextarea}}
+                <textarea class="sdrn-dark-textarea" name="sd:{{key}}" rows="3">{{value}}</textarea>
+                {{else if isBoolean}}
+                <label class="sdrn-switch">
+                  <input type="checkbox" name="sd:{{key}}" {{#if value}}checked{{/if}} />
+                  <span class="sdrn-switch-slider"></span>
+                </label>
+                {{else if isNumber}}
+                <input class="sdrn-reui-input" type="number" name="sd:{{key}}" value="{{value}}" />
+                {{else if isSelect}}
+                <select class="sdrn-reui-select" name="sd:{{key}}">
+                  {{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+                </select>
+                {{else}}
+                <input class="sdrn-reui-input" type="text" name="sd:{{key}}" value="{{value}}" />
+                {{/if}}
+              </div>
+            </div>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+
     </div>
+
   </div>
 
 </div>

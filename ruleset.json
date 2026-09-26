@@ -16,7 +16,8 @@
   "backgroundUrl": "/marketplace/rulesets/srd5e/assets/ui/system-banner.png",
   "client": "srd5e.mjs",
   "styles": [
-    "styles/srd5e.css"
+    "styles/srd5e.css",
+    "styles/dark-tactical-sheets.css"
   ],
   "actorTypes": [
     "character",

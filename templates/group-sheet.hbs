@@ -1,35 +1,124 @@
-<div class="sdrn-group-root">
-  <div class="sdrn-box">
-    <div class="sdrn-box-title">Group: {{name}} {{#if _isPrimary}}<span class="sdrn-tag sdrn-tag-highlight">Primary</span>{{/if}}</div>
-    <textarea name="sd:description" rows="3" placeholder="Description">{{_description}}</textarea>
+<div class="sdrn-root sdrn-group-root">
+
+  <div class="sdrn-group-container">
+
+    <!-- Header do Grupo / Party com Heráldica e Status -->
+    <header class="sdrn-group-header">
+      <div class="sdrn-group-header-left">
+        <div class="sdrn-group-crest" title="Party Crest">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="sdrn-group-identity">
+          <div class="sdrn-group-title-row">
+            <input type="text" class="sdrn-group-name-input" name="name" value="{{name}}" placeholder="Party Name" />
+            {{#if _isPrimary}}
+            <span class="sdrn-primary-badge" title="Designated as the primary adventuring party"><i class="fas fa-star"></i> PRIMARY PARTY</span>
+            {{else}}
+            <button type="button" class="sdrn-set-primary-btn" data-action="set-primary-party" title="Set as primary party for encounter budgeting">Set Primary</button>
+            {{/if}}
+          </div>
+          <div class="sdrn-group-subtitle">ADVENTURING COMPANY &bull; {{_members.length}} ACTIVE MEMBERS</div>
+        </div>
+      </div>
+
+      <div class="sdrn-group-header-actions">
+        <button type="button" class="sdrn-group-action-btn rest" data-action="short-rest-all" title="Short Rest (All Members)">
+          <i class="fas fa-utensils"></i> <span>Short Rest</span>
+        </button>
+        <button type="button" class="sdrn-group-action-btn rest" data-action="long-rest-all" title="Long Rest (All Members)">
+          <i class="fas fa-campground"></i> <span>Long Rest</span>
+        </button>
+        <button type="button" class="sdrn-group-action-btn award" data-action="award" title="Award XP or Treasure to Members">
+          <i class="fas fa-trophy"></i> <span>Award</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Cofre Coletivo (Vault) em 5 Moedas Metálicas -->
+    <section class="sdrn-group-vault-section">
+      <div class="sdrn-section-title"><i class="fas fa-coins"></i> PARTY VAULT &amp; TREASURY</div>
+      <div class="sdrn-currency-grid">
+        <div class="sdrn-coin-slot pp" title="Platinum Pieces">
+          <span class="sdrn-coin-icon"><i class="fas fa-gem"></i> PP</span>
+          <input type="number" name="sd:currency.pp" value="{{_currency.pp}}" min="0" />
+        </div>
+        <div class="sdrn-coin-slot gp" title="Gold Pieces">
+          <span class="sdrn-coin-icon"><i class="fas fa-circle"></i> GP</span>
+          <input type="number" name="sd:currency.gp" value="{{_currency.gp}}" min="0" />
+        </div>
+        <div class="sdrn-coin-slot ep" title="Electrum Pieces">
+          <span class="sdrn-coin-icon"><i class="fas fa-shield-alt"></i> EP</span>
+          <input type="number" name="sd:currency.ep" value="{{_currency.ep}}" min="0" />
+        </div>
+        <div class="sdrn-coin-slot sp" title="Silver Pieces">
+          <span class="sdrn-coin-icon"><i class="fas fa-moon"></i> SP</span>
+          <input type="number" name="sd:currency.sp" value="{{_currency.sp}}" min="0" />
+        </div>
+        <div class="sdrn-coin-slot cp" title="Copper Pieces">
+          <span class="sdrn-coin-icon"><i class="fas fa-cookie"></i> CP</span>
+          <input type="number" name="sd:currency.cp" value="{{_currency.cp}}" min="0" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Lista de Membros da Party -->
+    <section class="sdrn-group-members-section">
+      <div class="sdrn-box-header">
+        <div class="sdrn-section-title"><i class="fas fa-users"></i> COMPANIONS &amp; ALLIES ({{_members.length}})</div>
+      </div>
+
+      <div class="sdrn-group-members-grid">
+        {{#each _members}}
+        <div class="sdrn-group-member-card {{#if missing}}missing{{/if}}">
+          {{#if missing}}
+          <div class="sdrn-member-missing-info">
+            <span class="sdrn-empty">Member removed ({{id}})</span>
+          </div>
+          <button type="button" class="sdrn-card-remove-btn" data-action="remove-member" data-id="{{id}}" title="Remove from group">
+            <i class="fas fa-times"></i>
+          </button>
+          {{else}}
+          <div class="sdrn-member-avatar-wrap">
+            {{#if img}}
+            <img src="{{img}}" alt="{{name}}" class="sdrn-member-avatar-img" />
+            {{else}}
+            <div class="sdrn-member-avatar-placeholder"><i class="fas fa-user-shield"></i></div>
+            {{/if}}
+          </div>
+
+          <div class="sdrn-member-details">
+            <button type="button" class="sdrn-member-name-btn" data-action="open-member" data-id="{{id}}" title="Open character sheet">{{name}}</button>
+            <span class="sdrn-member-type-badge">{{type}}</span>
+          </div>
+
+          <div class="sdrn-member-controls">
+            <button type="button" class="sdrn-icon-ctrl-btn" data-action="open-member" data-id="{{id}}" title="Open Sheet">
+              <i class="fas fa-external-link-alt"></i>
+            </button>
+            <button type="button" class="sdrn-icon-ctrl-btn del" data-action="remove-member" data-id="{{id}}" title="Remove from group">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+          {{/if}}
+        </div>
+        {{else}}
+        <div class="sdrn-group-dropzone">
+          <div class="sdrn-dropzone-inner">
+            <i class="fas fa-users-crown sdrn-drop-icon"></i>
+            <div class="sdrn-drop-title">No Companions in this Group</div>
+            <div class="sdrn-drop-hint">Drag Player Characters or NPCs from the sidebar to assemble your party</div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <!-- Crônica da Party / Descrição -->
+    <section class="sdrn-group-desc-section">
+      <div class="sdrn-section-title"><i class="fas fa-scroll"></i> PARTY CHRONICLE &amp; CAMPAIGN LOG</div>
+      <textarea class="sdrn-dark-textarea" name="sd:description" rows="5" placeholder="Record guild agreements, active quests, party marching order, camp watches, or shared history...">{{_description}}</textarea>
+    </section>
+
   </div>
-  <div class="sdrn-box">
-    <div class="sdrn-box-title">Vault</div>
-    <div style="display:flex;gap:8px;">
-      <label>PP <input type="number" name="sd:currency.pp" value="{{_currency.pp}}" /></label>
-      <label>GP <input type="number" name="sd:currency.gp" value="{{_currency.gp}}" /></label>
-      <label>EP <input type="number" name="sd:currency.ep" value="{{_currency.ep}}" /></label>
-      <label>SP <input type="number" name="sd:currency.sp" value="{{_currency.sp}}" /></label>
-      <label>CP <input type="number" name="sd:currency.cp" value="{{_currency.cp}}" /></label>
-    </div>
-  </div>
-  <div class="sdrn-box">
-    <div class="sdrn-box-header">
-      <div class="sdrn-box-title">Members ({{_members.length}})</div>
-      <button type="button" class="sdrn-item-roll-btn" data-action="set-primary-party">Set Primary</button>
-    </div>
-    {{#each _members}}
-    <div class="sdrn-item-row">
-      {{#if missing}}<span class="sdrn-empty">Member removed ({{id}})</span> <button type="button" class="sdrn-item-del" data-action="remove-member" data-id="{{id}}">Remove</button>
-      {{else}}<button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-member" data-id="{{id}}">{{name}} ({{type}})</button> <button type="button" class="sdrn-item-del" data-action="remove-member" data-id="{{id}}">Remove</button>
-      {{/if}}
-    </div>
-    {{/each}}
-    <div class="sdrn-empty-row">Drag characters/NPCs from sidebar here</div>
-  </div>
-  <div class="sdrn-box">
-    <button type="button" class="sdrn-item-roll-btn" data-action="short-rest-all">Short Rest All</button>
-    <button type="button" class="sdrn-item-roll-btn" data-action="long-rest-all">Long Rest All</button>
-    <button type="button" class="sdrn-item-roll-btn" data-action="award">Award XP/Treasure</button>
-  </div>
+
 </div>
