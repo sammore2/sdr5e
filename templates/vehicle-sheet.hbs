@@ -1,50 +1,321 @@
-<div class="sdrn-vehicle-root">
-  <div class="sdrn-box">
-    <div class="sdrn-box-title">Vehicle: {{name}}</div>
-    <input type="text" name="name" value="{{name}}" placeholder="Vehicle name" />
-    <label>Type <select name="sd:vehicleType"><option value="water" {{#if (eq _vehicleType "water")}}selected{{/if}}>Water</option><option value="air" {{#if (eq _vehicleType "air")}}selected{{/if}}>Air</option><option value="land" {{#if (eq _vehicleType "land")}}selected{{/if}}>Land</option></select></label>
-    <label>AC <input type="number" name="sd:attributes.ac" value="{{_ac}}" /></label>
-    <label>HP <input type="number" name="sd:resources.health.value" value="{{_health.value}}" /> / <input type="number" name="sd:resources.health.max" value="{{_health.max}}" /></label>
-    <label>Damage Threshold <input type="number" name="sd:attributes.damageThreshold" value="{{_damageThreshold}}" /></label>
-    <label>Travel Speed (mph) <input type="number" name="sd:attributes.travelSpeed" value="{{_travelSpeed}}" /></label>
-    <div>Movement: {{#each _movementTags}}<span class="sdrn-tag">{{mode}} {{value}}</span> {{else}}<span class="sdrn-empty">None</span>{{/each}} {{#if _hover}}<span class="sdrn-tag">Hover</span>{{/if}}</div>
-  </div>
-  <div class="sdrn-box">
-    <div class="sdrn-box-title">Crew ({{_crew.count}}/{{_crew.max}})</div>
-    <div data-drop-target="crew" style="min-height:40px;border:1px dashed #ccc;padding:4px;">Drop crew here
-      {{#each _crew.members}}
-      <div class="sdrn-item-row">{{#if missing}}Missing {{id}}{{else}}{{name}} ({{type}})<button type="button" data-action="open-member" data-id="{{id}}">Open</button>{{/if}} <button type="button" data-action="remove-crew" data-id="{{id}}">Remove</button></div>
-      {{/each}}
+<div class="sdrn-root sdrn-vehicle-root">
+
+  <div class="sdrn-body sdrn-vehicle-body">
+
+    <!-- Top Bar: Moedas / Tesouro do Veículo Exatamente Como a Referência -->
+    <div class="sdrn-vehicle-topbar">
+      <div class="sdrn-vehicle-coins">
+        <div class="sdrn-vcoin pp" title="Platinum Pieces">
+          <i class="fas fa-coins"></i>
+          <span class="sdrn-vcoin-icon pp"><i class="fas fa-gem"></i></span>
+          <input type="number" name="sd:currency.pp" value="{{_currency.pp}}" min="0" />
+        </div>
+        <div class="sdrn-vcoin gp" title="Gold Pieces">
+          <span class="sdrn-vcoin-icon gp"><i class="fas fa-circle"></i></span>
+          <input type="number" name="sd:currency.gp" value="{{_currency.gp}}" min="0" />
+        </div>
+        <div class="sdrn-vcoin ep" title="Electrum Pieces">
+          <span class="sdrn-vcoin-icon ep"><i class="fas fa-shield-alt"></i></span>
+          <input type="number" name="sd:currency.ep" value="{{_currency.ep}}" min="0" />
+        </div>
+        <div class="sdrn-vcoin sp" title="Silver Pieces">
+          <span class="sdrn-vcoin-icon sp"><i class="fas fa-moon"></i></span>
+          <input type="number" name="sd:currency.sp" value="{{_currency.sp}}" min="0" />
+        </div>
+        <div class="sdrn-vcoin cp" title="Copper Pieces">
+          <span class="sdrn-vcoin-icon cp"><i class="fas fa-cookie"></i></span>
+          <input type="number" name="sd:currency.cp" value="{{_currency.cp}}" min="0" />
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="sdrn-box">
-    <div class="sdrn-box-title">Passengers ({{_passengers.count}}/{{_passengers.max}})</div>
-    <div data-drop-target="passengers" style="min-height:40px;border:1px dashed #ccc;padding:4px;">Drop passengers here
-      {{#each _passengers.members}}
-      <div class="sdrn-item-row">{{#if missing}}Missing {{id}}{{else}}{{name}} ({{type}})<button type="button" data-action="open-member" data-id="{{id}}">Open</button>{{/if}} <button type="button" data-action="remove-passenger" data-id="{{id}}">Remove</button></div>
-      {{/each}}
+
+    <!-- Layout Dividido: Coluna do Timão / Specs à Esquerda + Conteúdo à Direita -->
+    <div class="sdrn-vehicle-main-grid">
+
+      <!-- Coluna Hero do Veículo (Timão + Specs Rápidas) -->
+      <aside class="sdrn-vehicle-sidebar">
+        <div class="sdrn-vehicle-helm-emblem" title="Vessel Identification">
+          <svg class="sdrn-helm-svg" viewBox="0 0 100 100" fill="currentColor">
+            <!-- Timão Náutico / Wheel Geométrico -->
+            <circle cx="50" cy="50" r="28" fill="none" stroke="#f8fafc" stroke-width="4.5" />
+            <circle cx="50" cy="50" r="16" fill="none" stroke="#f8fafc" stroke-width="3.5" />
+            <circle cx="50" cy="50" r="8" fill="#c99738" stroke="#f8fafc" stroke-width="2" />
+            <!-- Raios / Spokes -->
+            <line x1="50" y1="2" x2="50" y2="98" stroke="#f8fafc" stroke-width="4" stroke-linecap="round" />
+            <line x1="2" y1="50" x2="98" y2="50" stroke="#f8fafc" stroke-width="4" stroke-linecap="round" />
+            <line x1="16" y1="16" x2="84" y2="84" stroke="#f8fafc" stroke-width="4" stroke-linecap="round" />
+            <line x1="16" y1="84" x2="84" y2="16" stroke="#f8fafc" stroke-width="4" stroke-linecap="round" />
+            <!-- Manoplas externas -->
+            <circle cx="50" cy="4" r="3.5" fill="#c99738" />
+            <circle cx="50" cy="96" r="3.5" fill="#c99738" />
+            <circle cx="4" cy="50" r="3.5" fill="#c99738" />
+            <circle cx="96" cy="50" r="3.5" fill="#c99738" />
+            <circle cx="17" cy="17" r="3.5" fill="#c99738" />
+            <circle cx="83" cy="83" r="3.5" fill="#c99738" />
+            <circle cx="17" cy="83" r="3.5" fill="#c99738" />
+            <circle cx="83" cy="17" r="3.5" fill="#c99738" />
+          </svg>
+        </div>
+
+        <div class="sdrn-vehicle-identity">
+          <input type="text" class="sdrn-vehicle-name-input" name="name" value="{{name}}" placeholder="Vehicle Name" />
+          <div class="sdrn-vehicle-type-select-wrap">
+            <select name="sd:vehicleType" class="sdrn-vehicle-type-select">
+              <option value="water" {{#if (eq _vehicleType "water")}}selected{{/if}}>Water Vehicle</option>
+              <option value="air" {{#if (eq _vehicleType "air")}}selected{{/if}}>Air Vehicle</option>
+              <option value="land" {{#if (eq _vehicleType "land")}}selected{{/if}}>Land Vehicle</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Barra de Vida do Veículo -->
+        <div class="sdrn-dark-bar-group sdrn-vehicle-hp-group">
+          <div class="sdrn-dark-bar-header">
+            <span>HULL INTEGRITY (HP)</span>
+          </div>
+          <div class="sdrn-dark-bar sdrn-hp-bar">
+            <div class="sdrn-dark-bar-fill sdrn-hp-fill" style="width:{{_healthPct}}%;">
+              <div class="sdrn-dark-bar-text">
+                <input class="sdrn-bar-input" type="number" name="sd:resources.health.value" value="{{_health.value}}" title="Current HP" />
+                <span class="sdrn-bar-sep">/</span>
+                <input class="sdrn-bar-input" type="number" name="sd:resources.health.max" value="{{_health.max}}" title="Max HP" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mini Stats de Viagem e Defesas -->
+        <div class="sdrn-vehicle-specs-list">
+          <div class="sdrn-vspec-item">
+            <span class="sdrn-vspec-label"><i class="fas fa-ship"></i> TRAVEL SPEED</span>
+            <span class="sdrn-vspec-val">
+              <input type="number" name="sd:attributes.travelSpeed" value="{{_travelSpeed}}" class="sdrn-vspec-input" /> mph
+            </span>
+          </div>
+
+          <div class="sdrn-vspec-item">
+            <span class="sdrn-vspec-label"><i class="fas fa-cog"></i> TRAVEL PACE</span>
+            <span class="sdrn-vspec-val">{{_travelPace}}</span>
+          </div>
+
+          <div class="sdrn-vspec-item">
+            <span class="sdrn-vspec-label"><i class="fas fa-expand-arrows-alt"></i> SIZE</span>
+            <span class="sdrn-vspec-val">{{_size}}</span>
+          </div>
+
+          <div class="sdrn-vspec-item">
+            <span class="sdrn-vspec-label"><i class="fas fa-shield-alt"></i> ARMOR CLASS</span>
+            <span class="sdrn-vspec-val">
+              <input type="number" name="sd:attributes.ac" value="{{_ac}}" class="sdrn-vspec-input" />
+            </span>
+          </div>
+
+          <div class="sdrn-vspec-item">
+            <span class="sdrn-vspec-label"><i class="fas fa-hammer"></i> DMG THRESHOLD</span>
+            <span class="sdrn-vspec-val">
+              <input type="number" name="sd:attributes.damageThreshold" value="{{_damageThreshold}}" class="sdrn-vspec-input" />
+            </span>
+          </div>
+        </div>
+
+        <!-- Tags de Modos de Movimento -->
+        <div class="sdrn-vehicle-movement-tags">
+          {{#each _movementTags}}
+          <span class="sdrn-tag" title="Movement: {{mode}}">{{mode}} {{value}}</span>
+          {{else}}
+          <span class="sdrn-tag muted">No extra modes</span>
+          {{/each}}
+          {{#if _hover}}<span class="sdrn-tag sdrn-tag-highlight">Hover</span>{{/if}}
+        </div>
+      </aside>
+
+      <!-- Painel Central com Abas -->
+      <main class="sdrn-vehicle-content">
+
+        <!-- Barra de Busca Superior -->
+        <div class="sdrn-search-bar">
+          <i class="fas fa-search sdrn-search-icon"></i>
+          <input type="text" placeholder="Search vehicle inventory, crew, features..." class="sdrn-search-input" />
+          <button type="button" class="sdrn-search-action-btn" title="Clear search"><i class="fas fa-times"></i></button>
+          <button type="button" class="sdrn-search-action-btn" title="Filter"><i class="fas fa-filter"></i></button>
+          <button type="button" class="sdrn-search-action-btn" title="Sort"><i class="fas fa-sort-amount-down"></i></button>
+        </div>
+
+        <!-- ABA 1: CARGO & CARGA -->
+        <div class="sdrn-vehicle-tab-panel" data-tab-content="cargo">
+          <div class="sdrn-vehicle-card-block">
+            <div class="sdrn-box-header">
+              <div class="sdrn-box-title"><i class="fas fa-dolly-flatbed"></i> CARGO MANIFEST</div>
+              <div class="sdrn-cargo-limits">
+                <span>Weight: </span>
+                <input type="number" name="sd:cargo.value" value="{{_cargo.value}}" class="sdrn-small-num-input" /> /
+                <input type="number" name="sd:cargo.max" value="{{_cargo.max}}" class="sdrn-small-num-input" placeholder="&infin;" /> tons
+              </div>
+            </div>
+
+            <div class="sdrn-vehicle-cargo-items">
+              {{#each _weapons}}
+              <div class="sdrn-item-row sdrn-dark-item-row">
+                <div class="sdrn-item-info">
+                  <span class="sdrn-item-type-badge">{{type}}</span>
+                  <span class="sdrn-item-name">{{name}}</span>
+                </div>
+                <div class="sdrn-item-controls">
+                  <button type="button" class="sdrn-item-chat-btn" data-action="post-item-chat" data-id="{{id}}" title="Send to chat"><i class="fas fa-comment-alt"></i> Chat</button>
+                  <button type="button" class="sdrn-item-del-btn" data-action="delete-item" data-id="{{id}}" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                </div>
+              </div>
+              {{else}}
+              <div class="sdrn-empty-row">No cargo or equipment aboard this vehicle yet.</div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA 2: CREW & PASSENGERS -->
+        <div class="sdrn-vehicle-tab-panel" data-tab-content="crew" style="display:none;">
+          <div class="sdrn-vehicle-card-block">
+            <div class="sdrn-box-header">
+              <div class="sdrn-box-title"><i class="fas fa-users-cog"></i> CREW COMPLEMENT ({{_crew.count}} / {{_crew.max}})</div>
+              <label class="sdrn-cap-label">Max Crew: <input type="number" name="sd:crew.max" value="{{_crew.max}}" class="sdrn-small-num-input" /></label>
+            </div>
+            <div class="sdrn-drop-zone-tactical" data-drop-target="crew">
+              <div class="sdrn-drop-zone-header"><i class="fas fa-user-plus"></i> Drag Crew from sidebar here</div>
+              <div class="sdrn-members-grid">
+                {{#each _crew.members}}
+                <div class="sdrn-member-pill {{#if missing}}missing{{/if}}">
+                  {{#if missing}}
+                  <span class="sdrn-member-missing">Missing actor ({{id}})</span>
+                  <button type="button" class="sdrn-member-del" data-action="remove-crew" data-id="{{id}}"><i class="fas fa-times"></i></button>
+                  {{else}}
+                  <div class="sdrn-member-name" title="{{name}}">{{name}} <small>({{type}})</small></div>
+                  <div class="sdrn-member-actions">
+                    <button type="button" class="sdrn-member-open" data-action="open-member" data-id="{{id}}" title="Open Sheet"><i class="fas fa-external-link-alt"></i></button>
+                    <button type="button" class="sdrn-member-del" data-action="remove-crew" data-id="{{id}}" title="Remove"><i class="fas fa-times"></i></button>
+                  </div>
+                  {{/if}}
+                </div>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+
+          <div class="sdrn-vehicle-card-block" style="margin-top:12px;">
+            <div class="sdrn-box-header">
+              <div class="sdrn-box-title"><i class="fas fa-users"></i> PASSENGERS ({{_passengers.count}} / {{_passengers.max}})</div>
+              <label class="sdrn-cap-label">Max Passengers: <input type="number" name="sd:passengers.max" value="{{_passengers.max}}" class="sdrn-small-num-input" /></label>
+            </div>
+            <div class="sdrn-drop-zone-tactical" data-drop-target="passengers">
+              <div class="sdrn-drop-zone-header"><i class="fas fa-user-friends"></i> Drag Passengers from sidebar here</div>
+              <div class="sdrn-members-grid">
+                {{#each _passengers.members}}
+                <div class="sdrn-member-pill {{#if missing}}missing{{/if}}">
+                  {{#if missing}}
+                  <span class="sdrn-member-missing">Missing actor ({{id}})</span>
+                  <button type="button" class="sdrn-member-del" data-action="remove-passenger" data-id="{{id}}"><i class="fas fa-times"></i></button>
+                  {{else}}
+                  <div class="sdrn-member-name" title="{{name}}">{{name}} <small>({{type}})</small></div>
+                  <div class="sdrn-member-actions">
+                    <button type="button" class="sdrn-member-open" data-action="open-member" data-id="{{id}}" title="Open Sheet"><i class="fas fa-external-link-alt"></i></button>
+                    <button type="button" class="sdrn-member-del" data-action="remove-passenger" data-id="{{id}}" title="Remove"><i class="fas fa-times"></i></button>
+                  </div>
+                  {{/if}}
+                </div>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA 3: ARMAMENT & WEAPONS -->
+        <div class="sdrn-vehicle-tab-panel" data-tab-content="weapons" style="display:none;">
+          <div class="sdrn-vehicle-card-block">
+            <div class="sdrn-box-header">
+              <div class="sdrn-box-title"><i class="fas fa-crosshairs"></i> MOUNTED WEAPONS &amp; SIEGE ENGINES</div>
+              <button type="button" class="sdrn-add-item-btn" data-action="create-item" data-item-type="weapon">+ Add Weapon</button>
+            </div>
+
+            <div class="sdrn-vehicle-weapons-list">
+              {{#each _weapons}}
+              <div class="sdrn-item-row sdrn-dark-item-row">
+                <div class="sdrn-item-info">
+                  <span class="sdrn-item-type-badge">{{type}}</span>
+                  <span class="sdrn-item-name">{{name}}</span>
+                </div>
+                <div class="sdrn-item-controls">
+                  <button type="button" class="sdrn-item-chat-btn" data-action="post-item-chat" data-id="{{id}}" title="Send to chat"><i class="fas fa-comment-alt"></i> Chat</button>
+                  <button type="button" class="sdrn-item-del-btn" data-action="delete-item" data-id="{{id}}" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                </div>
+              </div>
+              {{else}}
+              <div class="sdrn-empty-row">No mounted weaponry installed. Click "+ Add Weapon" to equip cannons, ballistas, or rams.</div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA 4: TRAITS & RESISTANCES -->
+        <div class="sdrn-vehicle-tab-panel" data-tab-content="traits" style="display:none;">
+          <div class="sdrn-vehicle-card-block">
+            <div class="sdrn-box-title"><i class="fas fa-shield-virus"></i> DAMAGE RESISTANCES &amp; IMMUNITIES</div>
+            <div class="sdrn-traits-container">
+              {{#each _damageTraits}}
+              <div class="sdrn-trait-cat-row">
+                <span class="sdrn-trait-cat-title">{{label}}</span>
+                <div class="sdrn-tag-list">
+                  {{#each types}}
+                  <button type="button" class="sdrn-tag {{#if active}}active{{/if}}" data-action="toggle-damage-trait" data-cat="{{../cat}}" data-type="{{type}}">{{label}}</button>
+                  {{/each}}
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA 5: DESCRIPTION & LOG -->
+        <div class="sdrn-vehicle-tab-panel" data-tab-content="description" style="display:none;">
+          <div class="sdrn-vehicle-card-block">
+            <div class="sdrn-box-title"><i class="fas fa-book"></i> SHIP'S LOG &amp; SPECIFICATIONS</div>
+            <textarea name="sd:description" class="sdrn-dark-textarea" rows="8" placeholder="Hull description, captain, port of origin, propulsion details, history...">{{_description}}</textarea>
+          </div>
+        </div>
+
+      </main>
+
     </div>
+
+    <!-- Rodapé: Capacidade de Carga e Botão de Ação Rápida -->
+    <footer class="sdrn-vehicle-footer">
+      <div class="sdrn-cargo-meter-wrap" title="Cargo Capacity Used">
+        <i class="fas fa-dolly"></i>
+        <span class="sdrn-cargo-label">{{_cargo.value}} / {{#if _cargo.max}}{{_cargo.max}}{{else}}&infin;{{/if}} tons</span>
+      </div>
+
+      <button type="button" class="sdrn-vehicle-fab-add" data-action="create-item" data-item-type="weapon" title="Add weapon or cargo">
+        <i class="fas fa-plus"></i>
+      </button>
+    </footer>
+
   </div>
-  <div class="sdrn-box">
-    <div class="sdrn-box-title">Cargo: {{_cargo.value}} / {{_cargo.max}} t</div>
-    <label>Current <input type="number" name="sd:cargo.value" value="{{_cargo.value}}" /></label>
-    <label>Max <input type="number" name="sd:cargo.max" value="{{_cargo.max}}" /></label>
-  </div>
-  <div class="sdrn-box">
-    <div class="sdrn-box-title">Traits</div>
-    {{#each _damageTraits}}
-    <div>{{label}}: {{#each types}}<button type="button" class="sdrn-tag {{#if active}}active{{/if}}" data-action="toggle-damage-trait" data-cat="{{../cat}}" data-type="{{type}}">{{label}}</button> {{/each}}</div>
-    {{/each}}
-  </div>
-  <div class="sdrn-box">
-    <div class="sdrn-box-title">Weapons/Features</div>
-    {{#each _weapons}}
-    <div class="sdrn-item-row"><span>{{name}} ({{type}})</span> <button type="button" data-action="post-item-chat" data-id="{{id}}">Chat</button> <button type="button" data-action="delete-item" data-id="{{id}}">Delete</button></div>
-    {{/each}}
-    <button type="button" data-action="create-item" data-item-type="weapon">+ Add Weapon</button>
-  </div>
-  <div class="sdrn-box">
-    <div class="sdrn-box-title">Description</div>
-    <textarea name="sd:description" rows="4">{{_description}}</textarea>
-  </div>
+ 
+   <!-- Dock Lateral de Abas Estilo Foundry V3 (Posicionado à Direita) -->
+   <nav class="sdrn-side-tabs sdrn-vehicle-tabs">
+     <button type="button" class="sdrn-tab-btn sdrn-vehicle-tab-btn active" data-action="tab" data-tab="cargo" title="Cargo &amp; Inventory">
+       <i class="fas fa-box-open"></i>
+     </button>
+     <button type="button" class="sdrn-tab-btn sdrn-vehicle-tab-btn" data-action="tab" data-tab="crew" title="Crew &amp; Passengers">
+       <i class="fas fa-users"></i>
+     </button>
+     <button type="button" class="sdrn-tab-btn sdrn-vehicle-tab-btn" data-action="tab" data-tab="weapons" title="Armament &amp; Features">
+       <i class="fas fa-crosshairs"></i>
+     </button>
+     <button type="button" class="sdrn-tab-btn sdrn-vehicle-tab-btn" data-action="tab" data-tab="traits" title="Damage Traits &amp; Defenses">
+       <i class="fas fa-shield-alt"></i>
+     </button>
+     <button type="button" class="sdrn-tab-btn sdrn-vehicle-tab-btn" data-action="tab" data-tab="description" title="Description &amp; Log">
+       <i class="fas fa-scroll"></i>
+     </button>
+   </nav>
+
 </div>

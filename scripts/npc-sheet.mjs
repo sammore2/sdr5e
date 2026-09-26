@@ -12,7 +12,11 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager } from '/_loom/sdk/index.js';
-import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, SKILL_ABILITIES, ITEM_TYPE_ICON, ITEM_TYPE_SINGULAR } from './config.mjs';
+import {
+  ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, SKILL_ABILITIES,
+  ITEM_TYPE_ICON, ITEM_TYPE_SINGULAR, DAMAGE_TYPES, DAMAGE_TYPE_LABELS,
+  CONDITIONS, SENSE_TYPES, SENSE_LABELS
+} from './config.mjs';
 import { fmtMod, setPathValue, currentAdvantageMode } from './utils.mjs';
 import { sdr5eRoll, applyHeal, applyDamage, getActorConditions, applyPoisonedDisadvantage, getSaveConditionOutcome, evaluateDamageFormula, postItemToChat, rollWeaponAttack, rollWeaponDamage } from './roll-engine.mjs';
 import { getDefaultData } from './schema.mjs';
@@ -249,6 +253,8 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const _abilities = ABILITY_KEYS.map((k) => ({
       key: k, abbr: k.toUpperCase(), label: ABILITY_LABELS[k],
       score: abilities[k]?.value ?? 10, mod: fmtMod(abilities[k]?.modifier ?? 0),
+      saveTotal: fmtMod(saves[k]?.total ?? abilities[k]?.modifier ?? 0),
+      saveProficient: !!saves[k]?.proficient,
     }));
 
     // Real monster stat blocks only list saves the creature is actually
@@ -307,6 +313,43 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
     const _traits = details.traits || { di: [], dr: [], dv: [], ci: [] };
     const _hasTraits = ((_traits.dr?.length || 0) + (_traits.di?.length || 0) + (_traits.ci?.length || 0) + (_traits.dv?.length || 0)) > 0;
+
+    const _traitItems = [];
+    for (const v of (_traits.dv || [])) {
+      _traitItems.push({ type: 'dv', typeLabel: 'Vulnerability', cssClass: 'vulnerability', value: v, label: DAMAGE_TYPE_LABELS[v] || v });
+    }
+    for (const r of (_traits.dr || [])) {
+      _traitItems.push({ type: 'dr', typeLabel: 'Resistance', cssClass: 'resistance', value: r, label: DAMAGE_TYPE_LABELS[r] || r });
+    }
+    for (const i of (_traits.di || [])) {
+      _traitItems.push({ type: 'di', typeLabel: 'Immunity', cssClass: 'immunity', value: i, label: DAMAGE_TYPE_LABELS[i] || i });
+    }
+    for (const c of (_traits.ci || [])) {
+      const cond = CONDITIONS.find((cd) => cd.id === c);
+      _traitItems.push({ type: 'ci', typeLabel: 'Condition Immunity', cssClass: 'condition', value: c, label: cond ? cond.label : (c.charAt(0).toUpperCase() + c.slice(1)) });
+    }
+
+    const _traitOptions = [
+      ...DAMAGE_TYPES.filter((t) => !(_traits.dr || []).includes(t)).map((t) => ({ value: `dr:${t}`, label: `Resistance: ${DAMAGE_TYPE_LABELS[t]}` })),
+      ...DAMAGE_TYPES.filter((t) => !(_traits.di || []).includes(t)).map((t) => ({ value: `di:${t}`, label: `Immunity: ${DAMAGE_TYPE_LABELS[t]}` })),
+      ...DAMAGE_TYPES.filter((t) => !(_traits.dv || []).includes(t)).map((t) => ({ value: `dv:${t}`, label: `Vulnerability: ${DAMAGE_TYPE_LABELS[t]}` })),
+      ...CONDITIONS.filter((c) => !(_traits.ci || []).includes(c.id)).map((c) => ({ value: `ci:${c.id}`, label: `Cond. Immunity: ${c.label}` })),
+    ];
+
+    const COMMON_SENSES = [
+      'Darkvision 18 m', 'Darkvision 36 m', 'Blindsight 9 m', 'Blindsight 18 m', 'Tremorsense 9 m', 'Tremorsense 18 m', 'Truesight 18 m', 'Truesight 36 m',
+    ];
+    const currentSensesList = [
+      ...((() => { const se = attrs.senses || {}; const eff = se.effective || se; const l=[]; for(const s of ['darkvision','blindsight','tremorsense','truesight']) if(eff[s]>0) l.push(`${s.charAt(0).toUpperCase()+s.slice(1)} ${eff[s]} m`); return l; })()),
+      ...(details.senses?.value || [])
+    ];
+    const _availableSensesList = COMMON_SENSES.filter((s) => !currentSensesList.includes(s));
+
+    const COMMON_LANGUAGES = [
+      'Common', 'Dwarvish', 'Elvish', 'Giant', 'Gnomish', 'Goblin', 'Halfling', 'Orc',
+      'Abyssal', 'Celestial', 'Draconic', 'Deep Speech', 'Infernal', 'Primordial', 'Sylvan', 'Undercommon', 'Telepathy 36 m'
+    ];
+    const _availableLanguagesList = COMMON_LANGUAGES.filter((lang) => !_languages.some((l) => l.name.toLowerCase() === lang.toLowerCase()));
 
     const SIZES = [
       { value: 'tiny', label: 'Tiny' },
@@ -371,6 +414,10 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _languagesCustom: details.languages?.custom || '',
       _traits,
       _hasTraits,
+      _traitItems,
+      _traitOptions,
+      _availableSensesList,
+      _availableLanguagesList,
       _legendaryActions: details.legendaryActions || 0,
       _legendaryResistances: details.legendaryResistances || 0,
       _biography: details.biography || '',

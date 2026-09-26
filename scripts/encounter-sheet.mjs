@@ -21,6 +21,7 @@ export class Sdr5eEncounterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     });
   }
 
+  _activeTab = 'members';
   _hasDropListener = false;
   async mount() {
     await super.mount();
@@ -28,8 +29,25 @@ export class Sdr5eEncounterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     this.element?.addEventListener('input', (e) => this._onChangeForm(e));
     this.element?.addEventListener('change', (e) => this._onChangeForm(e));
     this._attachDropListener();
+    this._applyActiveTab();
   }
-  _postRender() { if (typeof super._postRender === 'function') super._postRender(); this._attachDropListener(); }
+  _postRender() {
+    if (typeof super._postRender === 'function') super._postRender();
+    this._attachDropListener();
+    this._applyActiveTab();
+  }
+
+  _applyActiveTab() {
+    const root = this.element;
+    if (!root) return;
+    const tab = this._activeTab || 'members';
+    root.querySelectorAll('.sdrn-encounter-tab-btn').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
+    root.querySelectorAll('[data-tab-content]').forEach((panel) => {
+      panel.style.display = panel.dataset.tabContent === tab ? '' : 'none';
+    });
+  }
   _attachDropListener() {
     if (!this.element || this._hasDropListener) return;
     this._hasDropListener = true;
@@ -146,11 +164,18 @@ export class Sdr5eEncounterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _difficulty: difficulty,
       _budget: budget,
       _description: sd.description || '',
+      _currency: sd.currency || { pp: 0, gp: 0, ep: 0, sp: 0, cp: 0 },
+      _activeTab: this._activeTab || 'members',
       _isGM: !!window.Loom?.user?.isGM,
     };
   }
 
   onAction(action, id, target) {
+    if (action === 'tab') {
+      this._activeTab = id || target?.dataset?.tab || 'members';
+      this._applyActiveTab();
+      return;
+    }
     if (action === 'remove-member') { void this._removeMember(id); return; }
     if (action === 'roll-quantities') { void this._rollQuantities(); return; }
     if (action === 'place-on-stage') { void this._placeOnStage(); return; }
