@@ -29,12 +29,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/RobSammore/srd5e"
+    "url": "https://github.com/sammore2/sdr5e"
   },
   "bugs": {
-    "url": "https://github.com/RobSammore/srd5e/issues"
+    "url": "https://github.com/sammore2/sdr5e/issues"
   },
-  "homepage": "https://github.com/RobSammore/srd5e#readme",
+  "homepage": "https://github.com/sammore2/sdr5e#readme",
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@babel/eslint-parser": "^7.28.6",
