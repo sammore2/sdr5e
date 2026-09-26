@@ -18,19 +18,77 @@ export class Sdr5eVehicleSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       title: props.title || 'Vehicle',
       showFooter: false,
       resizable: true,
+      allowOverflow: true,
       classes: ['sdrn-sheet', 'sdrn-vehicle-sheet'],
     });
   }
 
+  _activeTab = 'cargo';
   _hasDropListener = false;
   async mount() {
     await super.mount();
     attachFormSaver(this);
     this.element?.addEventListener('input', (e) => this._onChangeForm(e));
     this.element?.addEventListener('change', (e) => this._onChangeForm(e));
+    this._applyActiveTab();
+    this._detachSideTabs();
     this._attachDropListener();
   }
-  _postRender() { if (typeof super._postRender === 'function') super._postRender(); this._attachDropListener(); }
+  _postRender() {
+    if (typeof super._postRender === 'function') super._postRender();
+    this._applyActiveTab();
+    this._detachSideTabs();
+    this._attachDropListener();
+  }
+
+  onClose() {
+    this._cleanupSideTabs();
+  }
+
+  _detachSideTabs() {
+    const nav = this.element?.querySelector('.sdrn-side-tabs');
+    if (!nav) return;
+    this._cleanupSideTabs();
+    const container = this.element?.parentElement;
+    if (!container) return;
+    container.appendChild(nav);
+    nav.style.position = 'fixed';
+    nav.addEventListener('click', (event) => {
+      const btn = event.target instanceof Element ? event.target.closest('[data-action]') : null;
+      if (!btn) return;
+      const action = btn.dataset.action;
+      const id = btn.dataset.id || btn.closest('[data-id]')?.dataset.id || null;
+      if (typeof this.onAction === 'function') this.onAction(action, id, btn);
+    });
+    this._sideTabsEl = nav;
+    const sync = () => {
+      if (!this._sideTabsEl?.isConnected || !this.element?.isConnected) return;
+      const r = this.element.getBoundingClientRect();
+      this._sideTabsEl.style.left = `${r.right - 1}px`;
+      this._sideTabsEl.style.top = `${r.top + 40}px`;
+      this._sideTabsRaf = requestAnimationFrame(sync);
+    };
+    sync();
+  }
+
+  _cleanupSideTabs() {
+    if (this._sideTabsRaf) cancelAnimationFrame(this._sideTabsRaf);
+    this._sideTabsRaf = null;
+    this._sideTabsEl?.remove();
+    this._sideTabsEl = null;
+  }
+
+  _applyActiveTab() {
+    const root = this.element;
+    if (!root) return;
+    const tab = this._activeTab || 'cargo';
+    (this._sideTabsEl || root).querySelectorAll('.sdrn-vehicle-tab-btn').forEach((btn) => {
+      btn.classList.toggle('active', btn.dataset.tab === tab);
+    });
+    root.querySelectorAll('[data-tab-content]').forEach((panel) => {
+      panel.style.display = panel.dataset.tabContent === tab ? '' : 'none';
+    });
+  }
   _attachDropListener() {
     if (!this.element || this._hasDropListener) return;
     this._hasDropListener = true;
@@ -132,7 +190,12 @@ export class Sdr5eVehicleSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _travelSpeed: attrs.travelSpeed ?? 0,
       _movementTags: movementTags,
       _hover: !!movement.hover,
-      _health: res.health || { value:10,max:10 },
+      _health: res.health || { value: 10, max: 10 },
+      _healthPct: res.health?.max ? Math.min(100, Math.max(0, Math.round((Number(res.health.value) / Number(res.health.max)) * 100))) : 100,
+      _currency: sd.currency || { pp: 0, gp: 0, ep: 0, sp: 0, cp: 0 },
+      _size: sd.details?.size || 'Large',
+      _travelPace: (attrs.travelSpeed ? (Number(attrs.travelSpeed) * 24).toFixed(0) : '12') + ' mi/day',
+      _activeTab: this._activeTab || 'cargo',
       _crew: { max: crew.max || 0, members: crewInfos, count: crewInfos.length },
       _passengers: { max: passengers.max || 0, members: passInfos, count: passInfos.length },
       _cargo: cargo,
@@ -144,6 +207,11 @@ export class Sdr5eVehicleSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   }
 
   onAction(action, id, target) {
+    if (action === 'tab') {
+      this._activeTab = id || target?.dataset?.tab || 'cargo';
+      this._applyActiveTab();
+      return;
+    }
     if (action === 'remove-crew') { void this._removeMember(id, 'crew'); return; }
     if (action === 'remove-passenger') { void this._removeMember(id, 'passengers'); return; }
     if (action === 'open-member') {
