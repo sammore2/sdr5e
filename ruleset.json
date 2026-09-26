@@ -56,16 +56,7 @@
     }
   ],
   "compendiums": [
-    "packs/spells-0.sqlite",
-    "packs/spells-1.sqlite",
-    "packs/spells-2.sqlite",
-    "packs/spells-3.sqlite",
-    "packs/spells-4.sqlite",
-    "packs/spells-5.sqlite",
-    "packs/spells-6.sqlite",
-    "packs/spells-7.sqlite",
-    "packs/spells-8.sqlite",
-    "packs/spells-9.sqlite",
+    "packs/spells.sqlite",
     "packs/races.sqlite",
     "packs/classes.sqlite",
     "packs/subclasses.sqlite",

@@ -17,7 +17,7 @@ run natively on the Loom engine (no Foundry runtime dependency).
 - **Resonance Mechanics**: Manage the balance between cosmic forces (Axis/Flux and Genesis/Abyss).
 - **Visceral Combat**: Tactical encounters with streamlined yet lethal outcomes.
 - **Grimdark Aesthetic**: Custom-built UI and identity for an immersive dark fantasy setting.
-- **Modular SRD Support**: Architecture designed to adapt between SRD 3.5 and 5.1 frameworks.
+- **SRD 5.2 Foundation**: Full implementation of the System Reference Document 5.2 (CC-BY-4.0) rules and mechanics.
 
 ## ⚙️ Installation
 
