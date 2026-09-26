@@ -70,12 +70,12 @@
               </div>
             </div>
 
-            <!-- Mini stats poligonais com SVG vector shapes (Initiative, Walk, Proficiency) -->
+            <!-- Mini stats poligonais com styling dark tático (Initiative, Walk, Proficiency) -->
             <div class="sdrn-mini-stat-row">
               <button type="button" class="sdrn-mini-stat sdrn-mini-stat-btn" data-action="roll-initiative" title="Roll Initiative">
                 <div class="sdrn-stat-polygon-wrap">
                   <svg class="sdrn-stat-svg" viewBox="0 0 44 32" preserveAspectRatio="none">
-                    <polygon points="11,1 33,1 43,16 33,31 11,31 1,16" fill="#fcf9f2" stroke="#8c734b" stroke-width="1.5" stroke-linejoin="round" />
+                    <polygon points="11,1 33,1 43,16 33,31 11,31 1,16" class="sdrn-stat-poly" />
                   </svg>
                   <span class="sdrn-mini-stat-num">{{_initiative}}</span>
                 </div>
@@ -85,7 +85,7 @@
               <div class="sdrn-mini-stat">
                 <div class="sdrn-stat-polygon-wrap">
                   <svg class="sdrn-stat-svg" viewBox="0 0 44 32" preserveAspectRatio="none">
-                    <polygon points="8,1 36,1 43,16 36,31 8,31 1,16" fill="#fcf9f2" stroke="#8c734b" stroke-width="1.5" stroke-linejoin="round" />
+                    <polygon points="8,1 36,1 43,16 36,31 8,31 1,16" class="sdrn-stat-poly" />
                   </svg>
                   <span class="sdrn-mini-stat-num" title="{{_movement.walkTitle}}">{{_speed}}</span>
                 </div>
@@ -96,7 +96,7 @@
               <div class="sdrn-mini-stat">
                 <div class="sdrn-stat-polygon-wrap">
                   <svg class="sdrn-stat-svg" viewBox="0 0 44 32" preserveAspectRatio="none">
-                    <polygon points="11,1 33,1 43,16 33,31 11,31 1,16" fill="#fcf9f2" stroke="#8c734b" stroke-width="1.5" stroke-linejoin="round" />
+                    <polygon points="11,1 33,1 43,16 33,31 11,31 1,16" class="sdrn-stat-poly" />
                   </svg>
                   <span class="sdrn-mini-stat-num">{{_prof}}</span>
                 </div>
@@ -198,22 +198,22 @@
       <!-- Área de conteúdo: atributos fixos no topo + abas que trocam -->
       <div class="sdrn-content-col">
 
-        <!-- Faixa de ability pennants em SVG: persistente, sobreposta ao banner sem corte! -->
+        <!-- Faixa de ability pennants: dark tactical styling com mod em destaque e score base -->
         <div class="sdrn-header-abilities">
           {{#each _abilities}}
-          <div class="sdrn-mini-ability">
+          <div class="sdrn-mini-ability" title="{{label}}">
             <div class="sdrn-ability-pennant-top">
               <svg class="sdrn-pennant-svg" viewBox="0 0 58 52">
-                <polygon points="12,1 46,1 57,12 57,51 1,51 1,12" fill="#fdfbf7" stroke="#bba377" stroke-width="1.5" stroke-linejoin="round" />
+                <polygon points="12,1 46,1 57,12 57,51 1,51 1,12" class="sdrn-pennant-top-poly" />
               </svg>
               <div class="sdrn-ability-pennant-inner">
                 <span class="sdrn-mini-abbr">{{abbr}}</span>
-                <button type="button" class="sdrn-mini-mod" data-action="roll-ability" data-key="{{key}}" data-mode="test" title="Roll {{label}} (hold Shift: advantage, Ctrl: disadvantage)">{{mod}}</button>
+                <button type="button" class="sdrn-mini-mod" data-action="roll-ability" data-key="{{key}}" data-mode="test" title="Roll {{label}}">{{mod}}</button>
               </div>
             </div>
             <div class="sdrn-ability-tab-bottom">
               <svg class="sdrn-pennant-tab-svg" viewBox="0 0 46 20">
-                <polygon points="1,1 45,1 38,19 8,19" fill="#111111" stroke="#3d3325" stroke-width="1.2" stroke-linejoin="round" />
+                <polygon points="1,1 45,1 38,19 8,19" class="sdrn-pennant-bot-poly" />
               </svg>
               <div class="sdrn-ability-tab-inner">
                 <input class="sdrn-mini-score" type="number" name="sd:abilities.{{key}}.value" value="{{score}}" min="1" max="30" />

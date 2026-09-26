@@ -1,29 +1,188 @@
-<div class="sdrn-encounter-root">
-  <div class="sdrn-box">
-    <div class="sdrn-box-title">Encounter: {{name}}</div>
-    <input type="text" name="name" value="{{name}}" />
-    <textarea name="sd:description" rows="3" placeholder="Description">{{_description}}</textarea>
-  </div>
-  <div class="sdrn-box">
-    <div class="sdrn-box-title">Members</div>
-    {{#each _members}}
-    <div class="sdrn-item-row">
-      {{#if missing}}<span>Member removed ({{actorId}})</span>
-      {{else}}<span>{{name}} CR {{cr}} XP {{xp}} x <input type="number" name="sd:members.{{@index}}.quantity.value" value="{{quantity.value}}" style="width:50px;" /> {{#if quantity.formula}}<span>({{quantity.formula}})</span>{{/if}} = {{totalXp}} XP</span>
-      {{/if}}
-      <input type="text" name="sd:members.{{@index}}.quantity.formula" value="{{quantity.formula}}" placeholder="1d4+1" style="width:80px;" />
-      <button type="button" data-action="remove-member" data-id="{{actorId}}">Remove</button>
+<div class="sdrn-root sdrn-encounter-root">
+
+  <div class="sdrn-encounter-container">
+
+    <!-- Header Heroico Estilo Foundry V3 com Emblema de Espadas -->
+    <header class="sdrn-encounter-header">
+      <div class="sdrn-encounter-header-left">
+        <div class="sdrn-encounter-emblem" title="Encounter Heraldry">
+          <svg class="sdrn-swords-svg" viewBox="0 0 64 64" fill="currentColor">
+            <!-- Espada Esquerda -->
+            <rect x="8" y="24" width="8" height="34" rx="1" fill="#e2e8f0" />
+            <polygon points="8,24 12,18 16,24" fill="#e2e8f0" />
+            <rect x="4" y="22" width="16" height="3" rx="1" fill="#c99738" />
+            <rect x="11" y="58" width="2" height="5" fill="#c99738" />
+            <circle cx="12" cy="63" r="2" fill="#c99738" />
+
+            <!-- Espada Central (Mais Longa) -->
+            <rect x="28" y="16" width="8" height="42" rx="1" fill="#f8fafc" />
+            <polygon points="28,16 32,9 36,16" fill="#f8fafc" />
+            <rect x="24" y="14" width="16" height="3" rx="1" fill="#c99738" />
+            <rect x="31" y="58" width="2" height="5" fill="#c99738" />
+            <circle cx="32" cy="63" r="2" fill="#c99738" />
+
+            <!-- Espada Direita -->
+            <rect x="48" y="20" width="8" height="38" rx="1" fill="#e2e8f0" />
+            <polygon points="48,20 52,14 56,20" fill="#e2e8f0" />
+            <rect x="44" y="18" width="16" height="3" rx="1" fill="#c99738" />
+            <rect x="51" y="58" width="2" height="5" fill="#c99738" />
+            <circle cx="52" cy="63" r="2" fill="#c99738" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="sdrn-encounter-header-center">
+        <h1 class="sdrn-encounter-title">ENCOUNTER</h1>
+        <input type="text" class="sdrn-encounter-name-input" name="name" value="{{name}}" placeholder="Encounter Name" title="Click to rename encounter" />
+      </div>
+
+      <div class="sdrn-encounter-header-right">
+        <button type="button" class="sdrn-encounter-btn" data-action="roll-quantities" title="Roll Random Quantities (d20)">
+          <i class="fas fa-dice-d20"></i>
+        </button>
+        {{#if _isGM}}
+        <button type="button" class="sdrn-encounter-btn" data-action="place-on-stage" title="Place Tokens on Stage">
+          <i class="fas fa-map-marker-alt"></i>
+        </button>
+        {{/if}}
+        <button type="button" class="sdrn-encounter-btn" data-action="tab" data-tab="loot" title="Loot &amp; Rewards">
+          <i class="fas fa-trophy"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Sub-Navegação por Abas com Divisor Central '&' -->
+    <nav class="sdrn-encounter-nav">
+      <button type="button" class="sdrn-encounter-tab-btn active" data-action="tab" data-tab="members">MEMBERS</button>
+      <button type="button" class="sdrn-encounter-tab-btn" data-action="tab" data-tab="loot">LOOT</button>
+      <button type="button" class="sdrn-encounter-tab-btn" data-action="tab" data-tab="description">DESCRIPTION</button>
+    </nav>
+
+    <div class="sdrn-encounter-divider">
+      <span class="sdrn-divider-line"></span>
+      <span class="sdrn-divider-amp">&amp;</span>
+      <span class="sdrn-divider-line"></span>
     </div>
-    {{/each}}
-    <div class="sdrn-empty-row">Drag NPCs from sidebar here</div>
+
+    <!-- Área de Conteúdo das Abas -->
+    <div class="sdrn-encounter-body">
+
+      <!-- Aba 1: MEMBERS -->
+      <div class="sdrn-encounter-tab-panel" data-tab-content="members">
+        <div class="sdrn-encounter-members-list">
+          {{#each _members}}
+          <div class="sdrn-encounter-card {{#if missing}}missing{{/if}}">
+            <div class="sdrn-encounter-card-avatar">
+              {{#if img}}
+              <img src="{{img}}" alt="{{name}}" />
+              {{else}}
+              <div class="sdrn-card-avatar-dragon"><i class="fas fa-dragon"></i></div>
+              {{/if}}
+            </div>
+
+            <div class="sdrn-encounter-card-info">
+              <div class="sdrn-card-name">{{name}}</div>
+              <div class="sdrn-card-sub">
+                {{#if missing}}
+                <span class="sdrn-missing-tag">Removed ({{actorId}})</span>
+                {{else}}
+                <span>CR {{cr}}</span> &bull; <span>{{xp}} XP</span> {{#if (gt totalXp xp)}}<span class="sdrn-total-xp">({{totalXp}} XP total)</span>{{/if}}
+                {{/if}}
+              </div>
+            </div>
+
+            <div class="sdrn-encounter-card-controls">
+              <!-- CR Badge em moldura metálica -->
+              <div class="sdrn-cr-frame-badge" title="Challenge Rating">
+                <span class="sdrn-cr-badge-label">CR</span>
+                <span class="sdrn-cr-badge-num">{{cr}}</span>
+              </div>
+
+              <!-- Quantity Badge -->
+              <div class="sdrn-qty-frame-badge" title="Quantity">
+                <input type="number" class="sdrn-qty-badge-input" name="sd:members.{{@index}}.quantity.value" value="{{quantity.value}}" min="1" />
+              </div>
+
+              <!-- Fórmula Opcional -->
+              <div class="sdrn-formula-wrap" title="Formula (e.g. 1d4+1)">
+                <input type="text" class="sdrn-formula-input" name="sd:members.{{@index}}.quantity.formula" value="{{quantity.formula}}" placeholder="Formula" />
+              </div>
+
+              <!-- Botão Remover -->
+              <button type="button" class="sdrn-card-remove-btn" data-action="remove-member" data-id="{{actorId}}" title="Remove creature">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          {{else}}
+          <div class="sdrn-encounter-dropzone" title="Drag NPCs from sidebar into here">
+            <div class="sdrn-dropzone-inner">
+              <i class="fas fa-shield-virus sdrn-drop-icon"></i>
+              <div class="sdrn-drop-title">No Creatures in Encounter</div>
+              <div class="sdrn-drop-hint">Drag NPCs or Monsters from the sidebar to assemble your encounter</div>
+            </div>
+          </div>
+          {{/each}}
+
+          {{#if _members.length}}
+          <div class="sdrn-encounter-drop-hint-row">
+            <i class="fas fa-plus-circle"></i> Drag more NPCs from sidebar to add to encounter
+          </div>
+          {{/if}}
+        </div>
+      </div>
+
+      <!-- Aba 2: LOOT & TREASURE -->
+      <div class="sdrn-encounter-tab-panel" data-tab-content="loot" style="display:none;">
+        <div class="sdrn-encounter-loot-box">
+          <div class="sdrn-section-title"><i class="fas fa-coins"></i> ENCOUNTER TREASURE &amp; REWARDS</div>
+          <div class="sdrn-currency-grid">
+            <div class="sdrn-coin-slot pp" title="Platinum Pieces">
+              <span class="sdrn-coin-icon"><i class="fas fa-gem"></i> PP</span>
+              <input type="number" name="sd:currency.pp" value="{{_currency.pp}}" min="0" />
+            </div>
+            <div class="sdrn-coin-slot gp" title="Gold Pieces">
+              <span class="sdrn-coin-icon"><i class="fas fa-circle"></i> GP</span>
+              <input type="number" name="sd:currency.gp" value="{{_currency.gp}}" min="0" />
+            </div>
+            <div class="sdrn-coin-slot ep" title="Electrum Pieces">
+              <span class="sdrn-coin-icon"><i class="fas fa-shield-alt"></i> EP</span>
+              <input type="number" name="sd:currency.ep" value="{{_currency.ep}}" min="0" />
+            </div>
+            <div class="sdrn-coin-slot sp" title="Silver Pieces">
+              <span class="sdrn-coin-icon"><i class="fas fa-moon"></i> SP</span>
+              <input type="number" name="sd:currency.sp" value="{{_currency.sp}}" min="0" />
+            </div>
+            <div class="sdrn-coin-slot cp" title="Copper Pieces">
+              <span class="sdrn-coin-icon"><i class="fas fa-cookie"></i> CP</span>
+              <input type="number" name="sd:currency.cp" value="{{_currency.cp}}" min="0" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba 3: DESCRIPTION -->
+      <div class="sdrn-encounter-tab-panel" data-tab-content="description" style="display:none;">
+        <div class="sdrn-encounter-desc-box">
+          <div class="sdrn-section-title"><i class="fas fa-feather-alt"></i> TACTICAL NOTES &amp; LORE</div>
+          <textarea class="sdrn-dark-textarea" name="sd:description" rows="7" placeholder="Add battlefield terrain, enemy tactics, environmental hazards, reinforcements, or narrative context...">{{_description}}</textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Rodapé Elegante com Barra de XP e Indicador de Dificuldade -->
+    <footer class="sdrn-encounter-footer">
+      <div class="sdrn-xp-total-bar" title="Total Accumulated XP">
+        <span class="sdrn-xp-label">XP {{_totalXp}}</span>
+        <div class="sdrn-xp-meter"><div class="sdrn-xp-meter-fill" style="width:100%;"></div></div>
+      </div>
+
+      <div class="sdrn-difficulty-pill {{#if (eq _difficulty 'Low')}}diff-low{{/if}}{{#if (eq _difficulty 'Moderate')}}diff-mod{{/if}}{{#if (eq _difficulty 'High')}}diff-high{{/if}}{{#if (eq _difficulty 'Beyond High')}}diff-deadly{{/if}}" title="{{#if _budget}}Party Budget: Low {{_budget.low}} &bull; Mod {{_budget.moderate}} &bull; High {{_budget.high}}{{/if}}">
+        <i class="fas fa-skull"></i> <span>{{_difficulty}}</span>
+      </div>
+    </footer>
+
   </div>
-  <div class="sdrn-box">
-    <div>Total XP: {{_totalXp}}</div>
-    {{#if _budget}}<div>Budget Low {{_budget.low}} · Moderate {{_budget.moderate}} · High {{_budget.high}} — <strong>{{_difficulty}}</strong></div>
-    {{else}}<div>{{_difficulty}}</div>{{/if}}
-  </div>
-  <div class="sdrn-box">
-    <button type="button" data-action="roll-quantities">Roll quantities</button>
-    {{#if _isGM}}<button type="button" data-action="place-on-stage">Place on Stage</button>{{/if}}
-  </div>
+
 </div>

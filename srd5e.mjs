@@ -20,6 +20,7 @@
 import { SystemRegistry, defineSystem, sheets, statusEffects } from '/_loom/sdk/index.js';
 import { prepareActorRow } from './scripts/prepare-data.mjs';
 import { getSheetSchema, getItemSheetSchema } from './scripts/sheet-schemas.mjs';
+import { getDefaultData } from './scripts/schema.mjs';
 import { applyDamageToTargets, rollWeaponAttack, rollWeaponDamage, rollSpellAttack, rollSpellDamage, rollUnarmedDamage, castSpell, activateFeature, postItemToChat, useConsumable, rollToolCheck } from './scripts/roll-engine.mjs';
 import { syncEquippedEffect, syncPermanentBonusEffect, removeItemEffects } from './scripts/effects.mjs';
 import { Sdr5eCharacterSheet } from './scripts/character-sheet.mjs';
