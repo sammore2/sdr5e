@@ -1,4 +1,60 @@
 {
+  "SDR5E": {
+    "Encounter": {
+      "StartCombat": "Start combat"
+    },
+    "Settings": {
+      "initiativeFormula": {
+        "name": "Initiative Formula",
+        "hint": "Combat tracker formula: Dexterity modifier, initiative adjustments, and decimal tie-breaker."
+      },
+      "initiativeTiebreaker": {
+        "name": "Initiative Tie-Breaker",
+        "hint": "Adds the decimal Dexterity score (DEX / 100) to initiative to break ties automatically."
+      },
+      "maxHpFirstLevel": {
+        "name": "Maximum Hit Points at Level 1",
+        "hint": "New heroes receive the maximum hit points for their first level."
+      },
+      "encumbranceTracking": {
+        "name": "Encumbrance Tracking",
+        "hint": "Applies the SRD optional carrying-capacity rule and its penalties for excess weight."
+      },
+      "collapseItemCards": {
+        "name": "Compact Chat Cards",
+        "hint": "Shows item rolls and activations in a compact format to save chat space."
+      },
+      "learningMilestones": {
+        "name": "Milestone Advancement",
+        "hint": "Allows level advancement through story milestones instead of accumulated XP."
+      },
+      "criticalHitRule": {
+        "name": "Critical Hit Rule",
+        "hint": "Method used to calculate damage on critical hits.",
+        "choices": {
+          "doubleDice": "Double Damage Dice (SRD)",
+          "maxDice": "Maximum Dice + Roll",
+          "flatMax": "Fixed Maximum Damage"
+        }
+      },
+      "deathSaveDC": {
+        "name": "Death Saving Throw DC",
+        "hint": "Difficulty for death saving throws (the standard 5e value is 10)."
+      },
+      "diagonalMovement": {
+        "name": "Diagonal Grid Movement",
+        "hint": "Rule used to count diagonal movement on the grid.",
+        "choices": {
+          "555": "5/5/5 ft (Equal-Distance, Standard)",
+          "5105": "5/10/5 ft (DMG Variant)"
+        }
+      },
+      "primaryParty": {
+        "name": "Primary Party",
+        "hint": "Group actor used to calculate encounter difficulty."
+      }
+    }
+  },
   "TYPES": {
     "Actor": {
       "character": "Character",

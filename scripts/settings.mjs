@@ -6,100 +6,119 @@
 
 export const SDR5E_SETTINGS = [
   {
+    key: 'initiativeFormula',
+    name: 'Initiative Formula',
+    hint: 'Formula used by the combat tracker: Dexterity modifier, initiative adjustments, and decimal tie-breaker.',
+    scope: 'world',
+    type: String,
+    default: '1d20 + floor((@abilities.dex.value - 10) / 2) + @attributes.initiative.value + @attributes.initiative.bonus + (@abilities.dex.value / 100)'
+  },
+  {
     key: 'initiativeTiebreaker',
-    name: 'Desempate de Iniciativa (Tiebreaker)',
-    hint: 'Adiciona a pontuação decimal de Destreza (DEX / 100) à iniciativa para desempatar automaticamente.',
+    name: 'Initiative Tie-Breaker',
+    hint: 'Adds the decimal Dexterity score (DEX / 100) to initiative to break ties automatically.',
     scope: 'world',
     type: Boolean,
     default: true
   },
   {
     key: 'maxHpFirstLevel',
-    name: 'PV Máximo no 1º Nível',
-    hint: 'Garante que novos heróis recebam o valor máximo de pontos de vida em seu primeiro nível.',
+    name: 'Maximum Hit Points at Level 1',
+    hint: 'New heroes receive the maximum hit points for their first level.',
     scope: 'world',
     type: Boolean,
     default: true
   },
   {
     key: 'encumbranceTracking',
-    name: 'Rastreamento de Carga (Encumbrance)',
-    hint: 'Aplica a regra opcional do SRD de capacidade de carga e penalidades por excesso de peso.',
+    name: 'Encumbrance Tracking',
+    hint: 'Applies the SRD optional carrying-capacity rule and its penalties for excess weight.',
     scope: 'world',
     type: Boolean,
     default: false
   },
   {
     key: 'collapseItemCards',
-    name: 'Cards Compactos no Chat',
-    hint: 'Exibe rolagens e ativações de itens de forma mais enxuta para economizar espaço no chat.',
+    name: 'Compact Chat Cards',
+    hint: 'Shows item rolls and activations in a compact format to save chat space.',
     scope: 'client',
     type: Boolean,
     default: false
   },
   {
     key: 'learningMilestones',
-    name: 'Progressão por Marcos (Milestones)',
-    hint: 'Permite evolução guiada por marcos da história em vez de acúmulo numérico de XP.',
+    name: 'Milestone Advancement',
+    hint: 'Allows level advancement through story milestones instead of accumulated XP.',
     scope: 'world',
     type: Boolean,
     default: true
   },
   {
     key: 'criticalHitRule',
-    name: 'Regra de Acerto Crítico',
-    hint: 'Método de cálculo do dano em acertos críticos.',
+    name: 'Critical Hit Rule',
+    hint: 'Method used to calculate damage on critical hits.',
     scope: 'world',
     type: String,
     default: 'doubleDice',
     choices: {
-      doubleDice: 'Dobrar Dados de Dano (SRD)',
-      maxDice: 'Dado Máximo + Rolagem',
-      flatMax: 'Dano Máximo Fixo'
+      doubleDice: 'Double Damage Dice (SRD)',
+      maxDice: 'Maximum Dice + Roll',
+      flatMax: 'Fixed Maximum Damage'
     }
   },
   {
     key: 'deathSaveDC',
-    name: 'CD da Salvaguarda Contra a Morte',
-    hint: 'Dificuldade para testes de resistência contra a morte (padrão 5e é 10).',
+    name: 'Death Saving Throw DC',
+    hint: 'Difficulty for death saving throws (the standard 5e value is 10).',
     scope: 'world',
     type: Number,
     default: 10
   },
   {
     key: 'diagonalMovement',
-    name: 'Cálculo de Diagonal na Grade',
-    hint: 'Regra de contagem de movimento diagonal no grid.',
+    name: 'Diagonal Grid Movement',
+    hint: 'Rule used to count diagonal movement on the grid.',
     scope: 'world',
     type: String,
     default: '555',
     choices: {
-      '555': '5/5/5 ft (Equidistante - Padrão)',
-      '5105': '5/10/5 ft (Variante DMG)'
+      '555': '5/5/5 ft (Equal-Distance, Standard)',
+      '5105': '5/10/5 ft (DMG Variant)'
     }
   },
   {
     key: 'primaryParty',
-    name: 'Grupo Principal',
-    hint: 'Ator do tipo Grupo usado como referência de dificuldade de encontros.',
+    name: 'Primary Party',
+    hint: 'Group actor used to calculate encounter difficulty.',
     scope: 'world',
     type: String,
     default: ''
   }
 ];
 
+function localizeSetting(key, field, fallback) {
+  const translationKey = `SDR5E.Settings.${key}.${field}`;
+  const translated = window.Loom?.i18n?.localize?.(translationKey);
+  return translated && translated !== translationKey ? translated : fallback;
+}
+
 export function registerSettings() {
   if (!window.Loom?.settings?.register) return;
   for (const s of SDR5E_SETTINGS) {
     try {
       window.Loom.settings.register('srd5e', s.key, {
-        name: s.name,
-        hint: s.hint,
+        name: localizeSetting(s.key, 'name', s.name),
+        hint: localizeSetting(s.key, 'hint', s.hint),
         scope: s.scope,
         config: true,
         type: s.type,
         default: s.default,
         choices: s.choices
+          ? Object.fromEntries(Object.entries(s.choices).map(([value, label]) => [
+            value,
+            localizeSetting(s.key, `choices.${value}`, label),
+          ]))
+          : undefined
       });
     } catch {
       // Já registrado pelo manifesto ou chamada anterior
