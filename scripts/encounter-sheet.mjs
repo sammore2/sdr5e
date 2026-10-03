@@ -179,6 +179,7 @@ export class Sdr5eEncounterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (action === 'remove-member') { void this._removeMember(id); return; }
     if (action === 'roll-quantities') { void this._rollQuantities(); return; }
     if (action === 'place-on-stage') { void this._placeOnStage(); return; }
+    if (action === 'start-combat') { void this._startCombat(); return; }
     if (typeof super.onAction === 'function') super.onAction(action, id, target);
   }
 
@@ -221,50 +222,121 @@ export class Sdr5eEncounterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const sd = this.document.systemData || {};
     const members = sd.members || [];
     if(!members.length){ showToast?.('No members','warning'); return; }
-    // Find active stage
-    let stageId = null;
-    let gridSize = 50;
-    let stageWidth = 1000, stageHeight = 1000, padding = 0;
-    try{
-      const activeStage = await api.get('/stages/active');
-      if(activeStage){ stageId = activeStage.id; gridSize = activeStage.gridSize || 50; stageWidth = activeStage.width || 1000; stageHeight = activeStage.height || 1000; padding = activeStage.padding || 0; }
-    }catch(e){ console.warn(e); }
-    if(!stageId){
-      try{
+    const stage = await this._getStageContext();
+    if (!stage) { showToast?.('No active stage found — open a stage first','warning'); return; }
+    const placed = await this._placeMissingMembers(stage, members);
+    showToast?.(placed ? `${placed} creatures placed` : 'Encounter tokens are already on this stage','success');
+  }
+
+  async _getStageContext() {
+    let stage = null;
+    try { stage = await api.get('/stages/active'); } catch (e) { console.warn(e); }
+    if (!stage?.id) {
+      try {
         const worldId = window.Loom?.world?.id;
-        const stages = await api.get(`/stages?worldId=${worldId}`);
-        const list = Array.isArray(stages) ? stages : stages?.entries || [];
-        const active = list.find((s)=>s.isActive) || list[0];
-        stageId = active?.id;
-        if(active){ gridSize = active.gridSize || gridSize; stageWidth = active.width || stageWidth; stageHeight = active.height || stageHeight; padding = active.padding || 0; }
-      }catch(e){ console.warn(e); }
+        if (!worldId) return null;
+        const result = await api.get(`/stages?worldId=${encodeURIComponent(worldId)}`);
+        const stages = Array.isArray(result) ? result : result?.entries || [];
+        stage = stages.find((entry) => entry.isActive) || stages[0] || null;
+      } catch (e) { console.warn(e); }
     }
-    if(!stageId){ showToast?.('No active stage found — open a stage first','warning'); return; }
-    let placed=0;
-    let col=0, row=0;
-    const perRow=5;
-    for(const m of members){
-      const qty = Number(m.quantity?.value)||1;
+    if (!stage?.id) return null;
+    return {
+      ...stage,
+      gridSize: Number(stage.gridSize) || 50,
+      width: Number(stage.width) || 1000,
+      height: Number(stage.height) || 1000,
+      padding: Number(stage.padding) || 0,
+    };
+  }
+
+  async _placeMissingMembers(stage, members) {
+    let casts = [];
+    try {
+      const result = await api.get(`/cast?stageId=${encodeURIComponent(stage.id)}`);
+      casts = Array.isArray(result) ? result : result?.entries || [];
+    } catch (e) { console.warn(e); }
+
+    const placedByActor = new Map();
+    for (const cast of casts) {
+      if (!cast.actorId) continue;
+      placedByActor.set(cast.actorId, (placedByActor.get(cast.actorId) || 0) + 1);
+    }
+
+    let placed = 0;
+    let col = casts.length % 5;
+    let row = Math.floor(casts.length / 5);
+    const perRow = 5;
+    for (const member of members) {
+      const actorId = member.actorId;
+      if (!actorId) continue;
       let actor;
-      try{ actor = await api.get(`/actors/${m.actorId}`); }catch{ continue; }
-      if(!actor) continue;
-      for(let i=0;i<qty;i++){
-        const name = qty>1 ? `${actor.name} ${i+1}` : actor.name;
-        const centerX = Math.round((stageWidth/2 + padding)/gridSize)*gridSize;
-      const centerY = Math.round((stageHeight/2 + padding)/gridSize)*gridSize;
-      const offsetX = (col - Math.floor(perRow/2))*gridSize;
-      const offsetY = row*gridSize;
-      const x = centerX + offsetX;
-      const y = centerY + offsetY;
-        try{
-          await api.post('/cast', { actorId: m.actorId, isLinked:false, stageId, x, y, name });
+      try { actor = await api.get(`/actors/${actorId}`); } catch { continue; }
+      if (!actor || actor.type !== 'npc') continue;
+
+      const quantity = Math.max(1, Math.floor(Number(member.quantity?.value) || 1));
+      const alreadyPlaced = placedByActor.get(actorId) || 0;
+      for (let index = alreadyPlaced; index < quantity; index++) {
+        const centerX = Math.round((stage.width / 2 + stage.padding) / stage.gridSize) * stage.gridSize;
+        const centerY = Math.round((stage.height / 2 + stage.padding) / stage.gridSize) * stage.gridSize;
+        const x = centerX + (col - Math.floor(perRow / 2)) * stage.gridSize;
+        const y = centerY + row * stage.gridSize;
+        const name = quantity > 1 ? `${actor.name} ${index + 1}` : actor.name;
+        try {
+          const created = await api.post('/cast', { actorId, isLinked: false, stageId: stage.id, x, y, name });
+          if (created?.id) casts.push(created);
           placed++;
-        }catch(e){ console.warn('cast failed',e); }
+        } catch (e) { console.warn('cast failed', e); }
         col++;
-        if(col>=perRow){ col=0; row++; }
+        if (col >= perRow) { col = 0; row++; }
       }
+      placedByActor.set(actorId, Math.max(alreadyPlaced, quantity));
     }
-    showToast?.(`${placed} creatures placed`,'success');
+    return placed;
+  }
+
+  async _startCombat() {
+    if (!window.Loom?.user?.isGM) { showToast?.('Only GM can start combat','warning'); return; }
+    const worldId = window.Loom?.world?.id;
+    if (!worldId) { showToast?.('No active world found','error'); return; }
+    const members = this.document?.systemData?.members || [];
+    if (!members.length) { showToast?.('Add at least one creature to the encounter','warning'); return; }
+
+    const stage = await this._getStageContext();
+    if (!stage) { showToast?.('No active stage found — open a stage first','warning'); return; }
+    await this._placeMissingMembers(stage, members);
+
+    let casts;
+    try {
+      const result = await api.get(`/cast?stageId=${encodeURIComponent(stage.id)}`);
+      casts = Array.isArray(result) ? result : result?.entries || [];
+    } catch (e) {
+      showToast?.(e?.message || 'Could not load tokens from the active stage','error');
+      return;
+    }
+
+    const encounterActorIds = new Set(members.map((member) => member.actorId).filter(Boolean));
+    const eligibleCasts = await Promise.all(casts.map(async (cast) => {
+      if (!cast.actorId) return null;
+      if (encounterActorIds.has(cast.actorId)) return cast;
+      try {
+        const actor = await api.get(`/actors/${cast.actorId}`);
+        return actor?.type === 'character' ? cast : null;
+      } catch { return null; }
+    }));
+    const castIds = [...new Set(eligibleCasts.filter(Boolean).map((cast) => cast.id))];
+    if (!castIds.length) { showToast?.('No party or encounter tokens found on this stage','warning'); return; }
+
+    try {
+      const currentCombat = await api.get(`/combat/${encodeURIComponent(worldId)}`);
+      if (currentCombat?.isActive && !window.confirm('A combat is already active. Starting this encounter will replace its turn order. Continue?')) return;
+      const initiativeFormula = window.Loom?.settings?.get('srd5e', 'initiativeFormula')
+        || '1d20 + floor((@abilities.dex.value - 10) / 2) + @attributes.initiative.value + @attributes.initiative.bonus + (@abilities.dex.value / 100)';
+      await api.post(`/combat/${encodeURIComponent(worldId)}/dex-initiative`, { castIds, initiativeFormula });
+      showToast?.('Combat started with the encounter and party tokens on this stage','success');
+    } catch (e) {
+      showToast?.(e?.message || 'Could not start combat','error');
+    }
   }
 
   get title(){ return this.document?.name || 'Encounter'; }

@@ -1,4 +1,60 @@
 {
+  "SDR5E": {
+    "Encounter": {
+      "StartCombat": "Iniciar combate"
+    },
+    "Settings": {
+      "initiativeFormula": {
+        "name": "Fórmula de iniciativa",
+        "hint": "Fórmula do rastreador de combate: modificador de Destreza, ajustes de iniciativa e desempate decimal."
+      },
+      "initiativeTiebreaker": {
+        "name": "Desempate de iniciativa",
+        "hint": "Adiciona a fração do valor de Destreza (DES / 100) à iniciativa para desempatar automaticamente."
+      },
+      "maxHpFirstLevel": {
+        "name": "Pontos de vida máximos no 1º nível",
+        "hint": "Novos heróis recebem o máximo de pontos de vida no primeiro nível."
+      },
+      "encumbranceTracking": {
+        "name": "Rastreamento de carga",
+        "hint": "Aplica a regra opcional do SRD para capacidade de carga e penalidades por excesso de peso."
+      },
+      "collapseItemCards": {
+        "name": "Cards compactos no chat",
+        "hint": "Exibe rolagens e ativações de itens em formato compacto para economizar espaço no chat."
+      },
+      "learningMilestones": {
+        "name": "Progressão por marcos",
+        "hint": "Permite subir de nível por marcos da história em vez de acumular XP."
+      },
+      "criticalHitRule": {
+        "name": "Regra de acerto crítico",
+        "hint": "Método usado para calcular o dano em acertos críticos.",
+        "choices": {
+          "doubleDice": "Dobrar os dados de dano (SRD)",
+          "maxDice": "Dados no máximo + rolagem",
+          "flatMax": "Dano máximo fixo"
+        }
+      },
+      "deathSaveDC": {
+        "name": "CD da salvaguarda contra a morte",
+        "hint": "Dificuldade das salvaguardas contra a morte (o valor padrão de 5e é 10)."
+      },
+      "diagonalMovement": {
+        "name": "Movimento diagonal na grade",
+        "hint": "Regra usada para contar o movimento diagonal na grade.",
+        "choices": {
+          "555": "5/5/5 pés (equidistante, padrão)",
+          "5105": "5/10/5 pés (variante do DMG)"
+        }
+      },
+      "primaryParty": {
+        "name": "Grupo principal",
+        "hint": "Ator do tipo Grupo usado para calcular a dificuldade dos encontros."
+      }
+    }
+  },
   "TYPES": {
     "Actor": {
       "character": "Herói",

@@ -2512,3 +2512,45 @@
   color: var(--sdrn-text-muted);
   text-transform: uppercase;
 }
+
+.sdrn-encounter-start-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(226, 185, 96, 0.72);
+  border-radius: 6px;
+  background: linear-gradient(135deg, #a56f25, #d5a64c);
+  color: #17120b;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.28), inset 0 1px rgba(255, 255, 255, 0.2);
+  transition: filter 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+}
+
+.sdrn-encounter-start-btn:hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.35), 0 0 12px rgba(213, 166, 76, 0.2);
+}
+
+.sdrn-encounter-start-btn:focus-visible {
+  outline: 2px solid #f6d68b;
+  outline-offset: 3px;
+}
+
+@media (max-width: 620px) {
+  .sdrn-encounter-start-btn {
+    min-height: 34px;
+    gap: 6px;
+    padding: 0 9px;
+    font-size: 10px;
+  }
+}

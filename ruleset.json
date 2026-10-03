@@ -70,56 +70,64 @@
   ],
   "settings": [
     {
+      "key": "initiativeFormula",
+      "type": "string",
+      "default": "1d20 + floor((@abilities.dex.value - 10) / 2) + @attributes.initiative.value + @attributes.initiative.bonus + (@abilities.dex.value / 100)",
+      "scope": "world",
+      "name": "Initiative Formula",
+      "hint": "Formula used by the combat tracker: Dexterity modifier, initiative adjustments, and decimal tie-breaker."
+    },
+    {
       "key": "initiativeTiebreaker",
       "type": "boolean",
       "default": true,
       "scope": "world",
-      "name": "Desempate de Iniciativa (Tiebreaker)",
-      "hint": "Adiciona a fração de Destreza (DEX / 100) ao total da rolagem de iniciativa para desempatar automaticamente."
+      "name": "Initiative Tie-Breaker",
+      "hint": "Adds the decimal Dexterity score (DEX / 100) to initiative to break ties automatically."
     },
     {
       "key": "maxHpFirstLevel",
       "type": "boolean",
       "default": true,
       "scope": "world",
-      "name": "PV Máximo no 1º Nível",
-      "hint": "Garante que novos heróis recebam o valor máximo de pontos de vida em seu primeiro nível."
+      "name": "Maximum Hit Points at Level 1",
+      "hint": "New heroes receive the maximum hit points for their first level."
     },
     {
       "key": "encumbranceTracking",
       "type": "boolean",
       "default": false,
       "scope": "world",
-      "name": "Rastreamento de Carga (Encumbrance)",
-      "hint": "Calcula penalidades de sobrecarga por excesso de peso no inventário (regra variante do SRD)."
+      "name": "Encumbrance Tracking",
+      "hint": "Applies the SRD optional carrying-capacity rule and its penalties for excess weight."
     },
     {
       "key": "collapseItemCards",
       "type": "boolean",
       "default": false,
       "scope": "client",
-      "name": "Cards Compactos no Chat",
-      "hint": "Exibe rolagens e ativações de itens de forma mais enxuta para economizar espaço no chat."
+      "name": "Compact Chat Cards",
+      "hint": "Shows item rolls and activations in a compact format to save chat space."
     },
     {
       "key": "learningMilestones",
       "type": "boolean",
       "default": true,
       "scope": "world",
-      "name": "Progressão por Marcos (Milestones)",
-      "hint": "Permite evolução de nível guiada por marcos de história em vez de acúmulo numérico de XP."
+      "name": "Milestone Advancement",
+      "hint": "Allows level advancement through story milestones instead of accumulated XP."
     },
     {
       "key": "criticalHitRule",
       "type": "string",
       "default": "doubleDice",
       "scope": "world",
-      "name": "Regra de Dano Crítico",
-      "hint": "Método de cálculo do dano em acertos críticos.",
+      "name": "Critical Hit Rule",
+      "hint": "Method used to calculate damage on critical hits.",
       "choices": {
-        "doubleDice": "Dobrar Dados de Dano (SRD)",
-        "maxDice": "Dado Máximo + Rolagem",
-        "flatMax": "Dano Máximo Fixo"
+        "doubleDice": "Double Damage Dice (SRD)",
+        "maxDice": "Maximum Dice + Roll",
+        "flatMax": "Fixed Maximum Damage"
       }
     },
     {
@@ -127,19 +135,19 @@
       "type": "number",
       "default": 10,
       "scope": "world",
-      "name": "CD da Salvaguarda Contra a Morte",
-      "hint": "Valor de dificuldade (DC) para testes de resistência contra a morte (padrão 5e é 10)."
+      "name": "Death Saving Throw DC",
+      "hint": "Difficulty for death saving throws (the standard 5e value is 10)."
     },
     {
       "key": "diagonalMovement",
       "type": "string",
       "default": "555",
       "scope": "world",
-      "name": "Cálculo de Diagonal na Grade",
-      "hint": "Regra de contagem para movimentação diagonal no grid.",
+      "name": "Diagonal Grid Movement",
+      "hint": "Rule used to count diagonal movement on the grid.",
       "choices": {
-        "555": "5/5/5 ft (Equidistante - Padrão)",
-        "5105": "5/10/5 ft (Variante DMG)"
+        "555": "5/5/5 ft (Equal-Distance, Standard)",
+        "5105": "5/10/5 ft (DMG Variant)"
       }
     },
     {
@@ -147,8 +155,8 @@
       "type": "string",
       "default": "",
       "scope": "world",
-      "name": "Grupo Principal",
-      "hint": "Ator do tipo Grupo usado como referência de dificuldade de encontros."
+      "name": "Primary Party",
+      "hint": "Group actor used to calculate encounter difficulty."
     }
   ]
 }
