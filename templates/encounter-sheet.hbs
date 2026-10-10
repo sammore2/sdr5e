@@ -2,7 +2,7 @@
 
   <div class="sdrn-encounter-container">
 
-    <!-- Header Heroico Estilo Foundry V3 com Emblema de Espadas -->
+    <!-- Header Heroico Estilo VTT legado V3 com Emblema de Espadas -->
     <header class="sdrn-encounter-header">
       <div class="sdrn-encounter-header-left">
         <div class="sdrn-encounter-emblem" title="Encounter Heraldry">
@@ -182,8 +182,8 @@
         <div class="sdrn-xp-meter"><div class="sdrn-xp-meter-fill" style="width:100%;"></div></div>
       </div>
 
-      <div class="sdrn-difficulty-pill {{#if (eq _difficulty 'Low')}}diff-low{{/if}}{{#if (eq _difficulty 'Moderate')}}diff-mod{{/if}}{{#if (eq _difficulty 'High')}}diff-high{{/if}}{{#if (eq _difficulty 'Beyond High')}}diff-deadly{{/if}}" title="{{#if _budget}}Party Budget: Low {{_budget.low}} &bull; Mod {{_budget.moderate}} &bull; High {{_budget.high}}{{/if}}">
-        <i class="fas fa-skull"></i> <span>{{_difficulty}}</span>
+      <div class="sdrn-difficulty-pill {{#if (eq _difficultyClass 'low')}}diff-low{{/if}}{{#if (eq _difficultyClass 'moderate')}}diff-mod{{/if}}{{#if (eq _difficultyClass 'high')}}diff-high{{/if}}{{#if (eq _difficultyClass 'beyond-high')}}diff-deadly{{/if}}" title="{{_budgetTitle}}">
+        <i class="fas fa-skull"></i> <span>{{_difficultyLabel}}</span>
       </div>
     </footer>
 

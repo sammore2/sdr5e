@@ -1,4 +1,15 @@
 <div class="sdrn-wizard-root">
+  {{#if _creationRecovery}}
+  <section class="sdrn-wizard-body sdrn-wizard-recovery">
+    <h3>{{localize "SDR5E.CharacterWizard.CreationRecoveryTitle"}}</h3>
+    <p>{{localize "SDR5E.CharacterWizard.CreationRecoveryStatus"}}: {{_creationRecovery.status}} — {{_creationRecovery.actorName}}</p>
+    {{#if _creationRecovery.actorId}}<p>{{localize "SDR5E.CharacterWizard.CreationRecoveryActorId"}}: {{_creationRecovery.actorId}}</p>{{/if}}
+    <p>{{localize "SDR5E.CharacterWizard.CreationRecoverySteps"}}: {{_creationRecovery.completed}} / {{_creationRecovery.total}}</p>
+    {{#if _creationRecovery.unknownStep}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.CreationRecoveryUnknown"}}: {{_creationRecovery.unknownStep}}</p>{{/if}}
+    {{#if _creationRecovery.canResume}}<button type="button" class="sdrn-wizard-btn sdrn-wizard-btn-primary" data-action="wizard-resume-creation">{{localize "SDR5E.CharacterWizard.ResumeConfirmedSteps"}}</button>{{/if}}
+    <button type="button" class="sdrn-wizard-btn" data-action="wizard-acknowledge-creation-review">{{localize "SDR5E.CharacterWizard.AcknowledgeManualReview"}}</button>
+  </section>
+  {{/if}}
   <div class="sdrn-wizard-steps">
     {{#each _steps}}
     <div class="sdrn-wizard-step-dot {{#if active}}active{{/if}} {{#if done}}done{{/if}}">{{id}}</div>
@@ -19,6 +30,36 @@
       <strong>{{_data.race.name}}</strong> <span class="sdrn-wizard-hint">(from compendium)</span>
       <button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-race">Change</button>
     </div>
+    {{#if _speciesChoice}}
+    <div class="sdrn-bio-field"><label>{{_speciesChoice.label}}</label><select name="w:raceChoices.{{_speciesChoice.key}}"><option value="">—</option>{{#each _speciesChoice.options}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    {{/if}}
+    {{#if _speciesChoiceManual}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.SpeciesChoiceManual"}}</p>{{/if}}
+    {{#if _humanSpecies}}
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.HumanSkillChoice"}}</label><select name="w:raceChoices.skillful"><option value="">—</option>{{#each _humanSkillOptions}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    {{#if _humanFeatPicked}}<div class="sdrn-wizard-picked"><strong>{{_humanFeatName}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-human-feat">{{localize "SDR5E.CharacterWizard.Change"}}</button></div>
+    {{#if _humanFeatManual}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.FeatManualInstruction"}}</p>{{/if}}
+    {{#if _humanMagicInitiate}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.MagicInitiateInstructions"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.MagicInitiateList"}}</label><select name="w:magicInitiate.human.list"><option value="">—</option>{{#each _humanMagicInitiate.lists}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.MagicInitiateAbility"}}</label><select name="w:magicInitiate.human.ability"><option value="">—</option>{{#each _humanMagicInitiate.abilities}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.MagicInitiateCantrip1"}}</label><select name="w:magicInitiate.human.cantrips.0"><option value="">—</option>{{#each _humanMagicInitiate.cantrip1}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.MagicInitiateCantrip2"}}</label><select name="w:magicInitiate.human.cantrips.1"><option value="">—</option>{{#each _humanMagicInitiate.cantrip2}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.MagicInitiateLevel1Spell"}}</label><select name="w:magicInitiate.human.spell"><option value="">—</option>{{#each _humanMagicInitiate.spells}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    {{#unless _magicInitiateHumanValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.CompleteMagicInitiateChoices"}}</p>{{/unless}}
+    {{/if}}
+    {{#if _humanFeatChoiceSummary}}<p>{{_humanFeatChoiceSummary}}</p>{{/if}}
+    {{#if _humanFeatHasChoices}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.SkilledChoiceHint"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.ProficiencyChoice1"}}</label><select name="w:raceChoices.featChoice1"><option value="">—</option>{{#each _humanFeatChoices}}<option value="{{value}}" {{#if selectedFirst}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.ProficiencyChoice2"}}</label><select name="w:raceChoices.featChoice2"><option value="">—</option>{{#each _humanFeatChoices}}<option value="{{value}}" {{#if selectedSecond}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.ProficiencyChoice3"}}</label><select name="w:raceChoices.featChoice3"><option value="">—</option>{{#each _humanFeatChoices}}<option value="{{value}}" {{#if selectedThird}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    {{#unless _humanFeatChoiceValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.InvalidFeatProficiencyChoices"}}</p>{{/unless}}{{/if}}
+    {{#unless _humanChoicesValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.CompleteHumanChoices"}}</p>{{/unless}}
+    {{else}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.HumanFeatChoice"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.Filter"}}</label><input type="text" data-wizard-search="speciesFeat" value="{{_humanFeatQuery}}" placeholder="{{localize 'SDR5E.CharacterWizard.FilterHint'}}" /></div>
+    {{#if _humanFeatResults}}<div class="sdrn-wizard-results">{{#each _humanFeatResults}}<button type="button" class="sdrn-wizard-result" data-action="wizard-pick-human-feat" data-id="{{id}}"><span>{{name}}</span> <small>{{sourceName}}</small></button>{{/each}}</div>{{else}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.NoFeatOptions"}}</p>{{/if}}
+    {{/if}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.HumanTraitsManual"}}</p>
+    {{/if}}
     {{else}}
     <div class="sdrn-bio-field"><label>Filter</label><input type="text" data-wizard-search="race" value="{{_raceQuery}}" placeholder="Type to filter, or pick below" /></div>
     {{#if _raceResults}}
@@ -32,6 +73,40 @@
     {{else}}
     <p class="sdrn-wizard-hint">No compendium race packs found. Ask your GM to install a race pack.</p>
     {{/if}}
+    {{/if}}
+    {{/if}}
+
+    {{#if _stepBackground}}
+    <h3>{{localize "SDR5E.CharacterWizard.Background"}}</h3>
+    {{#if _backgroundPicked}}
+    <div class="sdrn-wizard-picked"><strong>{{_data.background.name}}</strong>
+      <button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-background">{{localize "SDR5E.CharacterWizard.Change"}}</button>
+    </div>
+    {{#if _backgroundHasToolChoice}}<div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.BackgroundToolChoice"}}</label><select name="w:backgroundAbilities.tool"><option value="">—</option>{{#each _backgroundToolOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>{{/if}}
+    {{#if _backgroundMagicInitiate}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.MagicInitiateInstructions"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.MagicInitiateList"}}</label><select name="w:magicInitiate.background.list"><option value="">—</option>{{#each _backgroundMagicInitiate.lists}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.MagicInitiateAbility"}}</label><select name="w:magicInitiate.background.ability"><option value="">—</option>{{#each _backgroundMagicInitiate.abilities}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.MagicInitiateCantrip1"}}</label><select name="w:magicInitiate.background.cantrips.0"><option value="">—</option>{{#each _backgroundMagicInitiate.cantrip1}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.MagicInitiateCantrip2"}}</label><select name="w:magicInitiate.background.cantrips.1"><option value="">—</option>{{#each _backgroundMagicInitiate.cantrip2}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.MagicInitiateLevel1Spell"}}</label><select name="w:magicInitiate.background.spell"><option value="">—</option>{{#each _backgroundMagicInitiate.spells}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    {{#unless _magicInitiateBackgroundValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.CompleteMagicInitiateChoices"}}</p>{{/unless}}
+    {{/if}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.EquipmentPackage"}}</p>
+    {{#each _backgroundEquipmentOptions}}<label><input type="radio" name="w:backgroundEquipment.package" value="{{value}}" {{#if selected}}checked{{/if}} />{{label}}</label>{{/each}}
+    {{#if _backgroundEquipmentNeedsHolySymbol}}<div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.HolySymbolForm"}}</label><select name="w:backgroundEquipment.holySymbol"><option value="">—</option>{{#each _holySymbolOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>{{/if}}
+    {{#unless _backgroundEquipmentValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.CompleteEquipmentChoices"}}</p>{{/unless}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.BackgroundAbilityChoice"}}</p>
+    <label><input type="checkbox" name="w:backgroundAbilities.spread" {{#if _backgroundSpread}}checked{{/if}} /> {{localize "SDR5E.CharacterWizard.BackgroundSpreadChoice"}}</label>
+    {{#unless _backgroundSpread}}
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.AbilityFirst"}}</label><select name="w:backgroundAbilities.first"><option value="">—</option>{{#each _backgroundAbilities}}<option value="{{key}}" {{#if selectedFirst}}selected{{/if}}>{{label}} ({{value}})</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.AbilitySecond"}}</label><select name="w:backgroundAbilities.second"><option value="">—</option>{{#each _backgroundAbilities}}<option value="{{key}}" {{#if selectedSecond}}selected{{/if}}>{{label}} ({{value}})</option>{{/each}}</select></div>
+    {{/unless}}
+    <p>{{localize "SDR5E.CharacterWizard.BackgroundSkillsTools"}}</p>
+    {{#if _backgroundFeatAvailable}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.BackgroundFeatManual"}} {{_backgroundFeatName}}</p>{{else}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.BackgroundFeatUnavailable"}}</p>{{/if}}
+    {{else}}
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.Filter"}}</label><input type="text" data-wizard-search="background" value="{{_backgroundQuery}}" placeholder="{{localize 'SDR5E.CharacterWizard.FilterHint'}}" /></div>
+    {{#if _backgroundResults}}<div class="sdrn-wizard-results">{{#each _backgroundResults}}<button type="button" class="sdrn-wizard-result" data-action="wizard-pick-background" data-id="{{id}}" data-source-id="{{sourceId}}"><span>{{name}}</span> <small>{{sourceName}}</small></button>{{/each}}</div>{{else}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.NoBackgroundOptions"}}</p>{{/if}}
     {{/if}}
     {{/if}}
 
@@ -58,27 +133,127 @@
     {{/if}}
     {{/if}}
 
+    {{#if _stepLanguages}}
+    <h3>{{localize "SDR5E.CharacterWizard.LanguagesHeading"}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.LanguagesHelp"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.OriginLanguageOne"}}</label><select name="w:originLanguages.0"><option value="">—</option>{{#each _originLanguageOneOptions}}<option value="{{name}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.OriginLanguageTwo"}}</label><select name="w:originLanguages.1"><option value="">—</option>{{#each _originLanguageTwoOptions}}<option value="{{name}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    {{#unless _originLanguagesValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.ChooseTwoLanguages"}}</p>{{/unless}}
+    {{#if _rogueLanguageRequired}}
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.RogueAdditionalLanguage"}}</label><select name="w:rogueAdditionalLanguage"><option value="">—</option>{{#each _rogueAdditionalLanguageOptions}}<option value="{{name}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    {{#unless _rogueAdditionalLanguageValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.ChooseRogueLanguage"}}</p>{{/unless}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.RogueCantGranted"}}</p>
+    {{/if}}
+    {{/if}}
+
+    {{#if _stepClassProficiencies}}
+    <h3>{{localize "SDR5E.CharacterWizard.ClassProficiencies"}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.ClassProficienciesHint"}}</p>
+    {{#each _classProficiencySkillChoices}}
+    <div class="sdrn-bio-field"><label>{{label}}</label>
+      <select name="{{name}}"><option value="">—</option>{{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+    </div>
+    {{/each}}
+    {{#each _classProficiencyToolChoices}}
+    <div class="sdrn-bio-field"><label>{{label}}</label>
+      <select name="{{name}}"><option value="">—</option>{{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+    </div>
+    {{/each}}
+    {{#unless _classProficienciesValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.CompleteClassProficiencyChoices"}}</p>{{/unless}}
+    {{/if}}
+
+    {{#if _stepWeaponMastery}}
+    <h3>{{localize "SDR5E.Wizard.LevelUp.WeaponMasteryHeading"}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.WeaponMasteryHelp"}} {{_weaponMasteryCount}} / {{_weaponMasteryRequired}}</p>
+    {{#each _weaponMasteryOptions}}
+    <label class="sdrn-wizard-picked"><input type="checkbox" name="w:weaponMasterySelections" value="{{identifier}}" {{#if selected}}checked{{/if}}><span>{{name}} — {{mastery}}</span></label>
+    {{/each}}
+    {{#unless _weaponMasteryValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.CompleteWeaponMasteryChoices"}}</p>{{/unless}}
+    {{/if}}
+
+    {{#if _stepClassEquipment}}
+    <h3>{{localize "SDR5E.CharacterWizard.ClassStartingEquipment"}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.ClassStartingEquipmentHint"}}</p>
+    {{#each _classEquipmentOptions}}
+    <label class="sdrn-wizard-choice"><input type="radio" name="w:classEquipment.package" value="{{value}}" {{#if selected}}checked{{/if}} /> {{label}}</label>
+    {{/each}}
+    {{#each _classEquipmentChoices}}
+    <div class="sdrn-bio-field"><label>{{label}}</label>
+      <select name="{{name}}"><option value="">—</option>{{#each options}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+    </div>
+    {{/each}}
+    {{#unless _classEquipmentValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.CompleteClassEquipmentChoices"}}</p>{{/unless}}
+    {{/if}}
+
+    {{#if _stepProgression}}
+    <h3>{{localize "SDR5E.CharacterWizard.LevelChoices"}} — {{localize "SDR5E.CharacterWizard.Level"}} {{_progressionLevel}}</h3>
     {{#if _stepSubclass}}
-    <h3>Subclass</h3>
+    <h4>{{localize "SDR5E.CharacterWizard.Subclass"}}</h4>
     {{#if _subclassPicked}}
-    <div class="sdrn-wizard-picked">
-      <strong>{{_data.subclass.name}}</strong> <span class="sdrn-wizard-hint">(from compendium)</span>
-      <button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-subclass">Change</button>
+    <div class="sdrn-wizard-picked"><strong>{{_data.subclass.name}}</strong>
+      <button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-subclass">{{localize "SDR5E.CharacterWizard.Change"}}</button>
     </div>
     {{else}}
-    <div class="sdrn-bio-field"><label>Filter</label><input type="text" data-wizard-search="subclass" value="{{_subclassQuery}}" placeholder="Type to filter, or pick below" /></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.Filter"}}</label><input type="text" data-wizard-search="subclass" value="{{_subclassQuery}}" placeholder="{{localize 'SDR5E.CharacterWizard.FilterHint'}}" /></div>
     {{#if _subclassResults}}
     <div class="sdrn-wizard-results">
       {{#each _subclassResults}}
-      <button type="button" class="sdrn-wizard-result" data-action="wizard-pick-subclass" data-id="{{id}}" data-source-id="{{sourceId}}">
-        <span>{{name}}</span> <small>{{sourceName}}</small>
-      </button>
+      <button type="button" class="sdrn-wizard-result" data-action="wizard-pick-subclass" data-id="{{id}}" data-source-id="{{sourceId}}"><span>{{name}}</span> <small>{{sourceName}}</small></button>
       {{/each}}
     </div>
+    {{else}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.NoSubclassOptions"}}</p>{{/if}}
+    {{/if}}
+    {{/if}}
+
+    {{#if _hasAbilityChoice}}
+    <h4>{{#if _isEpicBoonChoice}}{{localize "SDR5E.CharacterWizard.EpicBoon"}}{{else}}{{localize "SDR5E.CharacterWizard.AbilityImprovement"}}{{/if}}</h4>
+    {{#unless _isEpicBoonChoice}}
+    <label><input type="radio" name="w:progressionSelections.{{_choiceId}}.mode" value="scores" {{#if _asiModeScores}}checked{{/if}} /> {{localize "SDR5E.CharacterWizard.AbilityScores"}}</label>
+    <label><input type="radio" name="w:progressionSelections.{{_choiceId}}.mode" value="feat" {{#if _asiModeFeat}}checked{{/if}} /> {{localize "SDR5E.CharacterWizard.Feat"}}</label>
+    {{/unless}}
+    {{#if _asiModeScores}}
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.AbilityFirst"}}</label><select name="w:progressionSelections.{{_choiceId}}.first"><option value="">—</option>
+      {{#each _choiceAbilities}}<option value="{{key}}" {{#if selectedFirst}}selected{{/if}}>{{label}} ({{value}})</option>{{/each}}
+    </select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.AbilitySecond"}}</label><select name="w:progressionSelections.{{_choiceId}}.second"><option value="">—</option>
+      {{#each _choiceAbilities}}<option value="{{key}}" {{#if selectedSecond}}selected{{/if}}>{{label}} ({{value}})</option>{{/each}}
+    </select></div>
+    {{/if}}
+    {{#if _asiModeFeat}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.FeatEligibilityNotice"}}</p>
+    {{#if _featPicked}}<div class="sdrn-wizard-picked"><strong>{{_featName}}</strong>
+      <button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-feat" data-level="{{_progressionLevel}}">{{localize "SDR5E.CharacterWizard.Change"}}</button>
+    </div>
+    {{#if _featManual}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.FeatManualInstruction"}}</p><p>{{_featDescription}}</p>{{/if}}
+    {{#if _featHasAbilityIncrease}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.FeatAbilityIncrease"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.AbilityFirst"}}</label><select name="w:progressionSelections.{{_choiceId}}.featAbilityFirst"><option value="">—</option>
+      {{#each _choiceAbilities}}<option value="{{key}}" {{#if selectedFeatFirst}}selected{{/if}}>{{label}} ({{value}})</option>{{/each}}
+    </select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.AbilitySecond"}}</label><select name="w:progressionSelections.{{_choiceId}}.featAbilitySecond"><option value="">—</option>
+      {{#each _choiceAbilities}}<option value="{{key}}" {{#if selectedFeatSecond}}selected{{/if}}>{{label}} ({{value}})</option>{{/each}}
+    </select></div>
+    {{/if}}
+    {{#if _featHasChoices}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.SkilledChoiceHint"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.ProficiencyChoice1"}}</label><select name="w:progressionSelections.{{_choiceId}}.featChoice1"><option value="">—</option>{{#each _featChoiceOptions}}<option value="{{value}}" {{#if selectedFirst}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.ProficiencyChoice2"}}</label><select name="w:progressionSelections.{{_choiceId}}.featChoice2"><option value="">—</option>{{#each _featChoiceOptions}}<option value="{{value}}" {{#if selectedSecond}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.ProficiencyChoice3"}}</label><select name="w:progressionSelections.{{_choiceId}}.featChoice3"><option value="">—</option>{{#each _featChoiceOptions}}<option value="{{value}}" {{#if selectedThird}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    {{#unless _progressionChoicesValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.CompleteProgressionChoices"}}</p>{{/unless}}{{/if}}
     {{else}}
-    <p class="sdrn-wizard-hint">No subclass packs found for this class. Ask your GM to install a subclass pack or continue without.</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.Filter"}}</label><input type="text" data-wizard-search="feat" value="{{_featQuery}}" placeholder="{{localize 'SDR5E.CharacterWizard.FilterHint'}}" /></div>
+    {{#if _featResults}}<div class="sdrn-wizard-results">{{#each _featResults}}
+      <button type="button" class="sdrn-wizard-result" data-action="wizard-pick-feat" data-level="{{progressionLevel}}" data-id="{{id}}"><span>{{name}}</span> <small>{{sourceName}}</small></button>
+    {{/each}}</div>{{else}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.NoFeatOptions"}}</p>{{/if}}
     {{/if}}
     {{/if}}
+    {{/if}}
+    {{/if}}
+
+    {{#if _stepBardExpertise}}
+    <h3>{{localize "SDR5E.CharacterWizard.BardExpertiseHeading"}} — {{localize "SDR5E.CharacterWizard.Level"}} {{_bardExpertiseLevel}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.BardExpertiseHelp"}} {{_bardExpertiseCount}} / 2</p>
+    {{#each _bardExpertiseOptions}}<label class="sdrn-wizard-picked"><input type="checkbox" name="w:bardExpertiseChoices.{{../_bardExpertiseLevel}}" value="{{key}}" {{#if selected}}checked{{/if}}><span>{{label}}</span></label>{{/each}}
+    {{#unless _bardExpertiseChoiceValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.CompleteBardExpertiseChoices"}}</p>{{/unless}}
     {{/if}}
 
     {{#if _stepAbilities}}
@@ -91,14 +266,69 @@
     </div>
     {{/if}}
 
+    {{#if _stepSpells}}
+    <h3>{{localize "SDR5E.CharacterWizard.ClassSpellChoices"}}</h3>
+    {{#if _rangerFavoredEnemyRequired}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.RangerFavoredEnemySpellHint"}}</p>{{/if}}
+    {{#if _stepWizardSpells}}
+    {{#if _wizardPreparedStep}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.WizardPreparedChoiceHint"}}</p>
+    <p>{{localize "SDR5E.CharacterWizard.WizardPrepared"}}: {{_wizardPreparedCount}} / {{_wizardPreparedTarget}} — {{localize "SDR5E.CharacterWizard.Remaining"}} {{_wizardPreparedRemaining}}</p>
+    {{#each _wizardPreparedChoices}}<div class="sdrn-wizard-picked"><strong>{{name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-wizard-prepared" data-id="{{id}}">{{localize "SDR5E.CharacterWizard.RemovePrepared"}}</button></div>{{/each}}
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.Filter"}}</label><input type="text" data-wizard-search="classSpell" value="{{_wizardSpellQuery}}" placeholder="{{localize 'SDR5E.CharacterWizard.FilterHint'}}" /></div>
+    {{#each _wizardPreparedRows}}<div class="sdrn-wizard-picked"><span>{{name}} <small>{{localize "SDR5E.CharacterWizard.WizardSpellbook"}}</small></span><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-wizard-prepared" data-id="{{id}}">{{#if selected}}{{localize "SDR5E.CharacterWizard.RemovePrepared"}}{{else}}{{localize "SDR5E.CharacterWizard.PrepareSpell"}}{{/if}}</button></div>{{/each}}
+    {{#unless _wizardSpellsValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.CompleteWizardSpellChoices"}}</p>{{/unless}}
+    {{else}}
+    <p class="sdrn-wizard-hint">{{#if _wizardInitialSpellLevel}}{{localize "SDR5E.CharacterWizard.WizardSpellFoundation"}}{{else}}{{localize "SDR5E.CharacterWizard.WizardSpellAcquisitionHint"}}{{/if}}</p>
+    <p>{{localize "SDR5E.CharacterWizard.WizardSpellbook"}} — {{localize "SDR5E.CharacterWizard.Level"}} {{_wizardCreationStepLevel}}: {{_wizardSpellbookCount}} / {{_wizardStepCounts.spellbookCount}}</p>
+    {{#if _wizardStepCounts.cantripCount}}<p>{{localize "SDR5E.CharacterWizard.WizardCantrips"}} — {{localize "SDR5E.CharacterWizard.Level"}} {{_wizardCreationStepLevel}}: {{_wizardCantripCount}} / {{_wizardStepCounts.cantripCount}}</p>{{/if}}
+    {{#each _wizardCurrentSpellbookPicks}}<div class="sdrn-wizard-picked"><strong>{{name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-wizard-book" data-id="{{id}}">{{localize "SDR5E.CharacterWizard.Remove"}}</button></div>{{/each}}
+    {{#each _wizardCurrentCantripPicks}}<div class="sdrn-wizard-picked"><strong>{{name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-wizard-cantrip" data-id="{{id}}">{{localize "SDR5E.CharacterWizard.Remove"}}</button></div>{{/each}}
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.Filter"}}</label><input type="text" data-wizard-search="classSpell" value="{{_classSpellQuery}}" placeholder="{{localize 'SDR5E.CharacterWizard.FilterHint'}}" /></div>
+    {{#if _wizardSpellRows}}<div class="sdrn-wizard-results">{{#each _wizardSpellRows}}
+      {{#if data.spellLevel}}
+      <button type="button" class="sdrn-wizard-result" data-action="wizard-toggle-wizard-book" data-id="{{id}}" {{#if alreadySelected}}{{#unless spellbookSelected}}disabled{{/unless}}{{/if}}>{{#if spellbookSelected}}✓ {{localize "SDR5E.CharacterWizard.Remove"}}{{else}}{{#if alreadySelected}}{{localize "SDR5E.CharacterWizard.WizardSpellAlreadyChosen"}}{{else}}{{localize "SDR5E.CharacterWizard.AddToSpellbook"}}{{/if}}{{/if}} — {{name}} <small>{{localize "SDR5E.CharacterWizard.SpellLevel"}} {{data.spellLevel}}</small></button>
+      {{else}}
+      <button type="button" class="sdrn-wizard-result" data-action="wizard-toggle-wizard-cantrip" data-id="{{id}}" {{#if alreadySelected}}{{#unless cantripSelected}}disabled{{/unless}}{{/if}}>{{#if cantripSelected}}✓ {{localize "SDR5E.CharacterWizard.Remove"}}{{else}}{{#if alreadySelected}}{{localize "SDR5E.CharacterWizard.WizardSpellAlreadyChosen"}}{{else}}{{localize "SDR5E.CharacterWizard.ChooseCantrip"}}{{/if}}{{/if}} — {{name}}</button>
+      {{/if}}
+    {{/each}}</div>{{else}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.NoClassSpells"}}</p>{{/if}}
+    {{#unless _wizardSpellsValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.CompleteWizardSpellChoices"}}</p>{{/unless}}
+    {{/if}}
+    {{else}}
+    {{#if _bardCreation}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.BardSpellRules"}}</p>{{else if _sorcererCreation}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.SorcererSpellRules"}}</p>{{else if _warlockCreation}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.WarlockSpellRules"}}</p>{{else if _paladinCreation}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.HalfCasterSpellRules"}}</p>{{else if _rangerCreation}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.HalfCasterSpellRules"}}</p>{{else}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.ClassSpellRules"}}</p>{{/if}}
+    <p>{{localize "SDR5E.CharacterWizard.ClassCantripCount"}}: {{_classSpellCantripCount}} / {{_classSpellProgression.cantrips}} — {{localize "SDR5E.CharacterWizard.Remaining"}} {{_classSpellCantripsRemaining}}</p>
+    <p>{{localize "SDR5E.CharacterWizard.ClassPreparedSpellCount"}}: {{_classSpellPreparedCount}} / {{_classSpellProgression.prepared}} — {{localize "SDR5E.CharacterWizard.Remaining"}} {{_classSpellPreparedRemaining}}</p>
+    {{#each _classSpellCantrips}}<div class="sdrn-wizard-picked"><strong>{{name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-class-spell" data-id="{{id}}">{{localize "SDR5E.CharacterWizard.Remove"}}</button></div>{{/each}}
+    {{#each _classSpellPrepared}}<div class="sdrn-wizard-picked"><strong>{{name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-class-spell" data-id="{{id}}">{{localize "SDR5E.CharacterWizard.Remove"}}</button></div>{{/each}}
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.CharacterWizard.Filter"}}</label><input type="text" data-wizard-search="classSpell" value="{{_classSpellQuery}}" placeholder="{{localize 'SDR5E.CharacterWizard.FilterHint'}}" /></div>
+    {{#if _classSpellResults}}<div class="sdrn-wizard-results">{{#each _classSpellResults}}
+      <button type="button" class="sdrn-wizard-result {{#if selected}}selected{{/if}}" data-action="wizard-toggle-class-spell" data-id="{{id}}"><span>{{name}}</span> <small>Level {{data.spellLevel}}</small> {{#if selected}}✓{{else}}+{{/if}}</button>
+    {{/each}}</div>{{else}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.NoClassSpells"}}</p>{{/if}}
+    {{#unless _classSpellChoicesValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.CharacterWizard.CompleteClassSpellChoices"}}</p>{{/unless}}
+    {{/if}}
+    {{/if}}
+
     {{#if _stepReview}}
     <h3>Review</h3>
     <div class="sdrn-wizard-review">
       <div><strong>{{_data.name}}</strong> — Level {{_data.level}}</div>
       {{#if _data.race.name}}<div>Race: {{_data.race.name}} ({{_reviewRaceInfo}})</div>{{/if}}
+      {{#if _speciesChoiceReview}}<div>{{_speciesChoiceReview}} — {{localize "SDR5E.CharacterWizard.SpeciesChoiceManual"}}</div>{{/if}}
+      {{#if _humanSpecies}}<div>{{localize "SDR5E.CharacterWizard.HumanSkillChoice"}}: {{_data.raceChoices.skillful}}; {{localize "SDR5E.CharacterWizard.HumanFeatChoice"}}: {{_humanFeatName}}</div>{{/if}}
+      {{#if _data.background.name}}<div>{{localize "SDR5E.CharacterWizard.Background"}}: {{_data.background.name}} — {{_backgroundFeatName}}</div>{{/if}}
+      {{#if _backgroundMagicInitiateSummary}}<div>{{_backgroundFeatName}}: {{_backgroundMagicInitiateSummary}}</div>{{/if}}
+      {{#if _humanMagicInitiateSummary}}<div>{{_humanFeatName}}: {{_humanMagicInitiateSummary}}</div>{{/if}}
+      {{#if _backgroundEquipmentSummary}}<div>{{localize "SDR5E.CharacterWizard.EquipmentPackage"}}: {{_backgroundEquipmentSummary}}</div>{{/if}}
+      {{#if _classEquipmentSummary}}<div>{{localize "SDR5E.CharacterWizard.ClassStartingEquipment"}}: {{_classEquipmentSummary}}</div>{{/if}}
       {{#if _data.klass.name}}<div>Class: {{_data.klass.name}} ({{_reviewHitDie}} Hit Die)</div>{{/if}}
+      <div>{{localize "SDR5E.CharacterWizard.LanguagesHeading"}}: {{_reviewLanguages}}</div>
+      {{#if _classProficiencySummary}}<div>{{localize "SDR5E.CharacterWizard.ClassProficiencySummary"}}: {{_classProficiencySummary}}</div>{{/if}}
+      {{#if _classSpellSummary}}<div>{{localize "SDR5E.CharacterWizard.ClassSpellChoices"}}: {{_classSpellSummary}}</div>{{/if}}
       {{#if _data.subclass.name}}<div>Subclass: {{_data.subclass.name}}</div>{{/if}}
+      <div>{{localize "SDR5E.CharacterWizard.StartingHP"}}: {{_reviewStartingHp}}</div>
       <div>Abilities: {{_reviewAbilities}}</div>
+      {{#each _reviewProgressionChoices}}<div>{{this}}</div>{{/each}}
+      {{#if _humanFeatChoiceSummary}}<div>{{_humanFeatName}}: {{_humanFeatChoiceSummary}}</div>{{/if}}
+      {{#each _manualFeatBenefits}}<div><strong>{{name}}</strong> — {{localize "SDR5E.CharacterWizard.FeatManualInstruction"}} {{description}}</div>{{/each}}
     </div>
     {{/if}}
   </div>
@@ -106,6 +336,6 @@
   <div class="sdrn-wizard-nav">
     {{#unless _isFirst}}<button type="button" class="sdrn-wizard-btn" data-action="wizard-back">Back</button>{{/unless}}
     {{#unless _isLast}}<button type="button" class="sdrn-wizard-btn sdrn-wizard-btn-primary" data-action="wizard-next">Next</button>{{/unless}}
-    {{#if _isLast}}<button type="button" class="sdrn-wizard-btn sdrn-wizard-btn-primary" data-action="wizard-create">Create Character</button>{{/if}}
+    {{#if _isLast}}<button type="button" class="sdrn-wizard-btn sdrn-wizard-btn-primary" data-action="wizard-create" {{#unless _canCreate}}disabled{{/unless}}>{{localize "SDR5E.CharacterWizard.CreateCharacter"}}</button>{{/if}}
   </div>
 </div>

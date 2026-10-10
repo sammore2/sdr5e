@@ -4,7 +4,7 @@
 //
 // The public system API — a real centralized facade (equivalent to the
 // original `CodexApi` static-method class / `game.codex.api` in the old
-// Foundry system), not a scatter of loose exports. Sheets and macros alike
+// VTT legado system), not a scatter of loose exports. Sheets and macros alike
 // call `window.SDR5E.rollWeaponAttack(actor, item)`, never reach into
 // roll-engine.mjs/effects.mjs directly, so the actual mechanic — which file
 // it lives in, how it's implemented — stays free to move without breaking
@@ -41,7 +41,7 @@ export const SDR5EApi = {
   // Toggles
   toggleInspiration, setExhaustion,
   // Conditions (poisoned/restrained/paralyzed/etc — SRD 5.1 advantage/
-  // disadvantage rules, not Foundry's condition system)
+  // disadvantage rules, not VTT legado's condition system)
   getActorConditions, getSaveConditionOutcome,
   applyAbilityCheckConditionModifiers, applyWeaponAttackConditionModifiers,
   isToolProficient, rollToolCheck,
@@ -51,8 +51,8 @@ export const SDR5EApi = {
   // Chat
   postItemToChat, useConsumable, rollToolCheck,
   // Character creation
-  openCharacterWizard: () => {
+  openCharacterWizard: ({ actorId = null, existingActor = null } = {}) => {
     const wid = `sdr5e-wizard-${Math.random().toString(36).slice(2, 9)}`;
-    windowManager.open(wid, Sdr5eCharacterWizard, { id: wid });
+    windowManager.open(wid, Sdr5eCharacterWizard, { id: wid, actorId, existingActor });
   },
 };

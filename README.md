@@ -5,8 +5,7 @@
 # SDR5E
 
 A visceral, fantasy tabletop roleplaying system built on the mathematical foundation of the SRD.
-Native ruleset for **LoomVTT** — originally built for Foundry VTT, currently being converted to
-run natively on the Loom engine (no Foundry runtime dependency).
+Native ruleset for **LoomVTT** (no VTT legado runtime dependency).
 
 ## 🌒 Overview
 
@@ -14,10 +13,7 @@ run natively on the Loom engine (no Foundry runtime dependency).
 
 ### Key Features:
 
-- **Resonance Mechanics**: Manage the balance between cosmic forces (Axis/Flux and Genesis/Abyss).
-- **Visceral Combat**: Tactical encounters with streamlined yet lethal outcomes.
-- **Grimdark Aesthetic**: Custom-built UI and identity for an immersive dark fantasy setting.
-- **SRD 5.2 Foundation**: Full implementation of the System Reference Document 5.2 (CC-BY-4.0) rules and mechanics.
+- **SRD 5.2.1 content foundation**: Rules content is being aligned with the stated SRD version; see the coverage and limitations below before treating the ruleset as complete.
 
 ## ⚙️ Installation
 
@@ -25,13 +21,13 @@ To install SDR5E in LoomVTT, drop this ruleset in `marketplace/rulesets/` (or sy
 it there via a junction, see `.claude`/`.agents` skills for the pattern used by other
 Loom rulesets).
 
-> The Foundry VTT install steps below applied to the pre-conversion version and are kept
+> The VTT legado VTT install steps below applied to the pre-conversion version and are kept
 > only for historical reference while the port is in progress.
 
 <details>
-<summary>Legacy Foundry VTT installation (pre-conversion)</summary>
+<summary>Legacy VTT legado VTT installation (pre-conversion)</summary>
 
-1. Open the Foundry VTT Setup menu.
+1. Open the VTT legado VTT Setup menu.
 2. Go to the **Game Systems** tab.
 3. Click **Install System**.
 4. Use the **Manifest URL** provided in your private repository release.
@@ -44,10 +40,14 @@ Para desenvolvedores trabalhando no sistema:
 
 | Comando             | Função                                                       |
 | :------------------ | :------------------------------------------------------------- |
-| `npm run build`   | Compila arquivos **LESS** em CSS (Design/Interface)       |
-| `npm run compile` | Compila arquivos **JSON** em Packs (Banco de Dados/Itens) |
-| `npm run dev`     | Executa o Gulp em modo *watch* (Auto-compilação ao salvar)  |
-| `npm run eslint`  | Executa o linter para verificar erros de código               |
+| `npm test` | Executa as regressões determinísticas do ruleset. |
+| `npm run verify` | Verifica sintaxe JS, referências do manifesto, idiomas e integridade dos compêndios SQLite. |
+
+O repositório não contém atualmente uma fonte versionada de packs em JSON nem um pipeline de compilação LESS/SQLite. Por isso, estes comandos validam os artefatos presentes; não recompilam nem publicam pacotes.
+
+### Cobertura e limitações
+
+SDR5E ainda está em implementação. A progressão, parte dos recursos e os descansos possuem cobertura automatizada, mas criação em nível alto, várias features, atividades, magias, permissões e fluxos completos de encontro ainda exigem implementação e validação no Loom. Presença de uma entrada no compêndio não significa que seu efeito seja automatizado.
 
 ---
 

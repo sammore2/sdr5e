@@ -1,15 +1,18 @@
 <div class="sdrn-root sdrn-npc-root">
 
-  <!-- Dock Lateral de Abas Estilo Foundry V3 -->
+  <!-- Dock Lateral de Abas Estilo VTT legado V3 -->
   <nav class="sdrn-side-tabs sdrn-npc-side-tabs">
-    <button type="button" class="sdrn-tab-btn active" data-action="tab" data-tab="actions" title="Actions &amp; Features">
+    <button type="button" class="sdrn-tab-btn active" data-action="tab" data-tab="actions" title="{{_npcTabActions}}" aria-label="{{_npcTabActions}}">
       <i class="fas fa-list-ul"></i>
+      <span class="sdrn-tab-label">{{_npcTabActions}}</span>
     </button>
-    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="details" title="Biography &amp; Lore">
+    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="details" title="{{_npcTabDetails}}" aria-label="{{_npcTabDetails}}">
       <i class="fas fa-scroll"></i>
+      <span class="sdrn-tab-label">{{_npcTabDetails}}</span>
     </button>
-    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="config" title="Monster Configuration">
+    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="config" title="{{_npcTabConfig}}" aria-label="{{_npcTabConfig}}">
       <i class="fas fa-cog"></i>
+      <span class="sdrn-tab-label">{{_npcTabConfig}}</span>
     </button>
   </nav>
 
@@ -64,6 +67,28 @@
             <input class="sdrn-bar-input sdrn-tmp-input" type="number" name="sd:resources.health.temp" value="{{_health.temp}}" title="Temporary HP" />
           </div>
           {{/if}}
+          {{#if _showDeathSaves}}
+          <div class="sdrn-box sdrn-death-saves-block" style="margin-top:6px;">
+            <div class="sdrn-box-title">{{_deathSaveLabel}}</div>
+            <div class="sdrn-death-saves-row">
+              <div class="sdrn-death-saves-group">
+                {{#each _deathSaves.successPips}}
+                <span class="sdrn-death-pip success {{#if filled}}filled{{/if}}"></span>
+                {{/each}}
+              </div>
+              {{#if _canRollDeathSave}}
+              <button type="button" class="sdrn-death-roll-btn" data-action="roll-death-save" title="{{_rollDeathSaveLabel}}"><i class="fas fa-skull"></i></button>
+              {{else}}
+              <span class="sdrn-death-state-label">{{_deathStateLabel}}</span>
+              {{/if}}
+              <div class="sdrn-death-saves-group">
+                {{#each _deathSaves.failurePips}}
+                <span class="sdrn-death-pip failure {{#if filled}}filled{{/if}}"></span>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+          {{/if}}
         </div>
       </div>
 
@@ -107,7 +132,7 @@
           </div>
         </div>
 
-        <!-- Ribbon de 6 Atributos Estilo Foundry V3 -->
+        <!-- Ribbon de 6 Atributos Estilo VTT legado V3 -->
         <div class="sdrn-npc-abilities-ribbon">
           {{#each _abilities}}
           <div class="sdrn-ability-pill-card" title="{{label}}">
@@ -287,6 +312,48 @@
         <!-- ABA 1: ACTIONS & FEATURES -->
         <div data-tab-content="actions" class="sdrn-tab-panel">
 
+          <details class="sdrn-core-actions">
+            <summary class="sdrn-core-actions-summary" aria-label="{{_coreActionActivitiesTitle}}. {{_coreActionActivitiesNote}}" data-tooltip="{{_coreActionActivitiesNote}}">
+              <span>{{_coreActionActivitiesTitle}}</span><span class="sdrn-core-actions-help" aria-hidden="true">?</span>
+            </summary>
+            <div class="sdrn-core-actions-list">
+              {{#each _coreActionActivities}}
+              <div class="sdrn-core-action-row" data-core-action-row="{{action}}">
+                <label for="sdrn-npc-core-action-skill-{{action}}">{{label}}</label>
+                {{#if contextLabel}}<label>{{contextLabel}}<input type="text" maxlength="160" placeholder="{{contextPlaceholder}}" data-core-action-context></label>{{/if}}
+                <select id="sdrn-npc-core-action-skill-{{action}}" aria-label="{{label}} skill">
+                  {{#each skillOptions}}
+                  <option value="{{key}}" {{#if selected}}selected{{/if}} {{#unless available}}disabled{{/unless}}>{{label}}</option>
+                  {{/each}}
+                </select>
+                <button type="button" data-action="roll-core-action" data-activity="{{action}}" {{#if disabled}}disabled{{/if}}>{{rollLabel}}</button>
+              </div>
+              {{/each}}
+            </div>
+          </details>
+
+
+
+
+
+
+
+          <details class="sdrn-movement-ledger" data-movement-ledger>
+            <summary>{{_movementLedger.title}}{{#if _movementSlowPenalty}} · {{_movementLedger.slowPenalty}}{{/if}}{{#if _movementLedger}} · {{_movementLedger.remaining}} m {{_movementLedger.remainingLabel}}{{/if}}</summary>
+            {{#if _movementNeedsCastSelection}}
+            <label>{{_movementLedger.castSelect}} <select data-movement-cast-select><option value="">—</option>{{#each _movementCastChoices}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></label>
+            {{else if _movementCastUnavailable}}
+            <p>{{_movementLedger.castUnavailable}}</p>
+            {{else if _movementLedger}}
+            <div class="sdrn-movement-ledger-total"><span>{{_movementLedger.spentLabel}}: {{_movementLedger.spent}} m</span><span>{{_movementLedger.remainingLabel}}: {{_movementLedger.remaining}} m</span></div>
+            <div class="sdrn-movement-ledger-inputs"><label>{{_movementLedger.distanceLabel}}<input type="number" min="0.1" step="0.1" data-movement-distance></label><label>{{_movementLedger.modeFieldLabel}}<select data-movement-mode>{{#each _movementLedger.modes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><label class="sdrn-movement-difficult"><input type="checkbox" data-movement-difficult> {{_movementLedger.difficultLabel}}</label><button type="button" data-action="movement-ledger-add">{{_movementLedger.addLabel}}</button></div>
+            {{#each _movementLedger.segments}}<div class="sdrn-movement-ledger-segment {{#unless valid}}invalid{{/unless}}"><span>{{modeLabel}} · {{distanceText}}</span><button type="button" data-action="movement-ledger-remove" data-segment-index="{{index}}">{{../_movementLedger.removeLabel}}</button></div>{{/each}}
+            {{#if _movementLedger.dashModes.length}}<div class="sdrn-movement-dash-control"><label>{{_movementLedger.dashLabel}}<select data-dash-speed>{{#each _movementLedger.dashModes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><button type="button" data-action="movement-ledger-add-dash">{{_movementLedger.addDashLabel}}</button></div>{{/if}}
+            {{#each _movementLedger.dashBonuses}}<div class="sdrn-movement-ledger-segment"><span>{{modeLabel}} · +{{amountText}}</span><button type="button" data-action="movement-ledger-remove-dash" data-dash-index="{{index}}">{{../_movementLedger.removeDashLabel}}</button></div>{{/each}}
+            <button type="button" data-action="movement-ledger-reset">{{_movementLedger.resetLabel}}</button>
+            {{/if}}
+          </details>
+
           <!-- Barra de Busca de Ações & Filtros -->
           <div class="sdrn-search-bar">
             <i class="fas fa-search sdrn-search-icon"></i>
@@ -379,6 +446,10 @@
               <label class="sdrn-cfg-row">
                 <span>HP Formula</span>
                 <input type="text" name="sd:attributes.hp.formula" value="{{_hpFormula}}" placeholder="e.g. 8d8+16" />
+              </label>
+              <label class="sdrn-cfg-row sdrn-cfg-checkbox-row" title="{{_deathSaveOverrideHint}}">
+                <input type="checkbox" name="sd:details.useCharacterDeathSaves" {{#if _useCharacterDeathSaves}}checked{{/if}} />
+                <span>{{_deathSaveOverrideLabel}}<small>{{_deathSaveOverrideHint}}</small></span>
               </label>
               <label class="sdrn-cfg-row">
                 <span>Alignment</span>

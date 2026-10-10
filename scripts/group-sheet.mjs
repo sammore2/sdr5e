@@ -3,6 +3,13 @@ import { getSetting, setSetting } from './settings.mjs';
 import { takeRest } from './rest.mjs';
 import { attachFormSaver, readDropPayload } from './utils.mjs';
 import { fetchPreparedActor } from './prepare-data.mjs';
+import { Sdr5eCharacterSheet } from './character-sheet.mjs';
+import { groupXpAwardPreview, resolveGroupXpRecipients } from './group-xp.mjs';
+
+function groupXpText(key, values = {}) {
+  const source = window.Loom?.i18n?.localize?.(`SDR5E.GroupXP.${key}`) || `SDR5E.GroupXP.${key}`;
+  return Object.entries(values).reduce((text, [name, value]) => text.replaceAll(`{${name}}`, String(value)), source);
+}
 
 export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   static DEFAULT_OPTIONS = { position: { width: 600, height: 500 } };
@@ -90,6 +97,7 @@ export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _currency: currency,
       _description: sd.description || '',
       _isPrimary: isPrimary,
+      _canAwardXP: window.Loom?.user?.isGM === true,
     };
   }
 
@@ -105,7 +113,8 @@ export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     }
     if (action === 'short-rest-all') { void this._restAll('short'); return; }
     if (action === 'long-rest-all') { void this._restAll('long'); return; }
-    if (action === 'award') { void this._award(); return; }
+    if (action === 'award-xp') { void this._awardXP(); return; }
+    if (action === 'award') { void this._awardTreasure(); return; }
     if (action === 'set-primary-party') { void this._setPrimary(); return; }
     if (typeof super.onAction === 'function') super.onAction(action, id, target);
   }
@@ -126,15 +135,226 @@ export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         const actor = await api.get(`/actors/${mid}`);
         if(!actor || actor.type!=='character') continue;
         const fresh = await api.get(`/actors/${mid}`);
-        await takeRest(fresh, kind, {});
-        count++;
+        const rested = await takeRest(fresh, kind, {
+          promptPreparedSpells: kind === 'long'
+            ? (restingActor) => Sdr5eCharacterSheet.promptPreparedSpells(restingActor)
+            : undefined,
+        });
+        if (rested) count++;
       }catch(e){ console.warn('rest failed',e); }
     }
     await window.Loom.ChatMessage.create({ content: `${kind} rest for ${count} members`, flags:{ srd5e:{ name:`${this.document.name} — ${kind} rest`, description:`<div>Rest for ${count} characters</div>` } } });
     await this._reloadDocument();
   }
 
-  async _award() {
+  async _characterMemberActors(memberIds) {
+    const ids = Array.isArray(memberIds) ? memberIds : [];
+    const results = await Promise.all(ids.map(async (id) => {
+      try {
+        const actor = await api.get(`/actors/${id}`);
+        return actor?.type === 'character' ? { id, name: actor.name || groupXpText('UnnamedCharacter') } : null;
+      } catch {
+        return null;
+      }
+    }));
+    return results.filter(Boolean);
+  }
+
+  async _awardXP() {
+    if (window.Loom?.user?.isGM !== true) {
+      showToast?.(groupXpText('GMOnly'), 'warning');
+      return;
+    }
+
+    const memberActors = await this._characterMemberActors(this.document?.systemData?.members);
+    if (!memberActors.length) {
+      showToast?.(groupXpText('NoCharacters'), 'warning');
+      return;
+    }
+
+    const form = document.createElement('div');
+    form.className = 'sdrn-group-xp-form';
+    const label = document.createElement('label');
+    label.className = 'sdrn-group-xp-amount-label';
+    label.append(document.createTextNode(groupXpText('PerCharacterLabel')));
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.min = '1';
+    input.step = '1';
+    input.value = '0';
+    input.inputMode = 'numeric';
+    label.append(input);
+    const summary = document.createElement('p');
+    summary.className = 'sdrn-group-xp-preview';
+    const chooseSpecific = document.createElement('input');
+    chooseSpecific.type = 'checkbox';
+    const modeLabel = document.createElement('label');
+    modeLabel.className = 'sdrn-group-xp-mode';
+    modeLabel.append(chooseSpecific, document.createTextNode(groupXpText('ChooseRecipients')));
+    const recipientList = document.createElement('div');
+    recipientList.className = 'sdrn-group-xp-recipients';
+    recipientList.hidden = true;
+    for (const member of memberActors) {
+      const row = document.createElement('label');
+      row.className = 'sdrn-group-xp-recipient';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = member.id;
+      checkbox.checked = true;
+      const name = document.createElement('span');
+      name.textContent = member.name;
+      row.append(checkbox, name);
+      recipientList.append(row);
+    }
+    form.append(label, modeLabel, recipientList, summary);
+
+    const selectedMemberIds = () => resolveGroupXpRecipients(
+      memberActors.map(({ id }) => id),
+      [...recipientList.querySelectorAll('input:checked')].map((checkbox) => checkbox.value),
+      chooseSpecific.checked,
+    );
+
+    const updatePreview = () => {
+      try {
+        const selectedIds = selectedMemberIds();
+        if (!selectedIds.length) {
+          summary.textContent = groupXpText('NoRecipientSelected');
+          return;
+        }
+        const preview = groupXpAwardPreview(input.value, selectedIds.length);
+        summary.textContent = groupXpText('Preview', {
+          each: preview.xpPerCharacter,
+          count: preview.recipientCount,
+          total: preview.totalXp,
+          recipients: groupXpText(chooseSpecific.checked ? 'SelectedRecipients' : 'AllRecipients', { count: preview.recipientCount }),
+        });
+      } catch {
+        summary.textContent = groupXpText('EnterPositiveXP');
+      }
+    };
+    input.addEventListener('input', updatePreview);
+    chooseSpecific.addEventListener('change', () => {
+      recipientList.hidden = !chooseSpecific.checked;
+      updatePreview();
+    });
+    recipientList.addEventListener('change', updatePreview);
+    updatePreview();
+
+    const result = await LoomDialog.wait({
+      window: { title: groupXpText('DialogTitle') },
+      content: form,
+      width: 360,
+      buttons: [{
+        action: 'confirm',
+        label: groupXpText('Confirm'),
+        variant: 'primary',
+        callback: () => ({ xpPerCharacter: Number(input.value), memberIds: selectedMemberIds() }),
+      }],
+    });
+    if (!result) return;
+    if (!result.memberIds.length) {
+      showToast?.(groupXpText('NoRecipientSelected'), 'warning');
+      return;
+    }
+
+    let preview;
+    try {
+      preview = groupXpAwardPreview(result.xpPerCharacter, result.memberIds.length);
+    } catch {
+      showToast?.(groupXpText('EnterPositiveXP'), 'warning');
+      return;
+    }
+
+    let currentGroup;
+    try {
+      currentGroup = await api.get(`/actors/${this.document.id}`);
+    } catch {
+      showToast?.(groupXpText('AwardFailed'), 'error');
+      return;
+    }
+    const currentMemberActors = await this._characterMemberActors(currentGroup?.systemData?.members);
+    const currentMemberIds = currentMemberActors.map(({ id }) => id);
+    const originalMemberIds = memberActors.map(({ id }) => id);
+    if (currentGroup?.type !== 'group' || JSON.stringify([...currentMemberIds].sort()) !== JSON.stringify([...originalMemberIds].sort())
+      || result.memberIds.some((id) => !currentMemberIds.includes(id))) {
+      showToast?.(groupXpText('GroupChanged'), 'warning');
+      return;
+    }
+
+    let actors;
+    try {
+      actors = await Promise.all(result.memberIds.map((id) => api.get(`/actors/${id}`)));
+    } catch {
+      showToast?.(groupXpText('AwardFailed'), 'error');
+      return;
+    }
+    if (actors.some((actor) => actor?.type !== 'character')) {
+      showToast?.(groupXpText('GroupChanged'), 'warning');
+      return;
+    }
+
+    const snapshots = actors.map((actor) => {
+      const systemData = actor.systemData || {};
+      const details = systemData.details || {};
+      const xp = details.xp || {};
+      const current = Number(xp.value) || 0;
+      return { actor, systemData, details, xp, current, next: current + preview.xpPerCharacter };
+    });
+    if (snapshots.some(({ current, next }) => !Number.isSafeInteger(current) || current < 0 || !Number.isSafeInteger(next))) {
+      showToast?.(groupXpText('InvalidStoredXP'), 'warning');
+      return;
+    }
+    const completed = [];
+    try {
+      for (const snapshot of snapshots) {
+        await api.put(`/actors/${snapshot.actor.id}`, {
+          systemData: {
+            ...snapshot.systemData,
+            details: { ...snapshot.details, xp: { ...snapshot.xp, value: snapshot.next } },
+          },
+        });
+        completed.push(snapshot);
+      }
+    } catch (error) {
+      let rollbackFailed = false;
+      for (const snapshot of snapshots.slice().reverse()) {
+        try {
+          const latest = await api.get(`/actors/${snapshot.actor.id}`);
+          const latestSystemData = latest?.systemData || {};
+          const latestDetails = latestSystemData.details || {};
+          const latestXp = latestDetails.xp || {};
+          const latestValue = Number(latestXp.value) || 0;
+          if (latestValue === snapshot.current) continue;
+          if (latestValue !== snapshot.next) {
+            rollbackFailed = true;
+            continue;
+          }
+          await api.put(`/actors/${snapshot.actor.id}`, {
+            systemData: {
+              ...latestSystemData,
+              details: { ...latestDetails, xp: { ...latestXp, value: snapshot.current } },
+            },
+          });
+        } catch {
+          rollbackFailed = true;
+        }
+      }
+      console.error('[SDR5E] Group XP award failed', error);
+      showToast?.(groupXpText(rollbackFailed ? 'AwardPartialFailure' : 'AwardRolledBack', {
+        completed: completed.length,
+        count: snapshots.length,
+      }), 'error');
+      return;
+    }
+
+    await window.Loom.ChatMessage.create({
+      content: groupXpText('AwardChat', { each: preview.xpPerCharacter, count: preview.recipientCount, total: preview.totalXp }),
+      flags: { srd5e: { name: `${this.document.name} — ${groupXpText('ChatTitle')}`, description: groupXpText('AwardChat', { each: preview.xpPerCharacter, count: preview.recipientCount, total: preview.totalXp }) } },
+    });
+    await this._reloadDocument();
+  }
+
+  async _awardTreasure() {
     const sd = this.document.systemData || {};
     const members = sd.members || [];
     const charIds = [];
@@ -145,7 +365,6 @@ export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const container = document.createElement('div');
     container.innerHTML = `
       <div style="display:grid;gap:8px;">
-        <label>XP <input type="number" class="award-xp" value="0" /></label>
         <label>PP <input type="number" class="award-pp" value="0" /></label>
         <label>GP <input type="number" class="award-gp" value="0" /></label>
         <label>EP <input type="number" class="award-ep" value="0" /></label>
@@ -153,7 +372,6 @@ export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         <label>CP <input type="number" class="award-cp" value="0" /></label>
         <label><input type="checkbox" class="award-from-vault" /> Deduct from vault</label>
       </div>`;
-    const xpInput = container.querySelector('.award-xp');
     const ppInput = container.querySelector('.award-pp');
     const gpInput = container.querySelector('.award-gp');
     const epInput = container.querySelector('.award-ep');
@@ -161,11 +379,10 @@ export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const cpInput = container.querySelector('.award-cp');
     const fromVault = container.querySelector('.award-from-vault');
     const result = await LoomDialog.wait({
-      window:{ title:'Award XP & Treasure' },
+      window:{ title:'Award Treasure' },
       content: container,
       width: 360,
       buttons:[{ action:'confirm', label:'Award', variant:'primary', callback:()=>({
-        xp: Number(xpInput?.value)||0,
         pp: Number(ppInput?.value)||0,
         gp: Number(gpInput?.value)||0,
         ep: Number(epInput?.value)||0,
@@ -176,13 +393,11 @@ export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     });
     if(!result) return;
     const n = charIds.length;
-    const perXp = Math.floor(result.xp / n);
     const perPp = Math.floor(result.pp / n);
     const perGp = Math.floor(result.gp / n);
     const perEp = Math.floor(result.ep / n);
     const perSp = Math.floor(result.sp / n);
     const perCp = Math.floor(result.cp / n);
-    const remXp = result.xp % n;
     const remPp = result.pp % n;
     const remGp = result.gp % n;
     const remEp = result.ep % n;
@@ -199,7 +414,6 @@ export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const actor = await api.get(`/actors/${mid}`);
       const asd = actor.systemData || {};
       const details = asd.details || {};
-      const xpVal = Number(details.xp?.value)||0;
       const ppVal = Number(details.pp?.value)||0;
       const gpVal = Number(details.gp?.value)||0;
       const epVal = Number(details.ep?.value)||0;
@@ -207,10 +421,9 @@ export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const cpVal = Number(details.cp?.value)||0;
       await api.put(`/actors/${mid}`, { systemData: {
         ...asd,
-        details: { ...details, xp: { ...(details.xp||{}), value: xpVal + perXp }, pp:{value:ppVal+perPp}, gp:{value:gpVal+perGp}, ep:{value:epVal+perEp}, sp:{value:spVal+perSp}, cp:{value:cpVal+perCp} }
+        details: { ...details, pp:{value:ppVal+perPp}, gp:{value:gpVal+perGp}, ep:{value:epVal+perEp}, sp:{value:spVal+perSp}, cp:{value:cpVal+perCp} }
       } });
     }
-    // remainder stays in vault
     let vault = { ...(sd.currency || { pp:0,gp:0,ep:0,sp:0,cp:0 }) };
     if(result.fromVault){
       vault.pp = (vault.pp||0) - result.pp;
@@ -227,9 +440,8 @@ export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       vault.cp = (vault.cp||0) + remCp;
     }
     await api.put(`/actors/${this.document.id}`, { systemData: { ...sd, currency: vault } });
-    const xpRemainder = remXp ? ` ${remXp} XP not distributed.` : '';
-    const coinDetails = `PP ${perPp}, GP ${perGp}, EP ${perEp}, SP ${perSp}, CP ${perCp} each${xpRemainder}`;
-    await window.Loom.ChatMessage.create({ content:`Award: ${perXp} XP each`, flags:{ srd5e:{ name:`${this.document.name} — Award`, description:`<div>Each of ${n} characters gains ${perXp} XP and ${coinDetails}. Remainder in vault.</div>` } } });
+    const coinDetails = `PP ${perPp}, GP ${perGp}, EP ${perEp}, SP ${perSp}, CP ${perCp} each`;
+    await window.Loom.ChatMessage.create({ content:`Award treasure: ${coinDetails}`, flags:{ srd5e:{ name:`${this.document.name} — Award treasure`, description:`<div>Each of ${n} characters receives ${coinDetails}. Coin remainder in vault.</div>` } } });
     await this._reloadDocument();
   }
 

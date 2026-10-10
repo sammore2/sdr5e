@@ -3,15 +3,11 @@
   "version": "0.1.0",
   "description": "SDR5E — D20 fantasy ruleset for LoomVTT built on SRD mechanics (CC-BY-4.0)",
   "scripts": {
-    "gulp": "gulp",
-    "eslint": "eslint scripts/ the-codex.mjs",
-    "dev": "gulp watch",
-    "build": "gulp build",
-    "compile": "gulp compile",
-    "link": "gulp link",
-    "unlink": "gulp unlink",
-    "audit:actions": "node devtools/action-audit.mjs",
-    "rag:sync": "node devtools/rag-sync.mjs"
+    "verify": "node scripts/verify.mjs",
+    "test": "node --test",
+    "check": "npm test && npm run verify",
+    "packs:export": "node scripts/pack-sources.mjs export",
+    "packs:build": "node scripts/pack-sources.mjs build"
   },
   "browserslist": [
     "last 3 versions"
@@ -20,6 +16,9 @@
   "license": "MIT",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "keywords": [
     "fantasy",
     "loomvtt",
@@ -38,8 +37,6 @@
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@babel/eslint-parser": "^7.28.6",
-    "@foundryvtt/foundryvtt-cli": "^3.0.3",
-    "@league-of-foundry-developers/foundry-vtt-types": "*",
     "eslint": "^9.39.4",
     "eslint-plugin-hbs": "^1.0.3",
     "globals": "^15.15.0",
@@ -47,7 +44,6 @@
     "gulp-concat": "^2.6.1",
     "gulp-less": "^5.0.0"
   },
-  "main": "gulpfile.mjs",
   "dependencies": {
     "get-shit-done-cc": "^1.40.0"
   }

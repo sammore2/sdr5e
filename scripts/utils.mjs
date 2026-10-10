@@ -46,7 +46,7 @@ export function setPathValue(obj, path, value) {
 // Advantage/disadvantage on d20 rolls (`sdr5eRoll`'s `advantage` param) was
 // wired into the roll engine from the start but nothing ever actually
 // triggered it — every ability/skill/save/attack roll call site passed 0
-// (normal), with no UI path to change that. Real dnd5e-Foundry's convention
+// (normal), with no UI path to change that. Real dnd5e's convention
 // is Shift-click = advantage, Ctrl-click = disadvantage; `onAction(action,
 // id, target)` only gets the clicked element, not the click event, so
 // there's no per-click modifier-key info to read — tracked globally instead
@@ -66,11 +66,21 @@ if (typeof window !== 'undefined') {
   window.addEventListener('blur', () => { _shiftDown = false; _ctrlDown = false; _altDown = false; });
 }
 
-/** 1 = advantage (Shift held), -1 = disadvantage (Ctrl held), 0 = normal. Shift wins if both are held. */
+/** 1 = advantage (Shift held), -1 = disadvantage (Ctrl held), 0 = normal. Both held cancel out (SRD: Advantage and Disadvantage cancel). */
 export function currentAdvantageMode() {
+  if (_shiftDown && _ctrlDown) return 0;
   if (_shiftDown) return 1;
   if (_ctrlDown) return -1;
   return 0;
+}
+
+/**
+ * SRD Passive score: 10 + the check bonus, +5 with Advantage, -5 with Disadvantage.
+ * `mode` is the persistent Advantage/Disadvantage state only (1, 0, -1), never the transient Shift/Ctrl mode.
+ */
+export function passiveScore(checkBonus, mode = 0) {
+  const bonus = Number(checkBonus) || 0;
+  return 10 + bonus + (mode > 0 ? 5 : mode < 0 ? -5 : 0);
 }
 
 /** true = Alt está pressionado agora — sinaliza "role este dano como crítico" (Handout 30). */

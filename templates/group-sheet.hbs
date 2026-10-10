@@ -28,8 +28,13 @@
         <button type="button" class="sdrn-group-action-btn rest" data-action="long-rest-all" title="Long Rest (All Members)">
           <i class="fas fa-campground"></i> <span>Long Rest</span>
         </button>
-        <button type="button" class="sdrn-group-action-btn award" data-action="award" title="Award XP or Treasure to Members">
-          <i class="fas fa-trophy"></i> <span>Award</span>
+        {{#if _canAwardXP}}
+        <button type="button" class="sdrn-group-action-btn award award-xp" data-action="award-xp" title="{{localize 'SDR5E.GroupXP.AwardTitle'}}">
+          <i class="fas fa-star"></i> <span>{{localize "SDR5E.GroupXP.AwardButton"}}</span>
+        </button>
+        {{/if}}
+        <button type="button" class="sdrn-group-action-btn award" data-action="award" title="{{localize 'SDR5E.GroupXP.TreasureTitle'}}">
+          <i class="fas fa-coins"></i> <span>{{localize "SDR5E.GroupXP.TreasureButton"}}</span>
         </button>
       </div>
     </header>

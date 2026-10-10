@@ -17,15 +17,27 @@ import {
   ITEM_TYPE_ICON, ITEM_TYPE_SINGULAR, DAMAGE_TYPES, DAMAGE_TYPE_LABELS,
   CONDITIONS, SENSE_TYPES, SENSE_LABELS
 } from './config.mjs';
-import { fmtMod, setPathValue, currentAdvantageMode } from './utils.mjs';
-import { sdr5eRoll, applyHeal, applyDamage, getActorConditions, applyPoisonedDisadvantage, getSaveConditionOutcome, evaluateDamageFormula, postItemToChat, rollWeaponAttack, rollWeaponDamage } from './roll-engine.mjs';
+import { fmtMod, setPathValue, currentAdvantageMode, passiveScore } from './utils.mjs';
+import { initiativeBaseSources } from './initiative-mechanics.mjs';
+import { sdr5eRoll, rollDeathSave, applyHeal, applyDamage, getActorConditions, applyAbilityCheckConditionModifiers, applyPoisonedDisadvantage, getSaveConditionOutcome, getSaveCoverBonus, getSkillConditionOutcome, evaluateDamageFormula, postItemToChat, rollWeaponAttack, rollWeaponDamage } from './roll-engine.mjs';
 import { getDefaultData } from './schema.mjs';
 import { Sdr5eItemSheet } from './item-sheet.mjs';
+import { coreActionActivityView, coreActionContextMetadata, normalizeCoreActionContext, resolveCoreActionSkillCheck } from './core-action-checks.mjs';
+import { appendHelpRecord, createHelpRecord, helpActionView, normalizeHelpRecords, removeHelpRecord } from './help-action-mechanics.mjs';
+import { appendReadyRecord, createReadyRecord, normalizeReadyRecords, readyActionView, removeReadyRecord } from './ready-action-mechanics.mjs';
+import { clearDodgeRecord, dodgeActionView, setDodgeRecord } from './dodge-mechanics.mjs';
+import { composeInfluenceAdvantage, influenceFormView, resolveInfluenceAdjudication } from './influence-mechanics.mjs';
+import { addDashMovementBonus, addMovementSegment, movementLedgerView, normalizeMovementLedger, removeDashMovementBonus, removeMovementSegment, resetMovementLedger } from './movement-mechanics.mjs';
+import { resolveMovementSheetContext } from './movement-sheet-context.mjs';
+import { npcDeathSaveView } from './monster-death-mechanics.mjs';
+import { rageStrengthAdvantage } from './rage-mechanics.mjs';
+
+const localizeSheet = (key) => window.Loom?.i18n?.localize?.(key) || key;
 
 const SDR5E_HEADER_BANNER = '/marketplace/rulesets/srd5e/assets/images/banner-character.png';
 
 export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
-  static DEFAULT_OPTIONS = { position: { width: 640, height: 780 } };
+  static DEFAULT_OPTIONS = { position: { width: 840, height: 780 } };
 
   _activeTab = 'actions';
 
@@ -57,52 +69,13 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   async mount() {
     await super.mount();
     this._applyActiveTab();
-    this._detachSideTabs();
     this._attachListeners();
   }
 
   _postRender() {
     if (typeof super._postRender === 'function') super._postRender();
     this._applyActiveTab();
-    this._detachSideTabs();
     this._attachListeners();
-  }
-
-  onClose() {
-    this._cleanupSideTabs();
-  }
-
-  _detachSideTabs() {
-    const nav = this.element?.querySelector('.sdrn-side-tabs');
-    if (!nav) return;
-    this._cleanupSideTabs();
-    const container = this.element?.parentElement;
-    if (!container) return;
-    container.appendChild(nav);
-    nav.style.position = 'fixed';
-    nav.addEventListener('click', (event) => {
-      const btn = event.target instanceof Element ? event.target.closest('[data-action]') : null;
-      if (!btn) return;
-      const action = btn.dataset.action;
-      const id = btn.dataset.id || btn.closest('[data-id]')?.dataset.id || null;
-      if (typeof this.onAction === 'function') this.onAction(action, id, btn);
-    });
-    this._sideTabsEl = nav;
-    const sync = () => {
-      if (!this._sideTabsEl?.isConnected || !this.element?.isConnected) return;
-      const r = this.element.getBoundingClientRect();
-      this._sideTabsEl.style.left = `${r.right - 1}px`;
-      this._sideTabsEl.style.top = `${r.top + 40}px`;
-      this._sideTabsRaf = requestAnimationFrame(sync);
-    };
-    sync();
-  }
-
-  _cleanupSideTabs() {
-    if (this._sideTabsRaf) cancelAnimationFrame(this._sideTabsRaf);
-    this._sideTabsRaf = null;
-    this._sideTabsEl?.remove();
-    this._sideTabsEl = null;
   }
 
   _applyActiveTab() {
@@ -122,7 +95,22 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     this._attachDropListener();
     if (!this.element || this._hasListeners) return;
     this._hasListeners = true;
+    this.element.addEventListener('click', (event) => {
+      const tabButton = event.target instanceof Element
+        ? event.target.closest('.sdrn-side-tabs [data-action="tab"]')
+        : null;
+      if (!tabButton) return;
+      event.preventDefault();
+      this._activeTab = tabButton.dataset.tab || 'actions';
+      this._applyActiveTab();
+    });
     this.element.addEventListener('change', (e) => {
+      const movementSelect = e.target?.closest?.('[data-movement-cast-select]');
+      if (movementSelect) {
+        this._movementCastId = movementSelect.value || '';
+        void this._reloadDocument();
+        return;
+      }
       const select = e.target?.closest?.('select.sdrn-npc-quick-select[data-action]');
       if (!select) return;
       const action = select.dataset.action;
@@ -249,6 +237,17 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const attrs = sd.attributes || {};
     const res = sd.resources || {};
     const details = sd.details || {};
+    const conditions = await getActorConditions(this.document?.id);
+    this._movementContext = await resolveMovementSheetContext({ actorId: this.document?.id, combat: window.Loom?.combat, api,
+      selectedCastId: this._movementCastId, actorLedger: sd.srd5eMovementLedger,
+      actorSpeeds: attrs.movement?.effective || attrs.movement || {}, conditions, localize: localizeSheet });
+    if (this._movementContext.castId) this._movementCastId = this._movementContext.castId;
+    const deathSaveView = npcDeathSaveView({
+      healthValue: res.health?.value,
+      useCharacterDeathSaves: details.useCharacterDeathSaves === true,
+      deathState: res.deathState,
+      deathSaves: res.deathSaves,
+    });
 
     const _abilities = ABILITY_KEYS.map((k) => ({
       key: k, abbr: k.toUpperCase(), label: ABILITY_LABELS[k],
@@ -279,7 +278,8 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
     // SRD: todo stat block de monstro lista "passive Perception N" nos
     // sentidos, com ou sem proficiência na perícia (Handout 34).
-    const _passivePerception = 10 + (skills.perception?.total ?? 0);
+    // SRD Passive score: +/-5 only from persistent Advantage/Disadvantage (conditions such as Poisoned), never Shift/Ctrl.
+    const _passivePerception = passiveScore(skills.perception?.total, applyAbilityCheckConditionModifiers(0, conditions));
 
     const items = this.document?.items || [];
     const _actions = items.filter((i) => i.type !== 'language').map((i) => {
@@ -372,11 +372,29 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       name: (this.document?.name && this.document.name !== 'undefined') ? this.document.name : '',
       systemData: sd,
       _abilities,
+      _npcTabActions: localizeSheet('srd5e.NPC.Actions'),
+      _npcTabDetails: localizeSheet('srd5e.NPC.Biography'),
+      _npcTabConfig: localizeSheet('srd5e.NPC.Configuration'),
       _saves,
       _availableSaves,
       _skills,
       _availableSkills,
       _actions,
+      _coreActionActivities: coreActionActivityView(sd.skills, localizeSheet),
+      _coreActionActivitiesTitle: localizeSheet('SDR5E.CoreActions.Title'),
+      _coreActionActivitiesNote: localizeSheet('SDR5E.CoreActions.Note'),
+      _coreActionRollLabel: localizeSheet('SDR5E.CoreActions.RollCheck'),
+      _movementLedger: this._movementContext.view,
+      _movementCastChoices: this._movementContext.choices,
+      _movementCastId: this._movementContext.castId,
+      _movementNeedsCastSelection: this._movementContext.requiresSelection,
+      _movementCastUnavailable: this._movementContext.inCombat && !this._movementContext.castId && !this._movementContext.choices.length,
+      _movementInCombat: this._movementContext.inCombat,
+      _movementSlowPenalty: this._movementContext.penaltyFeet || 0,
+      _helpAction: helpActionView(sd, sd.srd5eHelpRecords, localizeSheet),
+      _readyAction: readyActionView(attrs.movement?.effective?.walk ?? attrs.movement?.walk, sd.srd5eReadyRecords, localizeSheet),
+      _dodgeAction: dodgeActionView(sd.srd5eDodgeRecord, localizeSheet),
+      _influence: influenceFormView(sd, localizeSheet),
       _prof: fmtMod(attrs.prof?.value ?? 2),
       _profValue: attrs.prof?.value ?? 2,
       _ac: attrs.da?.value ?? 10,
@@ -395,6 +413,15 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         walk: attrs.movement?.walk ?? 9, fly: attrs.movement?.fly ?? 0, swim: attrs.movement?.swim ?? 0, climb: attrs.movement?.climb ?? 0, burrow: attrs.movement?.burrow ?? 0, hover: !!attrs.movement?.hover,
       },
       _health: { value: res.health?.value ?? 0, max: healthMax, pct: healthPct, temp: res.health?.temp ?? 0 },
+      _deathSaves: deathSaveView,
+      _showDeathSaves: deathSaveView.visible,
+      _canRollDeathSave: deathSaveView.canRoll,
+      _deathSaveLabel: localizeSheet('srd5e.NPC.DeathSaves'),
+      _rollDeathSaveLabel: localizeSheet('srd5e.NPC.RollDeathSave'),
+      _deathStateLabel: localizeSheet(`srd5e.NPC.${deathSaveView.state === 'dead' ? 'Dead' : 'Stable'}`),
+      _useCharacterDeathSaves: details.useCharacterDeathSaves === true,
+      _deathSaveOverrideLabel: localizeSheet('srd5e.NPC.UseCharacterDeathSaves'),
+      _deathSaveOverrideHint: localizeSheet('srd5e.NPC.UseCharacterDeathSavesHint'),
       _hpFormula: attrs.hp?.formula || '',
       _cr: details.cr ?? 0,
       _xpLabel: details.xp?.label || `${details.xp?.value ?? 0} XP`,
@@ -520,6 +547,71 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   }
 
   onAction(action, id, target) {
+    if (action === 'movement-ledger-add') {
+      void this._addMovementSegment(target);
+      return;
+    }
+    if (action === 'movement-ledger-remove') {
+      const current = this._movementContext?.ledger || {};
+      void this._saveMovementLedger(removeMovementSegment(current, target?.dataset?.segmentIndex));
+      return;
+    }
+    if (action === 'movement-ledger-reset') {
+      void this._saveMovementLedger(resetMovementLedger());
+      return;
+    }
+    if (action === 'movement-ledger-add-dash') {
+      void this._addDashMovementBonus(target);
+      return;
+    }
+    if (action === 'movement-ledger-remove-dash') {
+      const current = this._movementContext?.ledger || {};
+      void this._saveMovementLedger(removeDashMovementBonus(current, target?.dataset?.dashIndex));
+      return;
+    }
+    if (action === 'roll-core-action') {
+      void this._rollCoreAction(target?.dataset?.activity, target);
+      return;
+    }
+    if (action === 'resolve-influence') {
+      void this._resolveInfluence(target);
+      return;
+    }
+    if (action === 'help-record-ability' || action === 'help-record-attack') {
+      void this._recordHelpAction(action === 'help-record-ability' ? 'ability' : 'attack', target);
+      return;
+    }
+    if (action === 'help-remove-record') {
+      const current = this.document?.systemData?.srd5eHelpRecords || [];
+      void this._saveHelpRecords(removeHelpRecord(current, target?.dataset?.helpIndex));
+      return;
+    }
+    if (action === 'help-clear-records') {
+      void this._saveHelpRecords([]);
+      return;
+    }
+    if (action === 'ready-record') {
+      void this._recordReadyAction(target);
+      return;
+    }
+    if (action === 'ready-remove-record') {
+      const current = this.document?.systemData?.srd5eReadyRecords || [];
+      void this._saveReadyRecords(removeReadyRecord(current, target?.dataset?.readyIndex));
+      return;
+    }
+    if (action === 'ready-clear-records') {
+      void this._saveReadyRecords([]);
+      return;
+    }
+    if (action === 'dodge-record') {
+      void this._saveDodgeRecord(setDodgeRecord());
+      return;
+    }
+    if (action === 'dodge-clear') {
+      void this._saveDodgeRecord(clearDodgeRecord());
+      return;
+    }
+
     if (action === 'tab') {
       const tab = target?.dataset?.tab;
       if (!tab) return;
@@ -635,6 +727,10 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       void this._rollInitiative();
       return;
     }
+    if (action === 'roll-death-save') {
+      void rollDeathSave(this.document).then(() => this._reloadDocument());
+      return;
+    }
     if (action === 'hp-delta') {
       const delta = Number(target.dataset.delta) || 0;
       void this._applyHpDelta(delta);
@@ -681,7 +777,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const sd = this.document.systemData;
     if (mode === 'save') {
       const conditions = await getActorConditions(this.document.id);
-      const { autoFail, disadvantage } = getSaveConditionOutcome(key, conditions);
+      const { autoFail, advantage: featureAdvantage, disadvantage } = getSaveConditionOutcome(key, conditions, 0, false, { items: this.document.items });
       if (autoFail) {
         await window.Loom.ChatMessage.create({
           speaker: window.Loom.ChatMessage.getSpeaker({ actor: this.document }),
@@ -691,12 +787,16 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         return;
       }
       const save = sd.saves?.[key];
+      const coverBonus = await getSaveCoverBonus(key, conditions);
+      if (coverBonus === null) return;
       const kb = currentAdvantageMode();
-      const advantage = (kb === 1 && disadvantage) ? 0 : disadvantage ? -1 : kb;
-      await sdr5eRoll({ label: `Save: ${ABILITY_LABELS[key]}`, parts: [{ label: 'Modifier', value: save?.total ?? 0 }], actor: this.document, advantage });
+      const advantageSources = (kb === 1 ? 1 : 0) + (featureAdvantage ? 1 : 0);
+      const disadvantageSources = (kb === -1 ? 1 : 0) + (disadvantage ? 1 : 0);
+      const advantage = advantageSources > disadvantageSources ? 1 : advantageSources < disadvantageSources ? -1 : 0;
+      await sdr5eRoll({ label: `Save: ${ABILITY_LABELS[key]}`, parts: [{ label: 'Modifier', value: (save?.total ?? 0) + coverBonus }], actor: this.document, advantage });
     } else {
       const conditions = await getActorConditions(this.document.id);
-      const advantage = applyPoisonedDisadvantage(currentAdvantageMode(), conditions);
+      const advantage = applyAbilityCheckConditionModifiers(currentAdvantageMode(), conditions, 0, false, rageStrengthAdvantage(this.document.items, key));
       const abl = sd.abilities?.[key];
       await sdr5eRoll({ label: `Ability Check: ${ABILITY_LABELS[key]}`, parts: [{ label: 'Modifier', value: abl?.modifier ?? 0 }], actor: this.document, advantage });
     }
@@ -705,13 +805,24 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   async _rollInitiative() {
     if (!this.document) return;
     const bonus = this.document.systemData?.attributes?.initiative?.total ?? 0;
-    await sdr5eRoll({ label: `${this.document.name} rolls Initiative!`, parts: [{ label: 'Initiative', value: bonus }], actor: this.document });
+    const conditions = await getActorConditions(this.document.id);
+    const advantage = initiativeBaseSources(conditions);
+    await sdr5eRoll({ label: `${this.document.name} rolls Initiative!`, parts: [{ label: 'Initiative', value: bonus }], actor: this.document, advantage, initiative: true });
   }
 
   async _rollSkill(key) {
     if (!key || !this.document) return;
     const skill = this.document.systemData?.skills?.[key];
     const conditions = await getActorConditions(this.document.id);
+    const { autoFail } = getSkillConditionOutcome(key, conditions);
+    if (autoFail) {
+      await window.Loom.ChatMessage.create({
+        speaker: window.Loom.ChatMessage.getSpeaker({ actor: this.document }),
+        content: `Skill Check: ${SKILL_LABELS[key] || key} — automatic failure`,
+        flags: { srd5e: { name: `${this.document.name} — Skill Check: ${SKILL_LABELS[key] || key}`, description: '<span style="color:#ef4444">Automatic failure (deafened)</span>' } },
+      });
+      return;
+    }
     const advantage = applyPoisonedDisadvantage(currentAdvantageMode(), conditions);
     await sdr5eRoll({ label: `Skill Check: ${SKILL_LABELS[key] || key}`, parts: [{ label: 'Modifier', value: skill?.total ?? 0 }], actor: this.document, advantage });
   }
@@ -721,6 +832,207 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (delta > 0) await applyHeal(this.document, delta);
     else await applyDamage(this.document, -delta, 'untyped');
     await this._reloadDocument();
+  }
+
+  async _addMovementSegment(target) {
+    const section = target?.closest?.('[data-movement-ledger]');
+    const distance = section?.querySelector('[data-movement-distance]')?.value;
+    const mode = section?.querySelector('[data-movement-mode]')?.value;
+    const difficultTerrain = section?.querySelector('[data-movement-difficult]')?.checked === true;
+    const current = this._movementContext?.ledger || {};
+    const speeds = this._movementContext?.speeds || {};
+    const result = addMovementSegment(current, { distance, mode, difficultTerrain }, speeds);
+    if (!result.valid) {
+      window.Loom?.showToast?.(localizeSheet(result.reason === 'speed-unavailable' ? 'SDR5E.MovementLedger.SpeedUnavailable' : result.reason === 'movement-exceeded' ? 'SDR5E.MovementLedger.Exceeded' : 'SDR5E.MovementLedger.InvalidSegment'), 'warning');
+      return;
+    }
+    await this._saveMovementLedger(result.ledger);
+  }
+
+  async _saveMovementLedger(value) {
+    if (!this.document?.id || this._movementLedgerSaving) return;
+    this._movementLedgerSaving = true;
+    try {
+      if (this._movementContext?.inCombat) {
+        if (!this._movementContext.castId) throw new Error('Cast de combate não selecionado.');
+        await api.put(`/cast/${encodeURIComponent(this._movementContext.castId)}`, { systemData: { srd5eMovementLedger: normalizeMovementLedger(value) } });
+      } else {
+        await api.put(`/actors/${encodeURIComponent(this.document.id)}`, { systemData: { srd5eMovementLedger: normalizeMovementLedger(value) } });
+      }
+      await this._reloadDocument();
+    } catch {
+      window.Loom?.showToast?.(localizeSheet('SDR5E.MovementLedger.SaveFailed'), 'error');
+    } finally {
+      this._movementLedgerSaving = false;
+    }
+  }
+
+  async _addDashMovementBonus(target) {
+    const mode = target?.closest?.('[data-movement-ledger]')?.querySelector('[data-dash-speed]')?.value;
+    const current = this._movementContext?.ledger || {};
+    const speeds = this._movementContext?.speeds || {};
+    const result = addDashMovementBonus(current, mode, speeds);
+    if (!result.valid) {
+      window.Loom?.showToast?.(localizeSheet(result.reason === 'speed-unavailable' ? 'SDR5E.MovementLedger.SpeedUnavailable' : 'SDR5E.MovementLedger.InvalidDash'), 'warning');
+      return;
+    }
+    await this._saveMovementLedger(result.ledger);
+  }
+
+  async _resolveInfluence(target) {
+    const section = target?.closest?.('[data-influence-form]');
+    if (!section || !this.document) return;
+    const value = (key) => section.querySelector(`[data-influence-${key}]`)?.value ?? '';
+    const decision = resolveInfluenceAdjudication({
+      branch: value('branch'), targetName: value('target'), attitude: value('attitude'), skillKey: value('skill'),
+      intelligence: value('intelligence'), dcOverride: value('dc'),
+    }, this.document.systemData || {});
+    if (!decision.valid) {
+      const key = decision.reason === 'skill-unavailable' ? 'Skill' : decision.reason === 'invalid-attitude' ? 'Attitude' : decision.reason === 'invalid-intelligence' ? 'Intelligence' : decision.reason === 'invalid-dc' ? 'DC' : 'Input';
+      window.Loom?.showToast?.(localizeSheet(`SDR5E.Influence.${key}Required`), 'warning');
+      return;
+    }
+    const escapeHtml = (text) => String(text).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+    if (!decision.requiresCheck) {
+      const message = localizeSheet(decision.branch === 'willing' ? 'SDR5E.Influence.WillingMessage' : 'SDR5E.Influence.UnwillingMessage').replace('{target}', escapeHtml(decision.targetName));
+      try {
+        await window.Loom.ChatMessage.create({
+          speaker: window.Loom.ChatMessage.getSpeaker({ actor: this.document }),
+          content: message,
+          flags: { srd5e: { name: localizeSheet('SDR5E.Influence.NoCheckTitle'), srd5eInfluence: { branch: decision.branch, targetName: decision.targetName } } },
+        });
+      } catch {
+        window.Loom?.showToast?.(localizeSheet('SDR5E.Influence.PostFailed'), 'error');
+      }
+      return;
+    }
+    const skillLabel = localizeSheet(`srd5e.Skills.${decision.skillKey}`);
+    const conditions = await getActorConditions(this.document.id);
+    const baseAdvantage = applyAbilityCheckConditionModifiers(currentAdvantageMode(), conditions, this.document.systemData?.resources?.exhaustion ?? 0);
+    const advantage = composeInfluenceAdvantage(baseAdvantage, decision.attitudeAdvantage);
+    const label = localizeSheet('SDR5E.Influence.RollLabel')
+      .replace('{target}', escapeHtml(decision.targetName))
+      .replace('{skill}', skillLabel)
+      .replace('{dc}', String(decision.dc));
+    await sdr5eRoll({
+      label,
+      parts: [{ label: skillLabel, value: decision.skillTotal }],
+      actor: this.document,
+      advantage,
+      dc: decision.dc,
+      extraMeta: { srd5eActivity: 'influence', srd5eSkillKey: decision.skillKey, srd5eAbilityKey: decision.abilityKey,
+        srd5eActionCost: 'action', srd5eInfluence: { branch: 'hesitant', targetName: decision.targetName, attitude: decision.attitude,
+          intelligence: decision.intelligence, defaultDC: decision.defaultDC, dcOverridden: decision.dcOverridden,
+          interaction: decision.interaction, outcomeAdjudication: 'manual' } },
+    });
+  }
+
+  async _recordHelpAction(mode, target) {
+    const section = target?.closest?.('[data-help-mode-form]');
+    const allyName = section?.querySelector('[data-help-ally]')?.value;
+    const enemyName = section?.querySelector('[data-help-enemy]')?.value;
+    const selected = section?.querySelector('[data-help-proficiency]')?.value || '';
+    const split = selected.indexOf(':');
+    const candidate = mode === 'ability'
+      ? { mode, allyName, proficiencyKind: split > 0 ? selected.slice(0, split) : '', proficiencyKey: split > 0 ? selected.slice(split + 1) : '' }
+      : { mode, allyName, enemyName };
+    const sd = this.document?.systemData || {};
+    const result = createHelpRecord(candidate, sd);
+    if (!result.valid) {
+      window.Loom?.showToast?.(localizeSheet(result.reason === 'proficiency-unavailable' ? 'SDR5E.HelpAction.UnavailableProficiency' : 'SDR5E.HelpAction.InvalidTarget'), 'warning');
+      return;
+    }
+    await this._saveHelpRecords(appendHelpRecord(sd.srd5eHelpRecords, result.record));
+  }
+
+  async _saveHelpRecords(value) {
+    if (!this.document?.id || this._helpRecordsSaving) return;
+    this._helpRecordsSaving = true;
+    try {
+      await api.put(`/actors/${encodeURIComponent(this.document.id)}`, { systemData: { srd5eHelpRecords: normalizeHelpRecords(value) } });
+      await this._reloadDocument();
+    } catch {
+      window.Loom?.showToast?.(localizeSheet('SDR5E.HelpAction.SaveFailed'), 'error');
+    } finally {
+      this._helpRecordsSaving = false;
+    }
+  }
+
+  async _recordReadyAction(target) {
+    const form = target?.closest?.('[data-ready-action-form]');
+    const speed = this.document?.systemData?.attributes?.movement?.effective?.walk
+      ?? this.document?.systemData?.attributes?.movement?.walk;
+    const candidate = {
+      trigger: form?.querySelector('[data-ready-trigger]')?.value,
+      responseType: form?.querySelector('[data-ready-response-type]')?.value,
+      response: form?.querySelector('[data-ready-response]')?.value,
+      spellName: form?.querySelector('[data-ready-spell]')?.value,
+      distance: form?.querySelector('[data-ready-distance]')?.value,
+    };
+    const result = createReadyRecord(candidate, speed);
+    if (!result.valid) {
+      const key = result.reason === 'speed-unavailable' || result.reason === 'movement-exceeds-speed'
+        ? 'SDR5E.ReadyAction.MovementInvalid'
+        : 'SDR5E.ReadyAction.Invalid';
+      window.Loom?.showToast?.(localizeSheet(key), 'warning');
+      return;
+    }
+    const current = this.document?.systemData?.srd5eReadyRecords || [];
+    if (current.length) {
+      window.Loom?.showToast?.(localizeSheet('SDR5E.ReadyAction.AlreadyRecorded'), 'warning');
+      return;
+    }
+    await this._saveReadyRecords(appendReadyRecord(current, result.record));
+  }
+
+  async _saveReadyRecords(value) {
+    if (!this.document?.id || this._readyRecordsSaving) return;
+    this._readyRecordsSaving = true;
+    try {
+      await api.put(`/actors/${encodeURIComponent(this.document.id)}`, { systemData: { srd5eReadyRecords: normalizeReadyRecords(value) } });
+      await this._reloadDocument();
+    } catch {
+      window.Loom?.showToast?.(localizeSheet('SDR5E.ReadyAction.SaveFailed'), 'error');
+    } finally {
+      this._readyRecordsSaving = false;
+    }
+  }
+
+  async _saveDodgeRecord(value) {
+    if (!this.document?.id || this._dodgeSaving) return;
+    this._dodgeSaving = true;
+    try {
+      await api.put(`/actors/${encodeURIComponent(this.document.id)}`, { systemData: { srd5eDodgeRecord: value } });
+      await this._reloadDocument();
+    } catch {
+      window.Loom?.showToast?.(localizeSheet('SDR5E.DodgeAction.SaveFailed'), 'error');
+    } finally {
+      this._dodgeSaving = false;
+    }
+  }
+
+  async _rollCoreAction(action, target) {
+    if (!this.document) return;
+    const row = target?.closest?.('[data-core-action-row]');
+    const skillKey = row?.querySelector('select')?.value || '';
+    const context = normalizeCoreActionContext(action, row?.querySelector('[data-core-action-context]')?.value);
+    const check = resolveCoreActionSkillCheck(action, skillKey, this.document.systemData || {});
+    if (!check.valid) {
+      window.Loom?.showToast?.(localizeSheet('SDR5E.CoreActions.SkillUnavailable'), 'warning');
+      return;
+    }
+    const skillLabel = localizeSheet(`srd5e.Skills.${check.skillKey}`);
+    const actionLabel = localizeSheet(`SDR5E.CoreActions.${check.action}`);
+    const dcLabel = check.fixedDC ? ` (${localizeSheet('SDR5E.CoreActions.DCLabel').replace('{dc}', String(check.fixedDC))})` : '';
+    const contextLabel = context ? ` — ${localizeSheet('SDR5E.CoreActions.ContextInRoll').replace('{context}', context)}` : '';
+    await sdr5eRoll({
+      label: `${actionLabel}: ${skillLabel}${dcLabel}${contextLabel}`,
+      parts: [{ label: skillLabel, value: check.total }],
+      actor: this.document,
+      dc: check.fixedDC,
+      extraMeta: { srd5eActivity: check.action, srd5eSkillKey: check.skillKey,
+        srd5eAbilityKey: check.abilityKey, srd5eActionCost: 'action', ...coreActionContextMetadata(action, context) },
+    });
   }
 
   async _openItem(itemId) {

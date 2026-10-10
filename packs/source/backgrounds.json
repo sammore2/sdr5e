@@ -1,0 +1,87 @@
+{
+  "format": 1,
+  "pack": "backgrounds.sqlite",
+  "tables": [
+    {
+      "name": "entries",
+      "schema": "CREATE TABLE `entries` (`id` varchar(255), `name` varchar(255) not null, `type` varchar(255) default '', `sortOrder` integer default '0', `imgUrl` varchar(255) default '', `data` text default '{}', `folderId` varchar(255) not null default '', primary key (`id`))",
+      "columns": [
+        "id",
+        "name",
+        "type",
+        "sortOrder",
+        "imgUrl",
+        "data",
+        "folderId"
+      ],
+      "rows": [
+        {
+          "id": "bg-acolyte",
+          "name": "Acolyte",
+          "type": "background",
+          "sortOrder": 0,
+          "imgUrl": "",
+          "data": "{\"identifier\":\"acolyte\",\"description\":\"Ability Scores: Intelligence, Wisdom, Charisma\\nFeat: Magic Initiate (Cleric) (see \\\"Feats\\\")\\nSkill Proficiencies: Insight and Religion\\nTool Proficiency: Calligrapher's Supplies\\nEquipment: Choose A or B: (A) Calligrapher's Supplies, Book (prayers), Holy Symbol, Parchment (10 sheets), Robe, 8 GP; or (B) 50 GP\",\"weight\":0,\"quantity\":1,\"rarity\":\"common\",\"isBindOnEquip\":false,\"attunement\":\"none\",\"source\":\"SRD 5.2 (CC-BY-4.0)\",\"price\":{\"gp\":0,\"sp\":0,\"cp\":0}}",
+          "folderId": ""
+        },
+        {
+          "id": "bg-criminal",
+          "name": "Criminal",
+          "type": "background",
+          "sortOrder": 1,
+          "imgUrl": "",
+          "data": "{\"identifier\":\"criminal\",\"description\":\"Ability Scores: Dexterity, Constitution, Intelligence\\nFeat: Alert (see \\\"Feats\\\")\\nSkill Proficiencies: Sleight of Hand and Stealth\\nTool Proficiency: Thieves' Tools\\nEquipment: Choose A or B: (A) 2 Daggers, Thieves' Tools, Crowbar, 2 Pouches, Traveler's Clothes, 16 GP; or (B) 50 GP\",\"weight\":0,\"quantity\":1,\"rarity\":\"common\",\"isBindOnEquip\":false,\"attunement\":\"none\",\"source\":\"SRD 5.2 (CC-BY-4.0)\",\"price\":{\"gp\":0,\"sp\":0,\"cp\":0}}",
+          "folderId": ""
+        },
+        {
+          "id": "bg-sage",
+          "name": "Sage",
+          "type": "background",
+          "sortOrder": 2,
+          "imgUrl": "",
+          "data": "{\"identifier\":\"sage\",\"description\":\"Ability Scores: Constitution, Intelligence, Wisdom\\nFeat: Magic Initiate (Wizard) (see \\\"Feats\\\")\\nSkill Proficiencies: Arcana and History\\nTool Proficiency: Calligrapher's Supplies\\nEquipment: Choose A or B: (A) Quarterstaff, Calligrapher's Supplies, Book (history), Parchment (8 sheets), Robe, 8 GP; or (B) 50 GP\",\"weight\":0,\"quantity\":1,\"rarity\":\"common\",\"isBindOnEquip\":false,\"attunement\":\"none\",\"source\":\"SRD 5.2 (CC-BY-4.0)\",\"price\":{\"gp\":0,\"sp\":0,\"cp\":0}}",
+          "folderId": ""
+        },
+        {
+          "id": "bg-soldier",
+          "name": "Soldier",
+          "type": "background",
+          "sortOrder": 3,
+          "imgUrl": "",
+          "data": "{\"identifier\":\"soldier\",\"description\":\"Ability Scores: Strength, Dexterity, Constitution\\nFeat: Savage Attacker (see \\\"Feats\\\")\\nSkill Proficiencies: Athletics and Intimidation\\nTool Proficiency: Choose one kind of Gaming Set (see \\\"Equipment\\\")\\nEquipment: Choose A or B: (A) Spear, Shortbow, 20 Arrows, Gaming Set (same as above), Healer's Kit, Quiver, Traveler's Clothes, 14 GP; or (B) 50 GP\",\"weight\":0,\"quantity\":1,\"rarity\":\"common\",\"isBindOnEquip\":false,\"attunement\":\"none\",\"source\":\"SRD 5.2 (CC-BY-4.0)\",\"price\":{\"gp\":0,\"sp\":0,\"cp\":0}}",
+          "folderId": ""
+        }
+      ]
+    },
+    {
+      "name": "folders",
+      "schema": "CREATE TABLE `folders` (`id` varchar(255), `name` varchar(255) not null, `parent` varchar(255) not null default '', `color` varchar(255) not null default '', `sorting` varchar(255) not null default 'm', `hubLogoUrl` varchar(255) not null default '', `hubBackground` varchar(255) not null default '', primary key (`id`))",
+      "columns": [
+        "id",
+        "name",
+        "parent",
+        "color",
+        "sorting",
+        "hubLogoUrl",
+        "hubBackground"
+      ],
+      "rows": []
+    },
+    {
+      "name": "pack_meta",
+      "schema": "CREATE TABLE `pack_meta` (`name` varchar(255) not null, `type` varchar(255) not null, `locked` boolean not null default '1')",
+      "columns": [
+        "name",
+        "type",
+        "locked"
+      ],
+      "rows": [
+        {
+          "name": "Antecedentes (SRD 5.2)",
+          "type": "Item",
+          "locked": 1
+        }
+      ]
+    }
+  ]
+}

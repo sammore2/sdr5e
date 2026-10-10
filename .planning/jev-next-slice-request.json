@@ -1,0 +1,26 @@
+{
+  "model": "jev-latest",
+  "state": {
+    "goal": "Finish the remaining implementation in the approved SDR5E plan for LoomVTT. Choose the next complete, bounded code deliverable by user impact and dependency order. The user's final product test happens after a complete point is implemented.",
+    "status": {
+      "staticVerification": "The existing npm run verify passed with 89 JavaScript entry points, 16 manifest references, 11 SQLite compendiums, and 2 language bundles. Do not add test scripts or expand the test suite; use only the existing npm run verify after changes.",
+      "implementedAreas": ["character/class progression", "spell slots and rests", "combat actions and weapon mastery", "encounter budgets", "equipment effects", "migration and resumable level-up"],
+      "remainingPlanGaps": ["long-rest recovery preserving concurrent updates", "chat result must match applied healing and damage across paths", "complete 12-class creation and multiclass progression", "structured executable actions for imported NPC stat blocks", "complete class/spell/item semantic coverage", "native encounter end-to-end flow", "permissions and rendered UI", "rebuildable packs and clean installation"]
+    },
+    "constraints": ["Keep SRD calculations and game rules deterministic in code.", "Do not claim a whole plan criterion complete when only a subcase is implemented.", "Choose a code deliverable, not another audit or additional test suite.", "Honor the existing Loom API; do not assume atomic multi-write support."]
+  },
+  "questions": {
+    "next_complete_deliverable": {
+      "type": "choice",
+      "instructions": "Choose the next implementation deliverable that most efficiently moves this ruleset toward a usable, complete player-facing system. Prefer a bounded code point that can be finished without a new test suite and does not assume unsupported server APIs. If the listed gaps are all too broad or depend on unverified APIs, choose defer and state the specific dependency.",
+      "criteria": {
+        "finish_weapon_mastery": "Complete the remaining Nick Light-weapon extra attack as part of the Attack action, respecting once-per-turn and existing weapon mastery flow. This closes the weapon-mastery implementation family but leaves broader plan gaps.",
+        "make_npc_actions_executable": "Convert imported NPC stat-block actions into structured executable activities and connect them to existing NPC and encounter flows. This unlocks meaningful NPC encounters but spans importer, data contract, and UI.",
+        "complete_long_rest_state": "Complete long-rest Hit Die recovery and preserve concurrent Actor changes using only Loom APIs actually supported by this ruleset. Defer any concurrency guarantee the API cannot provide.",
+        "unify_roll_application": "Make every supported healing and damage flow apply the exact server-rolled result shown in chat, following existing roll APIs.",
+        "finish_multiclass_creation": "Complete adding a second class through Level Up with prerequisites, class-specific progression, Hit Dice, proficiencies, spell pools, and resumable writes.",
+        "defer_for_missing_contract": "None can be completed responsibly from the supplied context; state the exact missing code or Loom contract needed before implementation."
+      }
+    }
+  }
+}

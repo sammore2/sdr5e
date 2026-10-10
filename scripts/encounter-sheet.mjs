@@ -1,9 +1,18 @@
 import { LoomHandlebarsMixin, LoomActorSheet, api, windowManager, showToast } from '/_loom/sdk/index.js';
-import { ENCOUNTER_XP_BUDGET } from './config.mjs';
 import { fetchPreparedActor } from './prepare-data.mjs';
 import { getSetting } from './settings.mjs';
 import { evaluateDamageFormula } from './roll-engine.mjs';
 import { attachFormSaver, readDropPayload } from './utils.mjs';
+import { combatInitiativeFormula } from './initiative-mechanics.mjs';
+import { encounterDifficultyForXp, encounterXpBudgetForLevels } from './encounter-budget-mechanics.mjs';
+
+const localizeEncounter = (key) => window.Loom?.i18n?.localize?.(`SDR5E.Encounter.${key}`) || `SDR5E.Encounter.${key}`;
+const encounterDifficultyLabels = {
+  Low: 'DifficultyLow',
+  Moderate: 'DifficultyModerate',
+  High: 'DifficultyHigh',
+  'Beyond High': 'DifficultyBeyondHigh',
+};
 
 export class Sdr5eEncounterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   static DEFAULT_OPTIONS = { position: { width: 600, height: 500 } };
@@ -125,35 +134,38 @@ export class Sdr5eEncounterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     }
     // Difficulty vs primary party
     let difficulty = null;
+    let difficultyMessage = null;
     let budget = null;
     const primaryId = getSetting('primaryParty','');
     if (!primaryId) {
-      difficulty = 'Defina um Grupo Principal pra ver a dificuldade';
+      difficultyMessage = localizeEncounter('SetPrimaryPartyForDifficulty');
     } else {
       try {
         const party = await fetchPreparedActor(primaryId);
         const pMembers = party?.systemData?.members || [];
-        let sumLevel=0; let count=0;
+        const partyLevels = [];
+        let partyHasUnavailableMember = false;
         for(const mid of pMembers){
           try{
             const a=await fetchPreparedActor(mid);
-            if(a?.type==='character'){ sumLevel+= Number(a.systemData?.details?.level)||1; count++; }
-          }catch{}
+            if(a?.type==='character') partyLevels.push(a.systemData?.details?.level ?? 1);
+          }catch{ partyHasUnavailableMember = true; }
         }
-        const avgLevel = count? Math.floor(sumLevel/count) : 1;
-        const table = ENCOUNTER_XP_BUDGET[avgLevel] || ENCOUNTER_XP_BUDGET[1];
-        const low = table.low * count;
-        const moderate = table.moderate * count;
-        const high = table.high * count;
-        budget = { low, moderate, high };
-        if (totalXp <= low) difficulty='Low';
-        else if (totalXp <= moderate) difficulty='Moderate';
-        else if (totalXp <= high) difficulty='High';
-        else difficulty='Beyond High';
+        budget = partyHasUnavailableMember ? null : encounterXpBudgetForLevels(partyLevels);
+        difficulty = budget
+          ? encounterDifficultyForXp(totalXp, budget)
+          : null;
+        if (!budget) difficultyMessage = localizeEncounter('InvalidPrimaryPartyForDifficulty');
       } catch {
-        difficulty='Defina um Grupo Principal pra ver a dificuldade';
+        difficultyMessage = localizeEncounter('SetPrimaryPartyForDifficulty');
       }
     }
+    const budgetTitle = budget
+      ? localizeEncounter('BudgetTitle')
+        .replace('{low}', budget.low)
+        .replace('{moderate}', budget.moderate)
+        .replace('{high}', budget.high)
+      : '';
     return {
       ...context,
       ...this.document,
@@ -162,7 +174,10 @@ export class Sdr5eEncounterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _members: memberInfos,
       _totalXp: totalXp,
       _difficulty: difficulty,
+      _difficultyLabel: difficulty ? localizeEncounter(encounterDifficultyLabels[difficulty]) : difficultyMessage,
+      _difficultyClass: difficulty === 'Beyond High' ? 'beyond-high' : String(difficulty || '').toLocaleLowerCase(),
       _budget: budget,
+      _budgetTitle: budgetTitle,
       _description: sd.description || '',
       _currency: sd.currency || { pp: 0, gp: 0, ep: 0, sp: 0, cp: 0 },
       _activeTab: this._activeTab || 'members',
@@ -330,8 +345,9 @@ export class Sdr5eEncounterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     try {
       const currentCombat = await api.get(`/combat/${encodeURIComponent(worldId)}`);
       if (currentCombat?.isActive && !window.confirm('A combat is already active. Starting this encounter will replace its turn order. Continue?')) return;
-      const initiativeFormula = window.Loom?.settings?.get('srd5e', 'initiativeFormula')
-        || '1d20 + floor((@abilities.dex.value - 10) / 2) + @attributes.initiative.value + @attributes.initiative.bonus + (@abilities.dex.value / 100)';
+      const configuredFormula = window.Loom?.settings?.get('srd5e', 'initiativeFormula');
+      const tieBreakerEnabled = window.Loom?.settings?.get('srd5e', 'initiativeTiebreaker') === true;
+      const initiativeFormula = combatInitiativeFormula(configuredFormula, tieBreakerEnabled);
       await api.post(`/combat/${encodeURIComponent(worldId)}/dex-initiative`, { castIds, initiativeFormula });
       showToast?.('Combat started with the encounter and party tokens on this stage','success');
     } catch (e) {

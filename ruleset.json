@@ -118,25 +118,17 @@
       "hint": "Allows level advancement through story milestones instead of accumulated XP."
     },
     {
-      "key": "criticalHitRule",
+      "key": "levelUpHpMode",
       "type": "string",
-      "default": "doubleDice",
+      "default": "player",
       "scope": "world",
-      "name": "Critical Hit Rule",
-      "hint": "Method used to calculate damage on critical hits.",
+      "name": "Level Up Hit Point Method",
+      "hint": "Sets whether characters choose a roll or fixed Hit Die result, or the GM selects one method for everyone.",
       "choices": {
-        "doubleDice": "Double Damage Dice (SRD)",
-        "maxDice": "Maximum Dice + Roll",
-        "flatMax": "Fixed Maximum Damage"
+        "player": "Player chooses each level",
+        "fixed": "Fixed value",
+        "roll": "Roll the Hit Die"
       }
-    },
-    {
-      "key": "deathSaveDC",
-      "type": "number",
-      "default": 10,
-      "scope": "world",
-      "name": "Death Saving Throw DC",
-      "hint": "Difficulty for death saving throws (the standard 5e value is 10)."
     },
     {
       "key": "diagonalMovement",
