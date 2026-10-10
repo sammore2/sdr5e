@@ -12,15 +12,37 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 import { LoomHandlebarsMixin, LoomActorSheet, effects, api, windowManager, showToast, LoomDialog } from '/_loom/sdk/index.js';
-import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON, ITEM_TYPE_LABEL, ITEM_TYPE_SINGULAR, SIZE_LABELS, SIZE_CARRY_MULTIPLIER, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, DAMAGE_TYPES, DAMAGE_TYPE_LABELS, KNOWN_SPELLS_TABLE, KNOWN_CANTRIPS_TABLE } from './config.mjs';
-import { fmtMod, setPathValue, currentAdvantageMode } from './utils.mjs';
+import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON, ITEM_TYPE_LABEL, ITEM_TYPE_SINGULAR, SIZE_LABELS, SIZE_CARRY_MULTIPLIER, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, DAMAGE_TYPES, DAMAGE_TYPE_LABELS } from './config.mjs';
+import { fmtMod, setPathValue, currentAdvantageMode, passiveScore } from './utils.mjs';
+import { initiativeBaseSources } from './initiative-mechanics.mjs';
+import { getSetting } from './settings.mjs';
+import { resolveLevelUpEligibility, resolveXpProgress } from './xp-progression.mjs';
 import { computeCarriedWeight } from './prepare-data.mjs';
-import { sdr5eRoll, rollDeathSave, toggleInspiration, setExhaustion, rollWeaponAttack, rollWeaponDamage, rollUnarmedStrike, rollUnarmedDamage, castSpell, rollSpellAttack, rollSpellDamage, spendHitDie, postItemToChat, getActorConditions, applyAbilityCheckConditionModifiers, getSaveConditionOutcome, getSkillConditionOutcome, activateFeature, useConsumable, isToolProficient, rollToolCheck } from './roll-engine.mjs';
+import { sdr5eRoll, rollDeathSave, toggleInspiration, setExhaustion, rollWeaponAttack, rollWeaponDamage, rollUnarmedStrike, rollUnarmedDamage, rollUnarmedGrapple, rollUnarmedShove, castSpell, rollSpellAttack, rollSpellDamage, spendHitDie, postItemToChat, getActorConditions, applyAbilityCheckConditionModifiers, getSaveConditionOutcome, getSaveCoverBonus, getSkillConditionOutcome, activateFeature, toggleRage, extendRage, useConsumable, useHealersKit, isToolProficient, rollToolCheck } from './roll-engine.mjs';
 import { takeRest } from './rest.mjs';
+import { rageStrengthAdvantage } from './rage-mechanics.mjs';
+import { resolveArcaneRecovery } from './arcane-recovery.mjs';
+import { resolveWizardMemorizeSpellChoice, resolveWizardSpellMasteryReplacement, wizardSpellCastOptions } from './wizard-spell-mechanics.mjs';
+import { resolveWeaponMasteryReplacement, weaponMasteryRestCandidates } from './weapon-mastery.mjs';
+import { druidMagicianCheckBonus, hasDangerSense, hasFeralInstinct, hasIndomitableMight, primalKnowledgeAbility, resolveAdvantageSources, unarmoredDefenseOptions } from './class-feature-mechanics.mjs';
 import { getContents, isDescendant, containerLoad } from './containers.mjs';
 import { removeItemEffects } from './effects.mjs';
+import { actorSetupWizardRequired, readCreationJournal } from './creation-journal.mjs';
 import { getDefaultData } from './schema.mjs';
 import { Sdr5eItemSheet } from './item-sheet.mjs';
+import { spellCountsTowardPreparedLimit } from './magic-initiate.mjs';
+import { KNOWN_SPELLS_TABLE, KNOWN_CANTRIPS_TABLE, classSpellcastingAtLevel, inspectWizardSpellbookState, preparedSpellCapacityForClass, spellEligibleForClassPreparation } from './class-spellcasting.mjs';
+import { circleLandAlwaysPreparedSpellNames, planSubclassSpellGrantReconciliation, resolveCircleLandAlwaysPreparedSpells } from './subclass-spell-grants.mjs';
+import { searchCompendiumEntries } from './utils.mjs';
+import { coreActionActivityView, coreActionContextMetadata, normalizeCoreActionContext, resolveCoreActionSkillCheck } from './core-action-checks.mjs';
+import { appendHelpRecord, createHelpRecord, helpActionView, normalizeHelpRecords, removeHelpRecord } from './help-action-mechanics.mjs';
+import { appendReadyRecord, createReadyRecord, normalizeReadyRecords, readyActionView, removeReadyRecord } from './ready-action-mechanics.mjs';
+import { clearDodgeRecord, dodgeActionView, setDodgeRecord } from './dodge-mechanics.mjs';
+import { composeInfluenceAdvantage, influenceFormView, resolveInfluenceAdjudication } from './influence-mechanics.mjs';
+import { addDashMovementBonus, addMovementSegment, normalizeMovementLedger, removeDashMovementBonus, removeMovementSegment, resetMovementLedger } from './movement-mechanics.mjs';
+import { resolveMovementSheetContext } from './movement-sheet-context.mjs';
+
+const localizeSheet = (key) => window.Loom?.i18n?.localize?.(key) || key;
 
 // Header banner — the mechanism already exists in the core (base-window.ts:665,
 // `.window-has-banner` class): passing `bannerImage` to the window constructor,
@@ -62,6 +84,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   // the debounce window and silently dropped the rest).
   _pendingFields = new Map();
   _openContainers = new Set();
+  _classlessWizardOpened = false;
 
   static PARTS = { main: { template: '/marketplace/rulesets/srd5e/templates/character-sheet.hbs' } };
 
@@ -146,7 +169,14 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     // 4): drop whatever temporary effect it was holding up, same as
     // rollConcentrationSave does on a failed roll.
     if (!next && concentratingOn) await removeItemEffects({ id: concentratingOn });
-    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, resources: { ...sd.resources, concentrating: next, concentratingOn: next ? concentratingOn : '' } } });
+    const concentrationId = next
+      ? String(sd.resources?.concentrationId || globalThis.crypto?.randomUUID?.() || `concentration-${Date.now().toString(36)}`)
+      : '';
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, resources: {
+      ...sd.resources, concentrating: next, concentratingOn: next ? concentratingOn : '', concentrationId,
+      concentrationSaveAttemptId: next ? String(sd.resources?.concentrationSaveAttemptId || '') : '',
+      concentrationSaveAttemptIds: next ? (sd.resources?.concentrationSaveAttemptIds || []) : [],
+    } } });
     await this._reloadDocument();
   }
 
@@ -155,6 +185,14 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const item = (this.document.items || []).find((i) => i.id === itemId);
     if (!item) return;
     await castSpell(this.document, item);
+    await this._reloadDocument();
+  }
+
+  async _castRitual(itemId) {
+    if (!itemId || !this.document) return;
+    const item = (this.document.items || []).find((entry) => entry.id === itemId);
+    if (!item) return;
+    await castSpell(this.document, item, { ritual: true });
     await this._reloadDocument();
   }
 
@@ -170,15 +208,24 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (!itemId || !this.document) return;
     const item = (this.document.items || []).find((i) => i.id === itemId);
     if (!item) return;
-    if (kind === 'attack') await rollWeaponAttack(this.document, item);
+    if (kind === 'attack') await rollWeaponAttack(this.document, item, { attackAction: true });
     else await rollWeaponDamage(this.document, item);
   }
 
   /** SRD: modificador de habilidade de conjuração + nível do personagem,
    * mínimo 1. Ver Handout 04 (.planning/handouts/) pra nota sobre classes
    * "conhecidas" vs "preparadas" — simplificação assumida de propósito. */
-  _maxPreparedSpells() {
+  _maxPreparedSpells(classIdentifier = '') {
     const sd = this.document?.systemData;
+    const classItems = (this.document?.items || []).filter((item) => item.type === 'class');
+    if (classIdentifier) return preparedSpellCapacityForClass(classIdentifier, classItems) ?? 0;
+    if (classItems.length) {
+      const capacities = classItems.map((item) => {
+        const data = item.system || item.data || {};
+        return preparedSpellCapacityForClass(data.classIdentifier, classItems);
+      }).filter(Number.isInteger);
+      if (capacities.length) return capacities.reduce((sum, value) => sum + value, 0);
+    }
     if (!sd) return 0;
     const abilityKey = sd.attributes?.spellcasting?.ability || 'int';
     const abilityMod = sd.abilities?.[abilityKey]?.modifier || 0;
@@ -191,19 +238,28 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const item = (this.document?.items || []).find((i) => i.id === itemId);
     if (!item) return;
     const idata = item.system || item.data || {};
+    if (idata.magicInitiate || idata.alwaysPrepared) return;
     const willPrepare = !idata.prepared;
     const isCantrip = (idata.spellLevel ?? 0) === 0;
+    const classItems = (this.document?.items || []).filter((entry) => entry.type === 'class');
+    const sourceClassIdentifier = idata.sourceClassIdentifier;
+    if (willPrepare && !isCantrip && !spellEligibleForClassPreparation(idata, sourceClassIdentifier, classItems)) {
+      showToast?.(localizeSheet('SDR5E.Spellcasting.PreparedSpellSourceInvalid'), 'warning');
+      return;
+    }
 
     // Cantrips não contam pro limite (SRD: são "always prepared", sem custo).
     if (willPrepare && !isCantrip) {
-      const max = this._maxPreparedSpells();
+      const max = this._maxPreparedSpells(sourceClassIdentifier);
       const currentPrepared = (this.document.items || []).filter((i) => {
         if (i.type !== 'spell' || i.id === itemId) return false;
         const d = i.system || i.data || {};
-        return !!d.prepared && (d.spellLevel ?? 0) > 0;
+        return d.sourceClassIdentifier === sourceClassIdentifier
+          && spellCountsTowardPreparedLimit(d) && !d.alwaysPrepared
+          && (sourceClassIdentifier !== 'wizard' || d.wizardSpellbook === true);
       }).length;
       if (currentPrepared >= max) {
-        window.Loom?.showToast?.(`You can only prepare ${max} spell${max === 1 ? '' : 's'} (ability modifier + level).`, 'warning');
+        window.Loom?.showToast?.(`You can only prepare ${max} spell${max === 1 ? '' : 's'} for this class.`, 'warning');
         return;
       }
     }
@@ -281,6 +337,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     this._detachSideTabs();
     this._attachDropListener();
     this._attachDragListener();
+    this._attachMovementCastSelector();
   }
 
   _postRender() {
@@ -289,6 +346,20 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     this._detachSideTabs();
     this._attachDropListener();
     this._attachDragListener();
+    this._attachMovementCastSelector();
+  }
+
+  _movementSelectorRoot = null;
+  _attachMovementCastSelector() {
+    const root = this.element;
+    if (!root || this._movementSelectorRoot === root) return;
+    this._movementSelectorRoot = root;
+    root.addEventListener('change', (event) => {
+      const select = event.target?.closest?.('[data-movement-cast-select]');
+      if (!select) return;
+      this._movementCastId = select.value || '';
+      void this._reloadDocument();
+    });
   }
 
   // Lets a `[data-drag-item-id]` row (inventory/feature/spell — always an
@@ -464,6 +535,28 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
   async _prepareContext() {
     const context = await super._prepareContext();
+    const actorIdForSetup = this.document?.id;
+    const hasClass = (this.document?.items || []).some((item) => item.type === 'class');
+    const pendingCreation = readCreationJournal(window.Loom?.world?.id);
+    if (actorSetupWizardRequired(actorIdForSetup, hasClass, pendingCreation) && !this._classlessWizardOpened) {
+      this._classlessWizardOpened = true;
+      const actorId = actorIdForSetup;
+      queueMicrotask(async () => {
+        try {
+          const response = await api.get(`/actors/${encodeURIComponent(actorId)}?populate=true`);
+          const actor = response?.data?.id ? response.data : response;
+          const actorNeedsSetup = actorSetupWizardRequired(actor?.id, (actor?.items || []).some((item) => item.type === 'class'), pendingCreation);
+          if (!actor?.id || actor.type !== 'character' || !actorNeedsSetup) return;
+          const { Sdr5eCharacterWizard } = await import('./character-wizard.mjs');
+          const wid = `sdr5e-wizard-${Math.random().toString(36).slice(2, 9)}`;
+          windowManager.open(wid, Sdr5eCharacterWizard, { id: wid, actorId: actor.id, existingActor: actor });
+          windowManager.close(`actor-sheet-${actor.id}`);
+        } catch (error) {
+          console.error('[srd5e] Could not open classless character setup:', error);
+          showToast?.(localizeSheet('SDR5E.CharacterWizard.SetupUnavailable'), 'warning');
+        }
+      });
+    }
     const sd = this.document?.systemData || {};
     const abilities = sd.abilities || {};
     const saves = sd.saves || {};
@@ -471,6 +564,11 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const attrs = sd.attributes || {};
     const res = sd.resources || {};
     const details = sd.details || {};
+    const conditions = await getActorConditions(this.document?.id);
+    this._movementContext = await resolveMovementSheetContext({ actorId: this.document?.id, combat: window.Loom?.combat, api,
+      selectedCastId: this._movementCastId, actorLedger: sd.srd5eMovementLedger,
+      actorSpeeds: attrs.movement?.effective || attrs.movement || {}, conditions, localize: localizeSheet });
+    if (this._movementContext.castId) this._movementCastId = this._movementContext.castId;
 
     const _abilities = ABILITY_KEYS.map((k) => ({
       key: k,
@@ -487,16 +585,31 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       total: fmtMod(saves[k]?.total ?? 0),
     }));
 
+    // SRD Passive score: +/-5 only from persistent Advantage/Disadvantage (conditions such as Poisoned), never Shift/Ctrl.
+    const passiveMode = applyAbilityCheckConditionModifiers(0, conditions);
     const _skills = Object.keys(SKILL_LABELS).map((k) => ({
       key: k,
       label: SKILL_LABELS[k],
       ability: (skills[k]?.ability || '').toUpperCase(),
       proficient: !!skills[k]?.proficient,
       total: fmtMod(skills[k]?.total ?? 0),
-      passive: 10 + (skills[k]?.total ?? 0),
+      passive: passiveScore(skills[k]?.total, passiveMode),
     })).sort((a, b) => a.label.localeCompare(b.label));
 
     const items = this.document?.items || [];
+    const equippedArmor = items.filter((item) => item.type === 'armor' && (item.system || item.data || {}).equipped);
+    const unarmoredDefenseChoices = unarmoredDefenseOptions(items, {
+      dexterityModifier: abilities.dex?.modifier,
+      constitutionModifier: abilities.con?.modifier,
+      wisdomModifier: abilities.wis?.modifier,
+      bodyArmorWorn: equippedArmor.some((item) => (item.system || item.data || {}).armorType !== 'shield'),
+      shieldWielded: equippedArmor.some((item) => (item.system || item.data || {}).armorType === 'shield'),
+    }).map(({ classIdentifier, baseAC }) => ({
+      value: classIdentifier,
+      baseAC,
+      label: localizeSheet(`SDR5E.ClassFeatures.UnarmoredDefense${classIdentifier === 'barbarian' ? 'Barbarian' : 'Monk'}`),
+      selected: sd.srd5eUnarmoredDefenseClass === classIdentifier,
+    }));
     const isRoot = (it) => {
       const cid = (it.system || it.data || {}).container;
       return !cid || !items.some((x) => x.id === cid);
@@ -517,6 +630,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
             hasQuantity: c.type !== 'container',
             quantity: cdata.quantity ?? 1,
             isWeapon: c.type === 'weapon',
+            isHealersKit: c.type === 'item' && cdata.identifier === 'healers-kit',
             isConsumable: c.type === 'consumable',
             isTool: c.type === 'tool',
             isContainer: isCont,
@@ -545,6 +659,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         attunementRequired: idata.attunement === 'required' || idata.attunement === 'attuned',
         attuned: idata.attunement === 'attuned',
         isWeapon: type === 'weapon',
+        isHealersKit: type === 'item' && idata.identifier === 'healers-kit',
         isConsumable: type === 'consumable',
         isTool: type === 'tool',
         isContainer: isContainer,
@@ -577,7 +692,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       })
       .filter((g) => g.items.length > 0 || ['weapon', 'armor', 'item', 'consumable', 'tool'].includes(g.type));
     const _features = byType('feature');
-    // Grouped by `source` to match the real dnd5e-Foundry Features tab
+    // Grouped by `source` to match the real dnd5e Features tab
     // ("Wizard Features" / "Background Features" as separate header bars,
     // not one flat list) — features without a source (existing ones,
     // predating this field) fall into a generic group instead of vanishing.
@@ -590,20 +705,55 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       if (!_featureGroupMap.has(groupName)) _featureGroupMap.set(groupName, []);
       _featureGroupMap.get(groupName).push({
         ...f,
-        usesLabel: idata.uses?.max ? `${idata.uses?.value ?? idata.uses.max} / ${idata.uses.max}` : '—',
-        recoveryLabel: { sr: 'SR', lr: 'LR' }[idata.uses?.recovery] || '—',
+        isRage: idata.identifier === 'rage' && idata.classIdentifier === 'barbarian',
+        isMonkFocusPool: idata.identifier === 'monks-focus' && idata.classIdentifier === 'monk',
+        isUncannyMetabolism: idata.identifier === 'uncanny-metabolism' && idata.classIdentifier === 'monk',
+        arcaneRecoveryNotice: idata.identifier === 'arcane-recovery' && this.document.flags?.sdr5e?.arcaneRecoveryUsed
+          ? localizeSheet('SDR5E.ClassFeatures.ArcaneRecoveryUsed') : idata.identifier === 'arcane-recovery'
+            ? localizeSheet('SDR5E.ClassFeatures.ArcaneRecoveryHow') : '',
+        expertiseSkillLabel: idata.expertiseSkill ? SKILL_LABELS[idata.expertiseSkill] || idata.expertiseSkill : '',
+        memorizeSpellNotice: idata.identifier === 'memorize-spell'
+          ? localizeSheet('SDR5E.ClassFeatures.MemorizeSpellHowCard') : '',
+        rageActive: !!idata.rageActive,
+        rageCanExtend: !!idata.rageActive && idata.rageTurnState?.nextTurnSeen === true && idata.rageTurnState?.persistent !== true,
+        rageNotice: idata.rageActive
+          ? idata.rageTurnState?.persistent === true ? localizeSheet('SDR5E.ClassFeatures.RagePersistentTracked')
+            : idata.rageTurnState?.combatId ? idata.rageTurnState?.nextTurnSeen === true
+              ? localizeSheet('SDR5E.ClassFeatures.RageExtensionPrompt')
+              : localizeSheet('SDR5E.ClassFeatures.RageTurnTracked')
+            : localizeSheet('SDR5E.ClassFeatures.RageManualDuration')
+          : '',
+        usesLabel: idata.uses?.max > 0 ? `${idata.uses?.value ?? idata.uses.max} / ${idata.uses.max}` : '—',
+        recoveryLabel: idata.uses?.shortRestRestore
+          ? localizeSheet('SDR5E.ClassFeatures.RageRecovery')
+          : { sr: 'SR', lr: 'LR' }[idata.uses?.recovery] || '—',
+        supportHint: idata.mechanicsSupport?.manualNoticeKey ? localizeSheet(idata.mechanicsSupport.manualNoticeKey) : '',
         resourceCost: Number(idata.resourceCost) || 0,
       });
     }
     const _featureGroups = Array.from(_featureGroupMap, ([source, list]) => ({ source, items: list }));
 
+    const rangerFavoredEnemyItem = items.find((item) => item.type === 'feature'
+      && (item.system || item.data || {}).classIdentifier === 'ranger'
+      && (item.system || item.data || {}).identifier === 'favored-enemy');
+    const rangerFavoredEnemyUses = rangerFavoredEnemyItem?.system?.uses || rangerFavoredEnemyItem?.data?.uses;
     const spellItems = byType('spell').map((s) => {
       const sdata = s.system || s.data || {};
+      const wizardLevel = Math.max(0, ...items.filter((item) => item.type === 'class'
+        && (item.system || item.data || {}).classIdentifier === 'wizard')
+        .map((item) => Number((item.system || item.data || {}).levels) || 0));
       return {
         ...s,
         isCantrip: (sdata.spellLevel ?? 0) === 0,
         prepared: !!sdata.prepared,
+        alwaysPrepared: !!sdata.magicInitiate || !!sdata.alwaysPrepared,
+        isRangerFavoredEnemy: sdata.classes?.includes('ranger')
+          && String(s.name || '').trim().toLocaleLowerCase() === "hunter's mark"
+          && Number(sdata.spellLevel) === 1,
+        rangerFavoredEnemyUsesLabel: rangerFavoredEnemyUses
+          ? `${rangerFavoredEnemyUses.value ?? rangerFavoredEnemyUses.max}/${rangerFavoredEnemyUses.max}` : '',
         hasDamage: !!sdata.damage?.formula,
+        ...wizardSpellCastOptions(sdata, wizardLevel),
       };
     });
     const _spellsByLevel = Array.from({ length: 10 }, (_, lvl) => ({
@@ -632,13 +782,18 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       ability: (attrs.spellcasting?.ability || 'int').toUpperCase(),
       dc: attrs.spellcasting?.dc ?? 0,
       attackBonus: fmtMod(attrs.spellcasting?.attackBonus ?? 0),
-      prepared: preparableSpells.filter((s) => s.prepared).length,
+      prepared: preparableSpells.filter((s) => {
+        const data = s.system || s.data || {};
+        return !!data.sourceClassIdentifier && spellCountsTowardPreparedLimit(data) && !data.alwaysPrepared
+          && this._maxPreparedSpells(data.sourceClassIdentifier) > 0
+          && (data.sourceClassIdentifier !== 'wizard' || data.wizardSpellbook === true);
+      }).length,
       preparedMax: this._maxPreparedSpells(),
       // Só faz sentido quando `knownClassItem` existe — 0/0 pra quem prepara
       // magia em vez de "conhecer" (Cleric/Druid/Paladin/Wizard).
-      known: knownClassItem ? preparableSpells.length : 0,
+      known: knownClassItem ? preparableSpells.filter((s) => !(s.system || s.data || {}).magicInitiate).length : 0,
       knownMax,
-      cantripsKnown: knownClassItem ? spellItems.filter((s) => s.isCantrip).length : 0,
+      cantripsKnown: knownClassItem ? spellItems.filter((s) => s.isCantrip && !(s.system || s.data || {}).magicInitiate).length : 0,
       cantripsKnownMax,
     };
 
@@ -720,7 +875,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
     const exhaustion = res.exhaustion ?? 0;
     const _exhaustionLevels = Array.from({ length: 6 }, (_, i) => ({ level: i + 1, filled: exhaustion >= i + 1 }));
-    // Real dnd5e-Foundry flanks the AC shield with the exhaustion track
+    // Real dnd5e flanks the AC shield with the exhaustion track
     // split 3-and-3 either side, not a standalone boxed row — confirmed
     // live against the reference sheet.
     const _exhaustionLeft = _exhaustionLevels.slice(0, 3);
@@ -733,19 +888,29 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     };
 
     const xpVal = Number(details.xp?.value) || 0;
-    const xpMax = Number(details.xp?.max) || 300;
-    const xpPct = xpMax > 0 ? Math.max(0, Math.min(100, Math.round((xpVal / xpMax) * 100))) : 0;
+    const characterLevel = Number(details.level) || 1;
+    const xpProgress = resolveXpProgress(xpVal, characterLevel);
+    const levelUpEligibility = resolveLevelUpEligibility(xpVal, characterLevel, getSetting('learningMilestones', true));
     const _xp = {
       value: xpVal.toLocaleString(),
-      max: xpMax.toLocaleString(),
-      pct: xpPct,
+      max: (xpProgress.nextThreshold ?? xpProgress.currentThreshold).toLocaleString(),
+      pct: xpProgress.progressPercent,
     };
+    const _levelUpTitle = levelUpEligibility.reason === 'level-cap'
+      ? localizeSheet('SDR5E.Progression.LevelCap')
+      : levelUpEligibility.allowed
+        ? localizeSheet('SDR5E.Progression.LevelUpAvailable')
+        : localizeSheet('SDR5E.Wizard.LevelUp.InsufficientXP')
+          .replace('{max}', xpProgress.nextThreshold.toLocaleString())
+          .replace('{current}', xpVal.toLocaleString());
 
     return {
       ...context,
       ...this.document,
       name: (this.document?.name && this.document.name !== 'undefined') ? this.document.name : '',
       systemData: sd,
+      _grappleButton: localizeSheet('SDR5E.Grapple.Grapple'),
+      _shoveButton: localizeSheet('SDR5E.Shove.Shove'),
       _abilities,
       _saves,
       _skills,
@@ -760,12 +925,22 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         pct: res.primary?.max ? Math.max(0, Math.min(100, Math.round(((res.primary.value ?? 0) / res.primary.max) * 100))) : 0,
       },
       _spellsByLevel,
+      _pactMagic: {
+        active: (Number(res.pactMagic?.max) || 0) > 0,
+        value: Number(res.pactMagic?.value) || 0,
+        max: Number(res.pactMagic?.max) || 0,
+        spellLevel: Number(res.pactMagic?.spellLevel) || 0,
+        needsReview: !!res.pactMagic?.needsReview,
+      },
       _spellcasting,
       _effects,
       _prof: fmtMod(attrs.prof?.value ?? 2),
       _profValue: attrs.prof?.value ?? 2,
       _ac: attrs.da?.value ?? 10,
       _acBase: attrs.da?.base ?? 10,
+      _showUnarmoredDefenseChoice: unarmoredDefenseChoices.length > 1,
+      _unarmoredDefenseChoices: unarmoredDefenseChoices,
+      _unarmoredDefenseLabel: localizeSheet('SDR5E.ClassFeatures.UnarmoredDefenseChoice'),
       _initiative: fmtMod(attrs.initiative?.total ?? 0),
       _speed: `${attrs.movement?.effective?.walk ?? attrs.movement?.walk ?? 9} m`,
       _movement: (() => {
@@ -796,9 +971,12 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _exhaustionRight,
       _deathSaves,
       _showDeathSaves: (res.health?.value ?? 0) <= 0,
+      _deathState: res.deathState || 'alive',
       _level: details.level ?? 1,
       _classLabel: _classLabel,
       _xp,
+      _canLevelUp: levelUpEligibility.allowed,
+      _levelUpTitle,
       _background: details.background || '',
       _biography: details.biography || '',
       _bio: {
@@ -827,10 +1005,90 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _sensesRaw: details.senses?.value || [],
       _identity,
       _multiclassQualifies: multiclassQualifies,
+      _coreActionActivities: coreActionActivityView(sd.skills, localizeSheet),
+      _coreActionActivitiesTitle: localizeSheet('SDR5E.CoreActions.Title'),
+      _coreActionActivitiesNote: localizeSheet('SDR5E.CoreActions.Note'),
+      _coreActionRollLabel: localizeSheet('SDR5E.CoreActions.RollCheck'),
+      _movementLedger: this._movementContext.view,
+      _movementCastChoices: this._movementContext.choices,
+      _movementCastId: this._movementContext.castId,
+      _movementNeedsCastSelection: this._movementContext.requiresSelection,
+      _movementCastUnavailable: this._movementContext.inCombat && !this._movementContext.castId && !this._movementContext.choices.length,
+      _movementInCombat: this._movementContext.inCombat,
+      _movementSlowPenalty: this._movementContext.penaltyFeet || 0,
+      _helpAction: helpActionView(sd, sd.srd5eHelpRecords, localizeSheet),
+      _readyAction: readyActionView(attrs.movement?.effective?.walk ?? attrs.movement?.walk, sd.srd5eReadyRecords, localizeSheet),
+      _dodgeAction: dodgeActionView(sd.srd5eDodgeRecord, localizeSheet),
+      _influence: influenceFormView(sd, localizeSheet),
     };
   }
 
   onAction(action, id, target) {
+    if (action === 'movement-ledger-add') {
+      void this._addMovementSegment(target);
+      return;
+    }
+    if (action === 'movement-ledger-remove') {
+      const current = this._movementContext?.ledger || {};
+      void this._saveMovementLedger(removeMovementSegment(current, target?.dataset?.segmentIndex));
+      return;
+    }
+    if (action === 'movement-ledger-reset') {
+      void this._saveMovementLedger(resetMovementLedger());
+      return;
+    }
+    if (action === 'movement-ledger-add-dash') {
+      void this._addDashMovementBonus(target);
+      return;
+    }
+    if (action === 'movement-ledger-remove-dash') {
+      const current = this._movementContext?.ledger || {};
+      void this._saveMovementLedger(removeDashMovementBonus(current, target?.dataset?.dashIndex));
+      return;
+    }
+    if (action === 'roll-core-action') {
+      void this._rollCoreAction(target?.dataset?.activity, target);
+      return;
+    }
+    if (action === 'resolve-influence') {
+      void this._resolveInfluence(target);
+      return;
+    }
+    if (action === 'help-record-ability' || action === 'help-record-attack') {
+      void this._recordHelpAction(action === 'help-record-ability' ? 'ability' : 'attack', target);
+      return;
+    }
+    if (action === 'help-remove-record') {
+      const current = this.document?.systemData?.srd5eHelpRecords || [];
+      void this._saveHelpRecords(removeHelpRecord(current, target?.dataset?.helpIndex));
+      return;
+    }
+    if (action === 'help-clear-records') {
+      void this._saveHelpRecords([]);
+      return;
+    }
+    if (action === 'ready-record') {
+      void this._recordReadyAction(target);
+      return;
+    }
+    if (action === 'ready-remove-record') {
+      const current = this.document?.systemData?.srd5eReadyRecords || [];
+      void this._saveReadyRecords(removeReadyRecord(current, target?.dataset?.readyIndex));
+      return;
+    }
+    if (action === 'ready-clear-records') {
+      void this._saveReadyRecords([]);
+      return;
+    }
+    if (action === 'dodge-record') {
+      void this._saveDodgeRecord(setDodgeRecord());
+      return;
+    }
+    if (action === 'dodge-clear') {
+      void this._saveDodgeRecord(clearDodgeRecord());
+      return;
+    }
+
     if (action === 'tab') {
       const tab = target.dataset.tab;
       if (!tab) return;
@@ -888,6 +1146,10 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       void this._castSpell(id);
       return;
     }
+    if (action === 'cast-ritual') {
+      void this._castRitual(id);
+      return;
+    }
 
     if (action === 'roll-spell-attack') {
       void this._rollSpell(id, 'attack');
@@ -911,6 +1173,22 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
     if (action === 'unarmed-attack') {
       void rollUnarmedStrike(this.document);
+      return;
+    }
+
+    if (action === 'unarmed-grapple') {
+      void rollUnarmedGrapple(this.document).catch((error) => {
+        console.error('[srd5e] Unarmed Grapple failed:', error);
+        showToast(localizeSheet('SDR5E.Grapple.FlowFailed'), 'error');
+      });
+      return;
+    }
+
+    if (action === 'unarmed-shove') {
+      void rollUnarmedShove(this.document).catch((error) => {
+        console.error('[srd5e] Unarmed Shove failed:', error);
+        showToast(localizeSheet('SDR5E.Shove.FlowFailed'), 'error');
+      });
       return;
     }
 
@@ -938,10 +1216,22 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       void this._activateFeature(id);
       return;
     }
+    if (action === 'extend-rage') {
+      void this._extendRage(id);
+      return;
+    }
 
     if (action === 'use-consumable') {
       const item = (this.document.items || []).find((i) => i.id === id);
       if (item) void useConsumable(this.document, item).then(() => this._reloadDocument());
+      return;
+    }
+
+    if (action === 'use-healers-kit') {
+      const item = (this.document.items || []).find((i) => i.id === id);
+      if (item) void useHealersKit(this.document, item)
+        .then((result) => { if (result) return this._reloadDocument(); })
+        .catch(() => window.Loom?.showToast?.(localizeSheet('SDR5E.ItemUse.HealersKitSaveFailed'), 'warning'));
       return;
     }
 
@@ -1049,7 +1339,10 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const conditions = await getActorConditions(this.document.id);
       const exhaustionLevel = sd.resources?.exhaustion ?? 0;
       const armorPenalty = !!sd.attributes?.armor?.penalty;
-      const { autoFail, disadvantage, bonus: coverBonus } = getSaveConditionOutcome(key, conditions, exhaustionLevel, armorPenalty);
+      const { autoFail, advantage: featureAdvantage, disadvantage } = getSaveConditionOutcome(key, conditions, exhaustionLevel, armorPenalty, {
+        dangerSense: hasDangerSense(this.document.items),
+        items: this.document.items,
+      });
       if (autoFail) {
         await window.Loom.ChatMessage.create({
           speaker: window.Loom.ChatMessage.getSpeaker({ actor: this.document }),
@@ -1063,23 +1356,231 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       // Same cancel-out rule as attacks/ability checks: count sources, don't
       // just override the keyboard state (a Shift-held advantage should
       // still cancel a forced disadvantage per SRD, not lose to it blindly).
-      const advantage = (kb === 1 && disadvantage) ? 0 : disadvantage ? -1 : kb;
-      // Cover (Handout 28): bônus de +2/+5 em saves de Destreza, resolvido
-      // acima em getSaveConditionOutcome.
-      await sdr5eRoll({ label: `Save: ${ABILITY_LABELS[key]}`, parts: [{ label: 'Modifier', value: (save?.total ?? 0) + (coverBonus || 0) }], actor: this.document, advantage });
+      const advantageSources = (kb === 1 ? 1 : 0) + (featureAdvantage ? 1 : 0);
+      const disadvantageSources = (kb === -1 ? 1 : 0) + (disadvantage ? 1 : 0);
+      const advantage = resolveAdvantageSources(advantageSources, disadvantageSources);
+      const coverBonus = await getSaveCoverBonus(key, conditions);
+      if (coverBonus === null) return;
+      await sdr5eRoll({ label: `Save: ${ABILITY_LABELS[key]}`, parts: [{ label: 'Modifier', value: (save?.total ?? 0) + coverBonus }], actor: this.document, advantage,
+        extraMeta: { srd5eAbilityKey: key, ...(key === 'str' && hasIndomitableMight(this.document.items) ? { srd5eIndomitableMightScore: sd.abilities?.str?.value } : {}) } });
     } else {
       const conditions = await getActorConditions(this.document.id);
       const armorPenalty = (key === 'str' || key === 'dex') && !!sd.attributes?.armor?.penalty;
-      const advantage = applyAbilityCheckConditionModifiers(currentAdvantageMode(), conditions, sd.resources?.exhaustion ?? 0, armorPenalty);
+      const advantage = applyAbilityCheckConditionModifiers(currentAdvantageMode(), conditions, sd.resources?.exhaustion ?? 0, armorPenalty,
+        rageStrengthAdvantage(this.document.items, key));
       const abl = sd.abilities?.[key];
-      await sdr5eRoll({ label: `Ability Check: ${ABILITY_LABELS[key]}`, parts: [{ label: 'Modifier', value: abl?.modifier ?? 0 }], actor: this.document, advantage });
+      await sdr5eRoll({ label: `Ability Check: ${ABILITY_LABELS[key]}`, parts: [{ label: 'Modifier', value: abl?.modifier ?? 0 }], actor: this.document, advantage,
+        extraMeta: { srd5eAbilityKey: key, ...(key === 'str' && hasIndomitableMight(this.document.items) ? { srd5eIndomitableMightScore: sd.abilities?.str?.value } : {}) } });
     }
+  }
+
+  async _addMovementSegment(target) {
+    const section = target?.closest?.('[data-movement-ledger]');
+    const distance = section?.querySelector('[data-movement-distance]')?.value;
+    const mode = section?.querySelector('[data-movement-mode]')?.value;
+    const difficultTerrain = section?.querySelector('[data-movement-difficult]')?.checked === true;
+    const current = this._movementContext?.ledger || {};
+    const speeds = this._movementContext?.speeds || {};
+    const result = addMovementSegment(current, { distance, mode, difficultTerrain }, speeds);
+    if (!result.valid) {
+      showToast(localizeSheet(result.reason === 'speed-unavailable' ? 'SDR5E.MovementLedger.SpeedUnavailable' : result.reason === 'movement-exceeded' ? 'SDR5E.MovementLedger.Exceeded' : 'SDR5E.MovementLedger.InvalidSegment'), 'warning');
+      return;
+    }
+    await this._saveMovementLedger(result.ledger);
+  }
+
+  async _saveMovementLedger(value) {
+    if (!this.document?.id || this._movementLedgerSaving) return;
+    this._movementLedgerSaving = true;
+    try {
+      if (this._movementContext?.inCombat) {
+        if (!this._movementContext.castId) throw new Error('Cast de combate não selecionado.');
+        await api.put(`/cast/${encodeURIComponent(this._movementContext.castId)}`, { systemData: { srd5eMovementLedger: normalizeMovementLedger(value) } });
+      } else {
+        await api.put(`/actors/${encodeURIComponent(this.document.id)}`, { systemData: { srd5eMovementLedger: normalizeMovementLedger(value) } });
+      }
+      await this._reloadDocument();
+    } catch {
+      showToast(localizeSheet('SDR5E.MovementLedger.SaveFailed'), 'error');
+    } finally {
+      this._movementLedgerSaving = false;
+    }
+  }
+
+  async _addDashMovementBonus(target) {
+    const mode = target?.closest?.('[data-movement-ledger]')?.querySelector('[data-dash-speed]')?.value;
+    const current = this._movementContext?.ledger || {};
+    const speeds = this._movementContext?.speeds || {};
+    const result = addDashMovementBonus(current, mode, speeds);
+    if (!result.valid) {
+      showToast(localizeSheet(result.reason === 'speed-unavailable' ? 'SDR5E.MovementLedger.SpeedUnavailable' : 'SDR5E.MovementLedger.InvalidDash'), 'warning');
+      return;
+    }
+    await this._saveMovementLedger(result.ledger);
+  }
+
+  async _resolveInfluence(target) {
+    const section = target?.closest?.('[data-influence-form]');
+    if (!section || !this.document) return;
+    const value = (key) => section.querySelector(`[data-influence-${key}]`)?.value ?? '';
+    const decision = resolveInfluenceAdjudication({
+      branch: value('branch'), targetName: value('target'), attitude: value('attitude'), skillKey: value('skill'),
+      intelligence: value('intelligence'), dcOverride: value('dc'),
+    }, this.document.systemData || {});
+    if (!decision.valid) {
+      const key = decision.reason === 'skill-unavailable' ? 'Skill' : decision.reason === 'invalid-attitude' ? 'Attitude' : decision.reason === 'invalid-intelligence' ? 'Intelligence' : decision.reason === 'invalid-dc' ? 'DC' : 'Input';
+      showToast(localizeSheet(`SDR5E.Influence.${key}Required`), 'warning');
+      return;
+    }
+    const escapeHtml = (text) => String(text).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
+    if (!decision.requiresCheck) {
+      const message = localizeSheet(decision.branch === 'willing' ? 'SDR5E.Influence.WillingMessage' : 'SDR5E.Influence.UnwillingMessage').replace('{target}', escapeHtml(decision.targetName));
+      try {
+        await window.Loom.ChatMessage.create({
+          speaker: window.Loom.ChatMessage.getSpeaker({ actor: this.document }),
+          content: message,
+          flags: { srd5e: { name: localizeSheet('SDR5E.Influence.NoCheckTitle'), srd5eInfluence: { branch: decision.branch, targetName: decision.targetName } } },
+        });
+      } catch {
+        showToast(localizeSheet('SDR5E.Influence.PostFailed'), 'error');
+      }
+      return;
+    }
+    const skillLabel = localizeSheet(`srd5e.Skills.${decision.skillKey}`);
+    const conditions = await getActorConditions(this.document.id);
+    const baseAdvantage = applyAbilityCheckConditionModifiers(currentAdvantageMode(), conditions, this.document.systemData?.resources?.exhaustion ?? 0);
+    const advantage = composeInfluenceAdvantage(baseAdvantage, decision.attitudeAdvantage);
+    const label = localizeSheet('SDR5E.Influence.RollLabel')
+      .replace('{target}', escapeHtml(decision.targetName))
+      .replace('{skill}', skillLabel)
+      .replace('{dc}', String(decision.dc));
+    await sdr5eRoll({
+      label,
+      parts: [{ label: skillLabel, value: decision.skillTotal }],
+      actor: this.document,
+      advantage,
+      dc: decision.dc,
+      extraMeta: { srd5eActivity: 'influence', srd5eSkillKey: decision.skillKey, srd5eAbilityKey: decision.abilityKey,
+        srd5eActionCost: 'action', srd5eInfluence: { branch: 'hesitant', targetName: decision.targetName, attitude: decision.attitude,
+          intelligence: decision.intelligence, defaultDC: decision.defaultDC, dcOverridden: decision.dcOverridden,
+          interaction: decision.interaction, outcomeAdjudication: 'manual' } },
+    });
+  }
+
+  async _recordHelpAction(mode, target) {
+    const section = target?.closest?.('[data-help-mode-form]');
+    const allyName = section?.querySelector('[data-help-ally]')?.value;
+    const enemyName = section?.querySelector('[data-help-enemy]')?.value;
+    const selected = section?.querySelector('[data-help-proficiency]')?.value || '';
+    const split = selected.indexOf(':');
+    const candidate = mode === 'ability'
+      ? { mode, allyName, proficiencyKind: split > 0 ? selected.slice(0, split) : '', proficiencyKey: split > 0 ? selected.slice(split + 1) : '' }
+      : { mode, allyName, enemyName };
+    const sd = this.document?.systemData || {};
+    const result = createHelpRecord(candidate, sd);
+    if (!result.valid) {
+      showToast(localizeSheet(result.reason === 'proficiency-unavailable' ? 'SDR5E.HelpAction.UnavailableProficiency' : 'SDR5E.HelpAction.InvalidTarget'), 'warning');
+      return;
+    }
+    await this._saveHelpRecords(appendHelpRecord(sd.srd5eHelpRecords, result.record));
+  }
+
+  async _saveHelpRecords(value) {
+    if (!this.document?.id || this._helpRecordsSaving) return;
+    this._helpRecordsSaving = true;
+    try {
+      await api.put(`/actors/${encodeURIComponent(this.document.id)}`, { systemData: { srd5eHelpRecords: normalizeHelpRecords(value) } });
+      await this._reloadDocument();
+    } catch {
+      showToast(localizeSheet('SDR5E.HelpAction.SaveFailed'), 'error');
+    } finally {
+      this._helpRecordsSaving = false;
+    }
+  }
+
+  async _recordReadyAction(target) {
+    const form = target?.closest?.('[data-ready-action-form]');
+    const speed = this.document?.systemData?.attributes?.movement?.effective?.walk
+      ?? this.document?.systemData?.attributes?.movement?.walk;
+    const candidate = {
+      trigger: form?.querySelector('[data-ready-trigger]')?.value,
+      responseType: form?.querySelector('[data-ready-response-type]')?.value,
+      response: form?.querySelector('[data-ready-response]')?.value,
+      spellName: form?.querySelector('[data-ready-spell]')?.value,
+      distance: form?.querySelector('[data-ready-distance]')?.value,
+    };
+    const result = createReadyRecord(candidate, speed);
+    if (!result.valid) {
+      const key = result.reason === 'speed-unavailable' || result.reason === 'movement-exceeds-speed'
+        ? 'SDR5E.ReadyAction.MovementInvalid'
+        : 'SDR5E.ReadyAction.Invalid';
+      showToast(localizeSheet(key), 'warning');
+      return;
+    }
+    const current = this.document?.systemData?.srd5eReadyRecords || [];
+    if (current.length) {
+      showToast(localizeSheet('SDR5E.ReadyAction.AlreadyRecorded'), 'warning');
+      return;
+    }
+    await this._saveReadyRecords(appendReadyRecord(current, result.record));
+  }
+
+  async _saveReadyRecords(value) {
+    if (!this.document?.id || this._readyRecordsSaving) return;
+    this._readyRecordsSaving = true;
+    try {
+      await api.put(`/actors/${encodeURIComponent(this.document.id)}`, { systemData: { srd5eReadyRecords: normalizeReadyRecords(value) } });
+      await this._reloadDocument();
+    } catch {
+      showToast(localizeSheet('SDR5E.ReadyAction.SaveFailed'), 'error');
+    } finally {
+      this._readyRecordsSaving = false;
+    }
+  }
+
+  async _saveDodgeRecord(value) {
+    if (!this.document?.id || this._dodgeSaving) return;
+    this._dodgeSaving = true;
+    try {
+      await api.put(`/actors/${encodeURIComponent(this.document.id)}`, { systemData: { srd5eDodgeRecord: value } });
+      await this._reloadDocument();
+    } catch {
+      showToast(localizeSheet('SDR5E.DodgeAction.SaveFailed'), 'error');
+    } finally {
+      this._dodgeSaving = false;
+    }
+  }
+
+  async _rollCoreAction(action, target) {
+    if (!this.document) return;
+    const row = target?.closest?.('[data-core-action-row]');
+    const skillKey = row?.querySelector('select')?.value || '';
+    const context = normalizeCoreActionContext(action, row?.querySelector('[data-core-action-context]')?.value);
+    const check = resolveCoreActionSkillCheck(action, skillKey, this.document.systemData || {});
+    if (!check.valid) {
+      showToast(localizeSheet('SDR5E.CoreActions.SkillUnavailable'), 'warning');
+      return;
+    }
+    const skillLabel = localizeSheet(`srd5e.Skills.${check.skillKey}`);
+    const actionLabel = localizeSheet(`SDR5E.CoreActions.${check.action}`);
+    const dcLabel = check.fixedDC ? ` (${localizeSheet('SDR5E.CoreActions.DCLabel').replace('{dc}', String(check.fixedDC))})` : '';
+    const contextLabel = context ? ` — ${localizeSheet('SDR5E.CoreActions.ContextInRoll').replace('{context}', context)}` : '';
+    await sdr5eRoll({
+      label: `${actionLabel}: ${skillLabel}${dcLabel}${contextLabel}`,
+      parts: [{ label: skillLabel, value: check.total }],
+      actor: this.document,
+      dc: check.fixedDC,
+      extraMeta: { srd5eActivity: check.action, srd5eSkillKey: check.skillKey,
+        srd5eAbilityKey: check.abilityKey, srd5eActionCost: 'action', ...coreActionContextMetadata(action, context) },
+    });
   }
 
   async _rollInitiative() {
     if (!this.document) return;
     const bonus = this.document.systemData?.attributes?.initiative?.total ?? 0;
-    await sdr5eRoll({ label: `${this.document.name} rolls Initiative!`, parts: [{ label: 'Initiative', value: bonus }], actor: this.document });
+    const conditions = await getActorConditions(this.document.id);
+    const advantage = initiativeBaseSources(conditions, hasFeralInstinct(this.document.items));
+    await sdr5eRoll({ label: `${this.document.name} rolls Initiative!`, parts: [{ label: 'Initiative', value: bonus }], actor: this.document, advantage, initiative: true });
   }
 
   async _rollSkill(key) {
@@ -1096,9 +1597,15 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       });
       return;
     }
-    const armorPenalty = (skill?.ability === 'str' || skill?.ability === 'dex') && !!sd?.attributes?.armor?.penalty;
-    const advantage = applyAbilityCheckConditionModifiers(currentAdvantageMode(), conditions, sd?.resources?.exhaustion ?? 0, armorPenalty);
-    await sdr5eRoll({ label: `Skill Check: ${SKILL_LABELS[key] || key}`, parts: [{ label: 'Modifier', value: skill?.total ?? 0 }], actor: this.document, advantage });
+    const checkAbility = primalKnowledgeAbility(this.document.items, key) || skill?.ability;
+    const armorPenalty = (checkAbility === 'str' || checkAbility === 'dex') && !!sd?.attributes?.armor?.penalty;
+    const advantage = applyAbilityCheckConditionModifiers(currentAdvantageMode(), conditions, sd?.resources?.exhaustion ?? 0, armorPenalty,
+      checkAbility === 'str' ? rageStrengthAdvantage(this.document.items, 'str') : 0);
+    const originalAbilityModifier = Number(sd?.abilities?.[skill?.ability]?.modifier) || 0;
+    const checkAbilityModifier = Number(sd?.abilities?.[checkAbility]?.modifier) || 0;
+    const modifier = Number(skill?.total || 0) - originalAbilityModifier + checkAbilityModifier
+      + druidMagicianCheckBonus(this.document.items, key, sd?.abilities?.wis?.modifier);
+    await sdr5eRoll({ label: `Skill Check: ${SKILL_LABELS[key] || key}`, parts: [{ label: 'Modifier', value: modifier }], actor: this.document, advantage });
   }
 
   async _toggleProficiency(group, key) {
@@ -1161,8 +1668,180 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (!itemId || !this.document) return;
     const item = (this.document.items || []).find((i) => i.id === itemId);
     if (!item) return;
+    const idata = item.system || item.data || {};
+    if (idata.identifier === 'rage' && idata.classIdentifier === 'barbarian') {
+      await toggleRage(this.document, item);
+      await this._reloadDocument();
+      return;
+    }
     await activateFeature(this.document, item);
     await this._reloadDocument();
+  }
+
+  async _extendRage(itemId) {
+    const item = (this.document?.items || []).find((entry) => entry.id === itemId);
+    if (!item) return;
+    await extendRage(this.document, item);
+    await this._reloadDocument();
+  }
+
+  async _promptArcaneRecovery(actor) {
+    const wizard = actor.items?.find((entry) => entry.type === 'class'
+      && (entry.system || entry.data || {}).classIdentifier === 'wizard');
+    const wizardLevel = Number((wizard?.system || wizard?.data || {}).levels) || 0;
+    const slots = actor.systemData?.resources?.spellSlots || {};
+    if (!wizardLevel || actor.flags?.sdr5e?.arcaneRecoveryUsed) return null;
+    const budget = Math.ceil(wizardLevel / 2);
+    const dialog = document.createElement('div');
+    dialog.className = 'sdrn-rest-dialog';
+    dialog.innerHTML = `<p>${localizeSheet('SDR5E.ClassFeatures.ArcaneRecoveryBudget').replace('{budget}', String(budget))}</p>`;
+    const selects = [];
+    for (let level = 1; level <= 5; level += 1) {
+      const slot = slots[level] || slots[String(level)];
+      const missing = Math.max(0, (Number(slot?.max) || 0) - (Number(slot?.value) || 0));
+      if (!missing) continue;
+      const label = document.createElement('label');
+      label.textContent = `${localizeSheet('SDR5E.ClassFeatures.ArcaneRecoverySlot')} ${level}`;
+      const select = document.createElement('select');
+      select.className = 'sdrn-rest-hd-input';
+      for (let count = 0; count <= Math.min(missing, Math.floor(budget / level)); count += 1) {
+        const option = document.createElement('option');
+        option.value = String(count);
+        option.textContent = String(count);
+        select.append(option);
+      }
+      label.append(select);
+      dialog.append(label);
+      selects.push([level, select]);
+    }
+    if (!selects.length) {
+      return null;
+    }
+    const selected = await LoomDialog.wait({
+      window: { title: localizeSheet('SDR5E.ClassFeatures.ArcaneRecovery') }, content: dialog, width: 360,
+      buttons: [
+        { action: 'cancel', label: localizeSheet('SDR5E.Spellcasting.Cancel'), variant: 'ghost', callback: () => null },
+        { action: 'confirm', label: localizeSheet('SDR5E.ClassFeatures.RecoverSlots'), variant: 'primary', callback: () => Object.fromEntries(selects.map(([level, select]) => [level, Number(select.value)])) },
+      ],
+    });
+    if (!selected) return null;
+    const result = resolveArcaneRecovery({ wizardLevel, spellSlots: slots, selected });
+    if (!result.valid) {
+      showToast?.(localizeSheet('SDR5E.ClassFeatures.ArcaneRecoveryInvalid'), 'warning');
+      return null;
+    }
+    return selected;
+  }
+
+  async _promptWizardMemorizeSpell(actor) {
+    const wizard = actor.items?.find((entry) => entry.type === 'class'
+      && (entry.system || entry.data || {}).classIdentifier === 'wizard');
+    const wizardLevel = Number((wizard?.system || wizard?.data || {}).levels) || 0;
+    if (wizardLevel < 5) return null;
+    const book = (actor.items || []).filter((item) => item.type === 'spell'
+      && (item.system || item.data || {}).sourceClassIdentifier === 'wizard'
+      && (item.system || item.data || {}).wizardSpellbook === true
+      && Number((item.system || item.data || {}).spellLevel) >= 1
+      && Number((item.system || item.data || {}).spellLevel) <= (classSpellcastingAtLevel('wizard', wizardLevel)?.maximumSpellLevel || 0));
+    const prepared = book.filter((item) => (item.system || item.data || {}).prepared);
+    const unprepared = book.filter((item) => !(item.system || item.data || {}).prepared);
+    if (!prepared.length || !unprepared.length) return null;
+    const dialog = document.createElement('div');
+    dialog.className = 'sdrn-rest-dialog';
+    dialog.append(document.createTextNode(localizeSheet('SDR5E.ClassFeatures.MemorizeSpellHow')));
+    const makeSelect = (labelText, items) => {
+      const label = document.createElement('label');
+      label.textContent = labelText;
+      const select = document.createElement('select');
+      select.className = 'sdrn-rest-hd-input';
+      const empty = document.createElement('option');
+      empty.value = '';
+      empty.textContent = '—';
+      select.append(empty);
+      for (const item of items) {
+        const data = item.system || item.data || {};
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = `${item.name} (${localizeSheet('SDR5E.Spellcasting.SlotLevel')} ${data.spellLevel})`;
+        select.append(option);
+      }
+      label.append(select);
+      dialog.append(label);
+      return select;
+    };
+    const replaceSelect = makeSelect(localizeSheet('SDR5E.ClassFeatures.MemorizeSpellReplace'), prepared);
+    const replacementSelect = makeSelect(localizeSheet('SDR5E.ClassFeatures.MemorizeSpellWith'), unprepared);
+    const selection = await LoomDialog.wait({
+      window: { title: localizeSheet('SDR5E.ClassFeatures.MemorizeSpell') }, content: dialog, width: 380,
+      buttons: [
+        { action: 'cancel', label: localizeSheet('SDR5E.Spellcasting.Cancel'), variant: 'ghost', callback: () => null },
+        { action: 'confirm', label: localizeSheet('SDR5E.ClassFeatures.MemorizeSpell'), variant: 'primary', callback: () => ({ replaceId: replaceSelect.value, replacementId: replacementSelect.value }) },
+      ],
+    });
+    if (!selection?.replaceId || !selection?.replacementId) return null;
+    const result = resolveWizardMemorizeSpellChoice(wizardLevel, book, selection.replaceId, selection.replacementId);
+    if (!result.valid) {
+      showToast?.(localizeSheet('SDR5E.ClassFeatures.MemorizeSpellInvalid'), 'warning');
+      return null;
+    }
+    return result;
+  }
+
+  async _promptWizardSpellMasteryReplacement(actor) {
+    const wizard = actor.items?.find((item) => item.type === 'class'
+      && (item.system || item.data || {}).classIdentifier === 'wizard');
+    const wizardLevel = Number((wizard?.system || wizard?.data || {}).levels) || 0;
+    const feature = wizardLevel >= 18 ? actor.items?.find((item) => item.type === 'feature'
+      && (item.system || item.data || {}).classIdentifier === 'wizard'
+      && (item.system || item.data || {}).identifier === 'spell-mastery') : null;
+    const featureData = feature?.system || feature?.data || {};
+    if (!feature?.id || !featureData.levelOneSpellId || !featureData.levelTwoSpellId) return null;
+    const book = (actor.items || []).filter((item) => item.type === 'spell'
+      && (item.system || item.data || {}).sourceClassIdentifier === 'wizard'
+      && (item.system || item.data || {}).wizardSpellbook === true);
+    const current = [featureData.levelOneSpellId, featureData.levelTwoSpellId]
+      .map((id) => book.find((item) => String(item.id) === String(id))).filter(Boolean);
+    const eligible = (item) => /^1 action$/i.test(String((item.system || item.data || {}).castingTime || '').trim());
+    if (current.length !== 2 || !current.every(eligible)) return null;
+    const dialog = document.createElement('div');
+    dialog.className = 'sdrn-rest-dialog';
+    dialog.append(document.createTextNode(localizeSheet('SDR5E.ClassFeatures.SpellMasteryReplacePrompt')));
+    const makeSelect = (labelText, items, optionLabel) => {
+      const label = document.createElement('label');
+      label.textContent = labelText;
+      const select = document.createElement('select');
+      select.className = 'sdrn-rest-hd-input';
+      const empty = document.createElement('option');
+      empty.value = '';
+      empty.textContent = '—';
+      select.append(empty);
+      for (const item of items) {
+        const data = item.system || item.data || {};
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = `${item.name} (${localizeSheet('SDR5E.Spellcasting.SlotLevel')} ${data.spellLevel})`;
+        select.append(option);
+      }
+      label.append(select);
+      dialog.append(label);
+      return select;
+    };
+    const currentSelect = makeSelect(localizeSheet('SDR5E.ClassFeatures.SpellMasteryReplaceCurrent'), current);
+    const replacementSelect = makeSelect(localizeSheet('SDR5E.ClassFeatures.SpellMasteryReplaceWith'), book.filter((item) => eligible(item)));
+    const choice = await LoomDialog.wait({
+      window: { title: localizeSheet('SDR5E.ClassFeatures.SpellMastery') }, content: dialog, width: 380,
+      buttons: [
+        { action: 'cancel', label: localizeSheet('SDR5E.Spellcasting.Cancel'), variant: 'ghost', callback: () => null },
+        { action: 'confirm', label: localizeSheet('SDR5E.ClassFeatures.SpellMastery'), variant: 'primary', callback: () => ({ currentSpellId: currentSelect.value, replacementSpellId: replacementSelect.value }) },
+      ],
+    });
+    if (!choice?.currentSpellId || !choice?.replacementSpellId) return null;
+    const result = resolveWizardSpellMasteryReplacement(wizardLevel, book, choice.currentSpellId, choice.replacementSpellId);
+    if (!result.valid) {
+      showToast?.(localizeSheet('SDR5E.ClassFeatures.SpellMasteryReplaceInvalid'), 'warning');
+      return null;
+    }
+    return { ...result, featureId: feature.id, featureData };
   }
 
   async _addClassResource() {
@@ -1264,15 +1943,304 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     return result ?? 0;
   }
 
+  async _promptHitDiePool(pools) {
+    if (!pools?.length) return '';
+    const select = document.createElement('select');
+    select.className = 'sdrn-rest-hd-input';
+    for (const pool of pools) {
+      const option = document.createElement('option');
+      option.value = pool.id;
+      option.textContent = `${pool.die} (${pool.value}/${pool.max})`;
+      select.append(option);
+    }
+    const result = await LoomDialog.wait({
+      window: { title: 'Choose Hit Die' },
+      content: select,
+      width: 320,
+      buttons: [
+        { action: 'cancel', label: 'Cancel', variant: 'ghost', callback: () => null },
+        { action: 'confirm', label: 'Spend', variant: 'primary', callback: () => select.value },
+      ],
+    });
+    return result || '';
+  }
+
+  static async promptPreparedSpells(actor) {
+    const classItems = (actor.items || []).filter((item) => item.type === 'class');
+    const container = document.createElement('div');
+    const preparedClasses = classItems.map((item) => {
+      const data = item.system || item.data || {};
+      const subclass = (actor.items || []).find((entry) => entry.type === 'subclass'
+        && (entry.system || entry.data || {}).classIdentifier === data.classIdentifier);
+      return { item, data: { ...data, subclassName: data.subclassName || subclass?.name || '' } };
+    })
+      .filter(({ data }) => ['cleric', 'druid', 'paladin', 'ranger', 'wizard'].includes(data.classIdentifier));
+    if (!preparedClasses.length) return null;
+    let compendium = [];
+    if (preparedClasses.some(({ data }) => data.classIdentifier !== 'wizard')) {
+      try { compendium = await searchCompendiumEntries('spell', '', true); }
+      catch { showToast?.(localizeSheet('SDR5E.Spellcasting.PreparedListLoadFailed'), 'error'); return null; }
+    }
+    const groups = [];
+    for (const { data: classData } of preparedClasses) {
+      const classIdentifier = classData.classIdentifier;
+      const progression = classSpellcastingAtLevel(classIdentifier, classData.levels);
+      if (!progression) continue;
+      const wizardSpellbookItems = classIdentifier === 'wizard' ? (actor.items || []).filter((item) => item.type === 'spell'
+        && (item.system || item.data || {}).sourceClassIdentifier === 'wizard'
+        && (item.system || item.data || {}).wizardSpellbook === true
+        && Number((item.system || item.data || {}).spellLevel) > 0) : [];
+      const owned = (actor.items || []).filter((item) => item.type === 'spell'
+        && (item.system || item.data || {}).sourceClassIdentifier === classIdentifier
+        && (classIdentifier !== 'wizard' || (item.system || item.data || {}).wizardSpellbook === true)
+        && !(item.system || item.data || {}).magicInitiate
+        && !(item.system || item.data || {}).alwaysPrepared
+        && Number((item.system || item.data || {}).spellLevel) > 0);
+      const currentPrepared = owned.filter((item) => (item.system || item.data || {}).prepared);
+      const alwaysPreparedNames = new Set((actor.items || []).filter((item) => item.type === 'spell')
+        .map((item) => ({ name: item.name, data: item.system || item.data || {} }))
+        .filter(({ data }) => data.sourceClassIdentifier === classIdentifier && data.alwaysPrepared)
+        .map(({ name }) => String(name).toLocaleLowerCase()));
+      const wizardCantrips = classIdentifier === 'wizard' ? (actor.items || []).filter((item) => item.type === 'spell'
+        && (item.system || item.data || {}).sourceClassIdentifier === 'wizard'
+        && Number((item.system || item.data || {}).spellLevel) === 0) : [];
+      const wizardState = classIdentifier === 'wizard'
+        ? inspectWizardSpellbookState(classData.levels, wizardSpellbookItems, wizardCantrips) : { valid: true };
+      if (!wizardState.valid || currentPrepared.length !== progression.prepared
+        || owned.some((item) => !(item.system || item.data || {}).classes?.includes(classIdentifier))) {
+        showToast?.(localizeSheet('SDR5E.Spellcasting.PreparedListNeedsReview'), 'warning');
+        return null;
+      }
+      const ownedByName = new Map(owned.map((item) => [String(item.name).toLocaleLowerCase(), item]));
+      const candidatesByName = new Map();
+      const addCandidate = (entry, isActorItem) => {
+        const data = isActorItem ? (entry.system || entry.data || {}) : (entry.data || {});
+        const normalized = String(entry.name).toLocaleLowerCase();
+        candidatesByName.set(normalized, isActorItem
+          ? { id: entry.id, name: entry.name, data, actorItem: true }
+          : { id: entry.id, name: entry.name, data, actorItem: false });
+      };
+      if (classIdentifier === 'wizard') {
+        for (const item of owned) {
+          const data = item.system || item.data || {};
+          if (data.classes?.includes('wizard') && Number(data.spellLevel) <= progression.maximumSpellLevel) addCandidate(item, true);
+        }
+      } else {
+        for (const entry of compendium) {
+          const data = entry.data || {};
+          if (!data.classes?.includes(classIdentifier) || Number(data.spellLevel) < 1
+            || Number(data.spellLevel) > progression.maximumSpellLevel) continue;
+          if (alwaysPreparedNames.has(String(entry.name).toLocaleLowerCase())) continue;
+          const ownedItem = ownedByName.get(String(entry.name).toLocaleLowerCase());
+          addCandidate(ownedItem || entry, !!ownedItem);
+        }
+      }
+      for (const item of owned) if (!candidatesByName.has(String(item.name).toLocaleLowerCase())) addCandidate(item, true);
+      const candidates = [...candidatesByName.values()].sort((a, b) => a.name.localeCompare(b.name));
+      const group = { classIdentifier, candidates, currentPrepared, progression, inputs: [],
+        ...(classIdentifier === 'druid' && String(classData.subclassName).toLocaleLowerCase() === 'circle of the land'
+          ? { circleLandCandidates: compendium } : {}),
+      };
+      groups.push(group);
+      const section = document.createElement('fieldset');
+      const legend = document.createElement('legend');
+      legend.textContent = `${classIdentifier} — ${classData.levels}`;
+      section.append(legend);
+      const hint = document.createElement('p');
+      const singleReplacement = ['paladin', 'ranger'].includes(classIdentifier);
+      hint.textContent = singleReplacement
+        ? localizeSheet('SDR5E.Spellcasting.PreparedSpellReplacementHint')
+        : `${localizeSheet(classIdentifier === 'wizard' ? 'SDR5E.Spellcasting.WizardPreparedListHint' : 'SDR5E.Spellcasting.PreparedListHint')} ${progression.prepared}`;
+      section.append(hint);
+      if (group.circleLandCandidates) {
+        const label = document.createElement('label');
+        label.textContent = localizeSheet('SDR5E.Spellcasting.CircleLandChoice');
+        const select = document.createElement('select');
+        select.dataset.circleLandTerrain = 'true';
+        const blank = document.createElement('option');
+        blank.value = '';
+        blank.textContent = '—';
+        select.append(blank);
+        for (const terrain of ['arid', 'polar', 'temperate', 'tropical']) {
+          const option = document.createElement('option');
+          option.value = terrain;
+          option.textContent = localizeSheet(`SDR5E.Spellcasting.CircleLand.${terrain}`);
+          option.selected = classData.circleLandTerrain === terrain;
+          select.append(option);
+        }
+        group.circleLandTerrainSelect = select;
+        label.append(select);
+        section.append(label);
+      }
+      if (singleReplacement) {
+        const makeSelect = (labelText, entries) => {
+          const label = document.createElement('label');
+          label.textContent = labelText;
+          const select = document.createElement('select');
+          const blank = document.createElement('option');
+          blank.value = '';
+          blank.textContent = '—';
+          select.append(blank);
+          for (const entry of entries) {
+            const option = document.createElement('option');
+            option.value = entry.id;
+            option.textContent = `${entry.name} (${localizeSheet('SDR5E.Spellcasting.SlotLevel')} ${entry.data.spellLevel})`;
+            select.append(option);
+          }
+          label.append(select);
+          section.append(label);
+          return select;
+        };
+        group.replacementOut = makeSelect(localizeSheet('SDR5E.Spellcasting.PreparedSpellToReplace'), currentPrepared);
+        group.replacementIn = makeSelect(localizeSheet('SDR5E.Spellcasting.ReplacementPreparedSpell'), candidates);
+      } else {
+        const list = document.createElement('div');
+        for (const entry of candidates) {
+          const label = document.createElement('label');
+          const input = document.createElement('input');
+          input.type = 'checkbox';
+          input.value = entry.id;
+          input.checked = !!entry.data.prepared;
+          const name = document.createElement('span');
+          name.textContent = `${entry.name} (${localizeSheet('SDR5E.Spellcasting.SlotLevel')} ${entry.data.spellLevel})`;
+          label.append(input, name);
+          list.append(label);
+          group.inputs.push(input);
+        }
+        section.append(list);
+        const updateAvailability = () => {
+          const grantedNames = new Set(group.circleLandTerrainSelect
+            ? circleLandAlwaysPreparedSpellNames(group.circleLandTerrainSelect.value, classData.levels)
+              .map((grant) => String(grant.name).toLocaleLowerCase())
+            : []);
+          for (const input of group.inputs) {
+            const entry = group.candidates.find((candidate) => candidate.id === input.value);
+            const grantedByTerrain = grantedNames.has(String(entry?.name || '').toLocaleLowerCase());
+            if (grantedByTerrain) input.checked = false;
+          }
+          const count = group.inputs.filter((input) => input.checked).length;
+          for (const input of group.inputs) {
+            const entry = group.candidates.find((candidate) => candidate.id === input.value);
+            const grantedByTerrain = grantedNames.has(String(entry?.name || '').toLocaleLowerCase());
+            input.disabled = grantedByTerrain || (!input.checked && count >= progression.prepared);
+          }
+        };
+        for (const input of group.inputs) input.addEventListener('change', updateAvailability);
+        group.circleLandTerrainSelect?.addEventListener('change', updateAvailability);
+        updateAvailability();
+      }
+      container.append(section);
+    }
+    if (!groups.length) return null;
+    const selectedIds = await LoomDialog.wait({
+      window: { title: localizeSheet('SDR5E.Spellcasting.PreparedListTitle') },
+      content: container,
+      width: 520,
+      buttons: [
+        { action: 'cancel', label: localizeSheet('SDR5E.Spellcasting.Cancel'), variant: 'ghost', callback: () => null },
+        { action: 'confirm', label: localizeSheet('SDR5E.Spellcasting.Confirm'), variant: 'primary', callback: () => groups.map((group) => ({
+          classIdentifier: group.classIdentifier,
+          candidates: group.candidates,
+          ...(group.circleLandTerrainSelect ? {
+            circleLandTerrain: group.circleLandTerrainSelect.value,
+            circleLandCandidates: group.circleLandCandidates,
+          } : {}),
+          selectedIds: group.replacementOut
+            ? group.currentPrepared.map((item) => item.id)
+            : group.inputs.filter((input) => input.checked).map((input) => input.value),
+          ...(group.replacementOut ? {
+            currentPreparedIds: group.currentPrepared.map((item) => item.id),
+            replaceId: group.replacementOut.value,
+            replacementId: group.replacementIn.value,
+          } : {}),
+        })) },
+      ],
+    });
+    if (selectedIds === null || selectedIds === undefined) return null;
+    return selectedIds;
+  }
+
   // Rest rules are PROVISIONAL (see the note at the top of schema.mjs — final
   // numbers come from the SRD the user is transposing). Short: spends 0..N
   // Hit Dice (reusing spendHitDie, which rolls+heals+persists each die one at
   // a time) then frees up resources with reset:'short'. Long: full HP, half
   // of total Hit Dice (SRD: "up to half your total number of them, round
   // down, minimum 1"), 'short'+'long' resources, resets the short-rest counter.
+  async _promptWeaponMasteryReplacement(actor) {
+    const proficiencies = actor.systemData?.proficiencies?.weapons || [];
+    const offers = weaponMasteryRestCandidates(actor.items || [], proficiencies);
+    if (!offers.length) return null;
+    const content = document.createElement('div');
+    const intro = document.createElement('p');
+    intro.textContent = localizeSheet('SDR5E.ClassFeatures.WeaponMasteryRestHelp');
+    content.append(intro);
+    const controls = [];
+    for (const offer of offers) {
+      const fieldset = document.createElement('fieldset');
+      const legend = document.createElement('legend');
+      legend.textContent = `${offer.className} — ${localizeSheet('SDR5E.ClassFeatures.WeaponMasteryName')}`;
+      fieldset.append(legend);
+      const selectControl = (labelText, options) => {
+        const label = document.createElement('label');
+        label.textContent = labelText;
+        const select = document.createElement('select');
+        const blank = document.createElement('option');
+        blank.value = '';
+        blank.textContent = '—';
+        select.append(blank);
+        for (const weapon of options) {
+          const option = document.createElement('option');
+          option.value = weapon.identifier;
+          option.textContent = `${weapon.name} — ${weapon.mastery}`;
+          select.append(option);
+        }
+        label.append(select);
+        fieldset.append(label);
+        return select;
+      };
+      const current = offer.masteredOptions;
+      controls.push({ offer, current: selectControl(localizeSheet('SDR5E.ClassFeatures.WeaponMasteryReplaceCurrent'), current),
+        replacement: selectControl(localizeSheet('SDR5E.ClassFeatures.WeaponMasteryReplacement'), offer.options) });
+      content.append(fieldset);
+    }
+    const selections = await LoomDialog.wait({
+      window: { title: localizeSheet('SDR5E.ClassFeatures.WeaponMasteryRestTitle') },
+      content,
+      width: 520,
+      buttons: [
+        { action: 'cancel', label: localizeSheet('SDR5E.ClassFeatures.WeaponMasteryRestCancel'), variant: 'ghost', callback: () => null },
+        { action: 'confirm', label: localizeSheet('SDR5E.ClassFeatures.WeaponMasteryRestConfirm'), variant: 'primary', callback: () =>
+          controls.filter(({ current, replacement }) => current.value || replacement.value)
+            .map(({ offer, current, replacement }) => ({ featureId: offer.featureId,
+              replaceIdentifier: current.value, replacementIdentifier: replacement.value })) },
+      ],
+    });
+    if (!Array.isArray(selections)) return null;
+    const resolved = [];
+    for (const selection of selections) {
+      const offer = offers.find((candidate) => candidate.featureId === selection.featureId);
+      const result = offer && resolveWeaponMasteryReplacement(offer.classIdentifier, offer.mastered,
+        selection.replaceIdentifier, selection.replacementIdentifier, proficiencies);
+      if (!result?.valid) {
+        showToast?.(localizeSheet('SDR5E.ClassFeatures.WeaponMasteryInvalid'), 'warning');
+        return [];
+      }
+      resolved.push({ ...selection, featureId: offer.featureId, choices: result.choices });
+    }
+    return resolved;
+  }
+
   async _takeRest(kind) {
     if (!this.document) return;
-    await takeRest(this.document, kind, { promptHitDice: (n) => this._promptHitDiceToSpend(n) });
+    await takeRest(this.document, kind, {
+      promptHitDice: (n) => this._promptHitDiceToSpend(n),
+      promptHitDiePool: (pools) => this._promptHitDiePool(pools),
+      promptPreparedSpells: (actor) => Sdr5eCharacterSheet.promptPreparedSpells(actor),
+      promptArcaneRecovery: (actor) => this._promptArcaneRecovery(actor),
+      promptWizardMemorizeSpell: (actor) => this._promptWizardMemorizeSpell(actor),
+      promptWizardSpellMasteryReplacement: (actor) => this._promptWizardSpellMasteryReplacement(actor),
+      promptWeaponMasteryReplacement: (actor) => this._promptWeaponMasteryReplacement(actor),
+    });
     await this._reloadDocument();
   }
 }

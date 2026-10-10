@@ -889,7 +889,7 @@
 }
 
 /* =========================
-   FOUNDRY / UI
+   VTT legado / UI
 ========================= */
 .codex-dialog-v13.grimdark .dialog-buttons button {
   background: #4a1a1a;
@@ -917,7 +917,7 @@
   text-transform: uppercase;
 }
 
-/* GLOBAL FOUNDRY UI FIXES (V13) */
+/* GLOBAL VTT legado UI FIXES (V13) */
 .window-header {
   z-index: 10 !important;
   /* Garante que o cabeçalho sempre venha para frente */
@@ -7654,7 +7654,7 @@
 /* TOOLTIP "ELITE" ESTILO MMORPG (WOW)                     */
 /* ======================================================= */
 /* CentralizaÃƒÂ§ÃƒÂ£o dos NÃƒÂºmeros (Aba de Talentos) */
-/* Neutraliza o container de tooltip padrÃƒÂ£o do Foundry para nÃƒÂ£o dobrar bordas/background */
+/* Neutraliza o container de tooltip padrÃƒÂ£o do VTT legado para nÃƒÂ£o dobrar bordas/background */
 #tooltip.codex-rich-tooltip,
 #tooltip:has(.codex-tooltip-v13) {
   background: transparent !important;
@@ -9667,7 +9667,7 @@
   display: none;
 }
 
-/* EstilizaÃƒÂ§ÃƒÂ£o do breakdown nativo do Foundry no tema papiro */
+/* EstilizaÃƒÂ§ÃƒÂ£o do breakdown nativo do VTT legado no tema papiro */
 .codex-roll-card-v13 .dice-roll .dice-formula,
 .codex-roll-card-v13 .dice-roll .dice-total {
   background: rgba(74, 26, 26, 0.1);
@@ -10101,9 +10101,9 @@
 }
 
 /* --- REDESIGN CHAT CARDS V3: MOLDURA DE IDENTIDADE (COMBAT TOTEM) --- */
-/* Wrapper Foundry: Expande para preencher o chat sem bordas brancas */
+/* Wrapper VTT legado: Expande para preencher o chat sem bordas brancas */
 /* O FRAME MONOLÃƒÂTICO */
-/* Container do Foundry: Limpar para o card ser o protagonista */
+/* Container do VTT legado: Limpar para o card ser o protagonista */
 /* --- WIZARD NATIVO V13 (SCROLL & FLEX) --- */
 /* --- WIZARD NATIVO V13 (SCROLL & FLEX) --- */
 .wizard-runico {
@@ -13521,6 +13521,7 @@ form.npc-2024-sheet {
   gap: 4px;
   width: 100%;
   margin-top: 2px;
+  margin-bottom: 8px;
 }
 
 .sdrn-mini-stat {
@@ -13561,25 +13562,32 @@ form.npc-2024-sheet {
   stroke: #d4af37;
 }
 
+.sdrn-mini-stat-btn:hover .sdrn-mini-stat-num {
+  color: #1a1410;
+  text-shadow: none;
+}
+
 .sdrn-mini-stat-num {
   position: relative;
   z-index: 1;
-  font-size: 14px;
-  font-weight: 800;
-  color: #1a1410;
+  font-size: 16px;
+  font-weight: 900;
+  color: #fff4d8;
   line-height: 1;
+  text-shadow: 0 1px 2px #000;
 }
 
 .sdrn-mini-stat-label {
-  font-size: 7.5px;
-  font-weight: 700;
+  min-height: 11px;
+  font-size: 9px;
+  font-weight: 800;
   text-transform: uppercase;
-  color: #c4b59b;
-  letter-spacing: 0.5px;
-  margin-top: 3px;
+  color: #f1e6cf;
+  letter-spacing: 0.35px;
+  margin-top: 4px;
   font-family: 'Roboto Condensed', sans-serif;
-  text-shadow: 0 1px 2px #000;
-  line-height: 1;
+  text-shadow: 0 1px 3px #000, 0 0 1px #000;
+  line-height: 1.15;
 }
 
 /* Barras dark integradas de Hit Points e Hit Dice (estilo Hobbs) */
@@ -14118,7 +14126,7 @@ form.npc-2024-sheet {
   font-size: 11px;
 }
 
-/* Identity cards (Race, Background) style banner of original Foundry system */
+/* Identity cards (Race, Background) style banner of original VTT legado system */
 .sdrn-identity-cards {
   display: flex;
   flex-direction: column;
@@ -15524,8 +15532,9 @@ input.sdrn-npc-sub-input:focus {
 }
 
 .sdrn-mini-stat-btn .sdrn-mini-stat-num {
-  color: #1a1410;
-  font-weight: 800;
+  color: #fff4d8;
+  font-size: 16px;
+  font-weight: 900;
 }
 
 .sdrn-mini-stat-btn.active {
@@ -15539,7 +15548,7 @@ input.sdrn-npc-sub-input:focus {
 
 /* Inspiration is a boolean toggle, not a stat with a number like its
    Init/Walk/Prof neighbors — it used to reuse `.sdrn-mini-stat`, making it
-   just a 4th identical box in the row (real dnd5e-Foundry renders it as a
+   just a 4th identical box in the row (real dnd5e renders it as a
    standalone 36x36 icon button elsewhere in the header, not folded into the
    ability-badge row — confirmed live against the reference). Round badge
    with a glow on activation instead, so the ON state reads as "lit up",
@@ -15645,6 +15654,14 @@ input.sdrn-npc-sub-input:focus {
 
 .sdrn-death-roll-btn:hover {
   background: var(--sdr-ember);
+}
+
+.sdrn-death-state-label {
+  min-width: 54px;
+  text-align: center;
+  color: var(--sdr-parchment);
+  font-size: 11px;
+  font-weight: 700;
 }
 
 /* Carrying capacity strip (Inventory tab) */
@@ -15981,26 +15998,35 @@ input.sdrn-npc-sub-input:focus {
 }
 
 /* Class summary card at the top of the Features tab (matches real
-   dnd5e-Foundry: class + subclass icon, name, subclass as subtitle, level
+   dnd5e: class + subclass icon, name, subclass as subtitle, level
    badge on the right) — the markup existed but was never styled, so it
    rendered as a bare unstyled row (icon, text, and a floating "1" with no
    box around it) until this was added, found live from a screenshot. */
 .sdrn-feature-class-card {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(201, 161, 90, 0.25);
+  gap: 12px;
+  min-height: 58px;
+  padding: 10px 12px;
+  background: linear-gradient(110deg, #211716 0%, #30251a 100%);
+  border: 1px solid rgba(201, 161, 90, 0.72);
+  border-left: 3px solid #c99738;
   border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(25, 16, 10, 0.2);
   margin-bottom: 8px;
 }
 
 .sdrn-feature-class-icons {
   display: flex;
   flex: none;
-  background: transparent;
-  border: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  overflow: hidden;
+  background: #493719;
+  border: 1px solid #b48a42;
+  border-radius: 7px;
   padding: 0;
   cursor: pointer;
 }
@@ -16009,9 +16035,9 @@ input.sdrn-npc-sub-input:focus {
   width: 32px;
   height: 32px;
   border-radius: 6px;
-  background: rgba(201, 161, 90, 0.15);
-  border: 1px solid rgba(201, 161, 90, 0.3);
-  color: var(--sdr-gold);
+  background: #493719;
+  border: 1px solid #b48a42;
+  color: #ffe09a;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16033,8 +16059,25 @@ input.sdrn-npc-sub-input:focus {
   padding: 0;
 }
 
+.sdrn-feature-class-name .sdrn-id-title {
+  font-size: 14px;
+  color: #fff4d6 !important;
+}
+
+.sdrn-feature-class-name .sdrn-id-sub {
+  font-size: 11px;
+  color: #e6c77f !important;
+  font-weight: 700;
+}
+
 .sdrn-feature-class-name:hover .sdrn-id-title {
-  color: var(--sdr-ember);
+  color: #ffd27a !important;
+}
+
+.sdrn-feature-class-name:focus-visible,
+.sdrn-feature-class-icons:focus-visible {
+  outline: 2px solid #f0cf7a;
+  outline-offset: 2px;
 }
 
 .sdrn-feature-class-level {
@@ -16042,9 +16085,9 @@ input.sdrn-npc-sub-input:focus {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: rgba(201, 161, 90, 0.15);
-  border: 1px solid var(--sdr-gold);
-  color: var(--sdr-gold);
+  background: #c99738;
+  border: 1px solid #f0cf7a;
+  color: #21170c;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16116,9 +16159,9 @@ input.sdrn-npc-sub-input:focus {
 }
 
 /* Handout 23 — pips de dado individuais do card de rolagem nativo (o
-   `.dice-breakdown` já existia no CSS herdado do Foundry, mas os filhos
+   `.dice-breakdown` já existia no CSS herdado do VTT legado, mas os filhos
    `.dice-roll-pip` são novos porque agora o HTML é gerado por nós, não pelo
-   motor de dados do Foundry). */
+   motor de dados do VTT legado). */
 .codex-roll-card-v13 .dice-roll-pip {
   display: inline-flex;
   align-items: center;
@@ -16722,7 +16765,7 @@ input.sdrn-npc-sub-input:focus {
 /* ═══ DARK TACTICAL SHEETS MASTER BUNDLE ═══ */
 /* ══════════════════════════════════════════════════════════════════════════
    SDR5E — DARK TACTICAL FANTASY DESIGN SYSTEM
-   Inspirado no visual premium do Foundry VTT v3 (D&D 5e) + Componentes ReUI
+   Inspirado no visual premium do VTT legado VTT v3 (D&D 5e) + Componentes ReUI
    ══════════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -16995,7 +17038,7 @@ input.sdrn-npc-sub-input:focus {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   SEARCH & FILTER BAR (Foundry V3 standard)
+   SEARCH & FILTER BAR (VTT legado V3 standard)
    ══════════════════════════════════════════════════════════════════════════ */
 
 .sdrn-search-bar {
@@ -17048,7 +17091,7 @@ input.sdrn-npc-sub-input:focus {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   REUSABLE METRIC CHIPS & TAGS (Foundry v3 & ReUI style)
+   REUSABLE METRIC CHIPS & TAGS (VTT legado v3 & ReUI style)
    ══════════════════════════════════════════════════════════════════════════ */
 
 .sdrn-tag {
@@ -17362,7 +17405,7 @@ input.sdrn-npc-sub-input:focus {
   gap: 8px;
 }
 
-/* Card do Monstro no Encontro (Foundry v3 style) */
+/* Card do Monstro no Encontro (VTT legado v3 style) */
 .sdrn-encounter-card {
   display: flex;
   align-items: center;
@@ -17843,7 +17886,7 @@ input.sdrn-npc-sub-input:focus {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   3. NPC SHEET STYLING (Foundry V3 standard)
+   3. NPC SHEET STYLING (VTT legado V3 standard)
    ══════════════════════════════════════════════════════════════════════════ */
 
 .sdrn-npc-root {
@@ -18217,7 +18260,7 @@ input.sdrn-npc-sub-input:focus {
   color: var(--sdrn-text-muted);
 }
 
-/* Features Table (Foundry V3 standard) */
+/* Features Table (VTT legado V3 standard) */
 .sdrn-features-table {
   background: var(--sdrn-bg-surface);
   border: 1px solid var(--sdrn-border-subtle);
@@ -18738,10 +18781,318 @@ input.sdrn-npc-sub-input:focus {
 }
 
 
+.sdrn-info-tooltip {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 4px;
+  padding: 0;
+  color: #805f25;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 11px;
+  line-height: 1;
+  cursor: help;
+}
+
+.sdrn-info-tooltip::after {
+  position: absolute;
+  z-index: 1000;
+  right: 0;
+  bottom: calc(100% + 8px);
+  width: min(270px, 72vw);
+  padding: 9px 11px;
+  color: #f5efe3;
+  background: #24211d;
+  border: 1px solid rgba(201, 151, 56, .58);
+  border-radius: 7px;
+  box-shadow: 0 7px 20px rgba(0, 0, 0, .28);
+  content: attr(data-tooltip);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: normal;
+  line-height: 1.4;
+  text-align: left;
+  text-transform: none;
+  white-space: normal;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(3px);
+  transition: opacity .12s ease, transform .12s ease, visibility .12s;
+}
+
+.sdrn-info-tooltip:hover::after,
+.sdrn-info-tooltip:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.sdrn-info-tooltip:focus-visible {
+  outline: 2px solid #e5be70;
+  outline-offset: 2px;
+}
+
+.sdrn-core-actions {
+  margin: 0 0 8px;
+  padding: 0 8px;
+  color: var(--sdrn-text, #eee8dc);
+  background: rgba(17, 18, 20, .58);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 7px;
+}
+
+.sdrn-core-actions-summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  list-style: none;
+}
+
+.sdrn-core-actions-summary::-webkit-details-marker {
+  display: none;
+}
+
+.sdrn-core-actions-summary::before {
+  content: "\25B8";
+  color: #c99738;
+  transition: transform .12s ease;
+}
+
+.sdrn-core-actions[open] .sdrn-core-actions-summary::before {
+  transform: rotate(90deg);
+}
+
+.sdrn-core-actions-help {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 10px;
+}
+
+.sdrn-core-actions-summary::after {
+  position: absolute;
+  z-index: 1000;
+  left: 12px;
+  bottom: calc(100% + 5px);
+  width: min(250px, 72vw);
+  padding: 8px 10px;
+  color: #f5efe3;
+  background: #24211d;
+  border: 1px solid rgba(201, 151, 56, .58);
+  border-radius: 7px;
+  box-shadow: 0 7px 20px rgba(0, 0, 0, .28);
+  content: attr(data-tooltip);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: normal;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(3px);
+  transition: opacity .12s ease, transform .12s ease, visibility .12s;
+}
+
+.sdrn-core-actions-summary:hover::after,
+.sdrn-core-actions-summary:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.sdrn-core-actions-summary:focus-visible {
+  outline: 2px solid #e5be70;
+  outline-offset: 2px;
+}
+
+.sdrn-core-actions-list {
+  display: grid;
+  gap: 8px;
+  padding: 0 0 8px;
+}
+
+.sdrn-help-action {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0;
+  padding: 14px;
+  color: var(--sdrn-text, #eee8dc);
+  background: rgba(17, 18, 20, .82);
+  border: 1px solid rgba(190, 165, 112, .28);
+  border-radius: 8px;
+}
+.sdrn-help-heading h3,
+.sdrn-help-heading p,
+.sdrn-help-mode h4,
+.sdrn-help-mode p { margin: 0; }
+.sdrn-help-heading p,
+.sdrn-help-mode p { font-size: .82em; opacity: .76; }
+.sdrn-help-modes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sdrn-help-mode { display: grid; align-content: start; gap: 7px; padding: 10px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 6px; }
+.sdrn-help-mode label { display: grid; gap: 4px; font-size: .82em; }
+.sdrn-help-record { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 7px; border-top: 1px solid rgba(190, 165, 112, .16); font-size: .88em; }
+.sdrn-influence-action {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 14px;
+  border: 1px solid rgba(190, 165, 112, .28);
+  border-radius: 8px;
+  background: rgba(20, 18, 15, .62);
+}
+.sdrn-ready-action {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 14px;
+  border: 1px solid rgba(190, 165, 112, .28);
+  border-radius: 8px;
+  background: rgba(20, 18, 15, .62);
+}
+.sdrn-ready-heading h3,
+.sdrn-ready-heading p { margin: 0; }
+.sdrn-ready-heading p { font-size: .82em; opacity: .76; }
+.sdrn-ready-action [data-ready-action-form] { display: grid; gap: 8px; }
+.sdrn-ready-action label { display: grid; gap: 4px; font-size: .82em; }
+.sdrn-ready-record { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 7px; border-top: 1px solid rgba(190, 165, 112, .16); font-size: .88em; }
+.sdrn-influence-heading h3,
+.sdrn-influence-heading p { margin: 0; }
+.sdrn-influence-heading p { font-size: .82em; opacity: .76; }
+.sdrn-influence-action label { display: grid; gap: 4px; font-size: .82em; }
+@media (max-width: 560px) { .sdrn-help-modes { grid-template-columns: 1fr; } }
+
+.sdrn-movement-ledger {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0;
+  padding: 14px;
+  border: 1px solid rgba(190, 165, 112, .28);
+  border-radius: 8px;
+  background: rgba(20, 18, 15, .62);
+}
+.sdrn-movement-ledger-heading,
+.sdrn-movement-ledger-total,
+.sdrn-movement-ledger-segment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.sdrn-movement-ledger-heading h3 { margin: 0 0 4px; }
+.sdrn-movement-ledger-heading p { margin: 0; opacity: .76; font-size: .82em; }
+.sdrn-movement-ledger-inputs {
+  display: grid;
+  grid-template-columns: minmax(90px, 1fr) minmax(100px, 1fr) auto auto;
+  align-items: end;
+  gap: 8px;
+}
+.sdrn-movement-ledger-inputs label { display: grid; gap: 4px; font-size: .82em; }
+.sdrn-movement-dash-control { display: grid; grid-template-columns: minmax(150px, 1fr) auto; align-items: end; gap: 8px; }
+.sdrn-movement-dash-control label { display: grid; gap: 4px; font-size: .82em; }
+.sdrn-movement-dash-control span { grid-column: 1 / -1; font-size: .78em; opacity: .76; }
+.sdrn-movement-ledger-inputs .sdrn-movement-difficult { display: flex; align-items: center; gap: 5px; min-height: 34px; }
+.sdrn-movement-ledger-total { padding-top: 8px; border-top: 1px solid rgba(190, 165, 112, .18); }
+.sdrn-movement-ledger-segment { padding: 6px 0; border-top: 1px solid rgba(190, 165, 112, .12); font-size: .88em; }
+.sdrn-movement-ledger-segment.invalid { color: #ff8a80; }
+.sdrn-movement-ledger button { cursor: pointer; }
+@media (max-width: 560px) {
+  .sdrn-movement-ledger-inputs { grid-template-columns: 1fr 1fr; }
+  .sdrn-movement-dash-control { grid-template-columns: 1fr; }
+  .sdrn-movement-ledger-total { align-items: flex-start; flex-direction: column; }
+}
+
+.sdrn-core-actions-heading h3,
+.sdrn-core-actions-heading p {
+  margin: 0;
+}
+
+.sdrn-core-actions-heading h3 {
+  color: #d8b66f;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.sdrn-core-actions-heading p {
+  margin-top: 3px;
+  color: #aaa49a;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.sdrn-core-action-row {
+  display: grid;
+  grid-template-columns: minmax(74px, .65fr) minmax(0, 1.4fr) auto;
+  align-items: center;
+  gap: 7px;
+}
+
+.sdrn-core-action-row label {
+  color: #e6ddca;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sdrn-core-action-row select {
+  min-width: 0;
+  min-height: 30px;
+  padding: 4px 7px;
+  color: #eee8dc;
+  background: #191a1c;
+  border: 1px solid rgba(201, 151, 56, .3);
+  border-radius: 4px;
+}
+
+.sdrn-core-action-row button {
+  min-height: 30px;
+  padding: 4px 8px;
+  color: #e0c17f;
+  background: rgba(201, 151, 56, .08);
+  border: 1px solid rgba(201, 151, 56, .35);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.sdrn-core-action-row button:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+}
+
+.sdrn-core-action-row button:focus-visible,
+.sdrn-core-action-row select:focus-visible {
+  outline: 2px solid #e5be70;
+  outline-offset: 2px;
+}
+
+@media (max-width: 520px) {
+  .sdrn-core-action-row {
+    grid-template-columns: 1fr auto;
+  }
+
+  .sdrn-core-action-row label {
+    grid-column: 1 / -1;
+  }
+}
+
+
 /* ═══ DARK TACTICAL SHEETS MASTER BUNDLE ═══ */
 /* ══════════════════════════════════════════════════════════════════════════
    SDR5E — DARK TACTICAL FANTASY DESIGN SYSTEM
-   Inspirado no visual premium do Foundry VTT v3 (D&D 5e) + Componentes ReUI
+   Inspirado no visual premium do VTT legado VTT v3 (D&D 5e) + Componentes ReUI
    ══════════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -19014,7 +19365,7 @@ input.sdrn-npc-sub-input:focus {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   SEARCH & FILTER BAR (Foundry V3 standard)
+   SEARCH & FILTER BAR (VTT legado V3 standard)
    ══════════════════════════════════════════════════════════════════════════ */
 
 .sdrn-search-bar {
@@ -19067,7 +19418,7 @@ input.sdrn-npc-sub-input:focus {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   REUSABLE METRIC CHIPS & TAGS (Foundry v3 & ReUI style)
+   REUSABLE METRIC CHIPS & TAGS (VTT legado v3 & ReUI style)
    ══════════════════════════════════════════════════════════════════════════ */
 
 .sdrn-tag {
@@ -19381,7 +19732,7 @@ input.sdrn-npc-sub-input:focus {
   gap: 8px;
 }
 
-/* Card do Monstro no Encontro (Foundry v3 style) */
+/* Card do Monstro no Encontro (VTT legado v3 style) */
 .sdrn-encounter-card {
   display: flex;
   align-items: center;
@@ -19862,7 +20213,7 @@ input.sdrn-npc-sub-input:focus {
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   3. NPC SHEET STYLING (Foundry V3 standard)
+   3. NPC SHEET STYLING (VTT legado V3 standard)
    ══════════════════════════════════════════════════════════════════════════ */
 
 .sdrn-npc-root {
@@ -20236,7 +20587,7 @@ input.sdrn-npc-sub-input:focus {
   color: var(--sdrn-text-muted);
 }
 
-/* Features Table (Foundry V3 standard) */
+/* Features Table (VTT legado V3 standard) */
 .sdrn-features-table {
   background: var(--sdrn-bg-surface);
   border: 1px solid var(--sdrn-border-subtle);
@@ -20783,4 +21134,49 @@ input.sdrn-npc-sub-input:focus {
   font-weight: 800;
   color: var(--sdrn-text-muted);
   text-transform: uppercase;
+}
+.sdrn-group-xp-form {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.sdrn-group-xp-form > .sdrn-group-xp-amount-label {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.sdrn-group-xp-form input {
+  width: 100%;
+}
+
+.sdrn-group-xp-form .sdrn-group-xp-mode,
+.sdrn-group-xp-form label.sdrn-group-xp-recipient {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sdrn-group-xp-form .sdrn-group-xp-mode input,
+.sdrn-group-xp-form label.sdrn-group-xp-recipient input {
+  width: auto;
+}
+
+.sdrn-group-xp-recipients {
+  display: grid;
+  gap: 6px;
+  max-height: 160px;
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid var(--sdrn-border, #806c45);
+  border-radius: 6px;
+}
+
+.sdrn-group-xp-preview {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--sdrn-border, #806c45);
+  border-radius: 6px;
+  font-weight: 700;
 }

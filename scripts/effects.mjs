@@ -5,8 +5,8 @@
 // Equivalent to the original ActiveEffectHelper/EffectAutomation, but built on
 // the real Loom engine (server/applications/lib/effects.ts): buffs with
 // `changes: [{key, mode, value}]` applied to systemData on the server before
-// the sheet renders — there's no `ActiveEffect` document or Foundry config UI,
-// so `onRenderActiveEffectConfig`/`_showKeysList` (Foundry-only UI) and the
+// the sheet renders — there's no `ActiveEffect` document or VTT legado config UI,
+// so `onRenderActiveEffectConfig`/`_showKeysList` (VTT legado-only UI) and the
 // per-combat-round cleanup (`cleanupCombatEffects`, depends on a combat
 // tracker — out of scope) were cut. `key` here is relative to `systemData`,
 // no `system.` prefix (confirmed in effects.ts:45 — `change.key.split('.')`
@@ -14,6 +14,7 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 import { effects } from '/_loom/sdk/index.js';
+import { planEquippedEffectSync } from './effect-sync-mechanics.mjs';
 
 /** Flattens the `bonuses` schema (weapon/armor/feature/item, see defaultBonuses)
  * into a list of `add`-mode `changes`, skipping zero/empty values. */
@@ -77,11 +78,12 @@ export async function syncEquippedEffect(item) {
 
   const existing = await effects.forItem(item.id);
   const isEquipped = !!sd.equipped;
-
-  if (isEquipped && (!existing || existing.length === 0)) {
-    await applyItemEffect({ id: item.actorId }, item);
-  } else if (!isEquipped && existing && existing.length > 0) {
-    await removeItemEffects(item);
+  const changes = bonusesToChanges(sd.bonuses);
+  const plan = planEquippedEffectSync({ itemId: item.id, itemName: item.name, equipped: isEquipped, changes }, existing);
+  if (plan.kind === 'create') await applyItemEffect({ id: item.actorId }, item);
+  else if (plan.kind === 'remove') await removeItemEffects(item);
+  else if (plan.kind === 'update') {
+    for (const update of plan.updates) await effects.update(update.id, { name: update.name, changes: update.changes });
   }
 }
 

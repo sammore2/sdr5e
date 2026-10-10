@@ -14,6 +14,10 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 import { ABILITY_KEYS, ABILITY_LABELS, SKILL_ABILITIES, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, SIZE_LABELS, CLASS_IDENTIFIER_LABELS, DAMAGE_TYPES } from './config.mjs';
+import { ITEM_ACTION_COST_OPTIONS } from './item-action-costs.mjs';
+
+const actionCostField = { key: 'actionCost', labelKey: 'ActionCostField', type: 'select', options: ITEM_ACTION_COST_OPTIONS };
+const withExhaustionPenalty = (formula) => `${formula} - 2 * @resources.exhaustion`;
 
 export function characterSheetSchema() {
   return {
@@ -22,21 +26,21 @@ export function characterSheetSchema() {
         id: 'abilities', label: 'Abilities',
         fields: ABILITY_KEYS.map((k) => ({
           key: `abilities.${k}.value`, label: ABILITY_LABELS[k], type: 'number',
-          rollable: true, formula: `1d20 + @abilities.${k}.modifier`,
+          rollable: true, formula: withExhaustionPenalty(`1d20 + @abilities.${k}.modifier`),
         })),
       },
       {
         id: 'saves', label: 'Saves',
         fields: ABILITY_KEYS.flatMap((k) => [
           { key: `saves.${k}.proficient`, label: `${ABILITY_LABELS[k]} Save (proficient)`, type: 'boolean' },
-          { key: `saves.${k}.misc`, label: `${ABILITY_LABELS[k]} Save`, type: 'number', rollable: true, formula: `1d20 + @saves.${k}.total` },
+          { key: `saves.${k}.misc`, label: `${ABILITY_LABELS[k]} Save`, type: 'number', rollable: true, formula: withExhaustionPenalty(`1d20 + @saves.${k}.total`) },
         ]),
       },
       {
         id: 'skills', label: 'Skills',
         fields: Object.keys(SKILL_ABILITIES).flatMap((k) => [
           { key: `skills.${k}.proficient`, label: `${k} (proficient)`, type: 'boolean' },
-          { key: `skills.${k}.bonus`, label: k, type: 'number', rollable: true, formula: `1d20 + @skills.${k}.total` },
+          { key: `skills.${k}.bonus`, label: k, type: 'number', rollable: true, formula: withExhaustionPenalty(`1d20 + @skills.${k}.total`) },
         ]),
       },
       {
@@ -45,7 +49,7 @@ export function characterSheetSchema() {
           { key: 'resources.health.value', label: 'HP', type: 'number' },
           { key: 'resources.health.max', label: 'HP Max', type: 'number' },
           { key: 'attributes.da.base', label: 'Defense (base)', type: 'number' },
-          { key: 'attributes.initiative.value', label: 'Initiative (misc)', type: 'number', rollable: true, formula: '1d20 + @attributes.initiative.total' },
+          { key: 'attributes.initiative.value', label: 'Initiative (misc)', type: 'number', rollable: true, formula: withExhaustionPenalty('1d20 + @attributes.initiative.total') },
         ],
       },
       {
@@ -67,7 +71,7 @@ export function npcSheetSchema() {
         id: 'abilities', label: 'Abilities',
         fields: ABILITY_KEYS.map((k) => ({
           key: `abilities.${k}.value`, label: ABILITY_LABELS[k], type: 'number',
-          rollable: true, formula: `1d20 + @abilities.${k}.modifier`,
+          rollable: true, formula: withExhaustionPenalty(`1d20 + @abilities.${k}.modifier`),
         })),
       },
       {
@@ -102,6 +106,7 @@ export const ITEM_SHEET_SCHEMAS = {
   ] }] },
   armor: { tabs: [{ id: 'main', label: 'Armor', fields: [
     { key: 'description', label: 'Description', type: 'textarea' },
+    actionCostField,
     // Free text broke the same way race.size did: prepArmorAndDA compares
     // this against exact codes (light/medium/heavy/shield) to pick the DA
     // formula and which category wins when multiple armor pieces are
@@ -116,6 +121,7 @@ export const ITEM_SHEET_SCHEMAS = {
   ] }] },
   feature: { tabs: [{ id: 'main', label: 'Feature', fields: [
     { key: 'description', label: 'Description', type: 'textarea' },
+    actionCostField,
     { key: 'source', label: 'Source (groups the Features tab, e.g. "Wizard")', type: 'text' },
     { key: 'featureType', label: 'Feature Type', type: 'text' },
     { key: 'tier', label: 'Tier', type: 'number' },
@@ -129,6 +135,7 @@ export const ITEM_SHEET_SCHEMAS = {
   ] }] },
   item: { tabs: [{ id: 'main', label: 'Item', fields: [
     { key: 'description', label: 'Description', type: 'textarea' },
+    actionCostField,
     { key: 'category', label: 'Category', type: 'text' },
     { key: 'quantity', label: 'Quantity', type: 'number' },
     { key: 'weight', label: 'Weight', type: 'number' },
@@ -146,6 +153,7 @@ export const ITEM_SHEET_SCHEMAS = {
   ] }] },
   consumable: { tabs: [{ id: 'main', label: 'Consumable', fields: [
     { key: 'description', label: 'Description', type: 'textarea' },
+    actionCostField,
     { key: 'consumableType', label: 'Consumable Type', type: 'select', options: [
       { value: 'potion', label: 'Potion' }, { value: 'scroll', label: 'Scroll' }, { value: 'ammo', label: 'Ammunition' },
       { value: 'poison', label: 'Poison' }, { value: 'food', label: 'Food' }, { value: 'other', label: 'Other' },
@@ -164,6 +172,7 @@ export const ITEM_SHEET_SCHEMAS = {
   ] }] },
   tool: { tabs: [{ id: 'main', label: 'Tool', fields: [
     { key: 'description', label: 'Description', type: 'textarea' },
+    actionCostField,
     { key: 'toolType', label: 'Tool Type', type: 'select', options: [
       { value: 'artisan', label: 'Artisan' }, { value: 'gaming', label: 'Gaming' }, { value: 'musical', label: 'Musical' }, { value: 'kit', label: 'Kit' }, { value: 'other', label: 'Other' },
     ] },

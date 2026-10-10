@@ -1,6 +1,6 @@
 /* ══════════════════════════════════════════════════════════════════════════
    SDR5E — DARK TACTICAL FANTASY DESIGN SYSTEM
-   Inspirado no visual premium do Foundry VTT v3 (D&D 5e) + Componentes ReUI
+   Inspirado no visual premium do VTT legado VTT v3 (D&D 5e) + Componentes ReUI
    ══════════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -273,7 +273,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   SEARCH & FILTER BAR (Foundry V3 standard)
+   SEARCH & FILTER BAR (VTT legado V3 standard)
    ══════════════════════════════════════════════════════════════════════════ */
 
 .sdrn-search-bar {
@@ -326,7 +326,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   REUSABLE METRIC CHIPS & TAGS (Foundry v3 & ReUI style)
+   REUSABLE METRIC CHIPS & TAGS (VTT legado v3 & ReUI style)
    ══════════════════════════════════════════════════════════════════════════ */
 
 .sdrn-tag {
@@ -640,7 +640,7 @@
   gap: 8px;
 }
 
-/* Card do Monstro no Encontro (Foundry v3 style) */
+/* Card do Monstro no Encontro (VTT legado v3 style) */
 .sdrn-encounter-card {
   display: flex;
   align-items: center;
@@ -1121,11 +1121,12 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
-   3. NPC SHEET STYLING (Foundry V3 standard)
+   3. NPC SHEET STYLING (VTT legado V3 standard)
    ══════════════════════════════════════════════════════════════════════════ */
 
 .sdrn-npc-root {
   height: 100%;
+  min-width: 0;
   display: flex;
   background-color: #0d0e12 !important;
   background-image: none !important;
@@ -1134,12 +1135,35 @@
   overflow: hidden;
 }
 
+/* Keep the query container outside the sheet so its own layout can respond. */
+.sdrn-sheet .loom-window-body:has(> .sdrn-npc-root) {
+  container: sdr5e-npc / inline-size;
+}
+
+.sdrn-npc-root .sdrn-npc-side-tabs {
+  flex: 0 0 52px;
+  width: 52px;
+  align-self: stretch;
+  padding: 10px 0;
+  border-top: 0;
+  border-right: 1px solid var(--sdrn-border-subtle);
+  border-bottom: 0;
+  border-left: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.sdrn-npc-root .sdrn-tab-label {
+  display: none;
+}
+
 .sdrn-npc-body {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
   min-width: 0;
+  width: 0;
   overflow: hidden;
   padding: 0;
 }
@@ -1439,6 +1463,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 14px;
+  min-width: 0;
 }
 
 .sdrn-npc-name-block {
@@ -1731,12 +1756,17 @@
 /* Layout Grid do NPC (Sidebar + Main) */
 .sdrn-npc-layout-grid {
   display: grid;
-  grid-template-columns: 210px 1fr;
+  grid-template-columns: minmax(190px, 220px) minmax(0, 1fr);
   gap: 14px;
   padding: 12px 16px;
   flex: 1;
   min-height: 0;
   overflow: hidden;
+}
+
+.sdrn-npc-layout-grid > *,
+.sdrn-npc-header-main {
+  min-width: 0;
 }
 
 .sdrn-npc-stats-sidebar {
@@ -1946,6 +1976,132 @@
   overflow: hidden;
 }
 
+@container sdr5e-npc (max-width: 720px) {
+  .sdrn-npc-root {
+    flex-direction: column;
+  }
+
+  .sdrn-npc-body {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .sdrn-npc-root .sdrn-npc-side-tabs {
+    flex: 0 0 auto;
+    width: 100%;
+    min-height: 48px;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 4px 8px;
+    border-right: 0;
+    border-bottom: 1px solid var(--sdrn-border-subtle);
+  }
+
+  .sdrn-npc-root .sdrn-npc-side-tabs .sdrn-tab-btn {
+    width: auto;
+    min-width: 44px;
+    height: 40px;
+    gap: 8px;
+    padding: 0 10px;
+  }
+
+  .sdrn-npc-root .sdrn-tab-label {
+    display: inline;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .sdrn-npc-header-v3 {
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .sdrn-npc-identity-row {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+  }
+
+  .sdrn-npc-name-block {
+    flex-basis: 100%;
+  }
+
+  .sdrn-npc-top-badges {
+    align-self: flex-start;
+  }
+
+  .sdrn-npc-layout-grid {
+    grid-template-columns: minmax(0, 1fr);
+    overflow-y: auto;
+    padding: 10px;
+  }
+
+  .sdrn-npc-main-content {
+    grid-row: 1;
+  }
+
+  .sdrn-npc-stats-sidebar {
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-content: start;
+    overflow: visible;
+  }
+
+  .sdrn-npc-main-content {
+    min-height: 360px;
+  }
+}
+
+@container sdr5e-npc (max-width: 500px) {
+  .sdrn-npc-token-container {
+    width: 64px;
+  }
+
+  .sdrn-npc-token-frame {
+    width: 60px;
+    height: 60px;
+  }
+
+  .sdrn-npc-identity-row {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .sdrn-npc-header-v3 {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .sdrn-npc-layout-grid {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .sdrn-npc-abilities-ribbon {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .sdrn-npc-stats-sidebar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* All system sheets share the Loom window body. Let flex children shrink so
+   narrow windows scroll inside their content instead of widening the window. */
+.sdrn-sheet .loom-window-body {
+  min-width: 0;
+  min-height: 0;
+}
+
+.sdrn-sheet .loom-window-body > .sdrn-root {
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+}
+
 .sdrn-tab-panel {
   flex: 1;
   display: flex;
@@ -1956,7 +2112,7 @@
   padding-right: 4px;
 }
 
-/* Features Table (Foundry V3 standard) */
+/* Features Table (VTT legado V3 standard) */
 .sdrn-features-table {
   background: var(--sdrn-bg-surface);
   border: 1px solid var(--sdrn-border-subtle);

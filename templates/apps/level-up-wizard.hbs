@@ -6,48 +6,89 @@
   </div>
 
   <div class="sdrn-wizard-body">
+    {{#if _hasMulticlassRecovery}}
+    <div class="sdrn-wizard-review"><strong>{{localize "SDR5E.Wizard.LevelUp.MulticlassRecoveryTitle"}}</strong>
+      {{#if _multiclassRecoveryNeedsReview}}<p>{{localize "SDR5E.Wizard.LevelUp.MulticlassRecoveryReview"}}</p>
+      {{else}}<p>{{localize "SDR5E.Wizard.LevelUp.MulticlassRecoveryResumeHint"}}</p><button type="button" class="sdrn-wizard-btn" data-action="wizard-resume-multiclass">{{localize "SDR5E.Wizard.LevelUp.ResumeMulticlassProgression"}}</button>{{/if}}
+    </div>
+    {{/if}}
     {{#if _stepClass}}
     <h3>Which class levels up?</h3>
+    {{#unless _addingNewClass}}
     <select name="w:classId">
       {{#each _classItems}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}} (Level {{levels}})</option>{{/each}}
     </select>
+    <button type="button" class="sdrn-wizard-btn" data-action="wizard-add-multiclass">{{localize "SDR5E.Wizard.LevelUp.AddMulticlassClass"}}</button>
+    {{/unless}}
+    {{#if _addingNewClass}}
+    {{#if _isMulticlassEntry}}
+    <div class="sdrn-wizard-picked"><strong>{{_multiclassClassName}}</strong> <span class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.FirstClassLevel"}}</span></div>
+    {{else}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.MulticlassWizardFirstSlice"}}</p>
+    {{#if _multiclassClassResults}}<div class="sdrn-wizard-results">
+      {{#each _multiclassClassResults}}<button type="button" class="sdrn-wizard-result" data-action="wizard-pick-class" data-id="{{id}}"><span>{{name}}</span><small>{{sourceName}}</small></button>{{/each}}
+    </div>{{else}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.NoMulticlassClassEntry"}}</p>{{/if}}
+    {{/if}}
+    {{/if}}
     {{/if}}
 
     {{#if _stepHp}}
     <h3>{{_className}} — Level {{_currentClassLevel}} → {{_nextClassLevel}}</h3>
-    <p class="sdrn-wizard-hint">Hit Die: {{_die}}. Average result (SRD alternative to rolling): +{{_hpGain}} HP.</p>
-    <div class="sdrn-bio-field"><label>HP Gained</label><input type="number" value="{{_hpGain}}" disabled /></div>
+    {{#if _isMulticlassEntry}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.MulticlassWizardEntryHint"}}</p>
+    {{#unless _multiclassPrerequisitesValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.MulticlassPrerequisitesFailed"}}</p>{{/unless}}
+    {{else}}<button type="button" class="sdrn-wizard-btn" data-action="wizard-add-multiclass">{{localize "SDR5E.Wizard.LevelUp.AddMulticlassClass"}}</button>{{/if}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.HitDie"}} {{_die}}. {{localize "SDR5E.Wizard.LevelUp.FixedValue"}} +{{_fixedHpGain}} HP. {{localize "SDR5E.Wizard.LevelUp.RollResult"}} {{_hpRoll}} {{localize "SDR5E.Wizard.LevelUp.AppliedWithConstitution"}}</p>
+    {{#if _hpModePlayer}}
+    <label><input type="radio" name="w:hpMode" value="fixed" {{#if _hpModeFixed}}checked{{/if}} /> {{localize "SDR5E.Wizard.LevelUp.ChooseFixed"}}</label>
+    <label><input type="radio" name="w:hpMode" value="roll" {{#if _hpModeRoll}}checked{{/if}} /> {{localize "SDR5E.Wizard.LevelUp.RollHitDie"}}</label>
+    {{/if}}
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.HpGained"}}</label><input type="number" value="{{_hpGain}}" disabled /></div>
     {{/if}}
 
     {{#if _stepAsi}}
-    <h3>Ability Score Improvement</h3>
-    <p class="sdrn-wizard-hint">Level {{_nextClassLevel}}: increase one score by 2, or two scores by 1 each (max 20) — or take a Feat instead.</p>
-    <label><input type="radio" name="w:asiMode" value="scores" {{#if _asiModeScores}}checked{{/if}} /> Ability scores</label>
-    <label><input type="radio" name="w:asiMode" value="feat" {{#if _asiModeFeat}}checked{{/if}} /> Feat</label>
+    <h3>{{#if _isEpicBoon}}{{localize "SDR5E.Wizard.LevelUp.EpicBoon"}}{{else}}{{localize "SDR5E.Wizard.LevelUp.AbilityScoreImprovement"}}{{/if}}</h3>
+    <p class="sdrn-wizard-hint">Level {{_nextClassLevel}}: {{#if _isEpicBoon}}{{localize "SDR5E.Wizard.LevelUp.EpicBoonChoiceHint"}}{{else}}{{localize "SDR5E.Wizard.LevelUp.AbilityChoiceHint"}}{{/if}}</p>
+    {{#unless _isEpicBoon}}
+    <label><input type="radio" name="w:asiMode" value="scores" {{#if _asiModeScores}}checked{{/if}} /> {{localize "SDR5E.Wizard.LevelUp.AbilityScores"}}</label>
+    <label><input type="radio" name="w:asiMode" value="feat" {{#if _asiModeFeat}}checked{{/if}} /> {{localize "SDR5E.Wizard.LevelUp.Feat"}}</label>
+    {{/unless}}
 
-    {{#if _asiModeScores}}
+    {{#if _asiModeScores}}{{#unless _isEpicBoon}}
     <div class="sdrn-bio-field">
-      <label>+1 (or +2 if second is blank)</label>
+      <label>{{localize "SDR5E.Wizard.LevelUp.AbilityFirst"}}</label>
       <select name="w:asiFirst">
         <option value="">—</option>
         {{#each _abilities}}<option value="{{key}}" {{#if atCap}}disabled{{/if}}>{{label}} ({{value}})</option>{{/each}}
       </select>
     </div>
     <div class="sdrn-bio-field">
-      <label>+1 (optional second score)</label>
+      <label>{{localize "SDR5E.Wizard.LevelUp.AbilitySecond"}}</label>
       <select name="w:asiSecond">
         <option value="">—</option>
         {{#each _abilities}}<option value="{{key}}" {{#if atCap}}disabled{{/if}}>{{label}} ({{value}})</option>{{/each}}
       </select>
     </div>
-    {{/if}}
+    {{/unless}}{{/if}}
 
     {{#if _asiModeFeat}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.FeatEligibilityNotice"}}</p>
     {{#if _featPicked}}
     <div class="sdrn-wizard-picked">
       <strong>{{_featName}}</strong> <span class="sdrn-wizard-hint">(from compendium)</span>
       <button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-feat">Change</button>
     </div>
+    {{#if _featManual}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.FeatManualInstruction"}}</p>{{/if}}
+    <p>{{_featDescription}}</p>
+    {{#if _featHasAbilityIncrease}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.FeatAbilityIncrease"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.AbilityFirst"}}</label><select name="w:featAbilityFirst"><option value="">—</option>{{#each _featAbilityOptions}}<option value="{{key}}" {{#if atCap}}disabled{{/if}} {{#if selectedFirst}}selected{{/if}}>{{label}} ({{value}})</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.AbilitySecond"}}</label><select name="w:featAbilitySecond"><option value="">—</option>{{#each _featAbilityOptions}}<option value="{{key}}" {{#if atCap}}disabled{{/if}} {{#if selectedSecond}}selected{{/if}}>{{label}} ({{value}})</option>{{/each}}</select></div>
+    {{/if}}
+    {{#if _featHasChoices}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.SkilledChoiceHint"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.ProficiencyChoice1"}}</label><select name="w:featChoice1"><option value="">—</option>{{#each _featChoiceOptions}}<option value="{{value}}" {{#if selectedFirst}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.ProficiencyChoice2"}}</label><select name="w:featChoice2"><option value="">—</option>{{#each _featChoiceOptions}}<option value="{{value}}" {{#if selectedSecond}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.ProficiencyChoice3"}}</label><select name="w:featChoice3"><option value="">—</option>{{#each _featChoiceOptions}}<option value="{{value}}" {{#if selectedThird}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    {{#unless _featChoiceValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.CompleteFeatChoices"}}</p>{{/unless}}{{/if}}
     {{else}}
     <div class="sdrn-bio-field"><label>Filter</label><input type="text" data-wizard-search="feat" value="{{_featQuery}}" placeholder="Type to filter, or pick below" /></div>
     {{#if _featResults}}
@@ -88,10 +129,163 @@
     {{/if}}
     {{/if}}
 
+    {{#if _stepChoices}}
+    {{#if _wizardScholarRequired}}
+    <h3>{{localize "SDR5E.Wizard.LevelUp.WizardScholarHeading"}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.WizardScholarHelp"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.WizardScholarSkill"}}</label><select name="w:wizardScholarSkill"><option value="">—</option>{{#each _wizardScholarOptions}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+    {{#unless _wizardScholarChoiceValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.ChooseWizardScholarSkill"}}</p>{{/unless}}
+    {{/if}}
+    {{#if _wizardSpellMasteryRequired}}
+    <h3>{{localize "SDR5E.Wizard.LevelUp.SpellMasteryHeading"}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.SpellMasteryHelp"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.SpellMasteryLevelOne"}}</label><select name="w:wizardSpellMasteryLevelOne"><option value="">—</option>{{#each _wizardSpellMasteryLevelOneOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.SpellMasteryLevelTwo"}}</label><select name="w:wizardSpellMasteryLevelTwo"><option value="">—</option>{{#each _wizardSpellMasteryLevelTwoOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    {{#unless _wizardSpellMasteryValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.ChooseSpellMasterySpells"}}</p>{{/unless}}
+    {{/if}}
+    {{#if _wizardSignatureSpellsRequired}}
+    <h3>{{localize "SDR5E.Wizard.LevelUp.SignatureSpellsHeading"}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.SignatureSpellsHelp"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.SignatureSpellOne"}}</label><select name="w:wizardSignatureSpellFirst"><option value="">—</option>{{#each _wizardSignatureSpellOptions}}<option value="{{id}}" {{#if firstSelected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.SignatureSpellTwo"}}</label><select name="w:wizardSignatureSpellSecond"><option value="">—</option>{{#each _wizardSignatureSpellOptions}}<option value="{{id}}" {{#if secondSelected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    {{#unless _wizardSignatureSpellsValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.ChooseSignatureSpells"}}</p>{{/unless}}
+    {{/if}}
+    {{#if _weaponMasteryRequired}}
+    <h3>{{localize "SDR5E.Wizard.LevelUp.WeaponMasteryHeading"}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.WeaponMasteryHelp"}} {{_weaponMasteryCount}} / {{_weaponMasteryNeeded}}</p>
+    {{#each _weaponMasteryOptions}}
+    <label class="sdrn-wizard-picked"><input type="checkbox" name="w:weaponMastery" value="{{identifier}}" {{#if selected}}checked{{/if}}><span>{{name}} — {{mastery}}</span></label>
+    {{/each}}
+    {{#unless _weaponMasteryValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.ChooseWeaponMastery"}}</p>{{/unless}}
+    {{/if}}
+    {{#if _fighterStyleRequired}}
+    <h3>{{localize "SDR5E.Wizard.LevelUp.FightingStyleHeading"}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.FightingStyleManualNotice"}}</p>
+    {{#if _fighterStylePicked}}
+    <div class="sdrn-wizard-picked"><strong>{{_fighterStylePicked.name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-fighting-style">{{localize "SDR5E.Wizard.LevelUp.Remove"}}</button></div>
+    <p>{{_fighterStylePicked.data.description}}</p>
+    {{else}}
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.Filter"}}</label><input type="text" data-wizard-search="feat" value="{{_fighterStyleQuery}}" placeholder="{{localize 'SDR5E.Wizard.LevelUp.FilterHint'}}" /></div>
+    {{#each _fighterStyleResults}}<button type="button" class="sdrn-wizard-result" data-action="wizard-pick-fighting-style" data-id="{{id}}">{{name}}</button>{{/each}}
+    {{/if}}
+    {{#if _divineOrderRequired}}
+    <h3>{{localize "SDR5E.Wizard.LevelUp.DivineOrderHeading"}}</h3>
+    <p><button type="button" class="sdrn-wizard-btn {{#if _divineOrderProtector}}sdrn-wizard-btn-primary{{/if}}" data-action="wizard-pick-divine-order" data-id="protector">{{localize "SDR5E.Wizard.LevelUp.DivineOrderProtector"}}</button></p>
+    <p><button type="button" class="sdrn-wizard-btn {{#if _divineOrderThaumaturge}}sdrn-wizard-btn-primary{{/if}}" data-action="wizard-pick-divine-order" data-id="thaumaturge">{{localize "SDR5E.Wizard.LevelUp.DivineOrderThaumaturge"}}</button></p>
+    {{#if _divineOrderThaumaturge}}
+    <h4>{{localize "SDR5E.Wizard.LevelUp.DivineOrderCantrip"}}</h4>
+    {{#if _divineOrderCantripPick}}
+    <div class="sdrn-wizard-picked"><strong>{{_divineOrderCantripPick.name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-divine-order-cantrip">{{localize "SDR5E.Wizard.LevelUp.Remove"}}</button></div>
+    {{else}}
+    {{#each _divineOrderCantripOptions}}<button type="button" class="sdrn-wizard-result" data-action="wizard-pick-divine-order-cantrip" data-id="{{id}}">{{name}}</button>{{/each}}
+    {{/if}}
+    {{/if}}
+    {{#unless _divineOrderChoiceValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.ChooseDivineOrder"}}</p>{{/unless}}
+    {{/if}}
+    {{#if _primalOrderRequired}}
+    <h3>{{localize "SDR5E.Wizard.LevelUp.PrimalOrderHeading"}}</h3>
+    <p><button type="button" class="sdrn-wizard-btn {{#if _primalOrderMagician}}sdrn-wizard-btn-primary{{/if}}" data-action="wizard-pick-primal-order" data-id="magician">{{localize "SDR5E.Wizard.LevelUp.PrimalOrderMagician"}}</button></p>
+    <p><button type="button" class="sdrn-wizard-btn {{#if _primalOrderWarden}}sdrn-wizard-btn-primary{{/if}}" data-action="wizard-pick-primal-order" data-id="warden">{{localize "SDR5E.Wizard.LevelUp.PrimalOrderWarden"}}</button></p>
+    {{#if _primalOrderMagician}}
+    <h4>{{localize "SDR5E.Wizard.LevelUp.PrimalOrderCantrip"}}</h4>
+    {{#if _primalOrderCantripPick}}
+    <div class="sdrn-wizard-picked"><strong>{{_primalOrderCantripPick.name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-clear-primal-order-cantrip">{{localize "SDR5E.Wizard.LevelUp.Remove"}}</button></div>
+    {{else}}
+    {{#each _primalOrderCantripOptions}}<button type="button" class="sdrn-wizard-result" data-action="wizard-pick-primal-order-cantrip" data-id="{{id}}">{{name}}</button>{{/each}}
+    {{/if}}
+    {{/if}}
+    {{#unless _primalOrderChoiceValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.ChoosePrimalOrder"}}</p>{{/unless}}
+    {{/if}}
+    {{/if}}
+    {{#if _bardExpertiseRequired}}
+    <h3>{{localize "SDR5E.Wizard.LevelUp.BardExpertiseHeading"}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.BardExpertiseHelp"}} {{_bardExpertiseCount}} / 2</p>
+    {{#each _bardExpertiseOptions}}<label class="sdrn-wizard-picked"><input type="checkbox" name="w:bardExpertiseSkill" value="{{key}}" {{#if selected}}checked{{/if}}><span>{{label}}</span></label>{{/each}}
+    {{#unless _bardExpertiseValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.ChooseBardExpertiseSkills"}}</p>{{/unless}}
+    {{/if}}
+    {{#if _rogueChoicesRequired}}
+    <h3>{{localize "SDR5E.Wizard.LevelUp.RogueExpertiseHeading"}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.RogueExpertiseHelp"}} {{_rogueExpertiseCount}} / 2</p>
+    {{#each _rogueExpertiseOptions}}<label class="sdrn-wizard-picked"><input type="checkbox" name="w:rogueExpertiseSkill" value="{{key}}" {{#if selected}}checked{{/if}}><span>{{label}}</span></label>{{/each}}
+    {{#unless _rogueExpertiseValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.ChooseRogueExpertiseSkills"}}</p>{{/unless}}
+    <h3>{{localize "SDR5E.Wizard.LevelUp.RogueLanguageHeading"}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.RogueLanguageHelp"}} {{_rogueSpecialLanguage}}.</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.RogueAdditionalLanguage"}}</label><select name="w:rogueLanguage"><option value="">—</option>{{#each _rogueLanguageOptions}}<option value="{{name}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    {{#unless _rogueLanguageValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.ChooseRogueLanguage"}}</p>{{/unless}}
+    {{/if}}
+    {{#if _warlockInvocationRequired}}
+    <h3>{{localize "SDR5E.Wizard.LevelUp.WarlockInvocationHeading"}}</h3>
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.WarlockInvocationHelp"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.WarlockInvocationChoice"}}</label><select name="w:warlockInvocation"><option value="">—</option>{{#each _warlockInvocationOptions}}<option value="{{identifier}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    {{#if _warlockInvocationPick}}
+    <p class="sdrn-wizard-hint">{{#each _warlockInvocationOptions}}{{#if selected}}{{summary}}{{/if}}{{/each}}</p>
+    {{/if}}
+    {{#unless _warlockInvocationChoiceValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.ChooseWarlockInvocation"}}</p>{{/unless}}
+    {{/if}}
+    {{#if _multiclassProficiencyChoiceRequired}}
+    <h3>{{localize "SDR5E.Wizard.LevelUp.MulticlassProficiencyHeading"}}</h3>
+    {{#if _multiclassSkillChoiceCount}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.MulticlassSkills"}} {{_multiclassSkillCount}} / {{_multiclassSkillChoiceCount}}</p>
+    {{#each _multiclassSkillOptions}}<label class="sdrn-wizard-picked"><input type="checkbox" name="w:multiclassSkillChoice" value="{{key}}" {{#if selected}}checked{{/if}}><span>{{label}}</span></label>{{/each}}
+    {{/if}}
+    {{#if _multiclassToolChoiceCount}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.MulticlassTools"}} {{_multiclassToolCount}} / {{_multiclassToolChoiceCount}}</p>
+    {{#each _multiclassToolOptions}}<label class="sdrn-wizard-picked"><input type="checkbox" name="w:multiclassToolChoice" value="{{value}}" {{#if selected}}checked{{/if}}><span>{{label}}</span></label>{{/each}}
+    {{/if}}
+    {{#unless _multiclassSkillChoicesValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.ChooseMulticlassProficiencies"}}</p>{{/unless}}
+    {{/if}}
+    {{/if}}
+
     {{#if _stepSpells}}
     <h3>New Spells</h3>
-    {{#if _isKnownCaster}}
+    {{#if _rangerFavoredEnemyRequired}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Spellcasting.RangerFavoredEnemySpellLine"}}</p>{{/if}}
+    {{#if _newArcanumCircle}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.MysticArcanumNew"}} {{_newArcanumCircle}}.</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.MysticArcanumChoose"}}</label><select name="w:arcanumPick"><option value="">—</option>{{#each _arcanumNewOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    {{/if}}
+    {{#if _isWarlockSpellProgression}}
+    {{#if _arcanumOwnedOptions}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.MysticArcanumReplace"}}</p>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.MysticArcanumReplaceOut"}}</label><select name="w:arcanumReplaceOut"><option value="">—</option>{{#each _arcanumOwnedOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    {{#if _arcanumReplacementOptions}}<div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.MysticArcanumReplaceIn"}}</label><select name="w:arcanumReplaceIn"><option value="">—</option>{{#each _arcanumReplacementOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>{{/if}}{{/if}}
+    {{/if}}
+    {{#if _isBardSpellProgression}}
+    {{#unless _bardMetadataValid}}<p class="sdrn-wizard-hint">{{#if _isSorcererSpellProgression}}{{localize "SDR5E.Wizard.LevelUp.SorcererSpellbookReview"}}{{else if _isWarlockSpellProgression}}{{localize "SDR5E.Wizard.LevelUp.WarlockSpellbookReview"}}{{else}}{{localize "SDR5E.Wizard.LevelUp.BardSpellbookReview"}}{{/if}}</p>
+    {{else}}
+    {{#if _isSorcererSpellProgression}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.SorcererReplacementRules"}}</p>{{else if _isWarlockSpellProgression}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.WarlockReplacementRules"}}</p>{{else}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.BardReplacementRules"}}</p>{{/if}}
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.Filter"}}</label><input type="text" data-wizard-search="spell" value="{{_spellQuery}}" placeholder="{{localize 'SDR5E.Wizard.LevelUp.FilterHint'}}" /></div>
+    <div class="sdrn-bio-field"><label>{{#if _isSorcererSpellProgression}}{{localize "SDR5E.Wizard.LevelUp.SorcererReplacePrepared"}}{{else if _isWarlockSpellProgression}}{{localize "SDR5E.Wizard.LevelUp.WarlockReplacePrepared"}}{{else}}{{localize "SDR5E.Wizard.LevelUp.BardReplacePrepared"}}{{/if}}</label><select name="w:bardReplacement.spellOut"><option value="">—</option>{{#each _bardPreparedOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{#if _isSorcererSpellProgression}}{{localize "SDR5E.Wizard.LevelUp.SorcererNewPrepared"}}{{else if _isWarlockSpellProgression}}{{localize "SDR5E.Wizard.LevelUp.WarlockNewPrepared"}}{{else}}{{localize "SDR5E.Wizard.LevelUp.BardNewPrepared"}}{{/if}}</label><select name="w:bardReplacement.spellIn"><option value="">—</option>{{#each _bardSpellReplacementOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{#if _isSorcererSpellProgression}}{{localize "SDR5E.Wizard.LevelUp.SorcererReplaceCantrip"}}{{else if _isWarlockSpellProgression}}{{localize "SDR5E.Wizard.LevelUp.WarlockReplaceCantrip"}}{{else}}{{localize "SDR5E.Wizard.LevelUp.BardReplaceCantrip"}}{{/if}}</label><select name="w:bardReplacement.cantripOut"><option value="">—</option>{{#each _bardCantripOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    <div class="sdrn-bio-field"><label>{{#if _isSorcererSpellProgression}}{{localize "SDR5E.Wizard.LevelUp.SorcererNewCantrip"}}{{else if _isWarlockSpellProgression}}{{localize "SDR5E.Wizard.LevelUp.WarlockNewCantrip"}}{{else}}{{localize "SDR5E.Wizard.LevelUp.BardNewCantrip"}}{{/if}}</label><select name="w:bardReplacement.cantripIn"><option value="">—</option>{{#each _bardCantripReplacementOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></div>
+    {{#if _newSpellsRequired}}<p>{{localize "SDR5E.Wizard.LevelUp.PreparedSpellChoiceHint"}} {{_spellLeveledCount}} / {{_newSpellsRequired}}</p>{{/if}}
+    {{#if _newCantripsRequired}}<p>{{localize "SDR5E.Wizard.LevelUp.NewCantrips"}}: {{_spellCantripCount}} / {{_newCantripsRequired}}</p>{{/if}}
+    {{#each _spellPicksLeveled}}<div class="sdrn-wizard-picked"><strong>{{name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-spell" data-id="{{id}}">{{localize "SDR5E.Wizard.LevelUp.Remove"}}</button></div>{{/each}}
+    {{#each _spellPicksCantrips}}<div class="sdrn-wizard-picked"><strong>{{name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-spell" data-id="{{id}}">{{localize "SDR5E.Wizard.LevelUp.Remove"}}</button></div>{{/each}}
+    {{#if _spellResults}}<div class="sdrn-wizard-results">{{#each _spellResults}}<button type="button" class="sdrn-wizard-result" data-action="wizard-toggle-spell" data-id="{{id}}">{{name}} <small>{{#if data.spellLevel}}Level {{data.spellLevel}}{{else}}Cantrip{{/if}}</small></button>{{/each}}</div>{{/if}}
+    {{/unless}}
+    {{else if _isWizardSpellProgression}}
+    {{#unless _wizardMetadataValid}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.WizardSpellbookReview"}}</p>
+    {{else}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.WizardSpellbookChoiceHint"}} {{_wizardBookPicks.length}} / 2</p>
+    <p>{{localize "SDR5E.Wizard.LevelUp.PreparedSpellChoiceHint"}} {{_wizardPreparedPicks.length}} / {{_wizardPreparedRequired}} {{localize "SDR5E.Wizard.LevelUp.PreparedSpells"}}</p>
+    {{#if _newCantripsRequired}}<p>{{localize "SDR5E.Wizard.LevelUp.NewCantrips"}}: {{_wizardCantripPicks.length}} / {{_newCantripsRequired}}</p>{{/if}}
+    {{#each _wizardBookPicks}}<div class="sdrn-wizard-picked"><strong>{{name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-wizard-book" data-id="{{id}}">{{localize "SDR5E.Wizard.LevelUp.Remove"}}</button></div>{{/each}}
+    {{#each _wizardCantripPicks}}<div class="sdrn-wizard-picked"><strong>{{name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-wizard-cantrip" data-id="{{id}}">{{localize "SDR5E.Wizard.LevelUp.Remove"}}</button></div>{{/each}}
+    {{#each _wizardPreparedPicks}}<div class="sdrn-wizard-picked"><strong>{{name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-wizard-prepared" data-id="{{id}}">{{localize "SDR5E.Wizard.LevelUp.Remove"}}</button></div>{{/each}}
+    {{#each _wizardBookRows}}
+    {{#if canPrepare}}<div class="sdrn-wizard-picked"><span>{{name}} <small>{{localize "SDR5E.Wizard.LevelUp.Spellbook"}}</small></span><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-wizard-prepared" data-id="{{id}}">{{#if selectedForPreparation}}{{localize "SDR5E.Wizard.LevelUp.RemovePrepared"}}{{else}}{{localize "SDR5E.Wizard.LevelUp.PrepareSpell"}}{{/if}}</button></div>{{/if}}
+    {{/each}}
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.Filter"}}</label><input type="text" data-wizard-search="spell" value="{{_spellQuery}}" placeholder="{{localize 'SDR5E.Wizard.LevelUp.FilterHint'}}" /></div>
+    {{#if _spellResults}}<div class="sdrn-wizard-results">{{#each _spellResults}}
+      {{#if data.spellLevel}}<button type="button" class="sdrn-wizard-result" data-action="wizard-toggle-wizard-book" data-id="{{id}}">{{localize "SDR5E.Wizard.LevelUp.AddToSpellbook"}} — {{name}} <small>Level {{data.spellLevel}}</small></button>
+      {{else}}<button type="button" class="sdrn-wizard-result" data-action="wizard-toggle-wizard-cantrip" data-id="{{id}}">{{localize "SDR5E.Wizard.LevelUp.ChooseCantrip"}} — {{name}}</button>{{/if}}
+    {{/each}}</div>{{else}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.NoMoreSpells"}}</p>{{/if}}
+    {{/unless}}
+    {{else if _isKnownCaster}}
     <p class="sdrn-wizard-hint">Pick {{_newSpellsRequired}} new spell(s){{#if _newCantripsRequired}} and {{_newCantripsRequired}} new cantrip(s){{/if}} — picked so far: {{_spellLeveledCount}}/{{_newSpellsRequired}} spells, {{_spellCantripCount}}/{{_newCantripsRequired}} cantrips.</p>
+    {{else if _isPreparedProgressionCaster}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.PreparedSpellChoiceHint"}} {{_spellLeveledCount}} / {{_preparedSpellCapacity}} {{localize "SDR5E.Wizard.LevelUp.PreparedSpells"}}{{#if _newCantripsRequired}}; {{_spellCantripCount}} / {{_newCantripsRequired}} {{localize "SDR5E.Wizard.LevelUp.NewCantrips"}}{{/if}}</p>
     {{else}}
     <p class="sdrn-wizard-hint">{{_className}} prepares from its full spell list — add any spells you want available to prepare (optional, no fixed count).</p>
     {{/if}}
@@ -134,6 +328,8 @@
       <div>HP: +{{_hpGain}}</div>
       {{#if _subclassName}}<div>Subclass: {{_subclassName}}</div>{{/if}}
       {{#if _featName}}<div>Feat: {{_featName}}</div>{{/if}}
+      {{#if _featChoiceSummary}}<div>{{_featChoiceSummary}}</div>{{/if}}
+      {{#if _featName}}<div>{{#if _featManual}}{{localize "SDR5E.Wizard.LevelUp.FeatManualInstruction"}} {{/if}}{{_featDescription}}</div>{{/if}}
       {{#if _spellLeveledCount}}<div>New spells: {{_spellLeveledCount}}</div>{{/if}}
       {{#if _spellCantripCount}}<div>New cantrips: {{_spellCantripCount}}</div>{{/if}}
     </div>

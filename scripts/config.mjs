@@ -74,10 +74,9 @@ export const ACTOR_TYPE_LABEL = { character: 'Character', npc: 'NPC', group: 'Gr
 
 // SRD 5.1 spell slot progression — index 0 = nível de classe 1, index 19 =
 // nível de classe 20. Cada array tem até 9 posições (slot nível 1 a 9).
-// 'full' = Bard/Cleric/Druid/Sorcerer/Wizard. 'half' = Paladin/Ranger
-// (começam a conjurar no nível 2 de classe, por isso os dois primeiros
-// registros ficam vazios). 'pact' (Warlock) não usa esta tabela — ver
-// Handout 01, seção "Fora do escopo".
+// 'full' = Bard/Cleric/Druid/Sorcerer/Wizard. 'half' = Paladin/Ranger.
+// SRD 5.2 grants both half casters level-1 spell slots. 'pact' (Warlock)
+// uses a separate progression and resource pool.
 export const SPELL_SLOT_TABLE = {
   full: [
     [2],
@@ -102,7 +101,7 @@ export const SPELL_SLOT_TABLE = {
     [4, 3, 3, 3, 3, 2, 2, 1, 1],
   ],
   half: [
-    [],
+    [2],
     [2],
     [3],
     [3],
@@ -125,21 +124,15 @@ export const SPELL_SLOT_TABLE = {
   ],
 };
 
-// SRD 5.1 — magias/cantrips conhecidos por nível, pras 4 classes "known"
-// (sem preparação diária). Index 0 = nível de classe 1. Patrulheiro não tem
-// cantrip (confirmado: sem coluna "Cantrips Known" na tabela do Ranger).
-export const KNOWN_SPELLS_TABLE = {
-  bard: [4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 15, 16, 18, 19, 19, 20, 22, 22, 22],
-  sorcerer: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12, 13, 13, 14, 14, 15, 15, 15, 15],
-  warlock: [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15],
-  ranger: [0, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11],
-};
-
-export const KNOWN_CANTRIPS_TABLE = {
-  bard: [2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-  sorcerer: [4, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
-  warlock: [2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-};
+export const PACT_MAGIC_TABLE = [
+  [1, 1], [2, 1], [2, 2], [2, 2], [2, 3], [2, 3], [2, 4], [2, 4], [2, 5], [2, 5],
+  [3, 5], [3, 5], [3, 5], [3, 5], [3, 5], [3, 5], [4, 5], [4, 5], [4, 5], [4, 5],
+];
+export function pactMagicAtLevel(classLevel) {
+  const level = Math.max(1, Math.min(20, Number(classLevel) || 1));
+  const [max, spellLevel] = PACT_MAGIC_TABLE[level - 1] || [0, 0];
+  return { max, spellLevel };
+}
 
 // SRD 5.1 — Multiclassing Prerequisites (Characterizations/Multiclassing.md).
 // `mode: 'and'` (padrão) exige todos os itens de `abilities`; `mode: 'or'`
@@ -166,17 +159,21 @@ export const CLASS_IDENTIFIER_LABELS = {
   rogue: 'Rogue', sorcerer: 'Sorcerer', warlock: 'Warlock', wizard: 'Wizard',
 };
 
-// Handout 24 — níveis em que toda classe do SRD ganha Ability Score
-// Improvement (Barbarian.md:95, idêntico nas outras 11 classes: "When you
-// reach 4th level, and again at 8th, 12th, 16th, and 19th level").
-export const ASI_LEVELS = [4, 8, 12, 16, 19];
-
-// SRD 5.1 class tables: the level at which each class picks its subclass.
-// Keyed by `classIdentifier` (see CLASS_IDENTIFIER_LABELS). Classes not listed
-// (including 'none'/homebrew) fall back to SUBCLASS_LEVEL_DEFAULT.
-export const SUBCLASS_LEVEL_BY_CLASS = { cleric: 1, sorcerer: 1, warlock: 1, druid: 2, wizard: 2 };
+// SRD 5.2 progression entitlements. Fighter/Rogue receive additional Ability
+// Score Improvement choices; level 19 grants an Epic Boon separately.
+export const ASI_LEVELS_BY_CLASS = {
+  default: [4, 8, 12, 16],
+  fighter: [4, 6, 8, 12, 14, 16],
+  rogue: [4, 8, 10, 12, 16],
+};
+export const EPIC_BOON_LEVEL = 19;
+export const ASI_LEVELS = ASI_LEVELS_BY_CLASS.default;
+export const SUBCLASS_LEVEL_BY_CLASS = Object.fromEntries(
+  Object.keys(CLASS_IDENTIFIER_LABELS).filter((id) => id !== 'none').map((id) => [id, 3]),
+);
 export const SUBCLASS_LEVEL_DEFAULT = 3;
 export const subclassLevelFor = (classIdentifier) => SUBCLASS_LEVEL_BY_CLASS[classIdentifier] ?? SUBCLASS_LEVEL_DEFAULT;
+export const abilityChoiceLevelsFor = (classIdentifier) => ASI_LEVELS_BY_CLASS[classIdentifier] || ASI_LEVELS_BY_CLASS.default;
 
 // Full SRD 5.1 condition list — marker (id/label/color) a GM can drop on a
 // token from the core's status UI. Mechanical side (poisoned -> disadvantage,
@@ -192,8 +189,8 @@ export const CONDITIONS = [
   { id: 'petrified', label: 'Petrified', color: 0x9e9e9e },
   { id: 'restrained', label: 'Restrained', color: 0x8b4513 },
   { id: 'unconscious', label: 'Unconscious', color: 0x1a1614 },
-  { id: 'cover-half', label: 'Half Cover (+2 AC/DEX)', color: 0x4a90d9 },
-  { id: 'cover-3q', label: 'Three-Quarters Cover (+5 AC/DEX)', color: 0x2c5f8a },
+  { id: 'cover-half', label: 'Half Cover', color: 0x4a90d9 },
+  { id: 'cover-3q', label: 'Three-Quarters Cover', color: 0x2c5f8a },
 ];
 
 // Movement modes, in display order. Values on actors/races are numbers in meters.

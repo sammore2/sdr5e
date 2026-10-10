@@ -88,7 +88,7 @@ export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
    * type icon (🗡️/🛡️/etc) with no way to assign real artwork per item.
    * `FilePicker` itself is real Loom code; it's only reachable through
    * `Loom.applications.apps.FilePicker.implementation` — a path shaped for
-   * converted Foundry systems, but the class behind it isn't an emulation
+   * converted VTT legado systems, but the class behind it isn't an emulation
    * of anything, so this isn't a compatibility shortcut, just its only
    * exposed entry point.
    */
@@ -161,13 +161,17 @@ export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
       .filter((f) => !skipInDetails.has(f.key))
       .map((f) => ({
         key: f.key,
-        label: f.label,
+        label: f.labelKey ? (window.Loom?.i18n?.localize?.(`SDR5E.ItemUse.${f.labelKey}`) || f.labelKey) : f.label,
         type: f.type,
         isTextarea: f.type === 'textarea',
         isBoolean: f.type === 'boolean',
         isNumber: f.type === 'number',
         isSelect: f.type === 'select',
-        options: f.options?.map((o) => ({ ...o, selected: o.value === getVal(f.key) })),
+        options: f.options?.map((o) => ({
+          ...o,
+          label: o.labelKey ? (window.Loom?.i18n?.localize?.(`SDR5E.ItemUse.${o.labelKey}`) || o.labelKey) : o.label,
+          selected: o.value === getVal(f.key),
+        })),
         value: f.type === 'csv' ? (getVal(f.key) || []).join(', ') : getVal(f.key),
       }));
 

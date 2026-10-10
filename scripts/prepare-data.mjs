@@ -2,17 +2,21 @@
 // SDR5E — scripts/prepare-data.mjs
 // Component Version: 0.1.0
 //
-// Simplified version of the original Foundry actor-data.mjs/npc-data.mjs
+// Simplified version of the original VTT legado actor-data.mjs/npc-data.mjs
 // engine: keeps the math that doesn't depend on class items (fighter/adept
 // checks, arcane ward, spellcasting DC table, XP table) — that comes back
 // once class content exists. Writes directly onto `systemData` (never
 // include these fields in an `api.put` payload — that's the sheet's job).
 // ══════════════════════════════════════════════════════════════════════════
 
-import { ABILITY_KEYS, SPELL_SLOT_TABLE, SIZE_CARRY_MULTIPLIER, MOVEMENT_TYPES, SENSE_TYPES, feetToMeters } from './config.mjs';
+import { ABILITY_KEYS, SPELL_SLOT_TABLE, pactMagicAtLevel, SIZE_CARRY_MULTIPLIER, MOVEMENT_TYPES, SENSE_TYPES, feetToMeters } from './config.mjs';
 import { getSetting } from './settings.mjs';
 import { getDefaultData } from './schema.mjs';
 import { mergeDefaults } from './utils.mjs';
+import { BARBARIAN_FAST_MOVEMENT_BONUS, hasBarbarianFastMovement } from './movement-mechanics.mjs';
+import { initiativeTieBreakBonus } from './initiative-mechanics.mjs';
+import { clericDivineOrderSkillBonus } from './divine-order.mjs';
+import { fighterClassLevel, jackOfAllTradesSkillBonus, syncedFighterFeatureUses, syncedRangerWisdomUses, unarmoredDefenseBaseAC } from './class-feature-mechanics.mjs';
 
 export function parseDistance(text) {
   const raw = String(text || '').trim().toLowerCase();
@@ -113,12 +117,14 @@ export function prepArmorAndDA(sd, items) {
   let penalty = false;
   let stealthDisadvantage = false;
   let speedPenalty = false;
+  let bodyArmorWorn = false;
+  let shieldWielded = false;
   const priorities = { none: 0, light: 1, medium: 2, heavy: 3 };
   const str = sd.abilities.str.total || 10;
 
   for (const item of items) {
     // `equipmentSlots` (paper-doll) is defined on the schema but nothing in
-    // the native sheet writes to it — only `foundry-legacy-reference/` (inert,
+    // the native sheet writes to it — only `VTT legado-legacy-reference/` (inert,
     // never loaded) used it. The live "Equipped" checkbox on the item sheet
     // writes `item.data.equipped`, the same field `syncEquippedEffect`
     // listens to — reading anything else here means toggling Equipped
@@ -127,10 +133,15 @@ export function prepArmorAndDA(sd, items) {
     if (item.type !== 'armor' || !idata.equipped) continue;
     const acVal = Number(idata.acValue) || 0;
     const type = idata.armorType;
-    if (type === 'shield') shieldBonus += acVal;
-    else if (['light', 'medium', 'heavy'].includes(type)) {
-      bodyArmorAC += acVal;
-      if (priorities[type] > priorities[category]) category = type;
+    if (type === 'shield') {
+      shieldWielded = true;
+      shieldBonus += acVal;
+    } else {
+      bodyArmorWorn = true;
+      if (['light', 'medium', 'heavy'].includes(type)) {
+        bodyArmorAC += acVal;
+        if (priorities[type] > priorities[category]) category = type;
+      }
     }
     if (!isArmorProficient(sd, idata)) penalty = true;
     if (idata.stealthDisadvantage) stealthDisadvantage = true;
@@ -146,18 +157,32 @@ export function prepArmorAndDA(sd, items) {
   sd.attributes.armor.canCastSpells = !penalty;
 
   const dexMod = sd.abilities.dex.modifier || 0;
-  let appliedDex = dexMod;
+  const unarmoredBase = unarmoredDefenseBaseAC(items, {
+    dexterityModifier: dexMod,
+    constitutionModifier: sd.abilities.con.modifier,
+    wisdomModifier: sd.abilities.wis.modifier,
+    bodyArmorWorn,
+    shieldWielded,
+    selectedClass: sd.srd5eUnarmoredDefenseClass,
+  });
+  let appliedDex = unarmoredBase === null ? dexMod : 0;
   if (category === 'heavy') appliedDex = 0;
   else if (category === 'medium') appliedDex = Math.min(dexMod, 2);
 
-  const base = Math.max(sd.attributes.da.base || 10, 10);
+  const configuredBase = Math.max(Number(sd.attributes.da.base) || 10, 10);
+  const base = unarmoredBase === null ? configuredBase
+    : configuredBase > 10 ? Math.max(configuredBase, unarmoredBase) : unarmoredBase;
   const magic = Number(sd.attributes.da.magic) || 0;
   const bonus = Number(sd.attributes.da.bonus) || 0;
   sd.attributes.da.value = base + bodyArmorAC + shieldBonus + appliedDex + magic + bonus;
 }
 
-export function prepSkills(sd, prof) {
-  for (const skill of Object.values(sd.skills)) {
+export function prepSkills(sd, prof, items = []) {
+  const divineOrder = items.find((item) => item.type === 'feature'
+    && (item.system || item.data || {}).classIdentifier === 'cleric'
+    && (item.system || item.data || {}).identifier === 'divine-order');
+  const order = (divineOrder?.system || divineOrder?.data || {}).selectedOrder;
+  for (const [key, skill] of Object.entries(sd.skills)) {
     const ablKey = (skill.ability || '').toLowerCase();
     const mod = sd.abilities[ablKey]?.modifier || 0;
     // multiplier:0 é o valor padrão de toda perícia — não pode ser tratado como
@@ -166,7 +191,8 @@ export function prepSkills(sd, prof) {
     // (Expertise, ×2), caso algo defina isso no futuro.
     const multiplier = skill.proficient ? (skill.multiplier > 1 ? skill.multiplier : 1) : 0;
     const profValue = Math.floor(prof * multiplier);
-    skill.total = mod + profValue + (Number(skill.bonus) || 0);
+    skill.total = mod + profValue + jackOfAllTradesSkillBonus(items, prof, !!skill.proficient) + (Number(skill.bonus) || 0)
+      + clericDivineOrderSkillBonus(order, key, sd.abilities.wis?.modifier);
   }
 }
 
@@ -183,7 +209,7 @@ export function prepSaves(sd, prof) {
 
 export function prepInitiative(sd) {
   const dexMod = sd.abilities.dex.modifier || 0;
-  const tiebreaker = getSetting('initiativeTiebreaker', true) ? (Number(sd.abilities.dex.total ?? sd.abilities.dex.value) || 10) / 100 : 0;
+  const tiebreaker = initiativeTieBreakBonus(getSetting('initiativeTiebreaker', false), sd.abilities.dex.total ?? sd.abilities.dex.value);
   sd.attributes.initiative.total = dexMod
     + (Number(sd.attributes.initiative.value) || 0)
     + (Number(sd.attributes.initiative.bonus) || 0)
@@ -286,26 +312,11 @@ export function prepEncumbrance(sd, items) {
 // nível de personagem 1. Estruturalmente diferente da tabela 'full'/'half'
 // (todos os slots são do MESMO nível, em vez de um valor por nível 1-9) —
 // por isso é uma tabela e uma função de aplicação separadas.
-const PACT_MAGIC_TABLE = [
-  [1, 1], [2, 1], [2, 2], [2, 2], [2, 3], [2, 3], [2, 4], [2, 4], [2, 5], [2, 5],
-  [3, 5], [3, 5], [3, 5], [3, 5], [3, 5], [3, 5], [4, 5], [4, 5], [4, 5], [4, 5],
-];
-
-function applyPactMagicSlots(slots, classLevel) {
-  const [count, slotLevel] = PACT_MAGIC_TABLE[classLevel - 1] || [0, 0];
-  for (let lvl = 1; lvl <= 9; lvl++) {
-    const max = lvl === slotLevel ? count : 0;
-    slots[lvl].max = max;
-    if ((slots[lvl].value ?? 0) > max) slots[lvl].value = max;
-  }
-}
-
 function applySingleClassSlots(slots, idata) {
   const casterType = idata?.casterType;
 
   if (casterType === 'pact') {
-    const classLevel = Math.max(1, Math.min(20, Number(idata.levels) || 1));
-    applyPactMagicSlots(slots, classLevel);
+    for (let lvl = 1; lvl <= 9; lvl++) slots[lvl].max = 0;
     return;
   }
 
@@ -352,7 +363,9 @@ function applyMulticlassSlots(slots, classItems) {
     else if (idata.casterType === 'half') halfLevels += levels;
   }
 
-  const effectiveLevel = Math.max(0, Math.min(20, fullLevels + Math.floor(halfLevels / 2)));
+  // SRD 5.2 (Multiclass Spellcaster): "Half your levels (round up) in the
+  // Paladin and Ranger classes" is one combined total, not a rounding per class.
+  const effectiveLevel = Math.max(0, Math.min(20, fullLevels + Math.ceil(halfLevels / 2)));
 
   if (effectiveLevel === 0) {
     for (let lvl = 1; lvl <= 9; lvl++) slots[lvl].max = 0;
@@ -372,6 +385,18 @@ export function prepSpellSlots(sd, items) {
   if (!slots) return;
 
   const classItems = (items || []).filter((i) => i.type === 'class');
+  const pactClass = classItems.map((item) => item.system || item.data || {}).find((data) => data.casterType === 'pact');
+  const pact = sd.resources.pactMagic || (sd.resources.pactMagic = { value: 0, max: 0, spellLevel: 0, needsReview: false });
+  if (pactClass) {
+    const progression = pactMagicAtLevel(pactClass.levels);
+    pact.max = progression.max;
+    pact.spellLevel = progression.spellLevel;
+    pact.value = Math.min(Number(pact.value) || 0, pact.max);
+  } else {
+    pact.max = 0;
+    pact.spellLevel = 0;
+    pact.value = 0;
+  }
 
   if (classItems.length > 1) {
     applyMulticlassSlots(slots, classItems);
@@ -407,14 +432,17 @@ export function prepMovement(sd, items) {
   const sensesEffective = {};
   const exhaustion = Number(sd.resources?.exhaustion) || 0;
   const hasSpeedPenalty = !!sd.attributes.armor?.speedPenalty;
+  const barbarianFastMovement = hasBarbarianFastMovement(items || []);
   for (const mode of MOVEMENT_TYPES) {
     let base = Number(mv[mode]) || 0;
     if (base === 0 && raceMv) base = Number(raceMv[mode]) || 0;
     if (mode === 'walk' && base === 0) base = 9;
     let val = base;
+    // SRD 5.2 Fast Movement increases walking speed by 10 ft (3 m); derive
+    // from base each pass so preparation never stacks the feature repeatedly.
+    if (mode === 'walk' && barbarianFastMovement) val += BARBARIAN_FAST_MOVEMENT_BONUS;
     if (hasSpeedPenalty && val > 0) val = Math.max(0, val - 3);
-    if (exhaustion >= 5) val = 0;
-    else if (exhaustion >= 2) val = Math.floor(val / 2);
+    if (exhaustion > 0) val = Math.max(0, val - exhaustion * 1.5);
     effective[mode] = val;
   }
   effective.hover = !!mv.hover || !!(raceMv?.hover);
@@ -435,27 +463,21 @@ export function prepCharacter(sd, items) {
   sd.attributes.prof.value = prof;
   sd.details.proficiencyBonus = prof;
 
-  // SRD (Conditions.md, "Exhaustion", nível 4): "Hit point maximum halved".
-  // Campo DERIVADO — `resources.health.max` em si é editável pelo jogador
-  // (level-up/CON) e nunca é sobrescrito aqui, só lido. Recalculado a cada
-  // prepareData, igual prof/saves/initiative (Handout 26).
+  // SRD 5.2 exhaustion affects D20 Tests and Speed, not Hit Point maximum.
   const rawMax = Number(sd.resources?.health?.max) || 0;
   const exhaustionLevel = Number(sd.resources?.exhaustion) || 0;
   if (sd.resources?.health) {
-    sd.resources.health.effectiveMax = exhaustionLevel >= 4 ? Math.floor(rawMax / 2) : rawMax;
+    sd.resources.health.effectiveMax = rawMax;
     // Nunca deixa o HP atual acima do teto efetivo (mesmo comportamento do
     // SRD: HP atual em excesso é descartado, não fica "guardado" esperando
     // a exaustão baixar).
-    if ((Number(sd.resources.health.value) || 0) > sd.resources.health.effectiveMax) {
-      sd.resources.health.value = sd.resources.health.effectiveMax;
-    }
     // Alias for Loom's canvas token bars and vital resource monitoring (attributes.hp)
     if (!sd.attributes) sd.attributes = {};
     sd.attributes.hp = sd.resources.health;
   }
 
   if (sd.attributes.armor) prepArmorAndDA(sd, items);
-  prepSkills(sd, prof);
+  prepSkills(sd, prof, items);
   prepSaves(sd, prof);
   prepInitiative(sd);
   prepSpellSlots(sd, items);
@@ -470,7 +492,7 @@ export function prepCharacter(sd, items) {
   }
 }
 
-export function prepNpc(sd) {
+export function prepNpc(sd, items = []) {
   prepAbilities(sd);
   const cr = Number(sd.details?.cr) || 0;
   const prof = Math.floor((Math.max(cr, 1) - 1) / 4) + 2;
@@ -487,12 +509,10 @@ export function prepNpc(sd) {
   sd.attributes.da.value = base + (Number(sd.attributes.da.bonus) || 0) + (Number(sd.attributes.da.magic) || 0) + dexMod;
   sd.attributes.initiative.total = dexMod + (Number(sd.attributes.initiative.value) || 0) + (Number(sd.attributes.initiative.bonus) || 0);
 
-  prepSkills(sd, prof);
-  for (const k of ABILITY_KEYS) {
-    const save = sd.saves[k];
-    const mod = sd.abilities[k]?.modifier || 0;
-    save.total = mod + (save.proficient ? prof : 0);
-  }
+  prepSkills(sd, prof, items);
+  // Same save math as the character path (prepSaves): ability mod + proficiency
+  // if proficient + misc/temp bonuses. Keeps the NPC's listed misc bonus.
+  prepSaves(sd, prof);
   prepMovement(sd, null);
 }
 // Full derived-data pass for one actor row (the ruleset's prepareData hook).
@@ -505,6 +525,56 @@ export function prepareActorRow(row) {
     migrateLegacyMovement(sd.attributes, row.type);
     migrateLegacySenses(sd.attributes, sd.details);
   }
+  // Preserve an unambiguous legacy single-Warlock pool before new defaults
+  // are merged. Multiclass actors had no separate Pact pool in old saves, so
+  // their previous current count is unknowable and needs manual review.
+  if (sd.resources && !sd.resources.pactMagic) {
+    const classes = (row.items || []).filter((item) => item.type === 'class').map((item) => item.system || item.data || {});
+    const pactClass = classes.find((data) => data.casterType === 'pact');
+    if (pactClass) {
+      const progression = pactMagicAtLevel(pactClass.levels);
+      const legacy = sd.resources.spellSlots?.[progression.spellLevel];
+      const safelyMigrated = classes.length === 1 && Number(legacy?.max) > 0;
+      sd.resources.pactMagic = {
+        value: safelyMigrated ? Math.min(Number(legacy.value) || 0, progression.max) : 0,
+        max: progression.max,
+        spellLevel: progression.spellLevel,
+        needsReview: !safelyMigrated,
+      };
+    }
+  }
+  if (sd.resources?.hitDice && !sd.resources.hitDice.pools) {
+    const classes = (row.items || []).filter((item) => item.type === 'class').map((item) => item.system || item.data || {});
+    const hitDice = sd.resources.hitDice;
+    if (classes.length === 1) {
+      const classData = classes[0];
+      const classId = classData.classIdentifier || 'unclassified';
+      hitDice.pools = {
+        [classId]: {
+          value: Math.min(Number(hitDice.value) || 0, Number(hitDice.max) || Number(classData.levels) || 1),
+          max: Number(hitDice.max) || Number(classData.levels) || 1,
+          die: classData.hitDie || hitDice.die || 'd8',
+          needsReview: false,
+        },
+      };
+      hitDice.needsReview = false;
+    } else if (classes.length > 1) {
+      const byDie = {};
+      for (const classData of classes) {
+        const die = classData.hitDie || 'd8';
+        byDie[die] = (byDie[die] || 0) + (Number(classData.levels) || 0);
+      }
+      const dice = Object.keys(byDie);
+      if (dice.length === 1) {
+        const die = dice[0];
+        hitDice.pools = { [die]: { value: Math.min(Number(hitDice.value) || 0, byDie[die]), max: byDie[die], die, needsReview: false } };
+        hitDice.needsReview = false;
+      } else {
+        hitDice.pools = Object.fromEntries(dice.map((die) => [die, { value: 0, max: byDie[die], die, needsReview: true }]));
+        hitDice.needsReview = true;
+      }
+    }
+  }
   mergeDefaults(sd, getDefaultData(row.type));
   if (row.type === 'vehicle') {
     sd.attributes.da = { value: sd.attributes?.ac ?? 10, base: sd.attributes?.ac ?? 10, magic: 0, bonus: 0 };
@@ -512,9 +582,38 @@ export function prepareActorRow(row) {
     return row;
   }
   if (!sd.abilities) return row;
-  if (row.type === 'npc') prepNpc(sd);
-  else prepCharacter(sd, row.items || []);
+  if (row.type === 'npc') prepNpc(sd, row.items || []);
+  else {
+    prepCharacter(sd, row.items || []);
+    syncPreparedFighterUses(row.items || []);
+    syncPreparedRangerUses(row.items || [], sd.abilities?.wis?.modifier);
+  }
   return row;
+}
+
+// SRD 5.2 Ranger Tireless / Nature's Veil: max uses equal the Wisdom modifier
+// (minimum 1) as soon as the actor is prepared, mirroring Bardic Inspiration's
+// Charisma sync. Spent uses carry over inside syncedRangerWisdomUses.
+function syncPreparedRangerUses(items, wisdomModifier) {
+  for (const item of items) {
+    const key = item?.system ? 'system' : 'data';
+    const idata = item?.[key] || {};
+    const synced = syncedRangerWisdomUses(idata, wisdomModifier);
+    if (synced) item[key] = { ...idata, uses: synced };
+  }
+}
+
+// SRD 5.2 Fighter Action Surge / Indomitable: max uses follow the Fighter class
+// level as soon as the actor is prepared (level-up), not only at the next rest
+// or activation. Spent uses carry over inside syncedFighterFeatureUses.
+function syncPreparedFighterUses(items) {
+  const fighterLevel = fighterClassLevel(items);
+  for (const item of items) {
+    const key = item?.system ? 'system' : 'data';
+    const idata = item?.[key] || {};
+    const synced = syncedFighterFeatureUses(idata, fighterLevel);
+    if (synced) item[key] = { ...idata, uses: synced };
+  }
 }
 
 // Fetches an actor WITH its embedded items (the API only includes them with

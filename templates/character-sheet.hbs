@@ -31,7 +31,7 @@
                   <path class="sdrn-insp-core" d="M16 8 C16 12 20 16 24 16 C20 16 16 20 16 24 C16 20 12 16 8 16 C12 16 16 12 16 8 Z" />
                 </svg>
               </button>
-              <button type="button" class="sdrn-level-medallion" data-action="level-up-wizard" title="Level Up (click to advance)">
+              <button type="button" class="sdrn-level-medallion" data-action="level-up-wizard" title="{{_levelUpTitle}}" aria-label="{{_levelUpTitle}}" {{#unless _canLevelUp}}disabled aria-disabled="true"{{/unless}}>
                 <span class="sdrn-level-num">{{_level}}</span>
               </button>
             </div>
@@ -69,6 +69,16 @@
                 {{/each}}
               </div>
             </div>
+            {{#if _showUnarmoredDefenseChoice}}
+            <label class="sdrn-ac-formula-choice">{{_unarmoredDefenseLabel}}
+              <select name="sd:srd5eUnarmoredDefenseClass">
+                <option value="">—</option>
+                {{#each _unarmoredDefenseChoices}}
+                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}} ({{baseAC}})</option>
+                {{/each}}
+              </select>
+            </label>
+            {{/if}}
 
             <!-- Mini stats poligonais com styling dark tático (Initiative, Walk, Proficiency) -->
             <div class="sdrn-mini-stat-row">
@@ -224,11 +234,26 @@
         </div>
 
     <div data-tab-content="main" class="sdrn-tab-panel">
+      <details class="sdrn-movement-ledger" data-movement-ledger>
+        <summary>{{_movementLedger.title}}{{#if _movementSlowPenalty}} · {{_movementLedger.slowPenalty}}{{/if}}{{#if _movementLedger}} · {{_movementLedger.remaining}} m {{_movementLedger.remainingLabel}}{{/if}}</summary>
+        {{#if _movementNeedsCastSelection}}
+        <label>{{_movementLedger.castSelect}} <select data-movement-cast-select><option value="">—</option>{{#each _movementCastChoices}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></label>
+        {{else if _movementCastUnavailable}}
+        <p>{{_movementLedger.castUnavailable}}</p>
+        {{else if _movementLedger}}
+        <div class="sdrn-movement-ledger-total"><span>{{_movementLedger.spentLabel}}: {{_movementLedger.spent}} m</span><span>{{_movementLedger.remainingLabel}}: {{_movementLedger.remaining}} m</span></div>
+        <div class="sdrn-movement-ledger-inputs"><label>{{_movementLedger.distanceLabel}}<input type="number" min="0.1" step="0.1" data-movement-distance></label><label>{{_movementLedger.modeFieldLabel}}<select data-movement-mode>{{#each _movementLedger.modes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><label class="sdrn-movement-difficult"><input type="checkbox" data-movement-difficult> {{_movementLedger.difficultLabel}}</label><button type="button" data-action="movement-ledger-add">{{_movementLedger.addLabel}}</button></div>
+        {{#each _movementLedger.segments}}<div class="sdrn-movement-ledger-segment {{#unless valid}}invalid{{/unless}}"><span>{{modeLabel}} · {{distanceText}}</span><button type="button" data-action="movement-ledger-remove" data-segment-index="{{index}}">{{../_movementLedger.removeLabel}}</button></div>{{/each}}
+        {{#if _movementLedger.dashModes.length}}<div class="sdrn-movement-dash-control"><label>{{_movementLedger.dashLabel}}<select data-dash-speed>{{#each _movementLedger.dashModes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><button type="button" data-action="movement-ledger-add-dash">{{_movementLedger.addDashLabel}}</button></div>{{/if}}
+        {{#each _movementLedger.dashBonuses}}<div class="sdrn-movement-ledger-segment"><span>{{modeLabel}} · +{{amountText}}</span><button type="button" data-action="movement-ledger-remove-dash" data-dash-index="{{index}}">{{../_movementLedger.removeDashLabel}}</button></div>{{/each}}
+        <button type="button" data-action="movement-ledger-reset">{{_movementLedger.resetLabel}}</button>
+        {{/if}}
+      </details>
       <div class="sdrn-columns">
 
         <!-- Sub-colunas: skills | saves+tags -->
         <div class="sdrn-col sdrn-col-mid">
-          <div class="sdrn-box sdrn-skills">
+<div class="sdrn-box sdrn-skills">
             <div class="sdrn-box-title"><i class="fas fa-briefcase"></i> Skills</div>
             {{#each _skills}}
             <div class="sdrn-skill-row">
@@ -359,6 +384,25 @@
         </div>
 
       </div>
+      <details class="sdrn-core-actions">
+        <summary class="sdrn-core-actions-summary" aria-label="{{_coreActionActivitiesTitle}}. {{_coreActionActivitiesNote}}" data-tooltip="{{_coreActionActivitiesNote}}">
+          <span>{{_coreActionActivitiesTitle}}</span><span class="sdrn-core-actions-help" aria-hidden="true">?</span>
+        </summary>
+        <div class="sdrn-core-actions-list">
+          {{#each _coreActionActivities}}
+          <div class="sdrn-core-action-row" data-core-action-row="{{action}}">
+            <label for="sdrn-core-action-skill-{{action}}">{{label}}</label>
+            {{#if contextLabel}}<label>{{contextLabel}}<input type="text" maxlength="160" placeholder="{{contextPlaceholder}}" data-core-action-context></label>{{/if}}
+            <select id="sdrn-core-action-skill-{{action}}" aria-label="{{label}} skill">
+              {{#each skillOptions}}
+              <option value="{{key}}" {{#if selected}}selected{{/if}} {{#unless available}}disabled{{/unless}}>{{label}}</option>
+              {{/each}}
+            </select>
+            <button type="button" data-action="roll-core-action" data-activity="{{action}}" {{#if disabled}}disabled{{/if}}>{{rollLabel}}</button>
+          </div>
+          {{/each}}
+        </div>
+      </details>
     </div>
 
     <div data-tab-content="inventory" class="sdrn-tab-panel" style="display:none">
@@ -386,6 +430,8 @@
           <span class="sdrn-item-name">Unarmed Strike (1 + STR, bludgeoning)</span>
           <button type="button" class="sdrn-item-roll-btn" data-action="unarmed-attack" title="Roll Attack"><i class="fas fa-sword"></i> Atk</button>
           <button type="button" class="sdrn-item-roll-btn" data-action="unarmed-damage" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
+          <button type="button" class="sdrn-item-roll-btn" data-action="unarmed-grapple" title="{{_grappleButton}}">{{_grappleButton}}</button>
+          <button type="button" class="sdrn-item-roll-btn" data-action="unarmed-shove" title="{{_shoveButton}}">{{_shoveButton}}</button>
         </div>
       </div>
       {{#each _inventory}}
@@ -401,6 +447,10 @@
           {{/if}}
           {{#if isConsumable}}
           <button type="button" class="sdrn-item-roll-btn" data-action="use-consumable" data-id="{{id}}" title="Use">Use</button>
+          {{#if usesLabel}}<span class="sdrn-empty">{{usesLabel}}</span>{{/if}}
+          {{/if}}
+          {{#if isHealersKit}}
+          <button type="button" class="sdrn-item-roll-btn" data-action="use-healers-kit" data-id="{{id}}" title="Use Healer's Kit">Use</button>
           {{#if usesLabel}}<span class="sdrn-empty">{{usesLabel}}</span>{{/if}}
           {{/if}}
           {{#if isTool}}
@@ -435,6 +485,7 @@
             <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
             {{#if isWeapon}}<button type="button" class="sdrn-item-roll-btn" data-action="roll-attack" data-id="{{id}}">Atk</button><button type="button" class="sdrn-item-roll-btn" data-action="roll-damage" data-id="{{id}}">Dmg</button>{{/if}}
             {{#if isConsumable}}<button type="button" class="sdrn-item-roll-btn" data-action="use-consumable" data-id="{{id}}">Use</button>{{/if}}
+            {{#if isHealersKit}}<button type="button" class="sdrn-item-roll-btn" data-action="use-healers-kit" data-id="{{id}}">Use</button>{{/if}}
             {{#if isTool}}<button type="button" class="sdrn-item-roll-btn" data-action="roll-tool" data-id="{{id}}">Check</button>{{/if}}
             {{#if hasQuantity}}<span class="sdrn-empty">x{{quantity}}</span>{{/if}}
             {{#if isContainer}}<span class="sdrn-empty">{{capacityLabel}}</span><button type="button" data-action="toggle-container" data-id="{{id}}">{{#if containerOpen}}Collapse{{else}}Expand{{/if}}</button>{{/if}}
@@ -482,6 +533,12 @@
         <div class="sdrn-item-row sdrn-feature-row" draggable="true" data-drag-item-id="{{id}}" data-drag-item-name="{{name}}" data-drag-item-img="{{imgUrl}}">
           <button type="button" class="sdrn-item-icon sdrn-item-icon-btn" data-action="post-item-chat" data-id="{{id}}" title="Post to Chat">{{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}{{icon}}{{/if}}</button>
           <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
+          {{#if isRage}}
+          <button type="button" class="sdrn-item-roll-btn" data-action="activate-feature" data-id="{{id}}">{{#if rageActive}}{{localize "SDR5E.ClassFeatures.EndRage"}}{{else}}{{localize "SDR5E.ClassFeatures.StartRage"}}{{/if}}</button>
+          {{#if rageCanExtend}}<button type="button" class="sdrn-item-roll-btn" data-action="extend-rage" data-id="{{id}}" title="{{localize 'SDR5E.ClassFeatures.RageExtensionPrompt'}}">{{localize "SDR5E.ClassFeatures.MaintainRage"}}</button>{{/if}}
+          {{/if}}
+          {{#if isMonkFocusPool}}<button type="button" class="sdrn-item-roll-btn" data-action="activate-feature" data-id="{{id}}" title="{{localize 'SDR5E.ClassFeatures.SpendFocusPoint'}}">{{localize "SDR5E.ClassFeatures.SpendFocusPoint"}}</button>{{/if}}
+          {{#if isUncannyMetabolism}}<button type="button" class="sdrn-item-roll-btn" data-action="activate-feature" data-id="{{id}}" title="{{localize 'SDR5E.ClassFeatures.UncannyMetabolismManual'}}">{{localize "SDR5E.ClassFeatures.UseUncannyMetabolism"}}</button>{{/if}}
           {{#if resourceCost}}
           <button type="button" class="sdrn-item-roll-btn" data-action="activate-feature" data-id="{{id}}" title="Spend {{resourceCost}} from the class resource pool">Activate ({{resourceCost}})</button>
           {{/if}}
@@ -489,6 +546,11 @@
           <span class="sdrn-feature-col-recovery">{{recoveryLabel}}</span>
           <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}" title="Delete">&times;</button>
         </div>
+        {{#if supportHint}}<div class="sdrn-wizard-hint">{{supportHint}}</div>{{/if}}
+        {{#if rageNotice}}<div class="sdrn-wizard-hint">{{rageNotice}}</div>{{/if}}
+        {{#if arcaneRecoveryNotice}}<div class="sdrn-wizard-hint">{{arcaneRecoveryNotice}}</div>{{/if}}
+        {{#if expertiseSkillLabel}}<div class="sdrn-wizard-hint">Expertise: {{expertiseSkillLabel}}</div>{{/if}}
+        {{#if memorizeSpellNotice}}<div class="sdrn-wizard-hint">{{memorizeSpellNotice}}</div>{{/if}}
         {{/each}}
       </div>
       {{else}}
@@ -504,6 +566,10 @@
         <div class="sdrn-spell-stat"><div class="sdrn-spell-stat-num">{{_spellcasting.attackBonus}}</div><div class="sdrn-spell-stat-label">Attack</div></div>
         <div class="sdrn-spell-stat"><div class="sdrn-spell-stat-num">{{_spellcasting.prepared}}/{{_spellcasting.preparedMax}}</div><div class="sdrn-spell-stat-label">Prepared</div></div>
       </div>
+      {{#if _pactMagic.needsReview}}<div class="sdrn-wizard-hint">{{localize "SDR5E.Spellcasting.PactReview"}}</div>{{/if}}
+      {{#if _pactMagic.active}}
+      <div class="sdrn-box-title">{{localize "SDR5E.Spellcasting.PactMagic"}} — {{localize "SDR5E.Spellcasting.SlotLevel"}} {{_pactMagic.spellLevel}}: {{_pactMagic.value}}/{{_pactMagic.max}}</div>
+      {{/if}}
       {{#each _spellsByLevel}}
       <div class="sdrn-box">
         <div class="sdrn-box-title">
@@ -514,13 +580,15 @@
         <div class="sdrn-item-row" draggable="true" data-drag-item-id="{{id}}" data-drag-item-name="{{name}}" data-drag-item-img="{{imgUrl}}">
           <span class="sdrn-item-icon">{{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}{{icon}}{{/if}}</span>
           <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
-          <button type="button" class="sdrn-item-roll-btn" data-action="cast-spell" data-id="{{id}}" title="Cast (consumes a slot)">Cast</button>
+          {{#if isRangerFavoredEnemy}}<span class="sdrn-feature-col-uses" title="{{localize "SDR5E.Spellcasting.RangerFavoredEnemyUses"}}">{{localize "SDR5E.Spellcasting.RangerFavoredEnemyUses"}} {{rangerFavoredEnemyUsesLabel}}</span>{{/if}}
+          {{#if canCastNormally}}<button type="button" class="sdrn-item-roll-btn" data-action="cast-spell" data-id="{{id}}" title="{{localize "SDR5E.Spellcasting.CastSpell"}}">{{localize "SDR5E.Spellcasting.Cast"}}</button>{{/if}}
+          {{#if canCastAsRitual}}<button type="button" class="sdrn-item-roll-btn" data-action="cast-ritual" data-id="{{id}}" title="{{localize "SDR5E.Spellcasting.CastRitual"}}">{{localize "SDR5E.Spellcasting.Ritual"}}</button>{{/if}}
           <button type="button" class="sdrn-item-roll-btn" data-action="roll-spell-attack" data-id="{{id}}" title="Roll Spell Attack">Atk</button>
           {{#if hasDamage}}<button type="button" class="sdrn-item-roll-btn" data-action="roll-spell-damage" data-id="{{id}}" title="Roll Spell Damage">Dmg</button>{{/if}}
           {{#unless isCantrip}}
-          <button type="button" class="sdrn-item-prepared {{#if prepared}}active{{/if}}" data-action="toggle-prepared" data-id="{{id}}" title="Prepared">
+          {{#unless alwaysPrepared}}<button type="button" class="sdrn-item-prepared {{#if prepared}}active{{/if}}" data-action="toggle-prepared" data-id="{{id}}" title="Prepared">
             <i class="fas fa-book"></i>
-          </button>
+          </button>{{/unless}}
           {{/unless}}
           <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}" title="Delete">&times;</button>
         </div>

@@ -10,7 +10,7 @@
 
 import { SKILL_ABILITIES } from './config.mjs';
 
-// ── Shape helpers (mirror the original Foundry defineSchema() helpers) ─────
+// ── Shape helpers (mirror the original VTT legado defineSchema() helpers) ─────
 
 function defaultAbility() {
   return { value: 10, modifier: 0, resilience: 0 };
@@ -47,7 +47,7 @@ function defaultSpellSlots() {
   return out;
 }
 
-// Dynamic bonuses shared by weapon/armor/feature/item (getBonusesSchema in the original Foundry system)
+// Dynamic bonuses shared by weapon/armor/feature/item (getBonusesSchema in the original VTT legado system)
 function defaultBonuses() {
   return {
     abilities: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 },
@@ -65,7 +65,7 @@ function defaultBonuses() {
   };
 }
 
-// Generic action schema (getActionSchema in the original Foundry system) — shared trigger/mutation
+// Generic action schema (getActionSchema in the original VTT legado system) — shared trigger/mutation
 // engine for feature/gear (weapon only uses the damage/heal subset, see the 'weapon' case below).
 function defaultAction() {
   return {
@@ -86,10 +86,11 @@ function defaultAction() {
   };
 }
 
-// Base shared by every item (BaseItemModel in the original Foundry system)
+// Base shared by every item (BaseItemModel in the original VTT legado system)
 function defaultBaseItem() {
   return {
     identifier: '',
+    actionCost: 'unknown',
     description: '',
     weight: 0,
     quantity: 1,
@@ -136,11 +137,15 @@ export function getDefaultData(type) {
         resources: {
           shortRestsDone: 0,
           health: { value: 10, max: 10, bonus: 0, temp: 0 },
-          hitDice: { value: 1, max: 1, die: 'd8' },
+          hitDice: { value: 1, max: 1, die: 'd8', pools: {}, needsReview: false },
           spellSlots: defaultSpellSlots(),
+          pactMagic: { value: 0, max: 0, spellLevel: 0, needsReview: false },
+          spellSlotTurnSpent: null,
           racial: { value: 0, max: 0, reset: 'short' },
           primary: { value: 0, max: 0, label: 'Resource', reset: 'long' },
           deathSaves: { successes: 0, failures: 0 },
+          deathState: 'alive', // alive | stable | dead; GM may override manually
+          unconsciousConditionTokenIds: [], // token markers added automatically from 0 HP; manual markers stay unowned
           exhaustion: 0,
           inspiration: false,
           concentrating: false,
@@ -148,6 +153,9 @@ export function getDefaultData(type) {
           // not concentrating. Lets rollConcentrationSave() find and remove
           // the right temporary effect on a failed save (see roll-engine.mjs).
           concentratingOn: '',
+          concentrationId: '',
+          concentrationSaveAttemptId: '',
+          concentrationSaveAttemptIds: [],
         },
         traits: { di: [], dr: [], dv: [], ci: [] },
         proficiencies: { weapons: [], armor: [], tools: [] },
@@ -186,10 +194,17 @@ export function getDefaultData(type) {
           movement: { walk: 9, fly: 0, swim: 0, climb: 0, burrow: 0, hover: false },
           senses: { darkvision: 0, blindsight: 0, tremorsense: 0, truesight: 0 },
         },
-        resources: { health: { value: 10, max: 10, bonus: 0, temp: 0 } },
+        resources: {
+          health: { value: 10, max: 10, bonus: 0, temp: 0 },
+          deathSaves: { successes: 0, failures: 0 },
+          deathState: 'alive',
+          unconsciousConditionTokenIds: [],
+        },
         skills: defaultSkills(),
         details: {
           cr: 1,
+          creatureType: '',
+          useCharacterDeathSaves: false,
           xp: { value: 0, label: '0 XP' },
           alignment: '', size: 'med', biography: '',
           legendaryActions: 0, legendaryResistances: 0,
@@ -263,7 +278,7 @@ export function getDefaultData(type) {
     case 'feature':
       return {
         ...defaultBaseItem(),
-        // Real dnd5e-Foundry groups the Features tab into named sections
+        // Real dnd5e groups the Features tab into named sections
         // ("Wizard Features", "Background Features") — there's no
         // structural link to class/background here (that would need real
         // class content this ruleset doesn't have yet), so this is a
@@ -441,12 +456,24 @@ export function getDefaultData(type) {
         concentration: false,
         ritual: false,
         prepared: false,
+        alwaysPrepared: false,
+        sourceClassIdentifier: '',
+        subclassSpellGrantId: '',
+        // Mystic Arcanum is a Warlock spell granted independently of Pact
+        // Magic slots and usable once per Long Rest.
+        mysticArcanumCircle: 0,
+        uses: { value: 0, max: 0, recovery: 'none', recharge: 0 },
         // Which classes' spell lists this spell belongs to — array of
         // classIdentifier values (see CLASS_IDENTIFIER_LABELS, config.mjs).
         // Empty by default; populated from the real SRD 5.1 class spell
         // lists for the bundled compendium (see packs/spells-*.json).
         classes: [],
-        damage: { formula: '', type: '' },
+        // scaling: extra dice per slot level above `fromLevel` (SRD "Using a Higher-Level
+        // Spell Slot"); scalingByCharacterLevel: cantrip tiers [{ level, formula }] (SRD
+        // "Cantrip Upgrade"). Both optional; see resolveSpellDamageFormula in roll-engine.mjs.
+        // triggered: separate damage entries rolled by their own chat-card button (e.g. Wall of Ice
+        // passage damage), each { label, formula, type, scaling, addSpellcastingModifier? }.
+        damage: { formula: '', type: '', scaling: null, scalingByCharacterLevel: [], triggered: [] },
         // Mechanical effect this spell grants for `durationRounds` (e.g.
         // Shield of Faith's +2 AC) — same shape as weapon/armor `bonuses`,
         // flattened by effects.mjs's existing bonusesToChanges(). Zero

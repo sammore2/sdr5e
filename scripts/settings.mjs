@@ -8,18 +8,18 @@ export const SDR5E_SETTINGS = [
   {
     key: 'initiativeFormula',
     name: 'Initiative Formula',
-    hint: 'Formula used by the combat tracker: Dexterity modifier, initiative adjustments, and decimal tie-breaker.',
+    hint: 'Formula used by the combat tracker: Dexterity modifier and initiative adjustments.',
     scope: 'world',
     type: String,
-    default: '1d20 + floor((@abilities.dex.value - 10) / 2) + @attributes.initiative.value + @attributes.initiative.bonus + (@abilities.dex.value / 100)'
+    default: '1d20 + floor((@abilities.dex.value - 10) / 2) + @attributes.initiative.value + @attributes.initiative.bonus'
   },
   {
     key: 'initiativeTiebreaker',
     name: 'Initiative Tie-Breaker',
-    hint: 'Adds the decimal Dexterity score (DEX / 100) to initiative to break ties automatically.',
+    hint: 'Optional house rule: adds decimal Dexterity (DEX / 100) to break ties automatically instead of resolving ties by creature type and player/GM choice.',
     scope: 'world',
     type: Boolean,
-    default: true
+    default: false
   },
   {
     key: 'maxHpFirstLevel',
@@ -54,25 +54,13 @@ export const SDR5E_SETTINGS = [
     default: true
   },
   {
-    key: 'criticalHitRule',
-    name: 'Critical Hit Rule',
-    hint: 'Method used to calculate damage on critical hits.',
+    key: 'levelUpHpMode',
+    name: 'Level Up Hit Point Method',
+    hint: 'Sets whether characters choose a roll or fixed Hit Die result, or the GM selects one method for everyone.',
     scope: 'world',
     type: String,
-    default: 'doubleDice',
-    choices: {
-      doubleDice: 'Double Damage Dice (SRD)',
-      maxDice: 'Maximum Dice + Roll',
-      flatMax: 'Fixed Maximum Damage'
-    }
-  },
-  {
-    key: 'deathSaveDC',
-    name: 'Death Saving Throw DC',
-    hint: 'Difficulty for death saving throws (the standard 5e value is 10).',
-    scope: 'world',
-    type: Number,
-    default: 10
+    default: 'player',
+    choices: { player: 'Player chooses each level', fixed: 'Fixed value', roll: 'Roll the Hit Die' }
   },
   {
     key: 'diagonalMovement',

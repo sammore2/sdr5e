@@ -20,6 +20,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+          cache: npm
+
+      - name: Install and run verification gates
+        run: |
+          npm ci
+          npm run check
+
       - name: Resolve version
         id: v
         run: |
@@ -73,8 +84,20 @@ jobs:
           NAME: ${{ steps.v.outputs.name }}
         run: |
           zip -r "${NAME}.zip" . \
-            -x '.git/*' '.github/*' '.agents/*' '.dev/*' '.vite/*' 'node_modules/*' \
-               '.gitignore' '.gitattributes' '*.zip' 'release-notes.md' 'release-manifest.json'
+            -x '.git/*' '.github/*' '.agents/*' '.dev/*' '.planning/*' '.codex/*' '.vite/*' 'node_modules/*' 'packs/source/*' \
+               './.git/*' './.github/*' './.agents/*' './.dev/*' './.planning/*' './.codex/*' './.vite/*' './node_modules/*' './packs/source/*' \
+               'tests/*' './tests/*' 'templates/styles/*' './templates/styles/*' \
+               'scripts/verify.mjs' 'scripts/verify-package.mjs' \
+               '.gitignore' '.gitattributes' 'package.json' 'package-lock.json' '*.zip' \
+               'release-notes.md' 'release-manifest.json'
+
+      - name: Verify package contents
+        env:
+          NAME: ${{ steps.v.outputs.name }}
+          MANIFEST: ${{ steps.v.outputs.manifest }}
+        run: |
+          unzip -t "${NAME}.zip"
+          node scripts/verify-package.mjs "${NAME}.zip" "$MANIFEST"
 
       - name: Build release manifest (adds download URL + sha256)
         env:
