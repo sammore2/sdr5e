@@ -1,57 +1,81 @@
 <div class="sdrn-root sdrn-npc-root">
 
-  <!-- Dock Lateral de Abas Estilo VTT legado V3 -->
+  <!-- Dock Lateral de Abas (Glued to window right edge via attachSideTabs) -->
   <nav class="sdrn-side-tabs sdrn-npc-side-tabs">
     <button type="button" class="sdrn-tab-btn active" data-action="tab" data-tab="actions" title="{{_npcTabActions}}" aria-label="{{_npcTabActions}}">
       <i class="fas fa-list-ul"></i>
-      <span class="sdrn-tab-label">{{_npcTabActions}}</span>
+    </button>
+    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="spells" title="{{_npcTabSpells}}" aria-label="{{_npcTabSpells}}">
+      <i class="fas fa-wand-sparkles"></i>
+    </button>
+    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="inventory" title="{{_npcTabInventory}}" aria-label="{{_npcTabInventory}}">
+      <i class="fas fa-briefcase"></i>
+    </button>
+    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="effects" title="Active Effects &amp; Conditions" aria-label="Active Effects &amp; Conditions">
+      <i class="fas fa-hat-wizard"></i>
     </button>
     <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="details" title="{{_npcTabDetails}}" aria-label="{{_npcTabDetails}}">
       <i class="fas fa-scroll"></i>
-      <span class="sdrn-tab-label">{{_npcTabDetails}}</span>
     </button>
     <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="config" title="{{_npcTabConfig}}" aria-label="{{_npcTabConfig}}">
       <i class="fas fa-cog"></i>
-      <span class="sdrn-tab-label">{{_npcTabConfig}}</span>
     </button>
   </nav>
 
   <div class="sdrn-body sdrn-npc-body">
 
-    <!-- Top Grid: Hero Block (Retrato Circular + Identidade + Ribbon de Atributos) -->
-    <header class="sdrn-npc-header-v3">
+    <!-- ════════════════════════════════════════════════════════════════════════
+         DIV 1: PARTE DE CIMA (FIXA — NUNCA DÁ SCROLL!)
+         CONTÉM QUADRANTE 1 (ESQUERDA) E QUADRANTE 2 (DIREITA)
+         ════════════════════════════════════════════════════════════════════════ -->
+    <div class="sdrn-top-half">
 
-      <!-- Bloco de Retrato Circular com Badges de D20 e Escudo de CA -->
-      <div class="sdrn-npc-token-container">
-        <div class="sdrn-npc-token-frame">
-          <button type="button" class="sdrn-npc-token-btn" data-action="pick-portrait" title="Click to change portrait">
-            {{#if avatarUrl}}
-            <img src="{{avatarUrl}}" alt="{{name}}" class="sdrn-npc-token-img" />
-            {{else}}
-            <div class="sdrn-npc-token-placeholder"><i class="fas fa-dragon"></i></div>
-            {{/if}}
+      <!-- QUADRANTE 1: RETRATO CIRCULAR HERO + HP (ESQUERDA, 215px) -->
+      <div class="sdrn-quadrant-1">
+
+        <!-- Barra superior do Q1: Cadeado no canto esquerdo + Fonte da foto em Edição -->
+        <div class="sdrn-q1-top-bar">
+          <button type="button" class="sdrn-mode-toggle sdrn-mode-toggle-mini" data-action="toggle-edit-mode" aria-pressed="false" title="Modo Jogo / Edição">
+            <i class="fas fa-lock" aria-hidden="true"></i>
           </button>
+          <div class="sdrn-portrait-source" data-edit-only role="group" aria-label="Imagem do retrato">
+            <button type="button" data-action="portrait-source" data-value="art" aria-pressed="{{#if _portraitSourceIsArt}}true{{else}}false{{/if}}">Arte</button>
+            <button type="button" data-action="portrait-source" data-value="token" aria-pressed="{{#if _portraitSourceIsToken}}true{{else}}false{{/if}}">Token</button>
+          </div>
+        </div>
 
-          <!-- D20 Badge no Topo Direito do Anel -->
-          <button type="button" class="sdrn-npc-d20-badge" data-action="roll-initiative" title="Roll Initiative ({{_initiative}})">
+        <div class="sdrn-portrait-wrapper">
+          <div class="sdrn-npc-portrait-ring">
+            <button type="button" class="sdrn-npc-portrait-btn" data-action="pick-portrait" title="Alterar retrato">
+              {{#if _portraitUrl}}
+              <img src="{{_portraitUrl}}" alt="{{name}}" class="sdrn-npc-portrait-img" />
+              {{else}}
+              <div class="sdrn-npc-portrait-placeholder"><i class="fas fa-dragon"></i></div>
+              {{/if}}
+              <span class="sdrn-portrait-edit-overlay"><i class="fas fa-camera"></i></span>
+            </button>
+          </div>
+
+          <!-- D20 Badge de Iniciativa no Topo Direito -->
+          <button type="button" class="sdrn-npc-d20-badge" data-action="roll-initiative" title="Rolar Iniciativa ({{_initiative}})">
             <i class="fas fa-dice-d20 sdrn-d20-icon"></i>
             <span class="sdrn-d20-val">{{_initiative}}</span>
           </button>
 
-          <!-- Escudo de CA no Canto Inferior Esquerdo do Anel -->
+          <!-- Escudo de CA no Canto Inferior Esquerdo -->
           <div class="sdrn-npc-ac-shield" title="Armor Class (Base: {{_acBase}} &bull; Total: {{_ac}})">
             <svg class="sdrn-ac-shield-svg" viewBox="0 0 36 42">
-              <path d="M18,1 L34,7 C34,26 24,38 18,41 C12,38 2,26 2,7 Z" fill="#131418" stroke="#c99738" stroke-width="2.5" />
+              <path d="M18,1 L34,7 C34,26 24,38 18,41 C12,38 2,26 2,7 Z" fill="#14120f" stroke="#c99738" stroke-width="2.5" />
             </svg>
             <div class="sdrn-ac-shield-content">
               <span class="sdrn-ac-shield-lbl">AC</span>
-              <input class="sdrn-ac-shield-num" type="number" name="sd:attributes.da.base" value="{{_acBase}}" title="Edit Base AC" />
+              <input class="sdrn-ac-shield-num" type="number" name="sd:attributes.da.base" value="{{_acBase}}" title="Base AC" />
             </div>
           </div>
         </div>
 
-        <!-- Barra de Vida Integrada Logo Abaixo do Retrato Circular -->
-        <div class="sdrn-npc-hp-module">
+        <!-- Módulo de HP logo abaixo do retrato (Fluxo Normal) -->
+        <div class="sdrn-hp-block">
           <div class="sdrn-dark-bar sdrn-hp-bar">
             <div class="sdrn-dark-bar-fill sdrn-hp-fill" style="width:{{_health.pct}}%"></div>
             <div class="sdrn-dark-bar-text sdrn-hp-bar-text">
@@ -61,152 +85,110 @@
               <input class="sdrn-bar-input sdrn-hp-max" type="number" name="sd:resources.health.max" value="{{_health.max}}" title="Max HP" />
             </div>
           </div>
-          {{#if _health.temp}}
-          <div class="sdrn-hp-tmp-badge" title="Temporary HP">
-            <span class="sdrn-tmp-lbl">+TMP</span>
-            <input class="sdrn-bar-input sdrn-tmp-input" type="number" name="sd:resources.health.temp" value="{{_health.temp}}" title="Temporary HP" />
+
+          <!-- Controles rápidos de Curar e Dano -->
+          <div class="sdrn-quick-hp">
+            <input type="number" min="0" data-quick-hp data-always-on aria-label="Valor" placeholder="0" />
+            <button type="button" data-action="hp-heal" title="Curar">Curar</button>
+            <button type="button" data-action="hp-damage" title="Dano">Dano</button>
           </div>
-          {{/if}}
-          {{#if _showDeathSaves}}
-          <div class="sdrn-box sdrn-death-saves-block" style="margin-top:6px;">
-            <div class="sdrn-box-title">{{_deathSaveLabel}}</div>
-            <div class="sdrn-death-saves-row">
-              <div class="sdrn-death-saves-group">
-                {{#each _deathSaves.successPips}}
-                <span class="sdrn-death-pip success {{#if filled}}filled{{/if}}"></span>
-                {{/each}}
-              </div>
-              {{#if _canRollDeathSave}}
-              <button type="button" class="sdrn-death-roll-btn" data-action="roll-death-save" title="{{_rollDeathSaveLabel}}"><i class="fas fa-skull"></i></button>
-              {{else}}
-              <span class="sdrn-death-state-label">{{_deathStateLabel}}</span>
-              {{/if}}
-              <div class="sdrn-death-saves-group">
-                {{#each _deathSaves.failurePips}}
-                <span class="sdrn-death-pip failure {{#if filled}}filled{{/if}}"></span>
-                {{/each}}
-              </div>
-            </div>
-          </div>
-          {{/if}}
         </div>
       </div>
 
-      <!-- Identidade e Ribbon Horizontal de Atributos -->
-      <div class="sdrn-npc-header-main">
+      <!-- QUADRANTE 2: NOME, CR, XP E ATRIBUTOS (DIREITA, 1fr) -->
+      <div class="sdrn-quadrant-2">
+        <!-- Linha 1: Título e Top Cluster -->
+        <div class="sdrn-npc-title-row">
+          <input type="text" class="sdrn-npc-name-input" name="name" value="{{name}}" placeholder="Non-Player Character" />
 
-        <!-- Linha de Título, Tamanho, XP, Descanso e Medalhão de CR -->
-        <div class="sdrn-npc-identity-row">
-          <div class="sdrn-npc-name-block">
-            <input type="text" class="sdrn-npc-name-input" name="name" value="{{name}}" placeholder="Creature Name" />
-            <div class="sdrn-npc-meta-sub">
-              <select class="sdrn-npc-size-select" name="sd:details.size" title="Size">
-                {{#each _sizeOptions}}
-                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
-                {{/each}}
-              </select>
-              <span class="sdrn-meta-dot">&bull;</span>
-              <input class="sdrn-npc-meta-field" type="text" name="sd:details.type" value="{{_type}}" placeholder="Type" title="Creature Type" />
-              <span class="sdrn-meta-dot">&bull;</span>
-              <input class="sdrn-npc-meta-field" type="text" name="sd:details.alignment" value="{{_alignment}}" placeholder="Alignment" title="Alignment" />
-            </div>
-          </div>
-
-          <div class="sdrn-npc-top-badges">
-            <div class="sdrn-npc-status-pill" title="Experience Points">
-              <span class="sdrn-status-pill-lbl">XP</span>
-              <span class="sdrn-status-pill-val">{{_xpValue}}</span>
-            </div>
-            <div class="sdrn-npc-status-pill" title="Proficiency Bonus">
-              <span class="sdrn-status-pill-lbl">PROF</span>
-              <span class="sdrn-status-pill-val">{{_prof}}</span>
+          <div class="sdrn-npc-top-cluster">
+            <div class="sdrn-rest-btns">
+              <button type="button" class="sdrn-rest-btn" data-action="short-rest" title="Descanso Curto"><i class="fas fa-utensils"></i></button>
+              <button type="button" class="sdrn-rest-btn" data-action="long-rest" title="Descanso Longo"><i class="fas fa-campground"></i></button>
             </div>
 
-            <!-- Medalhão de CR Metálico com Borda Chanfrada -->
-            <div class="sdrn-cr-badge-wrap" title="Challenge Rating">
-              <span class="sdrn-cr-badge-label">CR</span>
-              <div class="sdrn-cr-medallion-badge">
-                <input class="sdrn-cr-badge-input" type="text" name="sd:details.cr" value="{{_cr}}" title="Edit CR" />
-              </div>
+            <!-- XP Editável -->
+            <label class="sdrn-npc-xp-badge" title="Experience Points">
+              <span class="sdrn-xp-lbl">XP</span>
+              <input type="number" class="sdrn-xp-input" name="sd:details.xp.value" value="{{_xpValue}}" min="0" placeholder="0" />
+            </label>
+
+            <!-- Proficiency Editável -->
+            <label class="sdrn-npc-prof-badge" title="Proficiency Bonus">
+              <span class="sdrn-prof-lbl">PROF</span>
+              <input type="number" class="sdrn-prof-input" name="sd:attributes.prof.value" value="{{_prof}}" min="0" placeholder="2" />
+            </label>
+
+            <!-- Medalhão de Desafio (CR Editável) -->
+            <div class="sdrn-npc-cr-medallion" title="Challenge Rating (CR)">
+              <span class="sdrn-cr-lbl">CR</span>
+              <input type="text" class="sdrn-cr-input" name="sd:details.cr" value="{{_cr}}" title="CR" placeholder="1" />
             </div>
           </div>
         </div>
 
-        <!-- Ribbon de 6 Atributos Estilo VTT legado V3 -->
+        <!-- Linha 2: Metadados (Tamanho, Tipo, Alinhamento) -->
+        <div class="sdrn-npc-meta-row">
+          <select class="sdrn-npc-size-select" name="sd:details.size" title="Size">
+            {{#each _sizeOptions}}
+            <option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+          <input class="sdrn-npc-meta-field" type="text" name="sd:details.type" value="{{_type}}" placeholder="Type" title="Creature Type" />
+          <input class="sdrn-npc-meta-field" type="text" name="sd:details.alignment" value="{{_alignment}}" placeholder="Alignment" title="Alignment" />
+        </div>
+
+        <!-- Linha 3: Ribbon dos 6 Atributos D&D com Salvaguardas -->
         <div class="sdrn-npc-abilities-ribbon">
           {{#each _abilities}}
           <div class="sdrn-ability-pill-card" title="{{label}}">
             <div class="sdrn-ability-pill-abbr">{{abbr}}</div>
-            <button type="button" class="sdrn-ability-pill-mod" data-action="roll-ability" data-key="{{key}}" data-mode="test" title="Roll {{label}}">{{mod}}</button>
+            <button type="button" class="sdrn-ability-pill-mod" data-action="roll-ability" data-key="{{key}}" data-mode="test" title="Rolar {{label}} ({{mod}})">{{mod}}</button>
             <div class="sdrn-ability-pill-score-wrap">
               <input class="sdrn-ability-pill-score" type="number" name="sd:abilities.{{key}}.value" value="{{score}}" min="1" max="30" title="{{label}} Score" />
             </div>
-            <!-- Botão de Salvaguarda Clicável Abaixo do Atributo -->
-            <button type="button" class="sdrn-ability-pill-save {{#if saveProficient}}proficient{{/if}}" data-action="roll-save" data-key="{{key}}" title="Roll {{label}} Save ({{saveTotal}})">
-              <span class="sdrn-save-pip {{#if saveProficient}}active{{/if}}"></span>
-              <span class="sdrn-save-mod">{{saveTotal}}</span>
-              <i class="fas fa-shield-alt sdrn-save-icon"></i>
+            <button type="button" class="sdrn-save-shield {{#if saveProficient}}is-prof{{/if}}" data-action="toggle-save-prof" data-key="{{key}}" aria-pressed="{{#if saveProficient}}true{{else}}false{{/if}}" title="Salvaguarda de {{label}} ({{saveTotal}})">
+              <span class="sdrn-save-disc" role="img"></span>
+              <span class="sdrn-save-val">{{saveTotal}}</span>
+              <i class="fas fa-shield-alt" aria-hidden="true"></i>
             </button>
           </div>
           {{/each}}
         </div>
 
+        <!-- Linha 4: Cartão de Resumo da Criatura -->
+        <div class="sdrn-npc-summary-card">
+          <div class="sdrn-summary-badges">
+            <span class="sdrn-summary-icon"><i class="fas fa-dragon"></i></span>
+            <span class="sdrn-summary-text"><b>{{#if _type}}{{_type}}{{else}}Creature{{/if}}</b> {{#if _subtype}}({{_subtype}}){{/if}}</span>
+          </div>
+          <span class="sdrn-summary-cr-pill">CR {{_cr}}</span>
+        </div>
       </div>
 
-    </header>
+    </div>
 
-    <!-- Layout Central: Sidebar de Stats Rápidos à Esquerda + Conteúdo à Direita -->
-    <div class="sdrn-npc-layout-grid">
+    <!-- ════════════════════════════════════════════════════════════════════════
+         DIV 2: PARTE DE BAIXO (ROLÁVEL)
+         CONTÉM QUADRANTE 3 (ESQUERDA) E QUADRANTE 4 (DIREITA)
+         ════════════════════════════════════════════════════════════════════════ -->
+    <div class="sdrn-bottom-half">
 
-      <!-- Sidebar Esquerda com Sentidos, Perícias, Saves, Traços e Deslocamento -->
-      <aside class="sdrn-npc-stats-sidebar">
+      <!-- QUADRANTE 3: CHIPS COMPACTOS (ESQUERDA, 215px) -->
+      <div class="sdrn-quadrant-3">
 
-        <!-- Speed & Hit Dice -->
-        <div class="sdrn-npc-stat-row-dual">
-          <div class="sdrn-npc-stat-item" title="Speed">
-            <span class="sdrn-stat-subhead"><i class="fas fa-running"></i> SPD</span>
-            <span class="sdrn-stat-val">{{_speed}}</span>
-          </div>
-          <div class="sdrn-npc-stat-item" title="Hit Dice / Formula">
-            <span class="sdrn-stat-subhead"><i class="fas fa-heartbeat"></i> HD</span>
-            <input class="sdrn-stat-inline-input" type="text" name="sd:attributes.hp.formula" value="{{_hpFormula}}" placeholder="e.g. 2d8+4" />
-          </div>
+        <!-- Speed -->
+        <div class="sdrn-compact-chip-row">
+          <span class="sdrn-chip-label"><i class="fas fa-running"></i> SPEED</span>
+          <span class="sdrn-chip-val">{{_speed}}</span>
         </div>
 
-        <!-- Saving Throws -->
-        <div class="sdrn-npc-stat-group">
-          <div class="sdrn-stat-group-header">
-            <span class="sdrn-stat-subhead"><i class="fas fa-shield-alt"></i> SAVING THROWS</span>
-            {{#if _availableSaves.length}}
-            <select class="sdrn-npc-quick-select" data-action="add-save-prof" title="Add Save Proficiency">
-              <option value="">+ Save</option>
-              {{#each _availableSaves}}
-              <option value="{{key}}">{{label}}</option>
-              {{/each}}
-            </select>
-            {{/if}}
-          </div>
-          <div class="sdrn-skills-pill-list">
-            {{#each _saves}}
-            <div class="sdrn-skill-tag-pill">
-              <button type="button" class="sdrn-skill-tag-btn" data-action="roll-save" data-key="{{key}}" title="Roll {{label}} Save ({{total}})">
-                <span class="sdrn-skill-tag-name">{{label}}</span>
-                <span class="sdrn-skill-tag-mod">{{total}}</span>
-              </button>
-              <button type="button" class="sdrn-tag-del-btn" data-action="remove-save-prof" data-key="{{key}}" title="Remove save proficiency">&times;</button>
-            </div>
-            {{else}}
-            <span class="sdrn-empty-tag">No proficient saves</span>
-            {{/each}}
-          </div>
-        </div>
-
-        <!-- Perícias em Tags Pílula Escuras -->
-        <div class="sdrn-npc-stat-group">
-          <div class="sdrn-stat-group-header">
+        <!-- Skills -->
+        <div class="sdrn-compact-section">
+          <div class="sdrn-compact-section-hdr">
             <span class="sdrn-stat-subhead"><i class="fas fa-graduation-cap"></i> SKILLS</span>
             {{#if _availableSkills.length}}
-            <select class="sdrn-npc-quick-select" data-action="add-skill-prof" title="Add Skill Proficiency">
+            <select class="sdrn-npc-quick-select" data-action="add-skill-prof" data-edit-only title="Adicionar Perícia">
               <option value="">+ Skill</option>
               {{#each _availableSkills}}
               <option value="{{key}}">{{label}}</option>
@@ -214,53 +196,26 @@
             </select>
             {{/if}}
           </div>
-          <div class="sdrn-skills-pill-list">
+          <div class="sdrn-chips-wrap">
             {{#each _skills}}
-            <div class="sdrn-skill-tag-pill">
-              <button type="button" class="sdrn-skill-tag-btn" data-action="roll-skill" data-key="{{key}}" title="Roll {{label}} ({{total}})">
-                <span class="sdrn-skill-tag-name">{{label}}</span>
-                <span class="sdrn-skill-tag-mod">{{total}}</span>
-              </button>
-              <button type="button" class="sdrn-tag-del-btn" data-action="remove-skill-prof" data-key="{{key}}" title="Remove skill proficiency">&times;</button>
-            </div>
-            {{else}}
-            <span class="sdrn-empty-tag">None proficient</span>
-            {{/each}}
-          </div>
-        </div>
-
-        <!-- Resistências & Imunidades (Damage Traits) -->
-        <div class="sdrn-npc-stat-group">
-          <div class="sdrn-stat-group-header">
-            <span class="sdrn-stat-subhead"><i class="fas fa-shield-virus"></i> RESISTANCES &amp; IMMUNITIES</span>
-            {{#if _traitOptions.length}}
-            <select class="sdrn-npc-quick-select" data-action="add-trait" title="Add Damage/Condition Trait">
-              <option value="">+ Trait</option>
-              {{#each _traitOptions}}
-              <option value="{{value}}">{{label}}</option>
-              {{/each}}
-            </select>
+            {{#if proficient}}
+            <button type="button" class="sdrn-compact-chip skill" data-action="roll-skill" data-key="{{key}}" title="Rolar {{label}} ({{total}})">
+              <span>{{label}}</span>
+              <b>{{total}}</b>
+            </button>
             {{/if}}
-          </div>
-          <div class="sdrn-traits-pill-list">
-            {{#each _traitItems}}
-            <div class="sdrn-trait-tag-pill {{cssClass}}" title="{{typeLabel}}: {{label}}">
-              <span class="sdrn-trait-type-prefix">{{type}}</span>
-              <span class="sdrn-trait-name">{{label}}</span>
-              <button type="button" class="sdrn-tag-del-btn" data-action="remove-trait" data-trait-type="{{type}}" data-value="{{value}}" title="Remove {{label}}">&times;</button>
-            </div>
             {{else}}
-            <span class="sdrn-empty-tag">&mdash;</span>
+            <span class="sdrn-empty-chip">Nenhuma perícia</span>
             {{/each}}
           </div>
         </div>
 
-        <!-- Sentidos Passivos -->
-        <div class="sdrn-npc-stat-group">
-          <div class="sdrn-stat-group-header">
+        <!-- Senses (3 Selos Passivos + Especiais) -->
+        <div class="sdrn-compact-section">
+          <div class="sdrn-compact-section-hdr">
             <span class="sdrn-stat-subhead"><i class="fas fa-eye"></i> SENSES</span>
             {{#if _availableSensesList.length}}
-            <select class="sdrn-npc-quick-select" data-action="add-sense" title="Add Sense">
+            <select class="sdrn-npc-quick-select" data-action="add-sense" data-edit-only title="Adicionar Sentido">
               <option value="">+ Sense</option>
               {{#each _availableSensesList}}
               <option value="{{this}}">{{this}}</option>
@@ -268,23 +223,67 @@
             </select>
             {{/if}}
           </div>
-          <div class="sdrn-senses-pill-list">
-            <span class="sdrn-sense-tag fixed"><i class="fas fa-low-vision"></i> PASSIVE PERCEPTION &bull; {{_passivePerception}}</span>
+          <div class="sdrn-passive-seals">
+            <div class="sdrn-passive-seal"><span class="sdrn-passive-val">{{_passivePerception}}</span><span class="sdrn-passive-lbl">Percepção</span></div>
+            <div class="sdrn-passive-seal"><span class="sdrn-passive-val">{{_passiveInvestigation}}</span><span class="sdrn-passive-lbl">Investigação</span></div>
+            <div class="sdrn-passive-seal"><span class="sdrn-passive-val">{{_passiveInsight}}</span><span class="sdrn-passive-lbl">Intuição</span></div>
+          </div>
+          <div class="sdrn-chips-wrap">
             {{#each _senses}}
-            <div class="sdrn-sense-tag removable">
+            <span class="sdrn-compact-chip sense">
               <span>{{this}}</span>
-              <button type="button" class="sdrn-tag-del-btn" data-action="remove-sense" data-value="{{this}}" title="Remove sense">&times;</button>
-            </div>
+              <button type="button" class="sdrn-tag-del-btn" data-action="remove-sense" data-value="{{this}}" data-edit-only title="Remover">&times;</button>
+            </span>
             {{/each}}
           </div>
         </div>
 
-        <!-- Idiomas -->
-        <div class="sdrn-npc-stat-group">
-          <div class="sdrn-stat-group-header">
+        <!-- Resistances & Immunities -->
+        <div class="sdrn-compact-section">
+          <div class="sdrn-compact-section-hdr">
+            <span class="sdrn-stat-subhead"><i class="fas fa-shield-virus"></i> RESISTANCES</span>
+            {{#if _traitOptions.length}}
+            <select class="sdrn-npc-quick-select" data-action="add-trait" data-edit-only title="Adicionar Resistência/Imunidade">
+              <option value="">+ Trait</option>
+              {{#each _traitOptions}}
+              <option value="{{value}}">{{label}}</option>
+              {{/each}}
+            </select>
+            {{/if}}
+          </div>
+          <div class="sdrn-chips-wrap">
+            {{#each _traitItems}}
+            <span class="sdrn-compact-chip trait {{cssClass}}" title="{{typeLabel}}: {{label}}">
+              <small>{{type}}</small>
+              <span>{{label}}</span>
+              <button type="button" class="sdrn-tag-del-btn" data-action="remove-trait" data-trait-type="{{type}}" data-value="{{value}}" data-edit-only title="Remover">&times;</button>
+            </span>
+            {{else}}
+            <span class="sdrn-empty-chip">&mdash;</span>
+            {{/each}}
+          </div>
+        </div>
+
+        <!-- Gear -->
+        <div class="sdrn-compact-section">
+          <div class="sdrn-compact-section-hdr">
+            <span class="sdrn-stat-subhead"><i class="fas fa-shield-alt"></i> GEAR</span>
+          </div>
+          <div class="sdrn-chips-wrap">
+            {{#each _gearChips}}
+            <span class="sdrn-compact-chip gear">{{this}}</span>
+            {{else}}
+            <span class="sdrn-empty-chip">&mdash;</span>
+            {{/each}}
+          </div>
+        </div>
+
+        <!-- Languages -->
+        <div class="sdrn-compact-section" data-edit-only>
+          <div class="sdrn-compact-section-hdr">
             <span class="sdrn-stat-subhead"><i class="fas fa-comment-dots"></i> LANGUAGES</span>
             {{#if _availableLanguagesList.length}}
-            <select class="sdrn-npc-quick-select" data-action="add-language" title="Add Language">
+            <select class="sdrn-npc-quick-select" data-action="add-language" title="Adicionar Idioma">
               <option value="">+ Lang</option>
               {{#each _availableLanguagesList}}
               <option value="{{this}}">{{this}}</option>
@@ -292,81 +291,39 @@
             </select>
             {{/if}}
           </div>
-          <div class="sdrn-lang-pill-list">
+          <div class="sdrn-chips-wrap">
             {{#each _languages}}
-            <div class="sdrn-lang-tag removable">
+            <span class="sdrn-compact-chip lang">
               <span>{{name}}</span>
-              <button type="button" class="sdrn-tag-del-btn" data-action="remove-language" data-id="{{id}}" data-name="{{name}}" title="Remove language">&times;</button>
-            </div>
+              <button type="button" class="sdrn-tag-del-btn" data-action="remove-language" data-id="{{id}}" data-name="{{name}}" title="Remover">&times;</button>
+            </span>
             {{else}}
-            <span class="sdrn-empty-tag">&mdash;</span>
+            <span class="sdrn-empty-chip">&mdash;</span>
             {{/each}}
           </div>
         </div>
 
-      </aside>
+      </div>
 
-      <!-- Painel Central Principal -->
-      <main class="sdrn-npc-main-content">
+      <!-- QUADRANTE 4: CONTEÚDO PRINCIPAL (DIREITA, 1fr, SCROLLA) -->
+      <div class="sdrn-quadrant-4">
 
-        <!-- ABA 1: ACTIONS & FEATURES -->
+        <!-- ABA 1: FEATURES & ACTIONS -->
         <div data-tab-content="actions" class="sdrn-tab-panel">
 
-          <details class="sdrn-core-actions">
-            <summary class="sdrn-core-actions-summary" aria-label="{{_coreActionActivitiesTitle}}. {{_coreActionActivitiesNote}}" data-tooltip="{{_coreActionActivitiesNote}}">
-              <span>{{_coreActionActivitiesTitle}}</span><span class="sdrn-core-actions-help" aria-hidden="true">?</span>
-            </summary>
-            <div class="sdrn-core-actions-list">
-              {{#each _coreActionActivities}}
-              <div class="sdrn-core-action-row" data-core-action-row="{{action}}">
-                <label for="sdrn-npc-core-action-skill-{{action}}">{{label}}</label>
-                {{#if contextLabel}}<label>{{contextLabel}}<input type="text" maxlength="160" placeholder="{{contextPlaceholder}}" data-core-action-context></label>{{/if}}
-                <select id="sdrn-npc-core-action-skill-{{action}}" aria-label="{{label}} skill">
-                  {{#each skillOptions}}
-                  <option value="{{key}}" {{#if selected}}selected{{/if}} {{#unless available}}disabled{{/unless}}>{{label}}</option>
-                  {{/each}}
-                </select>
-                <button type="button" data-action="roll-core-action" data-activity="{{action}}" {{#if disabled}}disabled{{/if}}>{{rollLabel}}</button>
-              </div>
-              {{/each}}
-            </div>
-          </details>
-
-
-
-
-
-
-
-          <details class="sdrn-movement-ledger" data-movement-ledger>
-            <summary>{{_movementLedger.title}}{{#if _movementSlowPenalty}} · {{_movementLedger.slowPenalty}}{{/if}}{{#if _movementLedger}} · {{_movementLedger.remaining}} m {{_movementLedger.remainingLabel}}{{/if}}</summary>
-            {{#if _movementNeedsCastSelection}}
-            <label>{{_movementLedger.castSelect}} <select data-movement-cast-select><option value="">—</option>{{#each _movementCastChoices}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></label>
-            {{else if _movementCastUnavailable}}
-            <p>{{_movementLedger.castUnavailable}}</p>
-            {{else if _movementLedger}}
-            <div class="sdrn-movement-ledger-total"><span>{{_movementLedger.spentLabel}}: {{_movementLedger.spent}} m</span><span>{{_movementLedger.remainingLabel}}: {{_movementLedger.remaining}} m</span></div>
-            <div class="sdrn-movement-ledger-inputs"><label>{{_movementLedger.distanceLabel}}<input type="number" min="0.1" step="0.1" data-movement-distance></label><label>{{_movementLedger.modeFieldLabel}}<select data-movement-mode>{{#each _movementLedger.modes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><label class="sdrn-movement-difficult"><input type="checkbox" data-movement-difficult> {{_movementLedger.difficultLabel}}</label><button type="button" data-action="movement-ledger-add">{{_movementLedger.addLabel}}</button></div>
-            {{#each _movementLedger.segments}}<div class="sdrn-movement-ledger-segment {{#unless valid}}invalid{{/unless}}"><span>{{modeLabel}} · {{distanceText}}</span><button type="button" data-action="movement-ledger-remove" data-segment-index="{{index}}">{{../_movementLedger.removeLabel}}</button></div>{{/each}}
-            {{#if _movementLedger.dashModes.length}}<div class="sdrn-movement-dash-control"><label>{{_movementLedger.dashLabel}}<select data-dash-speed>{{#each _movementLedger.dashModes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><button type="button" data-action="movement-ledger-add-dash">{{_movementLedger.addDashLabel}}</button></div>{{/if}}
-            {{#each _movementLedger.dashBonuses}}<div class="sdrn-movement-ledger-segment"><span>{{modeLabel}} · +{{amountText}}</span><button type="button" data-action="movement-ledger-remove-dash" data-dash-index="{{index}}">{{../_movementLedger.removeDashLabel}}</button></div>{{/each}}
-            <button type="button" data-action="movement-ledger-reset">{{_movementLedger.resetLabel}}</button>
-            {{/if}}
-          </details>
-
-          <!-- Barra de Busca de Ações & Filtros -->
+          <!-- Barra de Busca -->
           <div class="sdrn-search-bar">
             <i class="fas fa-search sdrn-search-icon"></i>
-            <input type="text" placeholder="Search features, actions, attacks..." class="sdrn-search-input" />
-            <button type="button" class="sdrn-search-action-btn" title="Clear"><i class="fas fa-times"></i></button>
-            <button type="button" class="sdrn-search-action-btn" title="Filter"><i class="fas fa-filter"></i></button>
-            <button type="button" class="sdrn-search-action-btn" title="Sort"><i class="fas fa-sort-amount-down"></i></button>
+            <input type="text" placeholder="Search features, actions, attacks..." class="sdrn-search-input" data-always-on />
+            <button type="button" class="sdrn-search-action-btn" title="Limpar"><i class="fas fa-times"></i></button>
+            <button type="button" class="sdrn-search-action-btn" title="Filtrar"><i class="fas fa-filter"></i></button>
+            <button type="button" class="sdrn-search-action-btn" title="Ordenar"><i class="fas fa-sort-amount-down"></i></button>
           </div>
 
-          <!-- Tabela de Características / Ações -->
+          <!-- Tabela 1: Features -->
           <div class="sdrn-features-table">
             <div class="sdrn-features-header">
-              <span class="col-name">Features &amp; Actions</span>
+              <span class="col-name">Features</span>
               <span class="col-uses">USES</span>
               <span class="col-roll">ROLL</span>
               <span class="col-formula">FORMULA</span>
@@ -374,7 +331,7 @@
             </div>
 
             <div class="sdrn-features-body">
-              {{#each _actions}}
+              {{#each _featuresList}}
               <div class="sdrn-feature-row">
                 <div class="col-name">
                   <div class="sdrn-feature-icon-thumb">
@@ -385,43 +342,83 @@
                     {{/if}}
                   </div>
                   <div class="sdrn-feature-titles">
-                    <button type="button" class="sdrn-feature-title-btn" data-action="open-item" data-id="{{id}}" title="Open details">{{name}}</button>
-                    <span class="sdrn-feature-type-sub">{{type}}</span>
+                    <button type="button" class="sdrn-feature-title-btn" data-action="open-item" data-id="{{id}}" title="Abrir">{{name}}</button>
+                    <span class="sdrn-feature-type-sub">{{subtitle}}</span>
                   </div>
                 </div>
 
-                <div class="col-uses">&mdash;</div>
+                <div class="col-uses">{{usesText}}</div>
+                <div class="col-roll">{{rollText}}</div>
+                <div class="col-formula">{{formulaText}}</div>
+
+                <div class="col-actions">
+                  <button type="button" class="sdrn-icon-ctrl-btn" data-action="post-action-chat" data-id="{{id}}" title="Chat"><i class="fas fa-comment-alt"></i></button>
+                  <button type="button" class="sdrn-icon-ctrl-btn del" data-action="delete-item" data-id="{{id}}" data-edit-only title="Excluir"><i class="fas fa-trash-alt"></i></button>
+                </div>
+              </div>
+              {{else}}
+              <div class="sdrn-empty-row">Nenhuma característica adicionada ainda.</div>
+              {{/each}}
+            </div>
+          </div>
+
+          <!-- Tabela 2: Actions & Attacks -->
+          <div class="sdrn-features-table" style="margin-top: 14px;">
+            <div class="sdrn-features-header actions">
+              <span class="col-name">Actions</span>
+              <span class="col-uses">USES</span>
+              <span class="col-roll">ROLL</span>
+              <span class="col-formula">FORMULA</span>
+              <span class="col-actions">ACTIONS</span>
+            </div>
+
+            <div class="sdrn-features-body">
+              {{#each _attacksList}}
+              <div class="sdrn-feature-row">
+                <div class="col-name">
+                  <div class="sdrn-feature-icon-thumb">
+                    {{#if imgUrl}}
+                    <img src="{{imgUrl}}" alt="" />
+                    {{else}}
+                    <span class="sdrn-feature-icon-fallback">{{icon}}</span>
+                    {{/if}}
+                  </div>
+                  <div class="sdrn-feature-titles">
+                    <button type="button" class="sdrn-feature-title-btn" data-action="open-item" data-id="{{id}}" title="Abrir">{{name}}</button>
+                    <span class="sdrn-feature-type-sub">{{subtitle}}</span>
+                  </div>
+                </div>
+
+                <div class="col-uses">{{usesText}}</div>
 
                 <div class="col-roll">
-                  {{#if isWeapon}}
-                  <button type="button" class="sdrn-table-action-btn atk" data-action="roll-attack" data-id="{{id}}" title="Roll Attack"><i class="fas fa-dice-d20"></i> Atk</button>
-                  {{else}}
-                  <span>&mdash;</span>
-                  {{/if}}
+                  <button type="button" class="sdrn-table-action-btn atk" data-action="roll-attack" data-id="{{id}}" title="Ataque">
+                    <i class="fas fa-dice-d20"></i> {{rollText}}
+                  </button>
                 </div>
 
                 <div class="col-formula">
-                  {{#if isWeapon}}
-                  <button type="button" class="sdrn-table-action-btn dmg" data-action="roll-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-tint"></i> Dmg</button>
-                  {{else if hasDamage}}
-                  <button type="button" class="sdrn-table-action-btn dmg" data-action="roll-action-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-tint"></i> Dmg</button>
+                  {{#if hasDamage}}
+                  <button type="button" class="sdrn-table-action-btn dmg" data-action="roll-damage" data-id="{{id}}" title="Dano">
+                    <i class="fas fa-tint"></i> {{formulaText}}
+                  </button>
                   {{else}}
                   <span>&mdash;</span>
                   {{/if}}
                 </div>
 
                 <div class="col-actions">
-                  <button type="button" class="sdrn-icon-ctrl-btn" data-action="post-action-chat" data-id="{{id}}" title="Post to Chat"><i class="fas fa-comment-alt"></i></button>
-                  <button type="button" class="sdrn-icon-ctrl-btn del" data-action="delete-item" data-id="{{id}}" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                  <button type="button" class="sdrn-icon-ctrl-btn" data-action="post-action-chat" data-id="{{id}}" title="Chat"><i class="fas fa-comment-alt"></i></button>
+                  <button type="button" class="sdrn-icon-ctrl-btn del" data-action="delete-item" data-id="{{id}}" data-edit-only title="Excluir"><i class="fas fa-trash-alt"></i></button>
                 </div>
               </div>
               {{else}}
-              <div class="sdrn-empty-row">No features, actions, or attacks added to this creature yet.</div>
+              <div class="sdrn-empty-row">Nenhuma ação cadastrada.</div>
               {{/each}}
             </div>
           </div>
 
-          <!-- Botões Rápidos de Adicionar Ação/Ataque -->
+          <!-- Botões de Adição Rápida -->
           <div class="sdrn-add-actions-footer">
             <button type="button" class="sdrn-quick-add-btn" data-action="create-item" data-item-type="feature"><i class="fas fa-plus"></i> Add Feature</button>
             <button type="button" class="sdrn-quick-add-btn" data-action="create-item" data-item-type="weapon"><i class="fas fa-plus"></i> Add Attack</button>
@@ -430,18 +427,202 @@
 
         </div>
 
-        <!-- ABA 2: DETAILS & LORE -->
-        <div data-tab-content="details" class="sdrn-tab-panel" style="display:none;">
-          <div class="sdrn-card-block">
-            <div class="sdrn-box-title"><i class="fas fa-feather-alt"></i> BIOGRAPHY &amp; MONSTER LORE</div>
-            <textarea name="sd:details.biography" class="sdrn-dark-textarea" rows="12" placeholder="Ecology, tactics, description, lair details...">{{_biography}}</textarea>
+        <!-- ABA 2: SPELLS (MAGIAS) -->
+        <div data-tab-content="spells" class="sdrn-tab-panel" style="display:none;">
+          <div class="sdrn-features-table">
+            <div class="sdrn-features-header">
+              <span class="col-name">Spells</span>
+              <span class="col-uses">SLOTS</span>
+              <span class="col-roll">CAST</span>
+              <span class="col-formula">EFFECT</span>
+              <span class="col-actions">ACTIONS</span>
+            </div>
+            <div class="sdrn-features-body">
+              {{#each _spellsList}}
+              <div class="sdrn-feature-row">
+                <div class="col-name">
+                  <div class="sdrn-feature-icon-thumb">
+                    {{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}<span class="sdrn-feature-icon-fallback">✨</span>{{/if}}
+                  </div>
+                  <div class="sdrn-feature-titles">
+                    <button type="button" class="sdrn-feature-title-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
+                    <span class="sdrn-feature-type-sub">{{subtitle}}</span>
+                  </div>
+                </div>
+                <div class="col-uses">{{usesText}}</div>
+                <div class="col-roll">
+                  <button type="button" class="sdrn-table-action-btn atk" data-action="post-action-chat" data-id="{{id}}"><i class="fas fa-magic"></i> Cast</button>
+                </div>
+                <div class="col-formula">{{formulaText}}</div>
+                <div class="col-actions">
+                  <button type="button" class="sdrn-icon-ctrl-btn del" data-action="delete-item" data-id="{{id}}" data-edit-only title="Excluir"><i class="fas fa-trash-alt"></i></button>
+                </div>
+              </div>
+              {{else}}
+              <div class="sdrn-empty-row">Nenhuma magia adicionada.</div>
+              {{/each}}
+            </div>
+          </div>
+          <div class="sdrn-add-actions-footer">
+            <button type="button" class="sdrn-quick-add-btn" data-action="create-item" data-item-type="spell"><i class="fas fa-plus"></i> Add Spell</button>
           </div>
         </div>
 
-        <!-- ABA 3: CONFIGURATION -->
+        <!-- ABA 3: INVENTORY (EQUIPAMENTO) -->
+        <div data-tab-content="inventory" class="sdrn-tab-panel" style="display:none;">
+          <div class="sdrn-features-table">
+            <div class="sdrn-features-header">
+              <span class="col-name">Inventory</span>
+              <span class="col-uses">QTY</span>
+              <span class="col-roll">WT</span>
+              <span class="col-formula">PRICE</span>
+              <span class="col-actions">ACTIONS</span>
+            </div>
+            <div class="sdrn-features-body">
+              {{#each _inventoryList}}
+              <div class="sdrn-feature-row">
+                <div class="col-name">
+                  <div class="sdrn-feature-icon-thumb">
+                    {{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}<span class="sdrn-feature-icon-fallback">🎒</span>{{/if}}
+                  </div>
+                  <div class="sdrn-feature-titles">
+                    <button type="button" class="sdrn-feature-title-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
+                    <span class="sdrn-feature-type-sub">{{type}}</span>
+                  </div>
+                </div>
+                <div class="col-uses">1</div>
+                <div class="col-roll">&mdash;</div>
+                <div class="col-formula">&mdash;</div>
+                <div class="col-actions">
+                  <button type="button" class="sdrn-icon-ctrl-btn del" data-action="delete-item" data-id="{{id}}" data-edit-only title="Excluir"><i class="fas fa-trash-alt"></i></button>
+                </div>
+              </div>
+              {{else}}
+              <div class="sdrn-empty-row">Nenhum equipamento adicionado.</div>
+              {{/each}}
+            </div>
+          </div>
+          <div class="sdrn-add-actions-footer">
+            <button type="button" class="sdrn-quick-add-btn" data-action="create-item" data-item-type="item"><i class="fas fa-plus"></i> Add Item</button>
+          </div>
+        </div>
+
+        <!-- ABA 4: ACTIVE EFFECTS & CONDITIONS -->
+        <div data-tab-content="effects" class="sdrn-tab-panel sdrn-effects-tab-panel" style="display:none;">
+          <!-- Seção 1: Condições de Status (D&D 5e Conditions Palette) -->
+          <div class="sdrn-effects-section">
+            <div class="sdrn-effects-section-hdr">
+              <div class="sdrn-section-title">
+                <i class="fas fa-shield-virus"></i>
+                <span>Condições de Status (D&D 5e)</span>
+              </div>
+              <span class="sdrn-section-hint">Clique em qualquer condição para aplicar ou remover</span>
+            </div>
+
+            <!-- Chips de Condições Atualmente Ativas -->
+            {{#if _activeConditions.length}}
+            <div class="sdrn-active-conditions-strip">
+              <span class="sdrn-active-strip-label">Ativas:</span>
+              {{#each _activeConditions}}
+              <button type="button" class="sdrn-active-condition-tag" data-action="toggle-condition" data-condition="{{id}}" title="Remover {{label}}">
+                <i class="{{icon}}"></i>
+                <span>{{label}}</span>
+                <span class="sdrn-tag-remove">&times;</span>
+              </button>
+              {{/each}}
+              <button type="button" class="sdrn-clear-conditions-btn" data-action="clear-conditions" title="Remover todas as condições">Limpar Todas</button>
+            </div>
+            {{/if}}
+
+            <!-- Grid com Todas as Condições Disponíveis (Clique para alternar) -->
+            <div class="sdrn-conditions-grid">
+              {{#each _allConditions}}
+              <button type="button" 
+                      class="sdrn-condition-card {{#if active}}is-active{{/if}}" 
+                      data-action="toggle-condition" 
+                      data-condition="{{id}}" 
+                      title="{{description}}">
+                <div class="sdrn-cond-icon-wrap" style="color: {{color}};">
+                  <i class="{{icon}}"></i>
+                </div>
+                <div class="sdrn-cond-info">
+                  <span class="sdrn-cond-name">{{label}}</span>
+                  <span class="sdrn-cond-status">{{#if active}}Ativo{{else}}Inativo{{/if}}</span>
+                </div>
+                {{#if active}}
+                <span class="sdrn-cond-check"><i class="fas fa-check"></i></span>
+                {{/if}}
+              </button>
+              {{/each}}
+            </div>
+          </div>
+
+          <!-- Seção 2: Buffs & Efeitos Mágicos Ativos (Loom ActiveEffects) -->
+          <div class="sdrn-effects-section" style="margin-top: 14px;">
+            <div class="sdrn-effects-section-hdr">
+              <div class="sdrn-section-title">
+                <i class="fas fa-wand-magic-sparkles"></i>
+                <span>Buffs &amp; Efeitos Mágicos Ativos</span>
+              </div>
+              <button type="button" class="sdrn-quick-add-btn" data-action="create-custom-effect" title="Criar Efeito Personalizado">
+                <i class="fas fa-plus"></i> Novo Efeito
+              </button>
+            </div>
+
+            <!-- Presets Rápidos de Magias Populares -->
+            <div class="sdrn-buff-presets-strip">
+              <span class="sdrn-presets-label"><i class="fas fa-bolt"></i> Aplicar Rápido:</span>
+              {{#each _buffPresets}}
+              <button type="button" class="sdrn-preset-btn" data-action="apply-buff-preset" data-preset-id="{{id}}" title="{{description}}">
+                <i class="{{icon}}"></i> + {{name}}
+              </button>
+              {{/each}}
+            </div>
+
+            <!-- Lista de Efeitos Ativos Instalados no Ator -->
+            <div class="sdrn-active-effects-list">
+              {{#each _effects}}
+              <div class="sdrn-effect-row {{#if disabled}}is-disabled{{/if}}">
+                <div class="sdrn-effect-icon">
+                  <i class="{{#if disabled}}fas fa-pause-circle{{else}}fas fa-magic{{/if}}"></i>
+                </div>
+                <div class="sdrn-effect-main">
+                  <div class="sdrn-effect-header-line">
+                    <span class="sdrn-effect-title">{{name}}</span>
+                    <span class="sdrn-effect-duration-badge">{{durationLabel}}</span>
+                  </div>
+                  {{#if changesSummary}}
+                  <div class="sdrn-effect-changes">{{changesSummary}}</div>
+                  {{/if}}
+                </div>
+                <div class="sdrn-effect-actions">
+                  <button type="button" class="sdrn-icon-ctrl-btn" data-action="toggle-effect-disabled" data-id="{{id}}" title="{{#if disabled}}Ativar Efeito{{else}}Pausar Efeito{{/if}}">
+                    <i class="{{#if disabled}}fas fa-play{{else}}fas fa-pause{{/if}}"></i>
+                  </button>
+                  <button type="button" class="sdrn-icon-ctrl-btn del" data-action="delete-effect" data-id="{{id}}" title="Remover Efeito">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+              {{else}}
+              <div class="sdrn-empty-row">Nenhum buff ou efeito mágico ativo no momento. Clique em um dos atalhos acima ou adicione um novo efeito.</div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+
+        <!-- ABA 4: BIOGRAPHY & LORE -->
+        <div data-tab-content="details" class="sdrn-tab-panel" style="display:none;">
+          <div class="sdrn-card-block">
+            <div class="sdrn-box-title"><i class="fas fa-feather-alt"></i> BIOGRAPHY &amp; MONSTER LORE</div>
+            <textarea name="sd:details.biography" class="sdrn-dark-textarea" rows="12" placeholder="Ecology, tactics, description...">{{_biography}}</textarea>
+          </div>
+        </div>
+
+        <!-- ABA 5: CONFIGURAÇÕES -->
         <div data-tab-content="config" class="sdrn-tab-panel" style="display:none;">
           <div class="sdrn-card-block">
-            <div class="sdrn-box-title"><i class="fas fa-sliders-h"></i> CONFIGURATION &amp; STAT BLOCK SETTINGS</div>
+            <div class="sdrn-box-title"><i class="fas fa-sliders-h"></i> CONFIGURATION</div>
             <div class="sdrn-config-fields-grid">
               <label class="sdrn-cfg-row">
                 <span>HP Formula</span>
@@ -471,7 +652,12 @@
           </div>
         </div>
 
-      </main>
+        <!-- Botão Flutuante (+) -->
+        <button type="button" class="sdrn-fab-add" data-action="create-item" data-item-type="feature" title="Adicionar">
+          <i class="fas fa-plus"></i>
+        </button>
+
+      </div>
 
     </div>
 

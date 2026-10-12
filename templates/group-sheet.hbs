@@ -4,20 +4,29 @@
 
     <!-- Header do Grupo / Party com Heráldica e Status -->
     <header class="sdrn-group-header">
-      <div class="sdrn-group-header-left">
-        <div class="sdrn-group-crest" title="Party Crest">
+      <div class="sdrn-group-header-top">
+        <button type="button" class="sdrn-group-crest" data-action="pick-portrait" title="Click to change party crest / avatar">
+          {{#if avatarUrl}}
+          <img src="{{avatarUrl}}" alt="{{name}}" class="sdrn-group-crest-img" />
+          {{else if img}}
+          <img src="{{img}}" alt="{{name}}" class="sdrn-group-crest-img" />
+          {{else}}
           <i class="fas fa-shield-alt"></i>
-        </div>
+          {{/if}}
+          <span class="sdrn-crest-edit-overlay"><i class="fas fa-camera"></i></span>
+        </button>
         <div class="sdrn-group-identity">
           <div class="sdrn-group-title-row">
-            <input type="text" class="sdrn-group-name-input" name="name" value="{{name}}" placeholder="Party Name" />
+            <input type="text" class="sdrn-group-name-input" name="name" value="{{name}}" placeholder="Party Name" autocomplete="off" />
             {{#if _isPrimary}}
             <span class="sdrn-primary-badge" title="Designated as the primary adventuring party"><i class="fas fa-star"></i> PRIMARY PARTY</span>
             {{else}}
             <button type="button" class="sdrn-set-primary-btn" data-action="set-primary-party" title="Set as primary party for encounter budgeting">Set Primary</button>
             {{/if}}
           </div>
-          <div class="sdrn-group-subtitle">ADVENTURING COMPANY &bull; {{_members.length}} ACTIVE MEMBERS</div>
+          <div class="sdrn-group-meta-row">
+            <span class="sdrn-group-subtitle">ADVENTURING COMPANY &bull; {{_members.length}} ACTIVE MEMBERS</span>
+          </div>
         </div>
       </div>
 

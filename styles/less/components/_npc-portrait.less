@@ -1,0 +1,402 @@
+// NPC portrait & HP module: Quadrante 1 (Top-Left)
+// O Retrato tem D20 e CA nas bordas, e o HP fica logo abaixo em fluxo normal (NUNCA por cima do dragão nem na base da tela!)
+.sdrn-npc-root {
+
+  .sdrn-quadrant-1,
+  .sdrn-quadrant-top-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  // Barra Superior do Q1: Cadeado no canto esquerdo + Seletor de Arte/Token em Edição
+  .sdrn-q1-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 28px;
+    margin-bottom: 2px;
+    padding: 0 4px;
+    box-sizing: border-box;
+  }
+
+  .sdrn-mode-toggle-mini {
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    min-height: 26px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 4px !important;
+    background: #1a1612 !important;
+    border: 1px solid rgba(184, 146, 58, 0.45) !important;
+    color: #ffd276 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5) !important;
+    transition: all 0.15s ease !important;
+
+    i {
+      font-size: 13px !important;
+      color: #ffd276 !important;
+      line-height: 1 !important;
+      margin: 0 !important;
+    }
+
+    &:hover {
+      background: #282119 !important;
+      border-color: #ffd276 !important;
+      color: #ffffff !important;
+      transform: translateY(-1px);
+
+      i {
+        color: #ffffff !important;
+      }
+    }
+
+    &[aria-pressed="true"] {
+      background: rgba(184, 146, 58, 0.25) !important;
+      border-color: #ffd276 !important;
+
+      i {
+        color: #ffd276 !important;
+      }
+    }
+  }
+
+  .sdrn-portrait-source {
+    position: static !important;
+    inset: auto !important;
+    width: auto !important;
+    display: none !important;
+    gap: 2px !important;
+    background: #1a1612 !important;
+    border: 1px solid rgba(184, 146, 58, 0.35) !important;
+    border-radius: 4px !important;
+    padding: 2px 4px !important;
+    box-sizing: border-box !important;
+
+    button {
+      background: transparent !important;
+      border: none !important;
+      color: #a3947c !important;
+      font-size: 9px !important;
+      font-weight: 700 !important;
+      padding: 2px 6px !important;
+      cursor: pointer !important;
+      border-radius: 2px !important;
+      line-height: 1 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      transition: all 0.12s ease !important;
+
+      &[aria-pressed="true"] {
+        background: rgba(184, 146, 58, 0.35) !important;
+        color: #ffd276 !important;
+      }
+
+      &:hover:not([aria-pressed="true"]) {
+        color: #ffffff !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+      }
+    }
+  }
+
+  &.is-editing .sdrn-portrait-source {
+    display: inline-flex !important;
+  }
+
+  .sdrn-portrait-wrapper,
+  .sdrn-npc-portrait-ring-wrap {
+    position: relative;
+    width: 124px;
+    height: 124px;
+    flex-shrink: 0;
+    margin: 0 auto;
+  }
+
+  .sdrn-npc-portrait-ring {
+    width: 124px;
+    height: 124px;
+    border-radius: 50%;
+    border: 3px solid #c99738;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+    position: relative;
+    background: #14120f;
+  }
+
+  .sdrn-npc-portrait-btn {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    display: block;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .sdrn-npc-portrait-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+  }
+
+  .sdrn-npc-portrait-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+    color: #c99738;
+    border-radius: 50%;
+  }
+
+  .sdrn-portrait-edit-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+
+  .sdrn-npc-portrait-btn:hover .sdrn-portrait-edit-overlay {
+    opacity: 1;
+  }
+
+  // D20 Badge de Iniciativa (Topo Direito do Círculo)
+  .sdrn-npc-d20-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 32px;
+    height: 32px;
+    background: #1a1612;
+    border: 1.5px solid #c99738;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+      background: #262019;
+      border-color: #ffd276;
+      transform: scale(1.08);
+    }
+  }
+
+  .sdrn-d20-icon {
+    font-size: 9px;
+    color: #c99738;
+    line-height: 1;
+  }
+
+  .sdrn-d20-val {
+    font-size: 11px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+  }
+
+  // Escudo de CA (Base Esquerda do Círculo)
+  .sdrn-npc-ac-shield {
+    position: absolute;
+    bottom: -2px;
+    left: -4px;
+    width: 36px;
+    height: 42px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.9));
+  }
+
+  .sdrn-ac-shield-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .sdrn-ac-shield-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: -2px;
+  }
+
+  .sdrn-ac-shield-lbl {
+    font-size: 7px;
+    font-weight: 800;
+    color: #c99738;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .sdrn-ac-shield-num {
+    width: 24px !important;
+    background: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    text-align: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-appearance: none !important;
+    appearance: textfield !important;
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════════
+  // MÓDULO DE HP: EM FLUXO NORMAL LOGO ABAIXO DO RETRATO!
+  // NUNCA POSITION: ABSOLUTE! NUNCA EM CIMA DO DRAGÃO NEM NO FUNDO DA TELA!
+  // ══════════════════════════════════════════════════════════════════════════════
+  .sdrn-hp-block,
+  .sdrn-npc-hp-module {
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    margin: 4px 0 0 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .sdrn-hp-bar {
+    width: 100%;
+    height: 22px;
+    background: #0f1117;
+    border: 1.5px solid rgba(201, 161, 90, 0.45);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+    box-sizing: border-box;
+  }
+
+  .sdrn-hp-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, #15803d 0%, #22c55e 100%);
+    z-index: 1;
+    transition: width 0.3s ease;
+    pointer-events: none;
+  }
+
+  .sdrn-hp-bar-text {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: 11px;
+    font-weight: 800;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+    gap: 2px;
+  }
+
+  .sdrn-hp-cur,
+  .sdrn-hp-max {
+    width: 26px !important;
+    background: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    -webkit-appearance: none !important;
+    appearance: textfield !important;
+  }
+
+  .sdrn-bar-sep {
+    opacity: 0.6;
+    font-size: 10px;
+  }
+
+  // Controles Rápidos de Vida (Curar / Dano)
+  .sdrn-quick-hp {
+    display: grid !important;
+    grid-template-columns: 44px 1fr 1fr !important;
+    gap: 4px !important;
+    width: 100% !important;
+
+    input[data-quick-hp] {
+      height: 22px !important;
+      background: #1a1612 !important;
+      border: 1px solid rgba(184, 146, 58, 0.35) !important;
+      border-radius: 3px !important;
+      color: #ffffff !important;
+      font-size: 11px !important;
+      font-weight: 800 !important;
+      text-align: center !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      outline: none !important;
+      -webkit-appearance: none !important;
+      appearance: textfield !important;
+    }
+
+    button {
+      height: 22px !important;
+      background: #1e1914 !important;
+      border: 1px solid rgba(184, 146, 58, 0.35) !important;
+      border-radius: 3px !important;
+      color: #e8d8b8 !important;
+      font-size: 10px !important;
+      font-weight: 700 !important;
+      cursor: pointer;
+      padding: 0 !important;
+      transition: all 0.15s ease;
+
+      &:hover {
+        background: #2a221a !important;
+        border-color: #ffd276 !important;
+        color: #ffffff !important;
+      }
+    }
+  }
+
+}

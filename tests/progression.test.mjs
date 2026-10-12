@@ -739,6 +739,9 @@ test('Wizard Scholar selects one already-proficient listed skill for Expertise',
   assert.equal(resolveWizardScholarChoice({ stealth: { proficient: true } }, 'stealth').reason, 'unsupported-skill');
   assert.equal(resolveWizardScholarChoice({ arcana: { proficient: true, multiplier: 2 } }, 'arcana').reason, 'expertise-already-set');
   assert.equal(resolveWizardScholarChoice({ arcana: { proficient: true, multiplier: 2 } }, 'arcana', 'arcana').valid, true);
+  assert.deepEqual(resolveWizardScholarChoice({}, 'arcana', '', { allowFallback: true }), {
+    valid: true, skill: 'arcana', multiplier: 2, grantedProficiency: true,
+  });
 });
 
 test('Wizard Ritual Adept allows unprepared rituals only from that Wizard spellbook', () => {

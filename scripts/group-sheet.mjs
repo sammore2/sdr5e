@@ -12,19 +12,34 @@ function groupXpText(key, values = {}) {
 }
 
 export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
-  static DEFAULT_OPTIONS = { position: { width: 600, height: 500 } };
+  static DEFAULT_OPTIONS = { position: { width: 720, height: 620 } };
   static PARTS = { main: { template: '/marketplace/rulesets/srd5e/templates/group-sheet.hbs' } };
 
   constructor(props) {
     super({
       ...props,
-      id: props?.id || `group-sheet-${props?.actorId}`,
+      id: props?.id || `actor-sheet-${props?.actorId}`,
       documentId: props.actorId,
-      title: props.title || 'Group',
+      title: (props.title && props.title !== 'undefined') ? props.title : (props.document?.name || 'Group'),
       showFooter: false,
       resizable: true,
+      allowOverflow: true,
       classes: ['sdrn-sheet', 'sdrn-group-sheet'],
     });
+  }
+
+  setZ(z) {
+    try {
+      if (typeof super.setZ === 'function') {
+        super.setZ(z);
+        return;
+      }
+    } catch {
+      // Safely ignore if base-window accesses style before window mount
+    }
+    if (this.element?.style) {
+      this.element.style.zIndex = String(z);
+    }
   }
 
   _hasDropListener = false;
@@ -91,7 +106,8 @@ export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     return {
       ...context,
       ...this.document,
-      name: this.document?.name || '',
+      avatarUrl: this.document?.avatarUrl || this.document?.imgUrl || this.document?.img || '',
+      name: (this.document?.name && this.document.name !== 'undefined') ? this.document.name : (this.options?.title || 'Party'),
       systemData: sd,
       _members: memberInfos,
       _currency: currency,
@@ -451,7 +467,11 @@ export class Sdr5eGroupSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     await this._reloadDocument();
   }
 
-  get title(){ return this.document?.name || 'Group'; }
+  get title() {
+    return (this.document?.name && this.document.name !== 'undefined')
+      ? this.document.name
+      : (this.options?.title || 'Group');
+  }
   get documentName(){ return 'actor'; }
   get apiRoute(){ return '/actors'; }
   get dataKey(){ return 'systemData'; }

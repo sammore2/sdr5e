@@ -170,6 +170,7 @@ export async function getActorConditions(actorId) {
       if (c.actorId !== actorId) continue;
       for (const m of (c.statusMarkers || [])) set.add(m);
     }
+    for (const cond of (actor?.systemData?.conditions || [])) set.add(cond);
     const characterStyle = actor?.type === 'character' || actor?.type === 'npc' && actor.systemData?.details?.useCharacterDeathSaves === true;
     if (characterStyle && (Number(actorHealth?.value) || 0) <= 0 && actor?.systemData?.resources?.deathState !== 'dead') set.add('unconscious');
     if (actor?.systemData?.resources?.knockedOut === true) set.add('unconscious');

@@ -1,0 +1,33 @@
+// Editable fields on the parchment (light) character sheet: they take the sheet's own colour instead of the
+// dark form-control background the legacy stylesheet forces on every sheet.
+@ink: #241c14;
+@hairline: rgba(36, 28, 20, 0.28);
+@focus: rgba(165, 120, 40, 0.65);
+
+.sdrn-root:not(.sdrn-npc-root) [data-tab-content="details"],
+.sdrn-root:not(.sdrn-npc-root) [data-tab-content="actions"] {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select {
+    background: transparent !important;
+    color: @ink !important;
+    border: 0 !important;
+    border-bottom: 1px solid @hairline !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  textarea {
+    background: rgba(36, 28, 20, 0.04) !important;
+    color: @ink !important;
+    border: 1px solid @hairline !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: 1px solid @focus !important;
+    outline-offset: -1px;
+  }
+}

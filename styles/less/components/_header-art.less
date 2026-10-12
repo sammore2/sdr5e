@@ -1,0 +1,28 @@
+// Header art: a picture behind the title with a dark gradient on top; without a picture the gold-to-black fallback shows.
+.sdrn-npc-root .sdrn-npc-header-art {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: #14110d;
+  background-image: linear-gradient(135deg, rgba(184, 146, 58, 0.18), rgba(10, 9, 8, 0.96));
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+}
+
+.sdrn-npc-root .sdrn-npc-header-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(10, 9, 8, 0.92), rgba(10, 9, 8, 0.55));
+}
+
+.sdrn-npc-root .sdrn-npc-header-main {
+  position: relative;
+  isolation: isolate;
+}
+
+.sdrn-npc-root .sdrn-npc-header-main > *:not(.sdrn-npc-header-art) {
+  position: relative;
+  z-index: 1;
+}

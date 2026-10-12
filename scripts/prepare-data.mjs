@@ -12,7 +12,7 @@
 import { ABILITY_KEYS, SPELL_SLOT_TABLE, pactMagicAtLevel, SIZE_CARRY_MULTIPLIER, MOVEMENT_TYPES, SENSE_TYPES, feetToMeters } from './config.mjs';
 import { getSetting } from './settings.mjs';
 import { getDefaultData } from './schema.mjs';
-import { mergeDefaults } from './utils.mjs';
+import { mergeDefaults, setItemSystemData } from './utils.mjs';
 import { BARBARIAN_FAST_MOVEMENT_BONUS, hasBarbarianFastMovement } from './movement-mechanics.mjs';
 import { initiativeTieBreakBonus } from './initiative-mechanics.mjs';
 import { clericDivineOrderSkillBonus } from './divine-order.mjs';
@@ -596,10 +596,9 @@ export function prepareActorRow(row) {
 // Charisma sync. Spent uses carry over inside syncedRangerWisdomUses.
 function syncPreparedRangerUses(items, wisdomModifier) {
   for (const item of items) {
-    const key = item?.system ? 'system' : 'data';
-    const idata = item?.[key] || {};
+    const idata = item?.systemData || item?.system || item?.data || {};
     const synced = syncedRangerWisdomUses(idata, wisdomModifier);
-    if (synced) item[key] = { ...idata, uses: synced };
+    if (synced) setItemSystemData(item, { uses: synced });
   }
 }
 
@@ -609,10 +608,9 @@ function syncPreparedRangerUses(items, wisdomModifier) {
 function syncPreparedFighterUses(items) {
   const fighterLevel = fighterClassLevel(items);
   for (const item of items) {
-    const key = item?.system ? 'system' : 'data';
-    const idata = item?.[key] || {};
+    const idata = item?.systemData || item?.system || item?.data || {};
     const synced = syncedFighterFeatureUses(idata, fighterLevel);
-    if (synced) item[key] = { ...idata, uses: synced };
+    if (synced) setItemSystemData(item, { uses: synced });
   }
 }
 

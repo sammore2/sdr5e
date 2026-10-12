@@ -20,6 +20,7 @@ import { bardicInspirationDieAtLevel, syncBardicInspiration } from './bardic-ins
 import { rangerFavoredEnemyUsesAtLevel, syncRangerFavoredEnemyUses } from './ranger-favored-enemy.mjs';
 import { monkFocusPointsAtLevel, syncMonkFocusUses } from './monk-focus.mjs';
 import { resolveWeaponMasteryFeatureData } from './weapon-mastery.mjs';
+import { setItemSystemData } from './utils.mjs';
 
 /**
  * `fromLevel` exclusive, `toLevel` inclusive — same convention as the level-
@@ -99,8 +100,7 @@ export async function grantClassFeatures(worldId, actorId, classIdentifier, from
     if (existing) {
       await api.put(`/items/${existing.id}`, { name: entry.name, data: entryData });
       existing.name = entry.name; // keep local list consistent for any later tier in this same batch
-      existing.system = entryData;
-      existing.data = entryData;
+      setItemSystemData(existing, entryData);
     } else {
       // A failed attempt can be retried after some features were already
       // created. Their class/level/name tuple is stable in the content pack,
@@ -119,8 +119,7 @@ export async function grantClassFeatures(worldId, actorId, classIdentifier, from
       const nextData = { ...rageData, uses: syncRageUses(rageData.uses, toLevel) };
       if (JSON.stringify(nextData.uses) !== JSON.stringify(rageData.uses)) {
         await api.put(`/items/${rage.id}`, { data: nextData });
-        rage.system = nextData;
-        rage.data = nextData;
+        setItemSystemData(rage, nextData);
       }
     }
   }
@@ -137,8 +136,7 @@ export async function grantClassFeatures(worldId, actorId, classIdentifier, from
       mechanicsSupport: { ...(inspirationData.mechanicsSupport || {}), manualNoticeKey: 'SDR5E.ClassFeatures.BardicInspirationManual' } };
     if (JSON.stringify(nextData) !== JSON.stringify(inspirationData)) {
       await api.put(`/items/${inspiration.id}`, { data: nextData });
-      inspiration.system = nextData;
-      inspiration.data = nextData;
+      setItemSystemData(inspiration, nextData);
     }
   }
 
@@ -153,8 +151,7 @@ export async function grantClassFeatures(worldId, actorId, classIdentifier, from
     const nextData = { ...data, uses: syncRangerFavoredEnemyUses(data.uses, toLevel) };
     if (JSON.stringify(nextData.uses) !== JSON.stringify(data.uses)) {
       await api.put(`/items/${favoredEnemy.id}`, { data: nextData });
-      favoredEnemy.system = nextData;
-      favoredEnemy.data = nextData;
+      setItemSystemData(favoredEnemy, nextData);
     }
   }
 
@@ -169,8 +166,7 @@ export async function grantClassFeatures(worldId, actorId, classIdentifier, from
     const nextData = { ...data, uses: syncMonkFocusUses(data.uses, toLevel) };
     if (JSON.stringify(nextData.uses) !== JSON.stringify(data.uses)) {
       await api.put(`/items/${focus.id}`, { data: nextData });
-      focus.system = nextData;
-      focus.data = nextData;
+      setItemSystemData(focus, nextData);
     }
   }
 }

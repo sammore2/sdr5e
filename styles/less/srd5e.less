@@ -1,0 +1,17 @@
+// Entry point for styles/srd5e.css.
+// Kept as a CSS import so LESS leaves it in the output instead of downloading and inlining it.
+@import (css) url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap');
+// The legacy stylesheet comes first; component files after it win ties by order.
+@import "legacy/_srd5e.less";
+@import "components/_fields-parchment.less";
+@import "components/_titles-full.less";
+@import "components/_actions-panel.less";
+@import "components/_npc-shell.less";
+@import "components/_header-art.less";
+@import "components/_ability-band.less";
+@import "components/_npc-portrait.less";
+@import "components/_npc-blocks.less";
+@import "components/_lock-mode.less";
+@import "components/_tooltip.less";
+@import "components/_npc-stage.less";
+@import "components/_active-effects.less";

@@ -12,7 +12,7 @@
 // ══════════════════════════════════════════════════════════════════════════
 
 import { LoomHandlebarsMixin, LoomActorSheet, effects, api, windowManager, showToast, LoomDialog } from '/_loom/sdk/index.js';
-import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON, ITEM_TYPE_LABEL, ITEM_TYPE_SINGULAR, SIZE_LABELS, SIZE_CARRY_MULTIPLIER, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, DAMAGE_TYPES, DAMAGE_TYPE_LABELS } from './config.mjs';
+import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON, ITEM_TYPE_LABEL, ITEM_TYPE_SINGULAR, SIZE_LABELS, SIZE_CARRY_MULTIPLIER, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, DAMAGE_TYPES, DAMAGE_TYPE_LABELS, MULTICLASS_PREREQS } from './config.mjs';
 import { fmtMod, setPathValue, currentAdvantageMode, passiveScore } from './utils.mjs';
 import { initiativeBaseSources } from './initiative-mechanics.mjs';
 import { getSetting } from './settings.mjs';
@@ -41,6 +41,8 @@ import { clearDodgeRecord, dodgeActionView, setDodgeRecord } from './dodge-mecha
 import { composeInfluenceAdvantage, influenceFormView, resolveInfluenceAdjudication } from './influence-mechanics.mjs';
 import { addDashMovementBonus, addMovementSegment, normalizeMovementLedger, removeDashMovementBonus, removeMovementSegment, resetMovementLedger } from './movement-mechanics.mjs';
 import { resolveMovementSheetContext } from './movement-sheet-context.mjs';
+import { attachSideTabs, detachSideTabs } from './side-tabs.mjs';
+import { getEffectsSheetData, toggleActorCondition, clearAllActorConditions, applyBuffPresetToActor, deleteActiveEffect, toggleEffectDisabled, promptCreateCustomEffect } from './active-effects-helper.mjs';
 
 const localizeSheet = (key) => window.Loom?.i18n?.localize?.(key) || key;
 
@@ -335,6 +337,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     await super.mount();
     this._applyActiveTab();
     this._detachSideTabs();
+    this._applyEditMode();
     this._attachDropListener();
     this._attachDragListener();
     this._attachMovementCastSelector();
@@ -344,6 +347,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (typeof super._postRender === 'function') super._postRender();
     this._applyActiveTab();
     this._detachSideTabs();
+    this._applyEditMode();
     this._attachDropListener();
     this._attachDragListener();
     this._attachMovementCastSelector();
@@ -416,6 +420,17 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       if (!source) return;
 
       const itemType = source.type || 'item';
+
+      if (itemType === 'class') {
+        const classIdentifier = (source.system || source.data || {}).classIdentifier;
+        const existingClass = (this.document.items || []).find((i) => i.type === 'class'
+          && (i.system?.classIdentifier || i.data?.classIdentifier) === classIdentifier);
+        if (existingClass) {
+          showToast?.(`Esta ficha já possui a classe ${source.name}. Use o Level Up para subir de nível.`, 'warning');
+          return;
+        }
+      }
+
       await api.post('/items', {
         worldId: window.Loom?.world?.id || this.document.worldId,
         name: source.name,
@@ -424,6 +439,18 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         data: source.system || source.data || getDefaultData(itemType),
         actorId: this.document.id,
       });
+
+      if (itemType === 'class') {
+        const classIdentifier = (source.system || source.data || {}).classIdentifier;
+        if (classIdentifier) {
+          const { grantClassFeatures } = await import('./class-features.mjs');
+          const worldId = window.Loom?.world?.id || this.document.worldId;
+          const cha = this.document.systemData?.abilities?.cha?.value ?? 10;
+          await grantClassFeatures(worldId, this.document.id, classIdentifier, 0, 1, this.document.items || [], { charismaScore: cha }).catch((err) => {
+            console.warn('[srd5e] Failed to grant starting class features on class drop:', err);
+          });
+        }
+      }
 
       if (itemType === 'language') {
         const sd = this.document.systemData || {};
@@ -471,48 +498,17 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
    * means clicks on it no longer bubble through the window's own listener.
    */
   _detachSideTabs() {
-    // `_postRender` can fire more than once per mount (base class's own
-    // render pipeline, then this override) — if there's no FRESH nav
-    // sitting inside `this.element` this pass, the one from the previous
-    // pass is already correctly floating outside; cleaning it up here
-    // would destroy it and find nothing to put back (real bug found live:
-    // the tab bar vanished completely, `document.querySelector` came back
-    // null both inside the window AND in `#windows`, meaning the second
-    // pass's cleanup ran with no replacement to append).
-    const nav = this.element?.querySelector('.sdrn-side-tabs');
-    if (!nav) return;
-    this._cleanupSideTabs();
-    const container = this.element?.parentElement;
-    if (!container) return;
-    container.appendChild(nav);
-    nav.style.position = 'fixed';
-    nav.addEventListener('click', (event) => {
+    attachSideTabs(this, (event) => {
       const btn = event.target instanceof Element ? event.target.closest('[data-action]') : null;
       if (!btn) return;
       const action = btn.dataset.action;
       const id = btn.dataset.id || btn.closest('[data-id]')?.dataset.id || null;
       if (typeof this.onAction === 'function') this.onAction(action, id, btn);
     });
-    this._sideTabsEl = nav;
-    const sync = () => {
-      if (!this._sideTabsEl?.isConnected || !this.element?.isConnected) return;
-      const r = this.element.getBoundingClientRect();
-      // Flush against the window edge, no gap (matches wod6e's `.cp-side-tabs`
-      // look, which touches at exactly `left:-52px` — 0px reveal). `-1px`
-      // instead of `0` to guarantee the seam is covered even with subpixel
-      // rounding on the window's own border.
-      this._sideTabsEl.style.left = `${r.right - 1}px`;
-      this._sideTabsEl.style.top = `${r.top + 40}px`;
-      this._sideTabsRaf = requestAnimationFrame(sync);
-    };
-    sync();
   }
 
   _cleanupSideTabs() {
-    if (this._sideTabsRaf) cancelAnimationFrame(this._sideTabsRaf);
-    this._sideTabsRaf = null;
-    this._sideTabsEl?.remove();
-    this._sideTabsEl = null;
+    detachSideTabs(this);
   }
 
   _applyActiveTab() {
@@ -848,11 +844,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       multiplier: sizeMultiplier,
     };
 
-    const rawEffects = this.document?.id ? await effects.forActor(this.document.id).catch(() => []) : [];
-    const _effects = (rawEffects || []).map((e) => ({
-      ...e,
-      durationLabel: e.duration < 0 ? 'Permanent' : `${e.duration} round${e.duration === 1 ? '' : 's'}`,
-    }));
+    const effectsData = await getEffectsSheetData(this.document);
 
     // SRD (Characterizations/Multiclassing.md, "Prerequisites") — só checa
     // de verdade com 2+ classes; com 0 ou 1, não há "multiclasse" pra
@@ -933,7 +925,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         needsReview: !!res.pactMagic?.needsReview,
       },
       _spellcasting,
-      _effects,
+      ...effectsData,
       _prof: fmtMod(attrs.prof?.value ?? 2),
       _profValue: attrs.prof?.value ?? 2,
       _ac: attrs.da?.value ?? 10,
@@ -1023,7 +1015,82 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     };
   }
 
-  onAction(action, id, target) {
+  // Lock/edit mode: 'Jogo' (locked) turns every field into plain text; 'Edição' (default) shows the editing controls.
+  _applyEditMode() {
+    const root = this.element;
+    if (!root) return;
+    if (this._editMode === undefined) this._editMode = false;
+    root.querySelector('.sdrn-root')?.classList.toggle('is-editing', this._editMode);
+    root.querySelectorAll('input, select, textarea').forEach((el) => {
+      if (el.hasAttribute('data-always-on')) return;
+      el.disabled = !this._editMode;
+    });
+    const btn = root.querySelector('[data-action="toggle-edit-mode"]');
+    if (btn) {
+      btn.setAttribute('aria-pressed', String(this._editMode));
+      btn.querySelector('i')?.setAttribute('class', this._editMode ? 'fas fa-lock-open' : 'fas fa-lock');
+      const label = btn.querySelector('.sdrn-mode-label');
+      if (label) label.textContent = this._editMode ? 'Edição' : 'Jogo';
+    }
+  }
+
+  async onAction(action, id, target) {
+    if (action === 'toggle-condition') {
+      const condId = target?.dataset?.condition;
+      if (condId && this.document) {
+        await toggleActorCondition(this.document, condId);
+        await this._reloadDocument();
+      }
+      return;
+    }
+    if (action === 'clear-conditions') {
+      if (this.document) {
+        await clearAllActorConditions(this.document);
+        await this._reloadDocument();
+      }
+      return;
+    }
+    if (action === 'apply-buff-preset') {
+      const presetId = target?.dataset?.presetId;
+      if (presetId && this.document) {
+        await applyBuffPresetToActor(this.document, presetId);
+        await this._reloadDocument();
+      }
+      return;
+    }
+    if (action === 'create-custom-effect') {
+      if (this.document) {
+        await promptCreateCustomEffect(this.document, () => this._reloadDocument());
+      }
+      return;
+    }
+    if (action === 'delete-effect') {
+      const effId = target?.dataset?.id || id;
+      if (effId) {
+        await deleteActiveEffect(effId);
+        await this._reloadDocument();
+      }
+      return;
+    }
+    if (action === 'toggle-effect-disabled') {
+      const effId = target?.dataset?.id || id;
+      if (effId) {
+        const isCurrentlyDisabled = target.closest('.sdrn-effect-row')?.classList?.contains('is-disabled');
+        await toggleEffectDisabled(effId, !!isCurrentlyDisabled);
+        await this._reloadDocument();
+      }
+      return;
+    }
+    // The portrait opens the engine's layered art editor instead of the plain file picker.
+    if (action === 'pick-portrait') {
+      if (this.document?.id) window.Loom?.openPortraitEditor?.(this.document.id);
+      return;
+    }
+    if (action === 'toggle-edit-mode') {
+      this._editMode = !this._editMode;
+      this._applyEditMode();
+      return;
+    }
     if (action === 'movement-ledger-add') {
       void this._addMovementSegment(target);
       return;

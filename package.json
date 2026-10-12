@@ -7,7 +7,9 @@
     "test": "node --test",
     "check": "npm test && npm run verify",
     "packs:export": "node scripts/pack-sources.mjs export",
-    "packs:build": "node scripts/pack-sources.mjs build"
+    "packs:build": "node scripts/pack-sources.mjs build",
+    "css": "gulp css",
+    "css:watch": "gulp cssWatch"
   },
   "browserslist": [
     "last 3 versions"
@@ -42,7 +44,8 @@
     "globals": "^15.15.0",
     "gulp": "^5.0.1",
     "gulp-concat": "^2.6.1",
-    "gulp-less": "^5.0.0"
+    "gulp-less": "^5.0.0",
+    "less": "^4.2.0"
   },
   "dependencies": {
     "get-shit-done-cc": "^1.40.0"

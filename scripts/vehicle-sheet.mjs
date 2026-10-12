@@ -63,9 +63,17 @@ export class Sdr5eVehicleSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     this._sideTabsEl = nav;
     const sync = () => {
       if (!this._sideTabsEl?.isConnected || !this.element?.isConnected) return;
+      if (this.element.style.display === 'none' || this.element.hidden) {
+        this._sideTabsEl.style.display = 'none';
+        this._sideTabsRaf = requestAnimationFrame(sync);
+        return;
+      }
+      this._sideTabsEl.style.display = 'flex';
       const r = this.element.getBoundingClientRect();
       this._sideTabsEl.style.left = `${r.right - 1}px`;
       this._sideTabsEl.style.top = `${r.top + 40}px`;
+      const winZ = parseInt(window.getComputedStyle(this.element).zIndex, 10) || 100;
+      this._sideTabsEl.style.zIndex = String(winZ + 1);
       this._sideTabsRaf = requestAnimationFrame(sync);
     };
     sync();
