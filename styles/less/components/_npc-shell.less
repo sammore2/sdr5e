@@ -1,0 +1,119 @@
+// NPC sheet shell: 2 DIVS PRINCIPAIS (Top Half & Bottom Half) com 4 QUADRANTES
+// Linha de cima (sdrn-top-half): Q1 (Retrato+HP) e Q2 (Nome, Atributos) — NUNCA DÁ SCROLL!
+// Linha de baixo (sdrn-bottom-half): Q3 (Chips) e Q4 (Tabelas) — ROLÁVEL!
+.sdrn-npc-root {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  background: #14120f !important; // Dark obsidian/charcoal quente
+  color: #e8d8b8 !important;
+  box-sizing: border-box !important;
+  padding-top: 42px !important; // Clearance total para a barra superior e botão 'X'
+
+  .sdrn-npc-body {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+  }
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // DIV 1: PARTE DE CIMA (FIXA — NUNCA DÁ SCROLL!)
+  // ════════════════════════════════════════════════════════════════════════════
+  .sdrn-top-half {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    gap: 14px !important;
+    width: 100% !important;
+    overflow: visible !important;
+    padding: 0 14px 8px 14px !important;
+    box-sizing: border-box !important;
+    border-bottom: 1px solid rgba(184, 146, 58, 0.28) !important;
+    background: transparent !important;
+    position: relative !important;
+    z-index: 5 !important;
+  }
+
+  // QUADRANTE 1 (Top-Left, 215px): Retrato Hero + HP
+  .sdrn-quadrant-1 {
+    width: 215px !important;
+    min-width: 215px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+
+  // QUADRANTE 2 (Top-Right, 1fr): Nome, Descansos, XP, CR e Atributos
+  .sdrn-quadrant-2 {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // DIV 2: PARTE DE BAIXO (ROLÁVEL)
+  // ════════════════════════════════════════════════════════════════════════════
+  .sdrn-bottom-half {
+    flex: 1 1 auto !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    gap: 14px !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    padding: 8px 14px 10px 14px !important;
+    box-sizing: border-box !important;
+  }
+
+  // QUADRANTE 3 (Bottom-Left, 215px): Chips
+  .sdrn-quadrant-3 {
+    width: 215px !important;
+    min-width: 215px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+    padding-right: 4px !important;
+    border-right: 1px solid rgba(184, 146, 58, 0.22) !important;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(184, 146, 58, 0.3) transparent;
+  }
+
+  // QUADRANTE 4 (Bottom-Right, 1fr): Tabelas de Features e Actions (ROLA!)
+  .sdrn-quadrant-4 {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    padding-right: 4px !important;
+    position: relative !important;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(184, 146, 58, 0.35) transparent;
+  }
+}

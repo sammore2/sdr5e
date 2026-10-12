@@ -1,0 +1,331 @@
+// NPC rail blocks: saves, passive senses seals, compact sidebar chips, proficiencies, quick HP controls.
+.sdrn-npc-root {
+  .sdrn-npc-saves {
+    margin: 0 0 10px;
+  }
+
+  .sdrn-npc-block-title {
+    margin: 0 0 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #b8923a;
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════════
+  // COMPACT SIDEBAR (Coluninha Esquerda no Corpo Div 2 - Sem scroll interno)
+  // ══════════════════════════════════════════════════════════════════════════════
+  .sdrn-npc-rail-chips,
+  .sdrn-npc-compact-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    border-right: none;
+    min-height: 100%;
+    box-sizing: border-box;
+
+    // Em modo jogo, seções vazias que não têm chips somem
+    &:not(.is-editing) .sdrn-compact-section:not(:has(.sdrn-compact-chip, .sdrn-passive-seal)) {
+      display: none;
+    }
+  }
+
+  .sdrn-compact-chip-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 8px;
+    background: rgba(184, 146, 58, 0.08);
+    border: 1px solid rgba(184, 146, 58, 0.35);
+    border-radius: 4px;
+    font-size: 11px;
+
+    .sdrn-chip-label {
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #b8923a;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .sdrn-chip-val {
+      font-weight: 800;
+      color: #f0c968;
+    }
+  }
+
+  .sdrn-compact-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .sdrn-compact-section-hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    min-height: 26px;
+    margin-bottom: 2px;
+    overflow: visible;
+
+    .sdrn-stat-subhead {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #b8923a;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+  }
+
+  .sdrn-npc-quick-select {
+    height: 24px !important;
+    min-height: 24px !important;
+    line-height: 22px !important;
+    font-family: inherit !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    padding: 0 6px !important;
+    background: #1a1612 !important;
+    border: 1px solid rgba(184, 146, 58, 0.45) !important;
+    border-radius: 4px !important;
+    color: #f0c968 !important;
+    cursor: pointer !important;
+    max-width: 95px !important;
+    box-sizing: border-box !important;
+    outline: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    vertical-align: middle !important;
+    appearance: menulist !important;
+    -webkit-appearance: menulist !important;
+
+    option {
+      background: #14120f !important;
+      color: #e8d8b8 !important;
+      font-size: 11px !important;
+      padding: 4px 6px !important;
+    }
+
+    &:hover {
+      border-color: #ffd276 !important;
+      background: #241e18 !important;
+      color: #ffffff !important;
+    }
+  }
+
+  .sdrn-chips-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .sdrn-compact-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 6px;
+    font-size: 11px;
+    line-height: 1.25;
+    background: rgba(22, 19, 15, 0.85);
+    border: 1px solid rgba(184, 146, 58, 0.32);
+    border-radius: 3px;
+    color: #e8d8b8;
+    white-space: nowrap;
+    box-sizing: border-box;
+    transition: all 0.15s ease;
+
+    b {
+      color: #f0c968;
+      font-weight: 700;
+      margin-left: 2px;
+    }
+
+    small {
+      font-size: 9px;
+      text-transform: uppercase;
+      color: #b8923a;
+      background: rgba(184, 146, 58, 0.15);
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+
+    &.skill {
+      cursor: pointer;
+      &:hover {
+        background: rgba(35, 30, 22, 0.95);
+        border-color: #f0c968;
+        color: #fff;
+      }
+    }
+
+    &.gear {
+      border-color: rgba(184, 146, 58, 0.25);
+      color: #d4c4a8;
+    }
+
+    &.trait {
+      border-color: rgba(160, 50, 50, 0.45);
+      background: rgba(28, 16, 16, 0.8);
+      &.dmg-res { border-color: rgba(60, 120, 180, 0.5); }
+      &.dmg-vuln { border-color: rgba(180, 60, 60, 0.5); }
+      &.ci { border-color: rgba(140, 60, 180, 0.5); }
+    }
+  }
+
+  .sdrn-empty-chip {
+    font-size: 10px;
+    color: rgba(212, 196, 168, 0.4);
+    font-style: italic;
+    padding: 2px 4px;
+  }
+
+  .sdrn-tag-del-btn {
+    background: transparent;
+    border: none;
+    color: rgba(212, 196, 168, 0.4);
+    font-size: 12px;
+    padding: 0 0 0 2px;
+    cursor: pointer;
+    line-height: 1;
+
+    &:hover {
+      color: #ff5555;
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════════
+  // PASSIVE SEALS (3 Selos Dourados)
+  // ══════════════════════════════════════════════════════════════════════════════
+  .sdrn-passive-seals {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  .sdrn-passive-seal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 2px;
+    border: 1px solid rgba(184, 146, 58, 0.45);
+    border-radius: 4px;
+    background: rgba(20, 17, 14, 0.9);
+    min-width: 0;
+
+    .sdrn-passive-val {
+      font-size: 13px;
+      font-weight: 800;
+      color: #f0c968;
+      line-height: 1.1;
+    }
+
+    .sdrn-passive-lbl {
+      font-size: 9px;
+      color: rgba(212, 196, 168, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip;
+      max-width: 100%;
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════════
+  // LEGACY SENSE / PROF TAG COMPATIBILITY
+  // ══════════════════════════════════════════════════════════════════════════════
+  .sdrn-save-pill {
+    display: grid;
+    grid-template-columns: 14px 1fr auto;
+    align-items: center;
+    gap: 6px;
+    min-height: 28px;
+    padding: 0 8px;
+    border: 1px solid rgba(184, 146, 58, 0.55);
+    border-radius: 4px;
+    background: rgba(18, 16, 13, 0.9);
+    color: inherit;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .sdrn-save-disc {
+    width: 10px;
+    height: 10px;
+    border: 1px solid #b8923a;
+    border-radius: 50%;
+  }
+
+  .sdrn-save-pill.is-prof .sdrn-save-disc {
+    background: #b8923a;
+  }
+
+  .sdrn-save-val {
+    font-weight: 700;
+  }
+
+  .sdrn-prof-group {
+    margin-bottom: 6px;
+  }
+
+  .sdrn-prof-group-title {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .sdrn-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .sdrn-prof-tag {
+    display: inline-flex;
+    flex-direction: column;
+    padding: 2px 6px;
+    border: 1px solid rgba(184, 146, 58, 0.4);
+    border-radius: 3px;
+    font-size: 11px;
+  }
+
+  .sdrn-prof-origin {
+    font-size: 10px;
+    opacity: 0.8;
+  }
+}
+
+// Global overrides for NPC root
+html .sdrn-npc-root.sdrn-npc-root {
+  .sdrn-passive-seals {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+  }
+
+  .sdrn-passive-seal {
+    flex-direction: column !important;
+    min-width: 0 !important;
+  }
+
+  .sdrn-passive-lbl {
+    font-size: 9px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+    max-width: 100% !important;
+  }
+}

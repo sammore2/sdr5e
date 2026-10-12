@@ -1,0 +1,44 @@
+// NPC sheet typography fixes. Moved out of the generated CSS so a rebuild keeps them.
+/* NPC sheet typography: one family for the whole sheet, form controls inherit it, no text under 10px. */
+html .sdrn-npc-root {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+html .sdrn-npc-root button,
+html .sdrn-npc-root input,
+html .sdrn-npc-root select,
+html .sdrn-npc-root textarea {
+  font-family: inherit;
+}
+
+html .sdrn-npc-root .sdrn-vital-lbl,
+html .sdrn-npc-root .sdrn-bar-lbl,
+html .sdrn-npc-root .sdrn-bar-sep,
+html .sdrn-npc-root .sdrn-meta-dot,
+html .sdrn-npc-root .sdrn-status-pill-lbl,
+html .sdrn-npc-root .sdrn-ability-pill-abbr,
+html .sdrn-npc-root .sdrn-save-mod,
+html .sdrn-npc-root .sdrn-stat-subhead,
+html .sdrn-npc-root .sdrn-ability-pill-save,
+html .sdrn-npc-root .sdrn-npc-vital-chip,
+html .sdrn-npc-root .sdrn-npc-vital-chip .sdrn-vital-input {
+  font-size: 10px;
+}
+
+/* The number spinner took the room the AC value needs, so it is hidden in the vitals chips. */
+html .sdrn-npc-root .sdrn-npc-vital-chip .sdrn-vital-input {
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+html .sdrn-npc-root .sdrn-npc-vital-chip .sdrn-vital-input::-webkit-outer-spin-button,
+html .sdrn-npc-root .sdrn-npc-vital-chip .sdrn-vital-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* XP / PROF / CR labels: the older rule is !important, so this one has to be too. */
+html .sdrn-npc-root .sdrn-status-pill-lbl {
+  font-size: 10px !important;
+}

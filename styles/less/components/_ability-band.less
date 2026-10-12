@@ -1,0 +1,407 @@
+// Ability band & Header Main layout for NPC sheet
+html .sdrn-npc-root.sdrn-npc-root {
+
+  .sdrn-npc-stage-header,
+  .sdrn-npc-header-main {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 0 !important;
+  }
+
+  // Linha 1: Título e Top Cluster (Descansos, XP, Prof, CR Medalhão)
+  .sdrn-npc-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    padding-right: 90px; // Clearance for Loom window native buttons [copy][:][X]
+  }
+
+  .sdrn-npc-name-input {
+    flex: 1;
+    min-width: 140px;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(201, 161, 90, 0.3) !important;
+    color: #ffffff !important;
+    font-family: var(--sdrn-font-display, 'Cinzel', Georgia, serif) !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    padding: 1px 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  }
+
+  .sdrn-npc-name-input:focus {
+    border-bottom-color: var(--sdrn-gold, #c99738) !important;
+  }
+
+  .sdrn-npc-top-cluster {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .sdrn-rest-btns {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: rgba(18, 14, 12, 0.7);
+    padding: 2px 4px;
+    border-radius: 4px;
+    border: 1px solid rgba(201, 161, 90, 0.3);
+  }
+
+  .sdrn-rest-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+    font-size: 11px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(225, 200, 150, 0.25);
+    color: #f2ead8;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: rgba(201, 161, 90, 0.3);
+      border-color: #ffd276;
+      color: #ffffff;
+    }
+  }
+
+  .sdrn-npc-xp-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #1a1612;
+    border: 1px solid rgba(184, 146, 58, 0.4);
+    border-radius: 4px;
+    padding: 1px 6px;
+    height: 24px;
+    box-sizing: border-box;
+
+    .sdrn-xp-lbl {
+      font-size: 9px;
+      font-weight: 700;
+      color: #b8923a;
+    }
+
+    .sdrn-xp-input {
+      width: 44px !important;
+      background: transparent !important;
+      border: none !important;
+      color: #ffd276 !important;
+      font-size: 11px !important;
+      font-weight: 800 !important;
+      text-align: center !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      outline: none !important;
+      -webkit-appearance: none !important;
+      appearance: textfield !important;
+    }
+  }
+
+  .sdrn-npc-prof-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #1a1612;
+    border: 1px solid rgba(184, 146, 58, 0.4);
+    border-radius: 4px;
+    padding: 1px 6px;
+    height: 24px;
+    box-sizing: border-box;
+
+    .sdrn-prof-lbl {
+      font-size: 9px;
+      font-weight: 700;
+      color: #b8923a;
+    }
+
+    .sdrn-prof-input {
+      width: 24px !important;
+      background: transparent !important;
+      border: none !important;
+      color: #ffffff !important;
+      font-size: 11px !important;
+      font-weight: 800 !important;
+      text-align: center !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      outline: none !important;
+      -webkit-appearance: none !important;
+      appearance: textfield !important;
+    }
+  }
+
+  .sdrn-npc-cr-medallion {
+    width: 34px;
+    height: 36px;
+    background: #1a1612;
+    border: 2px solid #b8923a;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    flex-shrink: 0;
+    padding: 1px 0;
+    box-sizing: border-box;
+
+    .sdrn-cr-lbl {
+      font-size: 7px;
+      font-weight: 800;
+      color: #b8923a;
+      line-height: 1;
+    }
+
+    .sdrn-cr-input {
+      width: 28px !important;
+      background: transparent !important;
+      border: none !important;
+      color: #ffd276 !important;
+      font-family: var(--sdrn-font-display, 'Cinzel', Georgia, serif) !important;
+      font-size: 14px !important;
+      font-weight: 900 !important;
+      text-align: center !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      line-height: 1 !important;
+      outline: none !important;
+      -webkit-appearance: none !important;
+      appearance: textfield !important;
+    }
+  }
+
+  // Linha 2: Metadados (Tamanho, Tipo, Alinhamento)
+  .sdrn-npc-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 22px;
+  }
+
+  .sdrn-npc-meta-sub {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--sdrn-text-muted, #94a3b8);
+  }
+
+  .sdrn-npc-size-select {
+    height: 24px !important;
+    min-height: 24px !important;
+    line-height: 22px !important;
+    background: #1a1612 !important;
+    border: 1px solid rgba(184, 146, 58, 0.45) !important;
+    border-radius: 4px !important;
+    color: #f0c968 !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    font-family: inherit !important;
+    padding: 0 6px !important;
+    box-sizing: border-box !important;
+    outline: none !important;
+    cursor: pointer !important;
+    appearance: menulist !important;
+    -webkit-appearance: menulist !important;
+
+    option {
+      background: #14120f !important;
+      color: #e8d8b8 !important;
+    }
+
+    &:hover {
+      border-color: #ffd276 !important;
+    }
+  }
+
+  .sdrn-npc-meta-field {
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.25) !important;
+    color: #e2e8f0 !important;
+    font-size: 11px !important;
+    padding: 0 4px !important;
+    outline: none !important;
+    max-width: 110px;
+  }
+
+  .sdrn-meta-dot {
+    color: rgba(201, 161, 90, 0.5);
+    font-size: 9px;
+  }
+
+  // Linha 3: Ribbon dos 6 Atributos D&D
+  .sdrn-npc-abilities-ribbon {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 5px;
+    width: 100%;
+  }
+
+  .sdrn-ability-pill-card {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-width: 0;
+    width: auto !important;
+    padding: 4px 2px;
+    border: 1px solid rgba(201, 161, 90, 0.25) !important;
+    border-radius: 4px !important;
+    background: #141620 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5) !important;
+    transition: all 0.15s ease;
+
+    &:hover {
+      border-color: rgba(201, 161, 90, 0.5) !important;
+      background: #191c28 !important;
+    }
+  }
+
+  .sdrn-ability-pill-abbr {
+    font-size: 9px;
+    font-weight: 800;
+    color: var(--sdrn-gold, #c99738);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .sdrn-ability-pill-mod {
+    width: 100% !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    font-size: 18px !important;
+    font-weight: 900;
+    color: #ffffff !important;
+    line-height: 1.1;
+    cursor: pointer;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: #ffd276 !important;
+    }
+  }
+
+  .sdrn-ability-pill-score-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .sdrn-ability-pill-score {
+    width: 26px !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 3px !important;
+    color: #94a3b8 !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    text-align: center;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1.2;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  .sdrn-save-shield {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(201, 161, 90, 0.3) !important;
+    border-radius: 12px !important;
+    padding: 1px 6px !important;
+    font-size: 8px !important;
+    color: #e2e8f0 !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    width: auto !important;
+
+    &:hover {
+      border-color: #ffd276 !important;
+      background: rgba(201, 161, 90, 0.2) !important;
+      color: #ffffff !important;
+    }
+
+    &.is-prof {
+      border-color: #c99738 !important;
+      color: #ffd276 !important;
+      .sdrn-save-disc {
+        background: #c99738 !important;
+      }
+    }
+  }
+
+  .sdrn-save-disc {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    border: 1px solid #c99738;
+  }
+
+  .sdrn-save-val {
+    font-weight: 800;
+  }
+
+  // Linha 4: Cartão de Resumo de Criatura
+  .sdrn-npc-summary-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(201, 161, 90, 0.2);
+    border-radius: 4px;
+    padding: 3px 10px;
+    margin-top: 2px;
+  }
+
+  .sdrn-summary-badges {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #cbd5e1;
+  }
+
+  .sdrn-summary-icon {
+    color: var(--sdrn-gold, #c99738);
+    font-size: 12px;
+  }
+
+  .sdrn-summary-cr-pill {
+    font-size: 9px;
+    font-weight: 800;
+    color: var(--sdrn-gold, #c99738);
+    text-transform: uppercase;
+    background: rgba(201, 161, 90, 0.15);
+    padding: 1px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+  }
+
+}

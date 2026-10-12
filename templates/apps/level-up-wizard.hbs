@@ -1,7 +1,9 @@
 <div class="sdrn-wizard-root">
   <div class="sdrn-wizard-steps">
-    {{#each _activeSteps}}
-    <div class="sdrn-wizard-step-dot">{{this}}</div>
+    {{#each _stepList}}
+    <button type="button" class="sdrn-wizard-step-dot {{#if active}}active{{/if}} {{#if done}}done{{/if}}" data-action="wizard-jump-step" data-index="{{index}}" style="cursor: pointer;">
+      {{label}}
+    </button>
     {{/each}}
   </div>
 
@@ -37,12 +39,17 @@
     {{#if _isMulticlassEntry}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.MulticlassWizardEntryHint"}}</p>
     {{#unless _multiclassPrerequisitesValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.MulticlassPrerequisitesFailed"}}</p>{{/unless}}
     {{else}}<button type="button" class="sdrn-wizard-btn" data-action="wizard-add-multiclass">{{localize "SDR5E.Wizard.LevelUp.AddMulticlassClass"}}</button>{{/if}}
-    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.HitDie"}} {{_die}}. {{localize "SDR5E.Wizard.LevelUp.FixedValue"}} +{{_fixedHpGain}} HP. {{localize "SDR5E.Wizard.LevelUp.RollResult"}} {{_hpRoll}} {{localize "SDR5E.Wizard.LevelUp.AppliedWithConstitution"}}</p>
+    <p class="sdrn-wizard-hint"><strong>{{localize "SDR5E.Wizard.LevelUp.HitDie"}}:</strong> {{_die}}. {{localize "SDR5E.Wizard.LevelUp.FixedValue"}}: +{{_fixedHpGain}} HP ({{localize "SDR5E.Wizard.LevelUp.Average"}} + CON). {{localize "SDR5E.Wizard.LevelUp.RollResult"}}: {{_hpRoll}}.</p>
     {{#if _hpModePlayer}}
     <label><input type="radio" name="w:hpMode" value="fixed" {{#if _hpModeFixed}}checked{{/if}} /> {{localize "SDR5E.Wizard.LevelUp.ChooseFixed"}}</label>
     <label><input type="radio" name="w:hpMode" value="roll" {{#if _hpModeRoll}}checked{{/if}} /> {{localize "SDR5E.Wizard.LevelUp.RollHitDie"}}</label>
     {{/if}}
-    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.HpGained"}}</label><input type="number" value="{{_hpGain}}" disabled /></div>
+    <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.HpGained"}} ({{_die}})</label><input type="number" value="{{_hpGain}}" disabled /></div>
+    {{#if _unlockedFeatures.length}}
+    <div class="sdrn-wizard-review" style="margin-top: 10px;">
+      <div><strong>Features do Nível {{_nextClassLevel}}:</strong> {{_unlockedFeaturesSummary}}</div>
+    </div>
+    {{/if}}
     {{/if}}
 
     {{#if _stepAsi}}
@@ -132,7 +139,11 @@
     {{#if _stepChoices}}
     {{#if _wizardScholarRequired}}
     <h3>{{localize "SDR5E.Wizard.LevelUp.WizardScholarHeading"}}</h3>
+    {{#if _wizardScholarFallback}}
+    <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.WizardScholarFallbackHelp"}}</p>
+    {{else}}
     <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.WizardScholarHelp"}}</p>
+    {{/if}}
     <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.WizardScholarSkill"}}</label><select name="w:wizardScholarSkill"><option value="">—</option>{{#each _wizardScholarOptions}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
     {{#unless _wizardScholarChoiceValid}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.ChooseWizardScholarSkill"}}</p>{{/unless}}
     {{/if}}
@@ -268,21 +279,41 @@
     <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.WizardSpellbookReview"}}</p>
     {{else}}
     <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.WizardSpellbookChoiceHint"}} {{_wizardBookPicks.length}} / 2</p>
-    <p>{{localize "SDR5E.Wizard.LevelUp.PreparedSpellChoiceHint"}} {{_wizardPreparedPicks.length}} / {{_wizardPreparedRequired}} {{localize "SDR5E.Wizard.LevelUp.PreparedSpells"}}</p>
     {{#if _newCantripsRequired}}<p>{{localize "SDR5E.Wizard.LevelUp.NewCantrips"}}: {{_wizardCantripPicks.length}} / {{_newCantripsRequired}}</p>{{/if}}
     {{#each _wizardBookPicks}}<div class="sdrn-wizard-picked"><strong>{{name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-wizard-book" data-id="{{id}}">{{localize "SDR5E.Wizard.LevelUp.Remove"}}</button></div>{{/each}}
-    {{#each _wizardCantripPicks}}<div class="sdrn-wizard-picked"><strong>{{name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-wizard-cantrip" data-id="{{id}}">{{localize "SDR5E.Wizard.LevelUp.Remove"}}</button></div>{{/each}}
-    {{#each _wizardPreparedPicks}}<div class="sdrn-wizard-picked"><strong>{{name}}</strong><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-wizard-prepared" data-id="{{id}}">{{localize "SDR5E.Wizard.LevelUp.Remove"}}</button></div>{{/each}}
-    {{#each _wizardBookRows}}
-    {{#if canPrepare}}<div class="sdrn-wizard-picked"><span>{{name}} <small>{{localize "SDR5E.Wizard.LevelUp.Spellbook"}}</small></span><button type="button" class="sdrn-wizard-btn" data-action="wizard-toggle-wizard-prepared" data-id="{{id}}">{{#if selectedForPreparation}}{{localize "SDR5E.Wizard.LevelUp.RemovePrepared"}}{{else}}{{localize "SDR5E.Wizard.LevelUp.PrepareSpell"}}{{/if}}</button></div>{{/if}}
-    {{/each}}
     <div class="sdrn-bio-field"><label>{{localize "SDR5E.Wizard.LevelUp.Filter"}}</label><input type="text" data-wizard-search="spell" value="{{_spellQuery}}" placeholder="{{localize 'SDR5E.Wizard.LevelUp.FilterHint'}}" /></div>
-    {{#if _spellResults}}<div class="sdrn-wizard-results">{{#each _spellResults}}
-      {{#if data.spellLevel}}<button type="button" class="sdrn-wizard-result" data-action="wizard-toggle-wizard-book" data-id="{{id}}">{{localize "SDR5E.Wizard.LevelUp.AddToSpellbook"}} — {{name}} <small>Level {{data.spellLevel}}</small></button>
-      {{else}}<button type="button" class="sdrn-wizard-result" data-action="wizard-toggle-wizard-cantrip" data-id="{{id}}">{{localize "SDR5E.Wizard.LevelUp.ChooseCantrip"}} — {{name}}</button>{{/if}}
-    {{/each}}</div>{{else}}<p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.NoMoreSpells"}}</p>{{/if}}
+    {{#if _spellResultsByLevel.length}}
+      {{#each _spellResultsByLevel}}
+      <div class="sdrn-wizard-spell-group" style="margin-top: 12px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(201, 161, 90, 0.25); padding-bottom: 3px; margin-bottom: 6px;">
+          <strong style="color: #c99738; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase;">{{label}}</strong>
+          <span style="font-size: 11px; opacity: 0.6;">{{spells.length}}</span>
+        </div>
+        <div class="sdrn-wizard-results">
+          {{#each spells}}
+            {{#if data.spellLevel}}
+            <button type="button" class="sdrn-wizard-result" data-action="wizard-toggle-wizard-book" data-id="{{id}}">
+              <span>+ {{name}}</span> <small>Level {{data.spellLevel}}</small>
+            </button>
+            {{else if ../../_newCantripsRequired}}
+            <button type="button" class="sdrn-wizard-result" data-action="wizard-toggle-wizard-cantrip" data-id="{{id}}">
+              <span>+ {{name}}</span> <small>Truque</small>
+            </button>
+            {{else}}
+            <button type="button" class="sdrn-wizard-result" disabled style="opacity: 0.5; cursor: not-allowed;" title="Nenhum novo truque neste nível">
+              <span>{{name}}</span> <small>Truque</small>
+            </button>
+            {{/if}}
+          {{/each}}
+        </div>
+      </div>
+      {{/each}}
+    {{else}}
+      <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.NoMoreSpells"}}</p>
+    {{/if}}
     {{/unless}}
-    {{else if _isKnownCaster}}
+    {{else}}
+    {{#if _isKnownCaster}}
     <p class="sdrn-wizard-hint">Pick {{_newSpellsRequired}} new spell(s){{#if _newCantripsRequired}} and {{_newCantripsRequired}} new cantrip(s){{/if}} — picked so far: {{_spellLeveledCount}}/{{_newSpellsRequired}} spells, {{_spellCantripCount}}/{{_newCantripsRequired}} cantrips.</p>
     {{else if _isPreparedProgressionCaster}}
     <p class="sdrn-wizard-hint">{{localize "SDR5E.Wizard.LevelUp.PreparedSpellChoiceHint"}} {{_spellLeveledCount}} / {{_preparedSpellCapacity}} {{localize "SDR5E.Wizard.LevelUp.PreparedSpells"}}{{#if _newCantripsRequired}}; {{_spellCantripCount}} / {{_newCantripsRequired}} {{localize "SDR5E.Wizard.LevelUp.NewCantrips"}}{{/if}}</p>
@@ -308,30 +339,62 @@
       {{/each}}
     </div>
     {{/if}}
-    {{#if _spellResults}}
-    <div class="sdrn-wizard-results">
-      {{#each _spellResults}}
-      <button type="button" class="sdrn-wizard-result" data-action="wizard-toggle-spell" data-id="{{id}}">
-        <span>{{name}}</span> <small>{{#if data.spellLevel}}Level {{data.spellLevel}}{{else}}Cantrip{{/if}}</small>
-      </button>
+    {{#if _spellResultsByLevel.length}}
+      {{#each _spellResultsByLevel}}
+      <div class="sdrn-wizard-spell-group" style="margin-top: 12px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(201, 161, 90, 0.25); padding-bottom: 3px; margin-bottom: 6px;">
+          <strong style="color: #c99738; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase;">{{label}}</strong>
+          <span style="font-size: 11px; opacity: 0.6;">{{spells.length}}</span>
+        </div>
+        <div class="sdrn-wizard-results">
+          {{#each spells}}
+          <button type="button" class="sdrn-wizard-result" data-action="wizard-toggle-spell" data-id="{{id}}">
+            <span>{{name}}</span> <small>{{#if data.spellLevel}}Level {{data.spellLevel}}{{else}}Truque{{/if}}</small>
+          </button>
+          {{/each}}
+        </div>
+      </div>
       {{/each}}
-    </div>
-    {{else}}
-    <p class="sdrn-wizard-hint">No more matching spells found for {{_className}}.</p>
+    {{/if}}
+    {{/if}}
     {{/if}}
     {{/if}}
 
     {{#if _stepReview}}
-    <h3>Review</h3>
+    <h3>Revisão</h3>
+    {{#if _pendingRequirements.length}}
+    <div class="sdrn-wizard-review" style="border-left: 3px solid #e05252; background: rgba(224, 82, 82, 0.1); margin-bottom: 12px; padding: 10px;">
+      <strong style="color: #e05252;">⚠️ Pendências para finalizar:</strong>
+      <ul style="margin: 6px 0 0 16px; padding: 0;">
+        {{#each _pendingRequirements}}
+        <li style="margin-bottom: 4px;">
+          <span>{{message}}</span>
+          <button type="button" class="sdrn-wizard-btn" data-action="wizard-jump-step" data-index="{{stepIndex}}" style="padding: 2px 6px; font-size: 11px; margin-left: 6px;">Ir para etapa →</button>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+    {{else}}
+    <div class="sdrn-wizard-review" style="border-left: 3px solid #2ecc71; background: rgba(46, 204, 113, 0.1); margin-bottom: 12px; padding: 10px;">
+      <strong style="color: #2ecc71;">✓ Tudo pronto! Clique em Finish para aplicar a evolução.</strong>
+    </div>
+    {{/if}}
     <div class="sdrn-wizard-review">
       <div><strong>{{_className}}</strong> — Level {{_currentClassLevel}} → {{_nextClassLevel}} (Total {{_nextTotalLevel}})</div>
-      <div>HP: +{{_hpGain}}</div>
+      <div><strong>HP:</strong> +{{_hpGain}} ({{localize "SDR5E.Wizard.LevelUp.HitDie"}}: {{_die}})</div>
+      {{#if _unlockedFeatures.length}}<div><strong>Features concedidas:</strong> {{_unlockedFeaturesSummary}}</div>{{/if}}
       {{#if _subclassName}}<div>Subclass: {{_subclassName}}</div>{{/if}}
       {{#if _featName}}<div>Feat: {{_featName}}</div>{{/if}}
       {{#if _featChoiceSummary}}<div>{{_featChoiceSummary}}</div>{{/if}}
       {{#if _featName}}<div>{{#if _featManual}}{{localize "SDR5E.Wizard.LevelUp.FeatManualInstruction"}} {{/if}}{{_featDescription}}</div>{{/if}}
+      {{#if _isWizardSpellProgression}}
+      {{#if _wizardBookPicks.length}}<div>{{localize "SDR5E.Wizard.LevelUp.WizardSpellbook"}}: {{_wizardBookPicks.length}}</div>{{/if}}
+      {{#if _wizardPreparedPicks.length}}<div>{{localize "SDR5E.Wizard.LevelUp.PreparedSpells"}}: {{_wizardPreparedPicks.length}}</div>{{/if}}
+      {{#if _wizardCantripPicks.length}}<div>{{localize "SDR5E.Wizard.LevelUp.NewCantrips"}}: {{_wizardCantripPicks.length}}</div>{{/if}}
+      {{else}}
       {{#if _spellLeveledCount}}<div>New spells: {{_spellLeveledCount}}</div>{{/if}}
       {{#if _spellCantripCount}}<div>New cantrips: {{_spellCantripCount}}</div>{{/if}}
+      {{/if}}
     </div>
     {{/if}}
   </div>

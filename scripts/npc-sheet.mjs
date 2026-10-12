@@ -21,6 +21,7 @@ import { fmtMod, setPathValue, currentAdvantageMode, passiveScore } from './util
 import { initiativeBaseSources } from './initiative-mechanics.mjs';
 import { sdr5eRoll, rollDeathSave, applyHeal, applyDamage, getActorConditions, applyAbilityCheckConditionModifiers, applyPoisonedDisadvantage, getSaveConditionOutcome, getSaveCoverBonus, getSkillConditionOutcome, evaluateDamageFormula, postItemToChat, rollWeaponAttack, rollWeaponDamage } from './roll-engine.mjs';
 import { getDefaultData } from './schema.mjs';
+import { takeRest } from './rest.mjs';
 import { Sdr5eItemSheet } from './item-sheet.mjs';
 import { coreActionActivityView, coreActionContextMetadata, normalizeCoreActionContext, resolveCoreActionSkillCheck } from './core-action-checks.mjs';
 import { appendHelpRecord, createHelpRecord, helpActionView, normalizeHelpRecords, removeHelpRecord } from './help-action-mechanics.mjs';
@@ -28,16 +29,19 @@ import { appendReadyRecord, createReadyRecord, normalizeReadyRecords, readyActio
 import { clearDodgeRecord, dodgeActionView, setDodgeRecord } from './dodge-mechanics.mjs';
 import { composeInfluenceAdvantage, influenceFormView, resolveInfluenceAdjudication } from './influence-mechanics.mjs';
 import { addDashMovementBonus, addMovementSegment, movementLedgerView, normalizeMovementLedger, removeDashMovementBonus, removeMovementSegment, resetMovementLedger } from './movement-mechanics.mjs';
+import { attachTooltips, detachTooltips } from './tooltip.mjs';
 import { resolveMovementSheetContext } from './movement-sheet-context.mjs';
 import { npcDeathSaveView } from './monster-death-mechanics.mjs';
 import { rageStrengthAdvantage } from './rage-mechanics.mjs';
+import { attachSideTabs, detachSideTabs } from './side-tabs.mjs';
+import { getEffectsSheetData, toggleActorCondition, clearAllActorConditions, applyBuffPresetToActor, deleteActiveEffect, toggleEffectDisabled, promptCreateCustomEffect } from './active-effects-helper.mjs';
 
 const localizeSheet = (key) => window.Loom?.i18n?.localize?.(key) || key;
 
 const SDR5E_HEADER_BANNER = '/marketplace/rulesets/srd5e/assets/images/banner-character.png';
 
 export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
-  static DEFAULT_OPTIONS = { position: { width: 840, height: 780 } };
+  static DEFAULT_OPTIONS = { position: { width: 780, height: 740 } };
 
   _activeTab = 'actions';
 
@@ -69,13 +73,44 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
   async mount() {
     await super.mount();
     this._applyActiveTab();
+    this._detachSideTabs();
+    this._applyEditMode();
+    attachTooltips(this.element);
     this._attachListeners();
   }
 
   _postRender() {
     if (typeof super._postRender === 'function') super._postRender();
     this._applyActiveTab();
+    this._detachSideTabs();
+    this._applyEditMode();
+    attachTooltips(this.element);
     this._attachListeners();
+  }
+
+  /**
+   * Same approach as the character sheet: the tab dock is moved out of the
+   * window and kept on the window's right edge, so the game canvas cannot
+   * cover it. Its clicks no longer reach the window, so they are handled here.
+   */
+  _detachSideTabs() {
+    attachSideTabs(this, (event) => {
+      const tabButton = event.target instanceof Element ? event.target.closest('[data-action="tab"]') : null;
+      if (!tabButton) return;
+      event.preventDefault();
+      this._activeTab = tabButton.dataset.tab || 'actions';
+      this._applyActiveTab();
+    });
+  }
+
+  _cleanupSideTabs() {
+    detachSideTabs(this);
+  }
+
+  // The tab dock lives outside the window, so it has to leave with it.
+  onClose() {
+    this._cleanupSideTabs();
+    detachTooltips(this.element);
   }
 
   _applyActiveTab() {
@@ -238,6 +273,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const res = sd.resources || {};
     const details = sd.details || {};
     const conditions = await getActorConditions(this.document?.id);
+    const effectsData = await getEffectsSheetData(this.document);
     this._movementContext = await resolveMovementSheetContext({ actorId: this.document?.id, combat: window.Loom?.combat, api,
       selectedCastId: this._movementCastId, actorLedger: sd.srd5eMovementLedger,
       actorSpeeds: attrs.movement?.effective || attrs.movement || {}, conditions, localize: localizeSheet });
@@ -280,12 +316,38 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     // sentidos, com ou sem proficiência na perícia (Handout 34).
     // SRD Passive score: +/-5 only from persistent Advantage/Disadvantage (conditions such as Poisoned), never Shift/Ctrl.
     const _passivePerception = passiveScore(skills.perception?.total, applyAbilityCheckConditionModifiers(0, conditions));
+    // Portrait choice per actor: 'art' shows the actor picture, 'token' shows the prototype token image when one is set.
+    const portraitCfg = sd.portrait || {};
+    const _portraitSource = portraitCfg.source === 'token' ? 'token' : 'art';
+    const _portraitUrl = (_portraitSource === 'token' ? portraitCfg.tokenImg : '') || this.document?.avatarUrl || this.document?.img || '';
+    const _headerImg = portraitCfg.headerImg || '';
+    // Passive Investigation and Insight use the same rule as Passive Perception.
+    const _passiveInvestigation = passiveScore(skills.investigation?.total, applyAbilityCheckConditionModifiers(0, conditions));
+    const _passiveInsight = passiveScore(skills.insight?.total, applyAbilityCheckConditionModifiers(0, conditions));
+    // Proficiency groups with the origin of each entry; an entry without a recorded origin reads as Manual.
+    const profOrigins = sd.proficiencyOrigins || {};
+    const profList = (key) => (sd.proficiencies?.[key] || []).map((v) => ({ name: String(v), origin: (profOrigins[key + ':' + v] || ['Manual']).join(', ') }));
+    const _profGroups = [
+      { label: 'Armaduras', entries: profList('armor') },
+      { label: 'Armas', entries: profList('weapons') },
+      { label: 'Ferramentas', entries: profList('tools') },
+    ].filter((group) => group.entries.length);
 
     const items = this.document?.items || [];
+    const _featuresList = [];
+    const _attacksList = [];
+    const _spellsList = [];
+    const _inventoryList = [];
+    const _gearChips = [];
+
     const _actions = items.filter((i) => i.type !== 'language').map((i) => {
       const idata = i.system || i.data || {};
       const formula = idata.damage?.formula || '';
-      return {
+      const uses = idata.uses?.max ? `${idata.uses.value ?? 0}/${idata.uses.max}` : '—';
+      const attackBonus = (idata.attackBonus !== undefined && idata.attackBonus !== null && idata.attackBonus !== '')
+        ? fmtMod(idata.attackBonus)
+        : (i.type === 'weapon' ? fmtMod((attrs.prof?.value ?? 2) + (sd.abilities?.str?.modifier ?? 0)) : '—');
+      const enriched = {
         ...i,
         imgUrl: i.imgUrl || i.img || i.avatarUrl || '',
         icon: ITEM_TYPE_ICON[i.type] || '⭐',
@@ -293,7 +355,25 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         isSpell: i.type === 'spell',
         isFeature: i.type === 'feature',
         hasDamage: !!formula,
+        usesText: uses,
+        rollText: attackBonus,
+        formulaText: formula || '—',
+        subtitle: idata.actionType || (i.type === 'weapon' ? 'Ação' : (i.type || 'Característica')),
       };
+
+      if (i.type === 'weapon') {
+        _attacksList.push(enriched);
+        _gearChips.push(i.name);
+      } else if (i.type === 'spell') {
+        _spellsList.push(enriched);
+      } else if (['armor', 'consumable', 'tool', 'loot', 'container'].includes(i.type)) {
+        _inventoryList.push(enriched);
+        if (i.type === 'armor' && idata.equipped) _gearChips.push(i.name);
+      } else {
+        _featuresList.push(enriched);
+      }
+
+      return enriched;
     });
 
     const langItems = items.filter((i) => i.type === 'language').map((i) => ({ id: i.id, name: i.name }));
@@ -369,10 +449,20 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       ...context,
       ...this.document,
       avatarUrl: this.document?.avatarUrl || this.document?.img || '',
+      _portraitUrl,
+      _portraitSource,
+      _headerImg,
+      _passiveInvestigation,
+      _passiveInsight,
+      _profGroups,
+      _portraitSourceIsArt: _portraitSource === 'art',
+      _portraitSourceIsToken: _portraitSource === 'token',
       name: (this.document?.name && this.document.name !== 'undefined') ? this.document.name : '',
       systemData: sd,
       _abilities,
       _npcTabActions: localizeSheet('srd5e.NPC.Actions'),
+      _npcTabSpells: localizeSheet('srd5e.NPC.Spells') || 'Magias',
+      _npcTabInventory: localizeSheet('srd5e.NPC.Inventory') || 'Inventário',
       _npcTabDetails: localizeSheet('srd5e.NPC.Biography'),
       _npcTabConfig: localizeSheet('srd5e.NPC.Configuration'),
       _saves,
@@ -380,6 +470,11 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _skills,
       _availableSkills,
       _actions,
+      _featuresList,
+      _attacksList,
+      _spellsList,
+      _inventoryList,
+      _gearChips,
       _coreActionActivities: coreActionActivityView(sd.skills, localizeSheet),
       _coreActionActivitiesTitle: localizeSheet('SDR5E.CoreActions.Title'),
       _coreActionActivitiesNote: localizeSheet('SDR5E.CoreActions.Note'),
@@ -422,10 +517,19 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _useCharacterDeathSaves: details.useCharacterDeathSaves === true,
       _deathSaveOverrideLabel: localizeSheet('srd5e.NPC.UseCharacterDeathSaves'),
       _deathSaveOverrideHint: localizeSheet('srd5e.NPC.UseCharacterDeathSavesHint'),
+      ...effectsData,
       _hpFormula: attrs.hp?.formula || '',
       _cr: details.cr ?? 0,
-      _xpLabel: details.xp?.label || `${details.xp?.value ?? 0} XP`,
-      _xpValue: details.xp?.value ?? 0,
+      _xpLabel: `${(() => {
+        const crToXp = { '0': 10, '1/8': 25, '0.125': 25, '1/4': 50, '0.25': 50, '1/2': 100, '0.5': 100, '1': 200, '2': 450, '3': 700, '4': 1100, '5': 1800, '6': 2300, '7': 2900, '8': 3900, '9': 5000, '10': 5900, '11': 7200, '12': 8400, '13': 10000, '14': 11500, '15': 13000, '16': 15000, '17': 18000, '18': 20000, '19': 22000, '20': 25000, '21': 33000, '22': 41000, '23': 50000, '24': 62000, '25': 75000, '26': 90000, '27': 105000, '28': 120000, '29': 135000, '30': 155000 };
+        const stored = details.xp?.value;
+        return (stored !== undefined && stored !== null && stored !== '') ? Number(stored) : (crToXp[String(details.cr ?? 0)] ?? 0);
+      })()} XP`,
+      _xpValue: (() => {
+        const crToXp = { '0': 10, '1/8': 25, '0.125': 25, '1/4': 50, '0.25': 50, '1/2': 100, '0.5': 100, '1': 200, '2': 450, '3': 700, '4': 1100, '5': 1800, '6': 2300, '7': 2900, '8': 3900, '9': 5000, '10': 5900, '11': 7200, '12': 8400, '13': 10000, '14': 11500, '15': 13000, '16': 15000, '17': 18000, '18': 20000, '19': 22000, '20': 25000, '21': 33000, '22': 41000, '23': 50000, '24': 62000, '25': 75000, '26': 90000, '27': 105000, '28': 120000, '29': 135000, '30': 155000 };
+        const stored = details.xp?.value;
+        return (stored !== undefined && stored !== null && stored !== '') ? Number(stored) : (crToXp[String(details.cr ?? 0)] ?? 0);
+      })(),
       _size,
       _sizeOptions,
       _alignment: details.alignment || '',
@@ -546,7 +650,180 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     }
   }
 
-  onAction(action, id, target) {
+  // Lock/edit mode: 'Jogo' (locked, default) hides every editable field; 'Edição' shows the controls marked data-edit-only.
+  _applyEditMode() {
+    const root = this.element;
+    if (!root) return;
+    // Sheets open locked (clean reading view); the toggle opens editing.
+    if (this._editMode === undefined) this._editMode = false;
+    root.querySelector('.sdrn-npc-root')?.classList.toggle('is-editing', this._editMode);
+    root.querySelectorAll('input, select, textarea').forEach((el) => {
+      if (el.hasAttribute('data-always-on')) return;
+      el.disabled = !this._editMode;
+    });
+    const btn = root.querySelector('[data-action="toggle-edit-mode"]');
+    if (btn) {
+      btn.setAttribute('aria-pressed', String(this._editMode));
+      btn.querySelector('i')?.setAttribute('class', this._editMode ? 'fas fa-lock-open' : 'fas fa-lock');
+      const label = btn.querySelector('.sdrn-mode-label');
+      if (label) label.textContent = this._editMode ? 'Edição' : 'Jogo';
+    }
+  }
+
+  async _toggleSaveProf(key) {
+    if (!key || !this.document?.id) return;
+    const sd = this.document.systemData || {};
+    const saves = { ...(sd.saves || {}) };
+    const current = saves[key] || { proficient: false, total: 0 };
+    const ablMod = sd.abilities?.[key]?.modifier ?? 0;
+    const prof = sd.attributes?.prof?.value ?? 2;
+    const proficient = !current.proficient;
+    saves[key] = { ...current, proficient, total: ablMod + (proficient ? prof : 0) };
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, saves } });
+    await this._reloadDocument();
+  }
+
+  // Quick HP: heal stops at max; damage uses temporary HP first and never goes below 0.
+  async _adjustHp(kind) {
+    const input = this.element?.querySelector('[data-quick-hp]');
+    const amount = Math.max(0, Math.floor(Number(input?.value) || 0));
+    if (!amount || !this.document?.id) return;
+    const sd = this.document.systemData;
+    const health = { ...(sd.resources?.health || {}) };
+    let value = Number(health.value) || 0;
+    const max = Number(health.max) || 0;
+    let temp = Number(health.temp) || 0;
+    if (kind === 'heal') {
+      value = Math.min(max, value + amount);
+    } else {
+      const fromTemp = Math.min(temp, amount);
+      temp -= fromTemp;
+      value = Math.max(0, value - (amount - fromTemp));
+    }
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, resources: { ...sd.resources, health: { ...health, value, temp } } } });
+    await this._reloadDocument();
+  }
+
+  // Portrait source per actor: 'art' uses the actor picture, 'token' uses the prototype token image.
+  async _setPortraitSource(source) {
+    if (!this.document?.id) return;
+    const sd = this.document.systemData;
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, portrait: { ...(sd.portrait || {}), source } } });
+    await this._reloadDocument();
+  }
+
+  async _takeRest(type) {
+    if (!this.document) return;
+    await takeRest(this.document, type);
+    await this._reloadDocument();
+  }
+
+  async _pickPortrait() {
+    if (!this.document?.id) return;
+    const sd = this.document.systemData || {};
+    const cfg = sd.portrait || {};
+    const token = cfg.source === 'token';
+    const current = token ? (cfg.tokenImg || '') : (this.document.avatarUrl || this.document.img || '');
+    const url = (typeof window.prompt === 'function') ? window.prompt('URL da imagem do retrato', current) : current;
+    if (url === null || url === undefined) return;
+    if (token) {
+      await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, portrait: { ...cfg, tokenImg: url.trim() } } });
+    } else {
+      await api.put(`${this.apiRoute}/${this.document.id}`, { avatarUrl: url.trim() });
+    }
+    await this._reloadDocument();
+  }
+
+  async onAction(action, id, target) {
+    if (action === 'short-rest') {
+      void this._takeRest('short');
+      return;
+    }
+    if (action === 'long-rest') {
+      void this._takeRest('long');
+      return;
+    }
+    // The portrait opens the engine's layered art editor instead of the plain file picker.
+    if (action === 'pick-portrait') {
+      if (window.Loom?.openPortraitEditor && this.document?.id) {
+        window.Loom.openPortraitEditor(this.document.id);
+      } else {
+        void this._pickPortrait();
+      }
+      return;
+    }
+    // The disc of a save pill toggles its proficiency while editing; while locked it just rolls the save.
+    if (action === 'toggle-save-prof') {
+      if (!this._editMode) {
+        this.onAction('roll-save', id, target);
+        return;
+      }
+      void this._toggleSaveProf(target?.dataset?.key);
+      return;
+    }
+    if (action === 'toggle-edit-mode') {
+      this._editMode = !this._editMode;
+      this._applyEditMode();
+      return;
+    }
+    if (action === 'portrait-source') {
+      void this._setPortraitSource(target?.dataset?.value === 'token' ? 'token' : 'art');
+      return;
+    }
+    if (action === 'toggle-condition') {
+      const condId = target?.dataset?.condition;
+      if (condId && this.document) {
+        await toggleActorCondition(this.document, condId);
+        await this._reloadDocument();
+      }
+      return;
+    }
+    if (action === 'clear-conditions') {
+      if (this.document) {
+        await clearAllActorConditions(this.document);
+        await this._reloadDocument();
+      }
+      return;
+    }
+    if (action === 'apply-buff-preset') {
+      const presetId = target?.dataset?.presetId;
+      if (presetId && this.document) {
+        await applyBuffPresetToActor(this.document, presetId);
+        await this._reloadDocument();
+      }
+      return;
+    }
+    if (action === 'create-custom-effect') {
+      if (this.document) {
+        await promptCreateCustomEffect(this.document, () => this._reloadDocument());
+      }
+      return;
+    }
+    if (action === 'delete-effect') {
+      const effId = target?.dataset?.id || id;
+      if (effId) {
+        await deleteActiveEffect(effId);
+        await this._reloadDocument();
+      }
+      return;
+    }
+    if (action === 'toggle-effect-disabled') {
+      const effId = target?.dataset?.id || id;
+      if (effId) {
+        const isCurrentlyDisabled = target.closest('.sdrn-effect-row')?.classList?.contains('is-disabled');
+        await toggleEffectDisabled(effId, !!isCurrentlyDisabled);
+        await this._reloadDocument();
+      }
+      return;
+    }
+    if (action === 'hp-heal') {
+      void this._adjustHp('heal');
+      return;
+    }
+    if (action === 'hp-damage') {
+      void this._adjustHp('damage');
+      return;
+    }
     if (action === 'movement-ledger-add') {
       void this._addMovementSegment(target);
       return;

@@ -1,0 +1,83 @@
+// Lock/edit mode: in play ('Jogo') fields read as plain values; 'Edição' reveals the controls marked data-edit-only.
+.sdrn-root {
+  position: relative;
+
+  .sdrn-mode-toggle {
+    // In the normal flow: it takes its own row and never covers another element.
+    position: static;
+    margin: 0 0 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 28px;
+    padding: 0 10px;
+    border: 1px solid rgba(184, 146, 58, 0.55);
+    border-radius: 4px;
+    background: rgba(18, 16, 13, 0.92);
+    color: inherit;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  [data-edit-only] {
+    display: none;
+  }
+
+  &.is-editing [data-edit-only] {
+    display: revert;
+  }
+
+  input:disabled,
+  select:disabled,
+  textarea:disabled {
+    opacity: 1;
+    -webkit-text-fill-color: currentColor;
+    background: transparent;
+    border: 0;
+    appearance: none;
+  }
+
+  input[type="number"]:disabled {
+    -moz-appearance: textfield;
+  }
+
+  &.is-editing .sdrn-portrait-source {
+    display: flex;
+  }
+
+  .sdrn-portrait-source {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    gap: 4px;
+    padding: 4px;
+    background: rgba(10, 9, 8, 0.85);
+  }
+
+  .sdrn-portrait-source button {
+    flex: 1;
+    height: 24px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+
+  .sdrn-portrait-source button[aria-pressed="true"] {
+    border-color: #b8923a;
+  }
+}
+
+// In the character header the toggle sits with the rest buttons: icon only, the label stays for screen readers.
+.sdrn-root .sdrn-mode-toggle--inline {
+  margin: 0;
+  padding: 0 8px;
+}
+
+.sdrn-root .sdrn-mode-toggle--inline .sdrn-mode-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

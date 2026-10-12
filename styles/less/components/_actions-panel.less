@@ -1,0 +1,547 @@
+// Actions tab (movement ledger and core action checks): always open, compact controls, aligned rows.
+.sdrn-root {
+  .sdrn-movement-ledger,
+  .sdrn-core-actions {
+    margin: 0 0 10px;
+    padding: 10px 12px;
+
+    > summary {
+      list-style: none;
+      cursor: default;
+      pointer-events: none;
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+
+    > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .sdrn-core-actions-help {
+      pointer-events: auto;
+      cursor: help;
+    }
+
+    input:not([type="checkbox"]):not([type="radio"]),
+    select,
+    button {
+      height: 28px;
+      min-height: 0;
+      font-size: 12px;
+      padding: 0 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: auto;
+      padding: 0 10px;
+    }
+  }
+
+  .sdrn-movement-ledger {
+    .sdrn-movement-ledger-total {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+    }
+
+    .sdrn-movement-ledger-inputs {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        font-size: 11px;
+      }
+
+      input[data-movement-distance] {
+        width: 84px;
+      }
+
+      select {
+        width: 140px;
+      }
+
+      .sdrn-movement-difficult {
+        flex-direction: row;
+        align-items: center;
+        gap: 6px;
+      }
+    }
+
+    .sdrn-movement-dash-control {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        font-size: 11px;
+      }
+
+      select {
+        width: 140px;
+      }
+    }
+
+    > button[data-action="movement-ledger-reset"] {
+      margin-top: 8px;
+    }
+  }
+
+  .sdrn-core-actions-list {
+    display: grid;
+    gap: 6px;
+  }
+
+  .sdrn-core-action-row {
+    display: grid;
+    grid-template-columns: 84px minmax(0, 200px) 24px;
+    align-items: center;
+    gap: 4px 8px;
+
+    > label:first-child {
+      grid-row: 1;
+      grid-column: 1;
+      font-size: 12px;
+    }
+
+    > select {
+      grid-row: 1;
+      grid-column: 2;
+    }
+
+    .sdrn-core-roll-d20 {
+      grid-row: 1;
+      grid-column: 3;
+      width: 24px;
+      min-width: 0;
+      height: 24px;
+      padding: 0;
+    }
+
+    > label:not(:first-child) {
+      grid-row: 2;
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 11px;
+
+      input {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// The legacy NPC rules (in the stylesheet that loads later) force these rows to flex; the doubled class wins that tie.
+html .sdrn-root.sdrn-root .sdrn-core-action-row {
+  display: grid;
+  flex-wrap: nowrap;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// NPC STRUCTURED TABLES (Features & Actions)
+// ══════════════════════════════════════════════════════════════════════════════
+.sdrn-npc-root {
+  .sdrn-npc-stage-body,
+  .sdrn-npc-main-content {
+    position: relative;
+    padding: 10px 4px 10px 0;
+    min-height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sdrn-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    background: rgba(18, 15, 12, 0.85);
+    border: 1px solid rgba(184, 146, 58, 0.32);
+    border-radius: 4px;
+    margin-bottom: 10px;
+
+    .sdrn-search-icon {
+      color: #b8923a;
+      font-size: 12px;
+    }
+
+    .sdrn-search-input {
+      flex: 1;
+      background: transparent !important;
+      border: none !important;
+      color: #f0e6d2 !important;
+      font-size: 12px !important;
+      outline: none;
+      height: 24px !important;
+      padding: 0 !important;
+    }
+
+    .sdrn-search-action-btn {
+      background: transparent;
+      border: none;
+      color: rgba(212, 196, 168, 0.55);
+      cursor: pointer;
+      padding: 2px 4px;
+      font-size: 11px;
+
+      &:hover {
+        color: #f0c968;
+      }
+    }
+  }
+
+  .sdrn-features-table {
+    display: flex;
+    flex-direction: column;
+    background: rgba(16, 14, 11, 0.85);
+    border: 1px solid rgba(184, 146, 58, 0.32);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  }
+
+  .sdrn-features-header {
+    display: grid;
+    grid-template-columns: minmax(130px, 1fr) 50px 70px 90px 50px;
+    align-items: center;
+    padding: 6px 8px;
+    background: linear-gradient(90deg, #421b1e 0%, #2e1416 100%);
+    border-bottom: 1px solid rgba(184, 146, 58, 0.45);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #f7e6c4;
+
+    &.actions {
+      background: linear-gradient(90deg, #421b1e 0%, #2e1416 100%);
+      border-bottom-color: rgba(184, 146, 58, 0.45);
+      color: #f7e6c4;
+    }
+
+    .col-name { text-align: left; }
+    .col-uses, .col-roll, .col-formula, .col-actions { text-align: center; }
+  }
+
+  .sdrn-features-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sdrn-feature-row {
+    display: grid;
+    grid-template-columns: minmax(130px, 1fr) 50px 70px 90px 50px;
+    align-items: center;
+    padding: 5px 8px;
+    border-bottom: 1px solid rgba(184, 146, 58, 0.12);
+    transition: background 0.12s;
+
+    &:hover {
+      background: rgba(184, 146, 58, 0.07);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .col-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      text-align: left;
+    }
+
+    .sdrn-feature-icon-thumb {
+      width: 26px;
+      height: 26px;
+      border-radius: 3px;
+      overflow: hidden;
+      border: 1px solid rgba(184, 146, 58, 0.35);
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .sdrn-feature-icon-fallback {
+        font-size: 13px;
+      }
+    }
+
+    .sdrn-feature-titles {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .sdrn-feature-title-btn {
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      color: #f0e6d2;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: auto !important;
+
+      &:hover {
+        color: #f0c968;
+        text-decoration: underline;
+      }
+    }
+
+    .sdrn-feature-type-sub {
+      font-size: 10px;
+      color: rgba(212, 196, 168, 0.55);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .col-uses {
+      text-align: center;
+      font-size: 11px;
+      color: rgba(212, 196, 168, 0.65);
+    }
+
+    .col-roll {
+      text-align: center;
+    }
+
+    .col-formula {
+      text-align: center;
+      font-size: 11px;
+      color: #e0d0b8;
+    }
+
+    .col-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+  }
+
+  .sdrn-table-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 2px 7px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 1px solid rgba(184, 146, 58, 0.45);
+    height: 24px;
+    line-height: 1;
+    transition: all 0.15s;
+
+    &.atk {
+      background: linear-gradient(180deg, rgba(40, 32, 22, 0.95), rgba(24, 18, 14, 0.95));
+      color: #f0c968;
+
+      &:hover {
+        border-color: #f0c968;
+        box-shadow: 0 0 6px rgba(240, 201, 104, 0.35);
+      }
+    }
+
+    &.dmg {
+      background: linear-gradient(180deg, rgba(55, 20, 20, 0.95), rgba(30, 12, 12, 0.95));
+      color: #ff8888;
+      border-color: rgba(180, 50, 50, 0.5);
+
+      &:hover {
+        border-color: #ff5555;
+        box-shadow: 0 0 6px rgba(255, 85, 85, 0.35);
+      }
+    }
+  }
+
+  .sdrn-icon-ctrl-btn {
+    background: transparent !important;
+    border: none !important;
+    color: rgba(212, 196, 168, 0.55);
+    cursor: pointer;
+    padding: 3px !important;
+    font-size: 11px;
+    width: auto !important;
+    height: auto !important;
+
+    &:hover {
+      color: #f0c968;
+    }
+
+    &.del:hover {
+      color: #ff5555;
+    }
+  }
+
+  .sdrn-empty-row {
+    padding: 12px;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(212, 196, 168, 0.45);
+    font-style: italic;
+  }
+
+  .sdrn-add-actions-footer {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .sdrn-quick-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    font-size: 11px;
+    background: rgba(184, 146, 58, 0.1);
+    border: 1px solid rgba(184, 146, 58, 0.35);
+    border-radius: 3px;
+    color: #f0c968;
+    cursor: pointer;
+    transition: all 0.15s;
+
+    &:hover {
+      background: rgba(184, 146, 58, 0.22);
+      border-color: #f0c968;
+    }
+  }
+
+  // Floating Action Button (+)
+  .sdrn-fab-add {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #c59b3f 0%, #7d591a 100%);
+    border: 2px solid #f0c968;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 0 0 10px rgba(184, 146, 58, 0.4);
+    color: #1a140a;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.15s, box-shadow 0.15s;
+
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.8), 0 0 16px rgba(240, 201, 104, 0.6);
+    }
+  }
+
+  // Card block & Configuration Grid
+  .sdrn-card-block {
+    padding: 12px;
+    background: rgba(16, 14, 11, 0.75);
+    border: 1px solid rgba(184, 146, 58, 0.32);
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+
+  .sdrn-box-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #b8923a;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .sdrn-dark-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(22, 19, 15, 0.85);
+    border: 1px solid rgba(184, 146, 58, 0.3);
+    border-radius: 4px;
+    color: #f0e6d2;
+    padding: 8px;
+    font-size: 12px;
+    font-family: inherit;
+    line-height: 1.4;
+    resize: vertical;
+  }
+
+  .sdrn-config-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+
+  .sdrn-cfg-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    color: #d4c4a8;
+
+    span {
+      font-weight: 600;
+      color: #b8923a;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      height: 26px;
+      padding: 0 6px;
+      background: rgba(25, 22, 18, 0.9);
+      border: 1px solid rgba(184, 146, 58, 0.35);
+      border-radius: 3px;
+      color: #fff;
+      font-size: 12px;
+    }
+  }
+
+  .sdrn-cfg-checkbox-row {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+
+    span {
+      color: #d4c4a8;
+    }
+
+    small {
+      display: block;
+      font-size: 10px;
+      color: rgba(212, 196, 168, 0.5);
+    }
+  }
+}
+

@@ -3,6 +3,7 @@ import { syncRageUses } from './rage-mechanics.mjs';
 import { bardicInspirationDieAtLevel, syncBardicInspiration } from './bardic-inspiration.mjs';
 import { rangerFavoredEnemyUsesAtLevel, syncRangerFavoredEnemyUses } from './ranger-favored-enemy.mjs';
 import { monkFocusPointsAtLevel, syncMonkFocusUses } from './monk-focus.mjs';
+import { setItemSystemData } from './utils.mjs';
 
 const dataOf = (item) => item?.system || item?.data || {};
 const keyPart = (value) => String(value || '').toLocaleLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -38,8 +39,7 @@ export function buildClassFeatureGrantPlan({
       planned.payload.data = nextData;
       if (name) planned.payload.name = name;
       item.name = planned.payload.name;
-      item.data = nextData;
-      item.system = nextData;
+      setItemSystemData(item, nextData);
       return;
     }
     const existing = pendingUpdates.get(item.id);
@@ -47,16 +47,14 @@ export function buildClassFeatureGrantPlan({
       existing.payload.data = { ...existing.payload.data, ...nextData };
       if (name) existing.payload.name = name;
       item.name = existing.payload.name;
-      item.data = existing.payload.data;
-      item.system = existing.payload.data;
+      setItemSystemData(item, existing.payload.data);
       return;
     }
     const operation = { kind: 'update-item', key, payload: { id: item.id, data: nextData, ...(name ? { name } : {}) } };
     pendingUpdates.set(item.id, operation);
     operations.push(operation);
     item.name = name || item.name;
-    item.data = nextData;
-    item.system = nextData;
+    setItemSystemData(item, nextData);
   };
   const queueCreate = (key, name, data) => {
     const id = `planned:${key}`;

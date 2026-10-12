@@ -1,0 +1,45 @@
+// Rich tooltip card: dark charcoal with a gold hairline and cut corners; text is at least 12px, labels 10px.
+.sdrn-tooltip {
+  position: fixed;
+  z-index: 10000;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: 280px;
+  padding: 10px 12px;
+  border: 1px solid #b8923a;
+  background: #14110d;
+  color: #efe6d2;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  transition: opacity 120ms ease-out;
+}
+
+.sdrn-tooltip[hidden] {
+  display: none;
+}
+
+.sdrn-tooltip-kind {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #b8923a;
+}
+
+.sdrn-tooltip-title {
+  font-family: Cinzel, serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.sdrn-tooltip-body {
+  font-size: 12px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

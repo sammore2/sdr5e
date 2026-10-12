@@ -1,0 +1,375 @@
+// ══════════════════════════════════════════════════════════════════════════
+// SDR5E — styles/less/components/_active-effects.less
+// Modern, tactile Active Effects & Conditions Palette for Character & NPC sheets
+// ══════════════════════════════════════════════════════════════════════════
+
+.sdrn-root {
+
+  .sdrn-effects-tab-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 10px 14px;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-y: auto;
+  }
+
+  .sdrn-effects-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(20, 18, 15, 0.6);
+    border: 1px solid rgba(184, 146, 58, 0.3);
+    border-radius: 6px;
+    padding: 12px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .sdrn-effects-section-hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(184, 146, 58, 0.2);
+
+    .sdrn-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #ffd276;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      i {
+        color: #f0c968;
+      }
+    }
+
+    .sdrn-section-hint {
+      font-size: 11px;
+      color: #9e8e78;
+      font-style: italic;
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // STRIP DE CONDIÇÕES ATIVAS (Resumo no Topo com Remoção Fácil)
+  // ══════════════════════════════════════════════════════════════════════════
+  .sdrn-active-conditions-strip {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px 8px;
+    background: rgba(184, 146, 58, 0.1);
+    border: 1px solid rgba(184, 146, 58, 0.35);
+    border-radius: 4px;
+  }
+
+  .sdrn-active-strip-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #f0c968;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .sdrn-active-condition-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 24px;
+    padding: 0 8px;
+    border-radius: 12px;
+    background: #2a2016;
+    border: 1px solid #ffd276;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    transition: all 0.15s ease;
+
+    i {
+      color: #ffd276;
+      font-size: 10px;
+    }
+
+    .sdrn-tag-remove {
+      color: #ff7777;
+      font-size: 14px;
+      line-height: 1;
+      margin-left: 2px;
+    }
+
+    &:hover {
+      background: #421b1e;
+      border-color: #ff6b6b;
+      transform: translateY(-1px);
+
+      .sdrn-tag-remove {
+        color: #ffffff;
+      }
+    }
+  }
+
+  .sdrn-clear-conditions-btn {
+    height: 22px;
+    padding: 0 8px;
+    background: rgba(80, 20, 20, 0.4);
+    border: 1px solid rgba(255, 107, 107, 0.4);
+    border-radius: 3px;
+    color: #ffaaaa;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-left: auto;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: #7a1f24;
+      border-color: #ff6b6b;
+      color: #ffffff;
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // GRID VISUAL DE CONDIÇÕES (PALETTE D&D 5E) — "CLICANDO SELECIONAR"
+  // ══════════════════════════════════════════════════════════════════════════
+  .sdrn-conditions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .sdrn-condition-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 38px;
+    padding: 0 8px;
+    background: rgba(26, 22, 18, 0.7);
+    border: 1px solid rgba(184, 146, 58, 0.25);
+    border-radius: 4px;
+    color: #c4b59d;
+    cursor: pointer;
+    text-align: left;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.15s ease;
+
+    .sdrn-cond-icon-wrap {
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .sdrn-cond-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .sdrn-cond-name {
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #e8d8b8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sdrn-cond-status {
+      font-size: 9px;
+      color: #8c7e6c;
+      line-height: 1;
+    }
+
+    .sdrn-cond-check {
+      color: #f0c968;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      background: rgba(40, 33, 26, 0.9);
+      border-color: rgba(240, 201, 104, 0.6);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+
+      .sdrn-cond-name {
+        color: #ffffff;
+      }
+    }
+
+    // ESTADO ATIVO: LUMINOSO COM DESTAQUE DOURADO
+    &.is-active {
+      background: rgba(184, 146, 58, 0.2) !important;
+      border: 1.5px solid #f0c968 !important;
+      box-shadow: 0 0 10px rgba(240, 201, 104, 0.3), inset 0 0 8px rgba(240, 201, 104, 0.15) !important;
+
+      .sdrn-cond-name {
+        color: #ffd276 !important;
+        font-weight: 800;
+      }
+
+      .sdrn-cond-status {
+        color: #f0c968 !important;
+        font-weight: 700;
+      }
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // PRESETS DE BUFFS & MAGIAS (QUICK-ADD)
+  // ══════════════════════════════════════════════════════════════════════════
+  .sdrn-buff-presets-strip {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px 0;
+  }
+
+  .sdrn-presets-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #f0c968;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-right: 2px;
+  }
+
+  .sdrn-preset-btn {
+    height: 24px;
+    padding: 0 8px;
+    background: #1e1914;
+    border: 1px solid rgba(184, 146, 58, 0.35);
+    border-radius: 4px;
+    color: #e8d8b8;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.15s ease;
+
+    i {
+      color: #ffd276;
+      font-size: 10px;
+    }
+
+    &:hover {
+      background: #2b231a;
+      border-color: #ffd276;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // LISTA DE EFEITOS ATIVOS (INSTALADOS NO ATOR)
+  // ══════════════════════════════════════════════════════════════════════════
+  .sdrn-active-effects-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .sdrn-effect-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: #181512;
+    border: 1px solid rgba(184, 146, 58, 0.25);
+    border-radius: 4px;
+    transition: all 0.15s ease;
+
+    &:hover {
+      border-color: rgba(184, 146, 58, 0.5);
+      background: #201b16;
+    }
+
+    &.is-disabled {
+      opacity: 0.6;
+      background: #12100e;
+      border-style: dashed;
+
+      .sdrn-effect-title {
+        text-decoration: line-through;
+        color: #8c7e6c;
+      }
+    }
+
+    .sdrn-effect-icon {
+      font-size: 16px;
+      color: #f0c968;
+      width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sdrn-effect-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .sdrn-effect-header-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sdrn-effect-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .sdrn-effect-duration-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      color: #4ade80;
+    }
+
+    .sdrn-effect-changes {
+      font-size: 10.5px;
+      color: #bfa886;
+    }
+
+    .sdrn-effect-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+  }
+
+}

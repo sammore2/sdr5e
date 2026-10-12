@@ -43,6 +43,30 @@ export function setPathValue(obj, path, value) {
   target[parts[parts.length - 1]] = value;
 }
 
+/**
+ * Safely updates an item's data whether it is an engine Document instance (with a read-only
+ * `system` getter), an API record with `systemData`, or a legacy plain object with `system`/`data`.
+ */
+export function setItemSystemData(item, nextData) {
+  if (!item || typeof nextData !== 'object' || nextData === null) return;
+  if (item.systemData && typeof item.systemData === 'object') {
+    Object.assign(item.systemData, nextData);
+  }
+  if (item.data && typeof item.data === 'object') {
+    Object.assign(item.data, nextData);
+  }
+  const desc = Object.getOwnPropertyDescriptor(item, 'system');
+  if (desc && (desc.writable || desc.set)) {
+    try {
+      item.system = { ...(item.system || {}), ...nextData };
+    } catch {}
+  } else if (item.system && typeof item.system === 'object') {
+    try {
+      Object.assign(item.system, nextData);
+    } catch {}
+  }
+}
+
 // Advantage/disadvantage on d20 rolls (`sdr5eRoll`'s `advantage` param) was
 // wired into the roll engine from the start but nothing ever actually
 // triggered it — every ability/skill/save/attack roll call site passed 0

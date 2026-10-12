@@ -2,6 +2,7 @@
 
   <nav class="sdrn-side-tabs">
     <button type="button" class="sdrn-tab-btn active" data-action="tab" data-tab="main" title="Attributes &amp; Skills"><i class="fas fa-fist-raised"></i></button>
+    <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="actions" title="Ações &amp; Movimento"><i class="fas fa-shoe-prints"></i></button>
     <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="inventory" title="Inventory"><i class="fas fa-briefcase"></i></button>
     <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="features" title="Features"><i class="fas fa-star"></i></button>
     <button type="button" class="sdrn-tab-btn" data-action="tab" data-tab="spells" title="Spells"><i class="fas fa-wand-sparkles"></i></button>
@@ -22,6 +23,10 @@
             <div class="sdrn-rest-btns">
               <button type="button" class="sdrn-rest-btn" data-action="short-rest" title="Short Rest"><i class="fas fa-utensils"></i></button>
               <button type="button" class="sdrn-rest-btn" data-action="long-rest" title="Long Rest"><i class="fas fa-campground"></i></button>
+              <button type="button" class="sdrn-rest-btn sdrn-mode-toggle sdrn-mode-toggle--inline" data-action="toggle-edit-mode" aria-pressed="false" title="Modo Jogo / Edição">
+                <i class="fas fa-lock-open" aria-hidden="true"></i>
+                <span class="sdrn-mode-label">Edição</span>
+              </button>
             </div>
             <div class="sdrn-level-wrap">
               <button type="button" class="sdrn-inspiration-badge {{#if _inspiration}}active{{/if}}" data-action="toggle-inspiration" title="Inspiration ({{#if _inspiration}}Active{{else}}Inactive{{/if}})" aria-pressed="{{_inspiration}}">
@@ -234,21 +239,6 @@
         </div>
 
     <div data-tab-content="main" class="sdrn-tab-panel">
-      <details class="sdrn-movement-ledger" data-movement-ledger>
-        <summary>{{_movementLedger.title}}{{#if _movementSlowPenalty}} · {{_movementLedger.slowPenalty}}{{/if}}{{#if _movementLedger}} · {{_movementLedger.remaining}} m {{_movementLedger.remainingLabel}}{{/if}}</summary>
-        {{#if _movementNeedsCastSelection}}
-        <label>{{_movementLedger.castSelect}} <select data-movement-cast-select><option value="">—</option>{{#each _movementCastChoices}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></label>
-        {{else if _movementCastUnavailable}}
-        <p>{{_movementLedger.castUnavailable}}</p>
-        {{else if _movementLedger}}
-        <div class="sdrn-movement-ledger-total"><span>{{_movementLedger.spentLabel}}: {{_movementLedger.spent}} m</span><span>{{_movementLedger.remainingLabel}}: {{_movementLedger.remaining}} m</span></div>
-        <div class="sdrn-movement-ledger-inputs"><label>{{_movementLedger.distanceLabel}}<input type="number" min="0.1" step="0.1" data-movement-distance></label><label>{{_movementLedger.modeFieldLabel}}<select data-movement-mode>{{#each _movementLedger.modes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><label class="sdrn-movement-difficult"><input type="checkbox" data-movement-difficult> {{_movementLedger.difficultLabel}}</label><button type="button" data-action="movement-ledger-add">{{_movementLedger.addLabel}}</button></div>
-        {{#each _movementLedger.segments}}<div class="sdrn-movement-ledger-segment {{#unless valid}}invalid{{/unless}}"><span>{{modeLabel}} · {{distanceText}}</span><button type="button" data-action="movement-ledger-remove" data-segment-index="{{index}}">{{../_movementLedger.removeLabel}}</button></div>{{/each}}
-        {{#if _movementLedger.dashModes.length}}<div class="sdrn-movement-dash-control"><label>{{_movementLedger.dashLabel}}<select data-dash-speed>{{#each _movementLedger.dashModes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><button type="button" data-action="movement-ledger-add-dash">{{_movementLedger.addDashLabel}}</button></div>{{/if}}
-        {{#each _movementLedger.dashBonuses}}<div class="sdrn-movement-ledger-segment"><span>{{modeLabel}} · +{{amountText}}</span><button type="button" data-action="movement-ledger-remove-dash" data-dash-index="{{index}}">{{../_movementLedger.removeDashLabel}}</button></div>{{/each}}
-        <button type="button" data-action="movement-ledger-reset">{{_movementLedger.resetLabel}}</button>
-        {{/if}}
-      </details>
       <div class="sdrn-columns">
 
         <!-- Sub-colunas: skills | saves+tags -->
@@ -384,25 +374,42 @@
         </div>
 
       </div>
-      <details class="sdrn-core-actions">
-        <summary class="sdrn-core-actions-summary" aria-label="{{_coreActionActivitiesTitle}}. {{_coreActionActivitiesNote}}" data-tooltip="{{_coreActionActivitiesNote}}">
-          <span>{{_coreActionActivitiesTitle}}</span><span class="sdrn-core-actions-help" aria-hidden="true">?</span>
-        </summary>
-        <div class="sdrn-core-actions-list">
-          {{#each _coreActionActivities}}
-          <div class="sdrn-core-action-row" data-core-action-row="{{action}}">
-            <label for="sdrn-core-action-skill-{{action}}">{{label}}</label>
-            {{#if contextLabel}}<label>{{contextLabel}}<input type="text" maxlength="160" placeholder="{{contextPlaceholder}}" data-core-action-context></label>{{/if}}
-            <select id="sdrn-core-action-skill-{{action}}" aria-label="{{label}} skill">
-              {{#each skillOptions}}
-              <option value="{{key}}" {{#if selected}}selected{{/if}} {{#unless available}}disabled{{/unless}}>{{label}}</option>
-              {{/each}}
-            </select>
-            <button type="button" data-action="roll-core-action" data-activity="{{action}}" {{#if disabled}}disabled{{/if}}>{{rollLabel}}</button>
+    </div>
+    <div data-tab-content="actions" class="sdrn-tab-panel" style="display:none">
+        <details open class="sdrn-movement-ledger" data-movement-ledger>
+          <summary>{{_movementLedger.title}}{{#if _movementSlowPenalty}} · {{_movementLedger.slowPenalty}}{{/if}}{{#if _movementLedger}} · {{_movementLedger.remaining}} m {{_movementLedger.remainingLabel}}{{/if}}</summary>
+          {{#if _movementNeedsCastSelection}}
+          <label>{{_movementLedger.castSelect}} <select data-movement-cast-select><option value="">—</option>{{#each _movementCastChoices}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></label>
+          {{else if _movementCastUnavailable}}
+          <p>{{_movementLedger.castUnavailable}}</p>
+          {{else if _movementLedger}}
+          <div class="sdrn-movement-ledger-total"><span>{{_movementLedger.spentLabel}}: {{_movementLedger.spent}} m</span><span>{{_movementLedger.remainingLabel}}: {{_movementLedger.remaining}} m</span></div>
+          <div class="sdrn-movement-ledger-inputs"><label>{{_movementLedger.distanceLabel}}<input type="number" min="0.1" step="0.1" data-movement-distance></label><label>{{_movementLedger.modeFieldLabel}}<select data-movement-mode>{{#each _movementLedger.modes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><label class="sdrn-movement-difficult"><input type="checkbox" data-movement-difficult> {{_movementLedger.difficultLabel}}</label><button type="button" data-action="movement-ledger-add">{{_movementLedger.addLabel}}</button></div>
+          {{#each _movementLedger.segments}}<div class="sdrn-movement-ledger-segment {{#unless valid}}invalid{{/unless}}"><span>{{modeLabel}} · {{distanceText}}</span><button type="button" data-action="movement-ledger-remove" data-segment-index="{{index}}">{{../_movementLedger.removeLabel}}</button></div>{{/each}}
+          {{#if _movementLedger.dashModes.length}}<div class="sdrn-movement-dash-control"><label>{{_movementLedger.dashLabel}}<select data-dash-speed>{{#each _movementLedger.dashModes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><button type="button" data-action="movement-ledger-add-dash">{{_movementLedger.addDashLabel}}</button></div>{{/if}}
+          {{#each _movementLedger.dashBonuses}}<div class="sdrn-movement-ledger-segment"><span>{{modeLabel}} · +{{amountText}}</span><button type="button" data-action="movement-ledger-remove-dash" data-dash-index="{{index}}">{{../_movementLedger.removeDashLabel}}</button></div>{{/each}}
+          <button type="button" data-action="movement-ledger-reset">{{_movementLedger.resetLabel}}</button>
+          {{/if}}
+        </details>
+        <details open class="sdrn-core-actions">
+          <summary class="sdrn-core-actions-summary" aria-label="{{_coreActionActivitiesTitle}}. {{_coreActionActivitiesNote}}" data-tooltip="{{_coreActionActivitiesNote}}">
+            <span>{{_coreActionActivitiesTitle}}</span><span class="sdrn-core-actions-help" aria-hidden="true">?</span>
+          </summary>
+          <div class="sdrn-core-actions-list">
+            {{#each _coreActionActivities}}
+            <div class="sdrn-core-action-row" data-core-action-row="{{action}}">
+              <label for="sdrn-core-action-skill-{{action}}">{{label}}</label>
+              {{#if contextLabel}}<label>{{contextLabel}}<input type="text" maxlength="160" placeholder="{{contextPlaceholder}}" data-core-action-context></label>{{/if}}
+              <select id="sdrn-core-action-skill-{{action}}" aria-label="{{label}} skill">
+                {{#each skillOptions}}
+                <option value="{{key}}" {{#if selected}}selected{{/if}} {{#unless available}}disabled{{/unless}}>{{label}}</option>
+                {{/each}}
+              </select>
+              <button type="button" class="sdrn-core-roll-d20" data-action="roll-core-action" data-activity="{{action}}" title="{{rollLabel}}" aria-label="{{rollLabel}}" {{#if disabled}}disabled{{/if}}><i class="fas fa-dice-d20" aria-hidden="true"></i></button>
+            </div>
+            {{/each}}
           </div>
-          {{/each}}
-        </div>
-      </details>
+        </details>
     </div>
 
     <div data-tab-content="inventory" class="sdrn-tab-panel" style="display:none">
@@ -586,9 +593,12 @@
           <button type="button" class="sdrn-item-roll-btn" data-action="roll-spell-attack" data-id="{{id}}" title="Roll Spell Attack">Atk</button>
           {{#if hasDamage}}<button type="button" class="sdrn-item-roll-btn" data-action="roll-spell-damage" data-id="{{id}}" title="Roll Spell Damage">Dmg</button>{{/if}}
           {{#unless isCantrip}}
-          {{#unless alwaysPrepared}}<button type="button" class="sdrn-item-prepared {{#if prepared}}active{{/if}}" data-action="toggle-prepared" data-id="{{id}}" title="Prepared">
+          {{#unless alwaysPrepared}}
+          <button type="button" class="sdrn-item-prepared {{#if prepared}}active{{/if}}" data-action="toggle-prepared" data-id="{{id}}" title="{{#if prepared}}Magia Preparada (clique para desmarcar){{else}}Preparar Magia{{/if}}">
             <i class="fas fa-book"></i>
-          </button>{{/unless}}
+            <span class="sdrn-prep-label">Prep</span>
+          </button>
+          {{/unless}}
           {{/unless}}
           <button type="button" class="sdrn-item-del" data-action="delete-item" data-id="{{id}}" title="Delete">&times;</button>
         </div>
@@ -598,19 +608,106 @@
       <button type="button" class="sdrn-add-btn" data-action="create-item" data-item-type="spell">+ Add Spell</button>
     </div>
 
-    <div data-tab-content="effects" class="sdrn-tab-panel" style="display:none">
-      <div class="sdrn-box">
-        <div class="sdrn-box-title">🪄 Active Effects</div>
-        {{#each _effects}}
-        <div class="sdrn-item-row">
-          <span class="sdrn-item-icon">{{#if disabled}}⏸️{{else}}✨{{/if}}</span>
-          <span class="sdrn-item-name">{{name}}</span>
-          <span class="sdrn-empty">{{durationLabel}}</span>
-          <button type="button" class="sdrn-item-del" data-action="delete-effect" data-id="{{id}}" title="Delete">&times;</button>
+    <div data-tab-content="effects" class="sdrn-tab-panel sdrn-effects-tab-panel" style="display:none">
+      <!-- Seção 1: Condições de Status (D&D 5e Conditions Palette) -->
+      <div class="sdrn-effects-section">
+        <div class="sdrn-effects-section-hdr">
+          <div class="sdrn-section-title">
+            <i class="fas fa-shield-virus"></i>
+            <span>Condições de Status (D&D 5e)</span>
+          </div>
+          <span class="sdrn-section-hint">Clique em qualquer condição para aplicar ou remover</span>
         </div>
-        {{else}}
-        <div class="sdrn-empty-row">No active effects. Equip a weapon/armor with bonuses to see one here.</div>
-        {{/each}}
+
+        <!-- Chips de Condições Atualmente Ativas -->
+        {{#if _activeConditions.length}}
+        <div class="sdrn-active-conditions-strip">
+          <span class="sdrn-active-strip-label">Ativas:</span>
+          {{#each _activeConditions}}
+          <button type="button" class="sdrn-active-condition-tag" data-action="toggle-condition" data-condition="{{id}}" title="Remover {{label}}">
+            <i class="{{icon}}"></i>
+            <span>{{label}}</span>
+            <span class="sdrn-tag-remove">&times;</span>
+          </button>
+          {{/each}}
+          <button type="button" class="sdrn-clear-conditions-btn" data-action="clear-conditions" title="Remover todas as condições">Limpar Todas</button>
+        </div>
+        {{/if}}
+
+        <!-- Grid com Todas as Condições Disponíveis (Clique para alternar) -->
+        <div class="sdrn-conditions-grid">
+          {{#each _allConditions}}
+          <button type="button" 
+                  class="sdrn-condition-card {{#if active}}is-active{{/if}}" 
+                  data-action="toggle-condition" 
+                  data-condition="{{id}}" 
+                  title="{{description}}">
+            <div class="sdrn-cond-icon-wrap" style="color: {{color}};">
+              <i class="{{icon}}"></i>
+            </div>
+            <div class="sdrn-cond-info">
+              <span class="sdrn-cond-name">{{label}}</span>
+              <span class="sdrn-cond-status">{{#if active}}Ativo{{else}}Inativo{{/if}}</span>
+            </div>
+            {{#if active}}
+            <span class="sdrn-cond-check"><i class="fas fa-check"></i></span>
+            {{/if}}
+          </button>
+          {{/each}}
+        </div>
+      </div>
+
+      <!-- Seção 2: Buffs & Efeitos Mágicos Ativos (Loom ActiveEffects) -->
+      <div class="sdrn-effects-section" style="margin-top: 14px;">
+        <div class="sdrn-effects-section-hdr">
+          <div class="sdrn-section-title">
+            <i class="fas fa-wand-magic-sparkles"></i>
+            <span>Buffs &amp; Efeitos Mágicos Ativos</span>
+          </div>
+          <button type="button" class="sdrn-quick-add-btn" data-action="create-custom-effect" title="Criar Efeito Personalizado">
+            <i class="fas fa-plus"></i> Novo Efeito
+          </button>
+        </div>
+
+        <!-- Presets Rápidos de Magias Populares -->
+        <div class="sdrn-buff-presets-strip">
+          <span class="sdrn-presets-label"><i class="fas fa-bolt"></i> Aplicar Rápido:</span>
+          {{#each _buffPresets}}
+          <button type="button" class="sdrn-preset-btn" data-action="apply-buff-preset" data-preset-id="{{id}}" title="{{description}}">
+            <i class="{{icon}}"></i> + {{name}}
+          </button>
+          {{/each}}
+        </div>
+
+        <!-- Lista de Efeitos Ativos Instalados no Ator -->
+        <div class="sdrn-active-effects-list">
+          {{#each _effects}}
+          <div class="sdrn-effect-row {{#if disabled}}is-disabled{{/if}}">
+            <div class="sdrn-effect-icon">
+              <i class="{{#if disabled}}fas fa-pause-circle{{else}}fas fa-magic{{/if}}"></i>
+            </div>
+            <div class="sdrn-effect-main">
+              <div class="sdrn-effect-header-line">
+                <span class="sdrn-effect-title">{{name}}</span>
+                <span class="sdrn-effect-duration-badge">{{durationLabel}}</span>
+              </div>
+              {{#if changesSummary}}
+              <div class="sdrn-effect-changes">{{changesSummary}}</div>
+              {{/if}}
+            </div>
+            <div class="sdrn-effect-actions">
+              <button type="button" class="sdrn-icon-ctrl-btn" data-action="toggle-effect-disabled" data-id="{{id}}" title="{{#if disabled}}Ativar Efeito{{else}}Pausar Efeito{{/if}}">
+                <i class="{{#if disabled}}fas fa-play{{else}}fas fa-pause{{/if}}"></i>
+              </button>
+              <button type="button" class="sdrn-icon-ctrl-btn del" data-action="delete-effect" data-id="{{id}}" title="Remover Efeito">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+          {{else}}
+          <div class="sdrn-empty-row">Nenhum buff ou efeito mágico ativo no momento. Clique em um dos atalhos acima ou adicione um novo efeito.</div>
+          {{/each}}
+        </div>
       </div>
     </div>
 

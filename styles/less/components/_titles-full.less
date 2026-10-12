@@ -1,0 +1,25 @@
+// Titles are shown in full: they wrap onto more lines instead of being cut with an ellipsis.
+.sdrn-root {
+  .sdrn-item-name,
+  .sdrn-item-name-btn,
+  .sdrn-feature-col-name,
+  .sdrn-box-title,
+  .sdrn-feature-group-title,
+  .sdrn-spell-name,
+  .sdrn-tab-label,
+  .sdrn-id-title,
+  .sdrn-id-sub,
+  .sdrn-subtitle {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+
+  .sdrn-feature-row .sdrn-item-name-btn,
+  .sdrn-item-row .sdrn-item-name-btn {
+    flex: 1 1 8em;
+    text-align: left;
+  }
+}

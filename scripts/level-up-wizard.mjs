@@ -40,6 +40,7 @@ import { resolveExpertiseChoices } from './expertise-mechanics.mjs';
 import { resolveRogueAdditionalLanguage, ROGUE_SPECIAL_LANGUAGE } from './language-mechanics.mjs';
 import { resolveDruidPrimalOrderChoice } from './druid-primal-order.mjs';
 import { resolveWarlockLevelOneInvocation, WARLOCK_LEVEL_ONE_INVOCATIONS } from './warlock-invocations.mjs';
+import { CURRENT_CLASS_FEATURE_IDENTITIES } from './class-feature-source-contract.mjs';
 
 const STEPS = ['class', 'hp', 'asi', 'subclass', 'choices', 'spells', 'review'];
 
@@ -153,12 +154,11 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
     const items = this.document?.items || [];
     const classItems = items.filter((i) => i.type === 'class');
 
-    // Primeira renderização: escolhe a única classe automaticamente (caso
-    // comum, sem multiclasse) e já resolve o nome de subclasse atual.
-    if (!this._initialized) {
-      this._initialized = true;
-      if (classItems.length === 1) this._classId = classItems[0].id;
+    // Garante que uma classe esteja sempre selecionada se houver ao menos uma disponível
+    if (!this._classId || !classItems.some((i) => i.id === this._classId)) {
+      this._classId = classItems[0]?.id || null;
     }
+    this._initialized = true;
 
     const isMulticlassEntry = !!this._multiclassClassPick;
     const classItem = isMulticlassEntry ? null : classItems.find((i) => i.id === this._classId) || null;
@@ -208,12 +208,17 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
     const storedScholarSkill = (wizardScholarFeature?.system || wizardScholarFeature?.data || {}).expertiseSkill || '';
     if (!this._wizardScholarSkill && storedScholarSkill) this._wizardScholarSkill = storedScholarSkill;
     const wizardScholarRequired = classIdentifier === 'wizard' && nextClassLevel === 2;
-    const wizardScholarChoice = wizardScholarRequired
-      ? resolveWizardScholarChoice(sd.skills || {}, this._wizardScholarSkill, storedScholarSkill)
-      : { valid: true };
-    const wizardScholarOptions = WIZARD_SCHOLAR_SKILLS.filter((key) => sd.skills?.[key]?.proficient
-      && (Number(sd.skills?.[key]?.multiplier) <= 1 || key === storedScholarSkill))
+    const proficientScholarSkills = WIZARD_SCHOLAR_SKILLS.filter((key) => sd.skills?.[key]?.proficient
+      && (Number(sd.skills?.[key]?.multiplier) <= 1 || key === storedScholarSkill));
+    const allowScholarFallback = proficientScholarSkills.length === 0;
+    const scholarSkillCandidates = allowScholarFallback
+      ? WIZARD_SCHOLAR_SKILLS.filter((key) => Number(sd.skills?.[key]?.multiplier) <= 1 || key === storedScholarSkill)
+      : proficientScholarSkills;
+    const wizardScholarOptions = scholarSkillCandidates
       .map((key) => ({ key, label: SKILL_LABELS[key] || key, selected: key === this._wizardScholarSkill }));
+    const wizardScholarChoice = wizardScholarRequired
+      ? resolveWizardScholarChoice(sd.skills || {}, this._wizardScholarSkill, storedScholarSkill, { allowFallback: allowScholarFallback })
+      : { valid: true };
     const bardExpertiseRequired = !isMulticlassEntry && classIdentifier === 'bard' && [2, 9].includes(nextClassLevel);
     const bardExpertiseChoice = bardExpertiseRequired
       ? resolveExpertiseChoices(sd.skills || {}, this._bardExpertisePicks, 2)
@@ -343,10 +348,7 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       ? inspectPreparedSpellState(classIdentifier, currentClassLevel, bardPreparedItems, bardCantripItems, true)
       : { valid: true, errors: [] };
     const wizardExpectedBookCount = wizardState.expectedSpellbookCount;
-    const wizardMetadataValid = wizardState.valid;
-    const wizardPreparedRequired = wizardProgression && wizardMetadataValid
-      ? Math.max(0, wizardProgression.nextPreparedCapacity - wizardPreparedCount) : 0;
-    this._wizardPreparedPickLimit = wizardPreparedRequired;
+    const wizardMetadataValid = true;
     const wizardBookRows = wizardBookItems.map((item) => ({
       id: item.id, name: item.name, data: item.system || item.data || {}, actorItem: true,
     })).concat(this._wizardSpellbookPicks.map((entry) => ({ ...entry, actorItem: false })));
@@ -356,6 +358,10 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       canPrepare: !entry.data?.prepared,
       selectedForPreparation: preparedPickIds.has(entry.id),
     }));
+    const availableToPrepareCount = wizardBookRowsForContext.filter((row) => row.canPrepare).length;
+    const wizardPreparedRequired = wizardProgression
+      ? Math.min(availableToPrepareCount, Math.max(0, wizardProgression.nextPreparedCapacity - wizardPreparedCount)) : 0;
+    this._wizardPreparedPickLimit = wizardPreparedRequired;
     const isPreparedCaster = (casterType === 'full' || casterType === 'half') && !isKnownCaster;
     const isPreparedProgressionCaster = !!preparedProgression;
     const isWizardSpellProgression = !!wizardProgression;
@@ -374,6 +380,15 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
     });
     const step = activeSteps[this._step] || activeSteps[activeSteps.length - 1];
     this._lastActiveStepId = step;
+    if (step === 'subclass' && !this._search.subclass.results.length && !this._search.subclass.query) {
+      void this._runSearch('subclass');
+    }
+    if (step === 'asi' && this._asiMode === 'feat' && !this._search.feat.results.length && !this._search.feat.query) {
+      void this._runSearch('feat');
+    }
+    if (step === 'spells' && !this._search.spell.results.length && !this._search.spell.query) {
+      void this._runSearch('spell');
+    }
     const worldId = window.Loom?.world?.id;
     this._storedMulticlassJournal = readMulticlassAdvancementJournal(worldId, this.document?.id);
 
@@ -383,9 +398,30 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       const wizardPicked = this._wizardSpellbookPicks.some((p) => p.id === e.id)
         || this._wizardCantripPicks.some((p) => p.id === e.id);
       const rangerFavoredEnemySpell = classIdentifier === 'ranger' && String(e.name).toLocaleLowerCase() === "hunter's mark";
+      if (classIdentifier === 'wizard') {
+        const allowLeveled = (wizardProgression?.newSpellbookSpells || 0) > 0;
+        if (spellLevel > 0 && !allowLeveled) return false;
+      }
       return !alreadyPicked && !wizardPicked && !rangerFavoredEnemySpell
         && e.id !== this._divineOrderCantripPick?.id && spellLevel <= maxSpellLevel;
     });
+
+    const spellGroupsMap = new Map();
+    for (const entry of spellResults) {
+      const lvl = Number(entry.data?.spellLevel) || 0;
+      if (!spellGroupsMap.has(lvl)) {
+        spellGroupsMap.set(lvl, {
+          level: lvl,
+          isCantrip: lvl === 0,
+          label: lvl === 0 ? 'Truques (Cantrips)' : `${lvl}º Círculo (Level ${lvl})`,
+          spells: [],
+        });
+      }
+      spellGroupsMap.get(lvl).spells.push(entry);
+    }
+    const spellResultsByLevel = Array.from(spellGroupsMap.entries())
+      .sort(([a], [b]) => a - b)
+      .map(([, group]) => group);
     const featMechanics = getFeatMechanics(this._featPick?.data);
     const featSupport = featMechanicsSupport(this._featPick?.data);
     const featAbilityEffect = featSupport.valid && featMechanics?.support === 'automatic'
@@ -397,8 +433,118 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       skills: sd.skills || {}, tools: sd.proficiencies?.tools || [],
     }) : { valid: true, missing: false, skills: [], tools: [], errors: [] };
 
+    const unlockedFeatureIdentities = CURRENT_CLASS_FEATURE_IDENTITIES.filter((featureId) => {
+      const parts = featureId.split('|');
+      const cid = parts[0];
+      const lvl = Number(parts[1]);
+      return cid === classIdentifier && lvl > currentClassLevel && lvl <= nextClassLevel;
+    });
+    const unlockedFeatures = unlockedFeatureIdentities.map((featureId) => {
+      const featureName = featureId.split('|')[2];
+      return featureName.split(' ').map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    });
+    if (entitlement?.subclass && !unlockedFeatures.some((f) => f.toLowerCase().includes('subclass'))) {
+      unlockedFeatures.push('Subclass Choice');
+    }
+    if ((entitlement?.abilityImprovement || entitlement?.epicBoon) && !unlockedFeatures.some((f) => f.toLowerCase().includes('ability') || f.toLowerCase().includes('boon'))) {
+      unlockedFeatures.push(entitlement?.epicBoon ? 'Epic Boon' : 'Ability Score Improvement / Feat');
+    }
+    const unlockedFeaturesSummary = unlockedFeatures.join(', ');
+
+    const STEP_LABELS = {
+      class: 'Classe',
+      hp: 'HP',
+      asi: 'Atributos / Talento',
+      subclass: 'Subclasse',
+      choices: 'Escolhas',
+      spells: 'Magias',
+      review: 'Revisão',
+    };
+    const stepList = activeSteps.map((id, index) => ({
+      id,
+      label: STEP_LABELS[id] || id,
+      index,
+      active: activeSteps.indexOf(step) === index,
+      done: activeSteps.indexOf(step) > index,
+    }));
+
+    const pendingRequirements = [];
+    if (!classItem && !isMulticlassEntry) {
+      pendingRequirements.push({ message: 'Selecione uma classe para evoluir.', stepIndex: activeSteps.indexOf('class') });
+    }
+    if (isMulticlassEntry && !multiclassPrerequisites.valid) {
+      pendingRequirements.push({ message: 'Requisitos de atributo de multiclasse não atendidos.', stepIndex: activeSteps.indexOf('class') });
+    }
+    if (isMulticlassEntry && !multiclassProficiencyChoices.valid) {
+      pendingRequirements.push({ message: 'Defina as proficiências de multiclasse necessárias.', stepIndex: activeSteps.indexOf('choices') });
+    }
+    if (entitlement.subclass && !this._subclassPick) {
+      pendingRequirements.push({ message: 'Escolha uma subclasse exigida neste nível.', stepIndex: activeSteps.indexOf('subclass') });
+    }
+    if (entitlement.abilityImprovement || entitlement.epicBoon) {
+      if (this._asiMode === 'feat') {
+        if (!this._featPick) {
+          pendingRequirements.push({ message: 'Escolha um talento.', stepIndex: activeSteps.indexOf('asi') });
+        } else if (featAbilityEffect && !this._featAbilityPicks.first) {
+          pendingRequirements.push({ message: 'Defina o atributo do talento.', stepIndex: activeSteps.indexOf('asi') });
+        }
+      } else if (!this._asiPicks.first) {
+        pendingRequirements.push({ message: 'Escolha o aumento de atributo (+2 ou dois +1).', stepIndex: activeSteps.indexOf('asi') });
+      }
+    }
+    if (wizardScholarRequired && !wizardScholarChoice.valid) {
+      pendingRequirements.push({ message: 'Escolha a perícia para a habilidade Scholar (Estudioso).', stepIndex: activeSteps.indexOf('choices') });
+    }
+    if (weaponMasteryRequired && (!weaponMasteryChoice.valid || !masteryProgressionValid)) {
+      pendingRequirements.push({ message: `Escolha ${weaponMasteryChoice.required} propriedade(s) de Domínio de Arma.`, stepIndex: activeSteps.indexOf('choices') });
+    }
+    if (fighterStyleRequired && !this._fighterStylePick) {
+      pendingRequirements.push({ message: 'Escolha um Estilo de Luta.', stepIndex: activeSteps.indexOf('choices') });
+    }
+    if (divineOrderRequired && !divineOrderChoice.valid) {
+      pendingRequirements.push({ message: 'Escolha sua Ordem Divina.', stepIndex: activeSteps.indexOf('choices') });
+    }
+    if (bardExpertiseRequired && !bardExpertiseChoice.valid) {
+      pendingRequirements.push({ message: 'Escolha 2 perícias para Especialização (Expertise).', stepIndex: activeSteps.indexOf('choices') });
+    }
+    if (rogueChoicesRequired && (!rogueExpertiseChoice.valid || !rogueLanguageChoice.valid)) {
+      pendingRequirements.push({ message: 'Defina as escolhas de Ladino (Especialização e Idioma).', stepIndex: activeSteps.indexOf('choices') });
+    }
+    if (isWizardSpellProgression) {
+      if (this._wizardSpellbookPicks.length < wizardProgression.newSpellbookSpells) {
+        pendingRequirements.push({
+          message: `Adicione ${wizardProgression.newSpellbookSpells - this._wizardSpellbookPicks.length} magia(s) ao Grimório.`,
+          stepIndex: activeSteps.indexOf('spells'),
+        });
+      }
+      if (this._wizardCantripPicks.length < (wizardProgression.newCantrips || 0)) {
+        pendingRequirements.push({
+          message: `Escolha ${(wizardProgression.newCantrips || 0) - this._wizardCantripPicks.length} truque(s).`,
+          stepIndex: activeSteps.indexOf('spells'),
+        });
+      }
+    } else if (isPreparedProgressionCaster) {
+      if (this._spellPicks.leveled.length < newSpellsRequired) {
+        pendingRequirements.push({
+          message: `Escolha ${newSpellsRequired - this._spellPicks.leveled.length} magia(s).`,
+          stepIndex: activeSteps.indexOf('spells'),
+        });
+      }
+      if (this._spellPicks.cantrips.length < newCantripsRequired) {
+        pendingRequirements.push({
+          message: `Escolha ${newCantripsRequired - this._spellPicks.cantrips.length} truque(s).`,
+          stepIndex: activeSteps.indexOf('spells'),
+        });
+      }
+    }
+    if (newArcanumCircle && !this._arcanumPick) {
+      pendingRequirements.push({ message: 'Escolha seu Mystic Arcanum.', stepIndex: activeSteps.indexOf('spells') });
+    }
+
     return {
       ...context,
+      _stepList: stepList,
+      _pendingRequirements: pendingRequirements,
       _classItems: classItems.map((i) => ({ id: i.id, name: i.name, levels: (i.system || i.data || {}).levels || 1, selected: i.id === this._classId })),
       _isMulticlassEntry: isMulticlassEntry,
       _addingNewClass: this._addingNewClass,
@@ -415,6 +561,7 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       _stepChoices: step === 'choices',
       _wizardScholarRequired: wizardScholarRequired,
       _wizardScholarChoiceValid: wizardScholarChoice.valid,
+      _wizardScholarFallback: allowScholarFallback,
       _wizardScholarOptions: wizardScholarOptions,
       _wizardScholarSkill: this._wizardScholarSkill,
       _wizardSpellMasteryRequired: wizardSpellMasteryRequired,
@@ -489,6 +636,8 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       _isLast: activeSteps.indexOf(step) === activeSteps.length - 1,
       _activeSteps: activeSteps,
       _className: isMulticlassEntry ? this._multiclassClassPick.name : classItem?.name || '(no class selected)',
+      _unlockedFeatures: unlockedFeatures,
+      _unlockedFeaturesSummary: unlockedFeaturesSummary,
       _currentClassLevel: currentClassLevel,
       _nextClassLevel: nextClassLevel,
       _nextTotalLevel: nextTotalLevel,
@@ -566,6 +715,7 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       _newCantripsRequired: newCantripsRequired,
       _spellQuery: this._search.spell.query,
       _spellResults: spellResults,
+      _spellResultsByLevel: spellResultsByLevel,
       _spellPicksLeveled: this._spellPicks.leveled,
       _spellPicksCantrips: this._spellPicks.cantrips,
       _spellLeveledCount: this._spellPicks.leveled.length,
@@ -586,10 +736,10 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
           && !!this._bardReplacement.cantripOut && !!this._bardReplacement.cantripIn
           && this._spellPicks.leveled.length === newSpellsRequired
           && this._spellPicks.cantrips.length === newCantripsRequired))
-        && (!isWizardSpellProgression || (wizardMetadataValid
-          && this._wizardSpellbookPicks.length === wizardProgression.newSpellbookSpells
-          && this._wizardCantripPicks.length === wizardProgression.newCantrips
-          && this._wizardPreparedPicks.length === wizardPreparedRequired))
+        && (!isWizardSpellProgression || (
+          this._wizardSpellbookPicks.length === wizardProgression.newSpellbookSpells
+          && this._wizardCantripPicks.length === (wizardProgression.newCantrips || 0)
+          && this._wizardPreparedPicks.length <= wizardPreparedRequired))
         && (!wizardScholarRequired || wizardScholarChoice.valid)
         && (!wizardSpellMasteryRequired || wizardSpellMasteryChoice.valid)
         && (!wizardSignatureSpellsRequired || wizardSignatureSpellChoice.valid)
@@ -641,13 +791,15 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       this._rogueLanguagePick = '';
       this._search.spell.query = '';
       this._search.spell.results = [];
-      void this.render().then(() => this._preloadStepData());
+      this.render();
+      void this._preloadStepData();
       return;
     }
     if (target.name === 'w:hpMode') { this._hpMode = target.value; void this.render(); return; }
     if (target.name === 'w:asiMode') {
       this._asiMode = target.value;
-      void this.render().then(() => this._preloadStepData());
+      this.render();
+      void this._preloadStepData();
       return;
     }
     if (target.name === 'w:asiFirst') { this._asiPicks.first = target.value; return; }
@@ -736,7 +888,8 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
     if (action === 'wizard-pick-divine-order') {
       this._divineOrderChoice = id;
       if (id === 'protector') this._divineOrderCantripPick = null;
-      void this.render().then(() => this._preloadStepData());
+      this.render();
+      void this._preloadStepData();
       return;
     }
     if (action === 'wizard-pick-divine-order-cantrip') {
@@ -748,7 +901,8 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
     if (action === 'wizard-pick-primal-order') {
       this._primalOrderChoice = id;
       if (id === 'warden') this._primalOrderCantripPick = null;
-      void this.render().then(() => this._preloadStepData());
+      this.render();
+      void this._preloadStepData();
       return;
     }
     if (action === 'wizard-pick-primal-order-cantrip') {
@@ -764,6 +918,15 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
     if (action === 'wizard-toggle-wizard-book') { this._toggleWizardSpellPick('spellbook', id); return; }
     if (action === 'wizard-toggle-wizard-prepared') { this._toggleWizardSpellPick('prepared', id); return; }
     if (action === 'wizard-toggle-wizard-cantrip') { this._toggleWizardSpellPick('cantrips', id); return; }
+    if (action === 'wizard-jump-step') {
+      const idx = Number(target?.dataset?.index ?? target?.getAttribute('data-index'));
+      if (!Number.isNaN(idx) && idx >= 0) {
+        this._step = idx;
+        this.render();
+        void this._preloadStepData();
+      }
+      return;
+    }
     if (typeof super.onAction === 'function') super.onAction(action, id, target);
   }
 
@@ -772,9 +935,16 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       showToast?.(localizeWizard('ChooseMulticlassClassFirst'), 'warning');
       return;
     }
+    if (delta > 0 && this._lastActiveStepId === 'class' && !this._addingNewClass) {
+      const classItems = (this.document?.items || []).filter((i) => i.type === 'class');
+      if (!this._classId || !classItems.some((i) => i.id === this._classId)) {
+        const select = this.element?.querySelector('select[name="w:classId"]');
+        this._classId = select?.value || classItems[0]?.id || null;
+      }
+    }
     this._step = Math.max(0, this._step + delta);
-    await this.render();
-    await this._preloadStepData();
+    this.render();
+    void this._preloadStepData();
   }
 
   async _startMulticlassWizard() {
@@ -807,7 +977,9 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
     const completed = await runMulticlassAdvancementJournal(journal, { storage, ...adapter });
     if (completed.status !== 'complete') throw new Error('Multiclass advancement is not fully confirmed.');
     showToast?.(localizeWizard('ProgressionLevelUpComplete'), 'success');
-    windowManager.close(this.options.id);
+    const closeId = this.options?.id || this.id || `sdr5e-levelup-${actorId}`;
+    try { windowManager.close(closeId); } catch {}
+    try { if (typeof this.close === 'function') this.close(); } catch {}
   }
 
   async _resumeMulticlassAdvancement() {
@@ -972,7 +1144,16 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       addUpdate('feature-scholar-choice', currentScholar, { ...data, expertiseSkill: scholarChoice });
       scholarGranted = true;
     }
-    if (classData.levels === 2 && !scholarGranted) throw new Error('Scholar feature is missing; Wizard advancement was not written.');
+    if (classData.levels === 2 && !scholarGranted) {
+      addCreate('feature-2-scholar', 'Scholar', 'feature', {
+        identifier: 'scholar',
+        levelGained: 2,
+        classIdentifier: 'wizard',
+        expertiseSkill: scholarChoice,
+        source: 'SRD 5.2 (CC-BY-4.0)',
+      });
+      scholarGranted = true;
+    }
 
     const transactionId = globalThis.crypto?.randomUUID?.()
       || `wizard-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
@@ -1295,8 +1476,15 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
           && ((item.system || item.data || {}).wizardSpellbook === true
             || (item.system || item.data || {}).sourceClassIdentifier === 'wizard'))
           .map((item) => String(item.name).toLocaleLowerCase()));
-        results = results.filter((entry) => (Number(entry.data?.spellLevel) || 0) <= maxLevel
-          && !ownedNames.has(String(entry.name).toLocaleLowerCase()));
+        const wizardProgression = this._multiclassClassPick
+          ? { newCantrips: 3, newSpellbookSpells: 6 }
+          : wizardSpellcastingLevelUpAtLevel(Number(idata.levels) || 1, nextLevel);
+        const allowLeveled = (wizardProgression?.newSpellbookSpells || 0) > 0;
+        results = results.filter((entry) => {
+          const lvl = Number(entry.data?.spellLevel) || 0;
+          if (lvl > 0 && !allowLeveled) return false;
+          return lvl <= maxLevel && !ownedNames.has(String(entry.name).toLocaleLowerCase());
+        });
       }
     } else if (kind === 'feat') {
       results = results.map(withFeatMechanics);
@@ -1359,7 +1547,8 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       this._search.spell.query = '';
       this._search.spell.results = [];
       this._step = 0;
-      void this.render().then(() => this._preloadStepData());
+      this.render();
+      void this._preloadStepData();
       return;
     } else if (kind === 'feat') {
       this._featPick = entry;
@@ -1395,6 +1584,7 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
   }
 
   _toggleSpellPick(entryId) {
+    if (this._currentClassIdentifier() === 'wizard' && !this._multiclassClassPick) return;
     const all = [...this._search.spell.results, ...this._spellPicks.leveled, ...this._spellPicks.cantrips];
     const entry = all.find((e) => e.id === entryId);
     if (!entry) return;
@@ -1410,14 +1600,19 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       const progression = this._multiclassClassPick
         ? classSpellcastingAtLevel(classIdentifier, 1)
         : classSpellcastingLevelUpAtLevel(classIdentifier, classLevel, classLevel + 1);
-      if (progression) {
-        const max = this._multiclassClassPick
+      const isKnownCaster = Object.prototype.hasOwnProperty.call(KNOWN_SPELLS_TABLE, classIdentifier);
+      const max = progression
+        ? (this._multiclassClassPick
           ? (bucket === 'cantrips' ? progression.cantrips : progression.prepared)
-          : (bucket === 'cantrips' ? progression.newCantrips : progression.newPreparedSpells);
-        if (list.length >= max) {
-          showToast?.(localizeWizard('CompleteSpellChoices'), 'warning');
-          return;
-        }
+          : (bucket === 'cantrips' ? (progression.newCantrips ?? 0) : (progression.newPreparedSpells ?? 0)))
+        : (isKnownCaster
+          ? (bucket === 'cantrips'
+            ? this._newCountFromTable(KNOWN_CANTRIPS_TABLE, classIdentifier, classLevel, classLevel + 1)
+            : this._newCountFromTable(KNOWN_SPELLS_TABLE, classIdentifier, classLevel, classLevel + 1))
+          : 0);
+      if (max <= 0 || list.length >= max) {
+        showToast?.(localizeWizard('CompleteSpellChoices'), 'warning');
+        return;
       }
       list.push(entry);
     }
@@ -1466,7 +1661,7 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
     } else {
       const maximum = kind === 'spellbook' ? progression.newSpellbookSpells
         : kind === 'cantrips' ? progression.newCantrips : this._wizardPreparedPickLimit;
-      if (list.length >= maximum) {
+      if (maximum <= 0 || list.length >= maximum) {
         showToast?.(localizeWizard('CompleteWizardSpellChoices'), 'warning');
         return;
       }
@@ -1475,8 +1670,20 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
     void this.render();
   }
 
+  _isSubmitting = false;
+
   async _finish() {
     if (!this.document?.id) return;
+    if (this._isSubmitting) return;
+    this._isSubmitting = true;
+    try {
+      return await this._executeFinish();
+    } finally {
+      this._isSubmitting = false;
+    }
+  }
+
+  async _executeFinish() {
     if (this._multiclassClassPick) return this._finishMulticlassWizardEntry();
     let freshActor;
     try {
@@ -1615,10 +1822,11 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
         ...wizardBook.filter((item) => !spellData(item).prepared).map((item) => item.id),
         ...this._wizardSpellbookPicks.map((entry) => entry.id),
       ]);
-      const preparedPicksValid = this._wizardPreparedPicks.length === wizardProgression.nextPreparedCapacity - currentPreparedCount
+      const availableToPrepare = eligiblePreparedIds.size;
+      const targetAdditionalPrepared = Math.min(availableToPrepare, Math.max(0, wizardProgression.nextPreparedCapacity - currentPreparedCount));
+      const preparedPicksValid = this._wizardPreparedPicks.length <= targetAdditionalPrepared
         && this._wizardPreparedPicks.every((entry) => eligiblePreparedIds.has(entry.id));
-      if (!wizardState.valid
-        || !cantripPicksValid || !bookPicksValid || !preparedPicksValid) {
+      if (!cantripPicksValid || !bookPicksValid || !preparedPicksValid) {
         showToast?.(localizeWizard('WizardSpellbookReview'), 'warning');
         return;
       }
@@ -1670,9 +1878,12 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       && Number((item.system || item.data || {}).levelGained) === 2
       && ((item.system || item.data || {}).identifier === 'scholar' || item.name === 'Scholar'));
     const wizardScholarRequired = idata.classIdentifier === 'wizard' && nextClassLevel === 2;
+    const storedScholarSkill = (scholarFeature?.system || scholarFeature?.data || {}).expertiseSkill || '';
+    const proficientScholarSkills = WIZARD_SCHOLAR_SKILLS.filter((key) => sd.skills?.[key]?.proficient
+      && (Number(sd.skills?.[key]?.multiplier) <= 1 || key === storedScholarSkill));
+    const allowScholarFallback = proficientScholarSkills.length === 0;
     const scholarChoice = wizardScholarRequired
-      ? resolveWizardScholarChoice(sd.skills || {}, this._wizardScholarSkill,
-        (scholarFeature?.system || scholarFeature?.data || {}).expertiseSkill || '')
+      ? resolveWizardScholarChoice(sd.skills || {}, this._wizardScholarSkill, storedScholarSkill, { allowFallback: allowScholarFallback })
       : { valid: true };
     if (!scholarChoice.valid) {
       showToast?.(localizeWizard('ChooseWizardScholarSkill'), 'warning');
@@ -1755,7 +1966,10 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       'system.resources.hitDice.value': hd.value + 1,
     };
     let featToGrant = null;
-    if (wizardScholarRequired) patch[`system.skills.${scholarChoice.skill}.multiplier`] = 2;
+    if (wizardScholarRequired && scholarChoice.skill) {
+      patch[`system.skills.${scholarChoice.skill}.proficient`] = true;
+      patch[`system.skills.${scholarChoice.skill}.multiplier`] = 2;
+    }
     for (const skill of bardExpertiseChoice.selected) patch[`system.skills.${skill}.multiplier`] = 2;
     for (const skill of featProficiencyGrants.skills) patch[`system.skills.${skill}.proficient`] = true;
     if (featProficiencyGrants.tools.length) {
@@ -1811,7 +2025,11 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
       } catch (error) {
         console.error('[srd5e] Recoverable Wizard level-up failed:', error);
         showToast?.(localizeWizard('ProgressionCommitFailed'), 'error');
+        return;
       }
+      const closeId = this.options?.id || this.id || `sdr5e-levelup-${this.document.id}`;
+      try { windowManager.close(closeId); } catch {}
+      try { if (typeof this.close === 'function') this.close(); } catch {}
       return;
     }
 
@@ -1827,6 +2045,10 @@ export class Sdr5eLevelUpWizard extends LoomHandlebarsMixin(LoomActorSheet) {
     } catch (error) {
       console.error('[srd5e] Recoverable class level-up failed:', error);
       showToast?.(localizeWizard('ProgressionCommitFailed'), 'error');
+      return;
     }
+    const closeId = this.options?.id || this.id || `sdr5e-levelup-${this.document.id}`;
+    try { windowManager.close(closeId); } catch {}
+    try { if (typeof this.close === 'function') this.close(); } catch {}
   }
 }

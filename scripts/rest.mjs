@@ -8,6 +8,7 @@ import { resolveArcaneRecovery } from './arcane-recovery.mjs';
 import { resetWizardSignatureSpellUses, resolveWizardMemorizeSpellChoice, resolveWizardSpellMasteryReplacement } from './wizard-spell-mechanics.mjs';
 import { planSubclassSpellGrantReconciliation, resolveCircleLandAlwaysPreparedSpells } from './subclass-spell-grants.mjs';
 import { resolveWeaponMasteryReplacement, weaponMasteryRestCandidates } from './weapon-mastery.mjs';
+import { setItemSystemData } from './utils.mjs';
 
 const LONG_REST_WAIT_MS = 16 * 60 * 60 * 1000;
 
@@ -406,8 +407,7 @@ export async function takeRest(actor, kind, opts = {}) {
       }
       for (const { feature, data } of writes) {
         await api.put(`/items/${feature.id}`, { data });
-        feature.system = data;
-        feature.data = data;
+        setItemSystemData(feature, data);
         recovered.push(`${feature.name}: ${window.Loom?.i18n?.localize?.('SDR5E.ClassFeatures.WeaponMasteryName') || 'Weapon Mastery'}`);
       }
     }
