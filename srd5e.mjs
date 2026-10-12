@@ -21,6 +21,7 @@ import { Sdr5eEncounterSheet } from './scripts/encounter-sheet.mjs';
 import { Sdr5eItemSheet } from './scripts/item-sheet.mjs';
 import { SDR5EApi } from './scripts/api.mjs';
 import { registerSettings } from './scripts/settings.mjs';
+import { registerCombatInitiative } from './scripts/combat-initiative.mjs';
 import { CONDITIONS } from './scripts/config.mjs';
 import { attackRollIsCritical } from './scripts/critical-mechanics.mjs';
 import { attackDamageBinding, resolveAttackAgainstTarget } from './scripts/attack-target-mechanics.mjs';
@@ -145,6 +146,7 @@ function prepareData(row) {
 }
 
 registerSettings();
+registerCombatInitiative();
 
 /**
  * `LoomSystem.useItem` — the generic entry point a ruleset-agnostic caller
