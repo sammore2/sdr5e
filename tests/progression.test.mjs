@@ -9,6 +9,7 @@ import { selectClassFeaturesToGrant } from '../scripts/class-feature-grants.mjs'
 import { featMechanicsSupport, resolveFeatMechanicChoices, validateFeatMechanics } from '../scripts/feat-mechanics.mjs';
 import { FEAT_MECHANICS_BY_IDENTIFIER, TOOL_PROFICIENCY_OPTIONS } from '../scripts/feat-mechanics-data.mjs';
 import { DatabaseSync } from 'node:sqlite';
+import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'node:fs';
 import { BACKGROUND_MECHANICS_BY_IDENTIFIER, resolveBackgroundChoices } from '../scripts/background-mechanics.mjs';
 import { ABILITY_LABELS, SKILL_LABELS } from '../scripts/config.mjs';
@@ -118,7 +119,7 @@ test('Bardic Inspiration uses follow Charisma modifier and its die scales by Bar
 });
 
 test('Bard table gaps have source-verified level records and explicit automation limits', () => {
-  const db = new DatabaseSync(new URL('../packs/features.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/features.sqlite', import.meta.url)), { readOnly: true });
   try {
     const ids = ['srd52-bard-expertise-2', 'srd52-bard-expertise-9', 'srd52-bard-countercharm',
       'srd52-bard-superior-inspiration', 'srd52-bard-words-of-creation'];
@@ -136,7 +137,7 @@ test('Bard table gaps have source-verified level records and explicit automation
     assert.equal(features.get('srd52-bard-superior-inspiration').data.mechanicsSupport.status, 'assisted');
     assert.equal(features.get('srd52-bard-words-of-creation').data.mechanicsSupport.status, 'manual');
     assert.ok(features.get('srd52-bard-words-of-creation').data.mechanicsSupport.manualNoticeKey);
-    const spells = new DatabaseSync(new URL('../packs/spells.sqlite', import.meta.url), { readOnly: true });
+    const spells = new DatabaseSync(fileURLToPath(new URL('../packs/spells.sqlite', import.meta.url)), { readOnly: true });
     try {
       // SRD 5.2 .dev/srd5.2_markdown/spells.md "#### Power Word Heal" (Level 9 Enchantment, Bard, Cleric) is a normal spell record; Words of Creation only grants it as always-prepared.
       assert.equal(spells.prepare("SELECT COUNT(*) AS count FROM entries WHERE type = 'spell' AND name = ?").get('Power Word Heal').count, 1);
@@ -806,7 +807,7 @@ test('Wizard Signature Spells requires two distinct level-3 book spells and trac
 });
 
 test('Wizard spellcasting features use exact SRD feature text and levels without spilling into the spell list', { skip: srdSkip('classes.md') }, () => {
-  const db = new DatabaseSync(new URL('../packs/features.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/features.sqlite', import.meta.url)), { readOnly: true });
   const rows = db.prepare("SELECT name, data FROM entries WHERE type='feature' AND json_extract(data, '$.classIdentifier')='wizard' AND json_extract(data, '$.identifier') IN ('ritual-adept','scholar','memorize-spell','spell-mastery','signature-spells')").all();
   db.close();
   const features = new Map(rows.map((row) => [JSON.parse(row.data).identifier, { name: row.name, data: JSON.parse(row.data) }]));
@@ -1140,7 +1141,7 @@ test('Persistent Rage skips per-turn extensions and expires at the ten-minute ro
 test('Rage pack metadata follows the local SRD 5.2 source and marks unimplemented effects manual', { skip: srdSkip('classes.md') }, () => {
   const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const expectedDescription = extractClassFeatureDescriptions(source).get('barbarian|1|rage');
-  const db = new DatabaseSync(new URL('../packs/features.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/features.sqlite', import.meta.url)), { readOnly: true });
   const rows = db.prepare("SELECT name, data FROM entries WHERE type = 'feature'").all()
     .map((row) => ({ name: row.name, data: JSON.parse(row.data) }))
     .filter((row) => row.data.identifier === 'rage');
@@ -1252,7 +1253,7 @@ test('multiclass-entry proficiency contracts match the SRD grants for all twelve
 
 test('all twelve class feature tables are exhaustively traced to same-class same-level feature rows or explicit gaps', { skip: srdSkip('classes.md') }, () => {
   const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
-  const db = new DatabaseSync(new URL('../packs/features.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/features.sqlite', import.meta.url)), { readOnly: true });
   const entries = db.prepare("SELECT name, data FROM entries WHERE type = 'feature'").all()
     .map((row) => ({ name: row.name, data: JSON.parse(row.data) }));
   db.close();
@@ -1279,7 +1280,7 @@ test('all twelve class feature tables are exhaustively traced to same-class same
 
 test('new multiclass level-one feature grants are class/level bounded and safe to retry', { skip: srdSkip('classes.md') }, () => {
   const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
-  const db = new DatabaseSync(new URL('../packs/features.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/features.sqlite', import.meta.url)), { readOnly: true });
   const entries = db.prepare("SELECT name, data FROM entries WHERE type = 'feature'").all()
     .map((row) => ({ name: row.name, data: JSON.parse(row.data) }));
   db.close();
@@ -2343,7 +2344,7 @@ test('ability increase handler enforces one +2 or two distinct +1 choices and cu
 });
 
 test('background mechanics map every local SRD record and validate score, skill, and tool choices', () => {
-  const db = new DatabaseSync(new URL('../packs/backgrounds.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/backgrounds.sqlite', import.meta.url)), { readOnly: true });
   try {
     const entries = db.prepare('select id, name, data from entries').all();
     assert.equal(entries.length, Object.keys(BACKGROUND_MECHANICS_BY_IDENTIFIER).length);
@@ -2618,7 +2619,7 @@ test('creation journal resolves dependent pack contents only after the parent co
 });
 
 test('Magic Initiate choices match the same SRD spell list and distinct cantrips', () => {
-  const db = new DatabaseSync(new URL('../packs/spells.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/spells.sqlite', import.meta.url)), { readOnly: true });
   try {
     const entries = db.prepare('select id, name, data from entries').all()
       .map((row) => ({ id: row.id, name: row.name, data: JSON.parse(row.data) }));
@@ -2665,7 +2666,7 @@ test('Magic Initiate spell ability overrides only that spell and uses standard s
 
 test('Bard, Cleric, and Druid spell counts match all SRD 5.2 class table levels', { skip: srdSkip('classes.md') }, () => {
   const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
-  const db = new DatabaseSync(new URL('../packs/spells.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/spells.sqlite', import.meta.url)), { readOnly: true });
   try {
     const spells = db.prepare('select id,name,data from entries').all().map((row) => ({ id: row.id, name: row.name, data: JSON.parse(row.data) }));
     for (const className of ['Bard', 'Cleric', 'Druid']) {
@@ -3108,7 +3109,7 @@ test('Life Domain always-prepared spell grants match SRD levels, class list, and
   assert.equal(subclassAlwaysPreparedSpellNames('cleric', 'Life Domain', 5).length, 6);
   assert.deepEqual(subclassAlwaysPreparedSpellNames('druid', 'Life Domain', 20), []);
 
-  const db = new DatabaseSync(new URL('../packs/spells.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/spells.sqlite', import.meta.url)), { readOnly: true });
   const spellEntries = db.prepare('SELECT name,data FROM entries').all().map((row) => ({ id: row.name, name: row.name, data: JSON.parse(row.data) }));
   db.close();
   const auraOfLife = spellEntries.find((entry) => entry.name === 'Aura of Life');
@@ -3163,7 +3164,7 @@ test('Oath of Devotion always-prepared grants match the Paladin SRD table and us
   assert.equal(subclassAlwaysPreparedSpellNames('paladin', 'Oath of Devotion', 4).length, 2);
   assert.equal(subclassAlwaysPreparedSpellNames('paladin', 'Oath of Devotion', 5).length, 4);
   assert.deepEqual(subclassAlwaysPreparedSpellNames('cleric', 'Oath of Devotion', 20), []);
-  const db = new DatabaseSync(new URL('../packs/spells.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/spells.sqlite', import.meta.url)), { readOnly: true });
   const spellEntries = db.prepare('SELECT name,data FROM entries').all().map((row) => ({ id: row.name, name: row.name, data: JSON.parse(row.data) }));
   db.close();
   const resolved = resolveSubclassAlwaysPreparedSpells('paladin', 'Oath of Devotion', 20, spellEntries);
@@ -3193,7 +3194,7 @@ test('Circle of the Land Long Rest terrain tables match SRD and resolve granted 
     assert.deepEqual(circleLandAlwaysPreparedSpellNames(terrain, 20).map(({ grantLevel, name }) => ({ level: grantLevel, name })), expectedByTerrain[terrain]);
   }
   assert.equal(circleLandAlwaysPreparedSpellNames('unknown', 20).length, 0);
-  const db = new DatabaseSync(new URL('../packs/spells.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/spells.sqlite', import.meta.url)), { readOnly: true });
   const spellEntries = db.prepare('SELECT name,data FROM entries').all().map((row) => ({ id: row.name, name: row.name, data: JSON.parse(row.data) }));
   db.close();
   for (const terrain of Object.keys(expectedByTerrain)) {
@@ -3242,7 +3243,7 @@ test('Ray of Sickness is present with its SRD 5.2 spell data for the Tropical La
   const start = source.indexOf('#### Ray of Sickness');
   const end = source.indexOf('\n#### ', start + 1);
   const section = source.slice(start, end < 0 ? undefined : end);
-  const db = new DatabaseSync(new URL('../packs/spells.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/spells.sqlite', import.meta.url)), { readOnly: true });
   const row = db.prepare('SELECT name,data FROM entries WHERE name=?').get('Ray of Sickness');
   db.close();
   assert.ok(row, 'Circle of the Land Tropical table requires this spell');
@@ -3351,7 +3352,7 @@ test('Wizard level-one creation keeps spellbook ownership separate from its four
     assert.equal(result.cantrips, Number(row[3]), `Wizard ${row[0]} cantrips`);
     assert.equal(result.prepared, Number(row[4]), `Wizard ${row[0]} prepared spells`);
   }
-  const db = new DatabaseSync(new URL('../packs/spells.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/spells.sqlite', import.meta.url)), { readOnly: true });
   try {
     const spells = db.prepare('select id,name,data from entries').all().map((row) => ({ id: row.id, name: row.name, data: JSON.parse(row.data) }));
     const cantrips = spells.filter((entry) => entry.data.classes.includes('wizard') && entry.data.spellLevel === 0);
@@ -3411,7 +3412,7 @@ test('Wizard Level Up rejects ambiguous spell items without explicit and level-v
 });
 
 test('Wizard high-level creation preserves each learned-at-level spell-slot limit', () => {
-  const db = new DatabaseSync(new URL('../packs/spells.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/spells.sqlite', import.meta.url)), { readOnly: true });
   try {
     const spells = db.prepare('select id,name,data from entries').all().map((row) => ({ id: row.id, name: row.name, data: JSON.parse(row.data) }));
     const firstLevel = spells.filter((entry) => entry.data.classes.includes('wizard') && entry.data.spellLevel === 1);
@@ -3442,7 +3443,7 @@ test('Skilled tool options are grounded in the local SRD 5.2 equipment source', 
 });
 
 test('species choices are constrained to local records and persist without claiming effect automation', () => {
-  const db = new DatabaseSync(new URL('../packs/races.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/races.sqlite', import.meta.url)), { readOnly: true });
   try {
     const rows = db.prepare('select name, data from entries').all().map((row) => ({ name: row.name, data: JSON.parse(row.data) }));
     const ids = new Set(rows.map((row) => row.data.identifier));
