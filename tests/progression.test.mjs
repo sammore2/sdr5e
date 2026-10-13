@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { hasSrdReference, srdReferencePath, srdSkip } from './_srd-reference.mjs';
 import assert from 'node:assert/strict';
 import { abilityChoiceLevelsFor, pactMagicAtLevel, subclassLevelFor } from '../scripts/config.mjs';
 import { buildProgressionPlan, exhaustionD20Penalty, isFeatEligibleForProgression, MULTICLASS_PRIMARY_ABILITY_REQUIREMENTS, progressionAtLevel, progressionBetween, resolveAbilityScoreIncrease, resolveMulticlassPrerequisites, resolveProgressionChoices, startingHitPoints } from '../scripts/progression.mjs';
@@ -164,8 +165,8 @@ test('high-level Bard creation resolves level-2 and level-9 Expertise cumulative
   assert.equal(resolveBardExpertiseProgression(skills, { 2: ['arcana', 'history'] }, [2, 9]).failedLevel, 9);
 });
 
-test('first-level weapon mastery choices match every weapon and mastery in the local SRD table', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/equipment.md', import.meta.url), 'utf8');
+test('first-level weapon mastery choices match every weapon and mastery in the local SRD table', { skip: srdSkip('equipment.md') }, () => {
+  const source = readFileSync(srdReferencePath('equipment.md'), 'utf8');
   const weaponTable = source.split('**Weapons**')[1]?.split('## Armor')[0] || '';
   const sourceRows = new Map();
   let category = '';
@@ -199,7 +200,7 @@ test('Weapon Mastery choices enforce class counts and only offer weapons allowed
     'Paladin/Ranger options require an explicit weapon proficiency context');
 });
 
-test('Weapon Mastery counts follow only Barbarian and Fighter table increases', () => {
+test('Weapon Mastery counts follow only Barbarian and Fighter table increases', { skip: srdSkip('classes.md') }, () => {
   assert.deepEqual([1, 3, 4, 9, 10, 15, 16, 20].map((level) => weaponMasteryCountAtLevel('barbarian', level)),
     [2, 2, 3, 3, 4, 4, 4, 4]);
   assert.deepEqual([1, 3, 4, 9, 10, 15, 16, 20].map((level) => weaponMasteryCountAtLevel('fighter', level)),
@@ -210,7 +211,7 @@ test('Weapon Mastery counts follow only Barbarian and Fighter table increases', 
   }
   assert.equal(weaponMasteryCountAtLevel('barbarian', 0), 0);
   assert.equal(weaponMasteryCountAtLevel('fighter', 21), 0);
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const sourceCount = (className) => {
     const start = source.indexOf(`### ${className} Class Features`);
     const nextClass = className === 'Barbarian' ? 'Bard' : 'Monk';
@@ -804,7 +805,7 @@ test('Wizard Signature Spells requires two distinct level-3 book spells and trac
   assert.equal(resetWizardSignatureSpellUses({ signatureSpellIds: ['a'] }, 'invalid'), null);
 });
 
-test('Wizard spellcasting features use exact SRD feature text and levels without spilling into the spell list', () => {
+test('Wizard spellcasting features use exact SRD feature text and levels without spilling into the spell list', { skip: srdSkip('classes.md') }, () => {
   const db = new DatabaseSync(new URL('../packs/features.sqlite', import.meta.url), { readOnly: true });
   const rows = db.prepare("SELECT name, data FROM entries WHERE type='feature' AND json_extract(data, '$.classIdentifier')='wizard' AND json_extract(data, '$.identifier') IN ('ritual-adept','scholar','memorize-spell','spell-mastery','signature-spells')").all();
   db.close();
@@ -814,7 +815,7 @@ test('Wizard spellcasting features use exact SRD feature text and levels without
     ['SRD 5.2 (CC-BY-4.0)', 1], ['SRD 5.2 (CC-BY-4.0)', 2], ['SRD 5.2 (CC-BY-4.0)', 5],
     ['SRD 5.2 (CC-BY-4.0)', 18], ['SRD 5.2 (CC-BY-4.0)', 20],
   ]);
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const descriptions = extractClassFeatureDescriptions(source);
   for (const [level, identifier, key] of [[18, 'spell-mastery', 'spell mastery'], [20, 'signature-spells', 'signature spells']]) {
     assert.equal(features.get(identifier).data.description, descriptions.get(`wizard|${level}|${key}`));
@@ -827,7 +828,7 @@ import { composeInfluenceAdvantage, INFLUENCE_CHECK_OPTIONS, influenceFormView, 
 import { applyDamageTraits, resolveDamageConsequences } from '../scripts/damage-mechanics.mjs';
 import { CLASS_PROFICIENCIES, MULTICLASS_PROFICIENCIES, classProficiencyChoiceContext, multiclassProficiencyChoiceContext, weaponProficiencyMatches } from '../scripts/class-proficiencies.mjs';
 import { attackRollIsCritical } from '../scripts/critical-mechanics.mjs';
-import { extractClassFeatureDescriptions, formatClassFeatureTrace, traceClassFeatures } from '../.dev/review/class-feature-coverage.mjs';
+const { extractClassFeatureDescriptions, formatClassFeatureTrace, traceClassFeatures } = hasSrdReference('classes.md') ? await import('../.dev/review/class-feature-coverage.mjs') : {};
 import { CURRENT_CLASS_FEATURE_IDENTITIES, isCurrentClassFeatureIdentity } from '../scripts/class-feature-source-contract.mjs';
 import { canCastSpellsDuringRage, canEnterRage, createRageCombatState, heavyArmorRageEndTriggered, incapacitatedRageEndTriggered, rageDamageBonusAtLevel, rageDamageBonusForAttack, rageResistanceTypes, rageStrengthAdvantage, rageUsesAtLevel, resolveRageCombatTurn, resolveRageExtension, restoredFeatureUses, syncRageUses } from '../scripts/rage-mechanics.mjs';
 import { addDashMovementBonus, addMovementSegment, BARBARIAN_FAST_MOVEMENT_BONUS, evaluateMovementLedger, hasBarbarianFastMovement, normalizeMovementLedger, removeDashMovementBonus, removeMovementSegment, resetMovementLedger, speedsWithCombatEffects } from '../scripts/movement-mechanics.mjs';
@@ -1136,8 +1137,8 @@ test('Persistent Rage skips per-turn extensions and expires at the ten-minute ro
   assert.equal(resolveRageCombatTurn(state, { id: 'other-combat', round: 103, currentTurn: 0, combatants: [{ id: 'barbarian-token' }] }).action, 'ignore');
 });
 
-test('Rage pack metadata follows the local SRD 5.2 source and marks unimplemented effects manual', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('Rage pack metadata follows the local SRD 5.2 source and marks unimplemented effects manual', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const expectedDescription = extractClassFeatureDescriptions(source).get('barbarian|1|rage');
   const db = new DatabaseSync(new URL('../packs/features.sqlite', import.meta.url), { readOnly: true });
   const rows = db.prepare("SELECT name, data FROM entries WHERE type = 'feature'").all()
@@ -1189,8 +1190,8 @@ test('class proficiency contracts cover all twelve SRD classes and reject duplic
   assert.equal(classProficiencyChoiceContext('rogue', { skills: ['stealth', 'perception', 'insight', 'deception'] }, ['stealth']).valid, false);
 });
 
-test('all class proficiency counts and selectable skills are backed by local SRD Core Class Traits', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('all class proficiency counts and selectable skills are backed by local SRD Core Class Traits', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const classNames = Object.fromEntries(Object.keys(CLASS_PROFICIENCIES).map((id) => [id, id[0].toUpperCase() + id.slice(1)]));
   const abilityNames = { str: 'Strength', dex: 'Dexterity', con: 'Constitution', int: 'Intelligence', wis: 'Wisdom', cha: 'Charisma' };
   for (const [classId, contract] of Object.entries(CLASS_PROFICIENCIES)) {
@@ -1249,8 +1250,8 @@ test('multiclass-entry proficiency contracts match the SRD grants for all twelve
   assert.equal(multiclassProficiencyChoiceContext('unknown').valid, false);
 });
 
-test('all twelve class feature tables are exhaustively traced to same-class same-level feature rows or explicit gaps', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('all twelve class feature tables are exhaustively traced to same-class same-level feature rows or explicit gaps', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const db = new DatabaseSync(new URL('../packs/features.sqlite', import.meta.url), { readOnly: true });
   const entries = db.prepare("SELECT name, data FROM entries WHERE type = 'feature'").all()
     .map((row) => ({ name: row.name, data: JSON.parse(row.data) }));
@@ -1276,8 +1277,8 @@ test('all twelve class feature tables are exhaustively traced to same-class same
   assert.equal(isCurrentClassFeatureIdentity('barbarian', 9, 'Brutal Critical'), false);
 });
 
-test('new multiclass level-one feature grants are class/level bounded and safe to retry', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('new multiclass level-one feature grants are class/level bounded and safe to retry', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const db = new DatabaseSync(new URL('../packs/features.sqlite', import.meta.url), { readOnly: true });
   const entries = db.prepare("SELECT name, data FROM entries WHERE type = 'feature'").all()
     .map((row) => ({ name: row.name, data: JSON.parse(row.data) }));
@@ -1990,8 +1991,8 @@ test('Rogue multiclass entry resolves Expertise, Cant, language, and eligible we
   assert.equal(invalid.valid, false, 'already-known languages cannot be selected again');
 });
 
-test('character language choices follow SRD origin rules and add Rogue languages without duplicates', () => {
-  const creationRules = readFileSync('.dev/srd5.2_markdown/character-creation.md', 'utf8');
+test('character language choices follow SRD origin rules and add Rogue languages without duplicates', { skip: srdSkip('character-creation.md') }, () => {
+  const creationRules = readFileSync(srdReferencePath('character-creation.md'), 'utf8');
   const standardSection = creationRules.match(/\*\*Standard Languages\*\*([\s\S]*?)\*\*Rare Languages\*\*/)?.[1] || '';
   const standardFromSource = [...standardSection.matchAll(/<tr>\s*<td>[^<]*<\/td>\s*<td>([^<]+)<\/td>\s*<\/tr>/g)]
     .map(([, name]) => name.trim());
@@ -2428,8 +2429,8 @@ test('Bard class starting equipment resolves both SRD packages and requires an i
   });
 });
 
-test('all twelve class equipment packages match their SRD package choices and have resolvable typed contents', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('all twelve class equipment packages match their SRD package choices and have resolvable typed contents', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const classes = {
     barbarian: ['Barbarian', ['A', 'B'], { A: 15, B: 75 }],
     bard: ['Bard', ['A', 'B'], { A: 19, B: 90 }],
@@ -2662,8 +2663,8 @@ test('Magic Initiate spell ability overrides only that spell and uses standard s
   assert.deepEqual(spellcastingStats(data, {}), { ability: 'int', dc: 15, attackBonus: 7 });
 });
 
-test('Bard, Cleric, and Druid spell counts match all SRD 5.2 class table levels', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('Bard, Cleric, and Druid spell counts match all SRD 5.2 class table levels', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const db = new DatabaseSync(new URL('../packs/spells.sqlite', import.meta.url), { readOnly: true });
   try {
     const spells = db.prepare('select id,name,data from entries').all().map((row) => ({ id: row.id, name: row.name, data: JSON.parse(row.data) }));
@@ -2719,8 +2720,8 @@ test('Bard, Cleric, and Druid spell counts match all SRD 5.2 class table levels'
   } finally { db.close(); }
 });
 
-test('Sorcerer creation counts and spell-slot gates match every SRD 5.2 class table level', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('Sorcerer creation counts and spell-slot gates match every SRD 5.2 class table level', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const start = source.indexOf('### Sorcerer Class Features');
   const end = source.indexOf('### Sorcerer Spell List', start);
   const section = source.slice(start, end);
@@ -2753,8 +2754,8 @@ test('Sorcerer creation counts and spell-slot gates match every SRD 5.2 class ta
   }).valid, false, 'prepared spell count and maximum level are enforced');
 });
 
-test('Cleric and Druid Level Up asks only for spell choices newly granted by the next class level', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('Cleric and Druid Level Up asks only for spell choices newly granted by the next class level', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   for (const className of ['Cleric', 'Druid']) {
     const classId = className.toLocaleLowerCase();
     const start = source.indexOf(`### ${className} Class Features`);
@@ -2812,8 +2813,8 @@ test('Sorcerer Level Up requires exact new choices and both class-provenanced re
   assert.equal(classSpellcastingLevelUpAtLevel('sorcerer', 1, 3), null, 'skip-level transitions are rejected');
 });
 
-test('Warlock Pact Magic spell choices match every SRD table level without using full-caster slots', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('Warlock Pact Magic spell choices match every SRD table level without using full-caster slots', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const start = source.indexOf('### Warlock Class Features');
   const end = source.indexOf('### Warlock Spell List', start);
   const section = source.slice(start, end);
@@ -2958,12 +2959,12 @@ test('initiative follows SRD ties by default and surprise cancels against advant
   assert.equal(resolveInitiativeAdvantage(0, -1, true), -1, 'multiple disadvantage sources remain disadvantage');
 });
 
-test('Hide, Search, Study, and Influence use only their literal SRD skill and ability options', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/playing-the-game.md', import.meta.url), 'utf8');
+test('Hide, Search, Study, and Influence use only their literal SRD skill and ability options', { skip: srdSkip('playing-the-game.md', 'rules-glossary.md') }, () => {
+  const source = readFileSync(srdReferencePath('playing-the-game.md'), 'utf8');
   const actionStart = source.indexOf('**Actions**');
   const actionEnd = source.indexOf('</table>', actionStart);
   const actionTable = source.slice(actionStart, actionEnd);
-  const glossary = readFileSync(new URL('../.dev/srd5.2_markdown/rules-glossary.md', import.meta.url), 'utf8');
+  const glossary = readFileSync(srdReferencePath('rules-glossary.md'), 'utf8');
   assert.ok(glossary.includes('succeed on a DC 15 Dexterity (Stealth) check'));
   for (const [name, checkText] of [
     ['Hide', 'Make a Dexterity (Stealth) check.'],
@@ -3003,8 +3004,8 @@ test('Hide, Search, Study, and Influence use only their literal SRD skill and ab
   assert.equal(view.find((activity) => activity.action === 'hide').contextLabel, '');
 });
 
-test('Influence adjudication follows the literal SRD branches, supported checks, attitudes, and default DC', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/rules-glossary.md', import.meta.url), 'utf8').replace(/\s+/g, ' ');
+test('Influence adjudication follows the literal SRD branches, supported checks, attitudes, and default DC', { skip: srdSkip('rules-glossary.md') }, () => {
+  const source = readFileSync(srdReferencePath('rules-glossary.md'), 'utf8').replace(/\s+/g, ' ');
   const influenceStart = source.indexOf('#### Influence [Action]');
   const influenceEnd = source.indexOf('#### Initiative', influenceStart);
   const section = source.slice(influenceStart, influenceEnd);
@@ -3042,8 +3043,8 @@ test('Influence adjudication follows the literal SRD branches, supported checks,
   assert.equal(influenceFormView(actor).skillOptions.every((option) => option.available), true);
 });
 
-test('Help action records both SRD modes and restricts ability-check help to the helper’s actual proficiencies', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/rules-glossary.md', import.meta.url), 'utf8');
+test('Help action records both SRD modes and restricts ability-check help to the helper’s actual proficiencies', { skip: srdSkip('rules-glossary.md') }, () => {
+  const source = readFileSync(srdReferencePath('rules-glossary.md'), 'utf8');
   const start = source.indexOf('#### Help [Action]');
   const end = source.indexOf('#### Heroic Inspiration', start);
   const helpText = source.slice(start, end).replace(/\s+/g, ' ');
@@ -3089,8 +3090,8 @@ test('ordinary prepared spell toggles resolve capacity and eligibility from each
   assert.equal(spellEligibleForClassPreparation({ ...clericSpell, sourceClassIdentifier: 'wizard', classes: ['wizard'], spellLevel: 1, wizardSpellbook: true }, 'wizard', classes), true);
 });
 
-test('Life Domain always-prepared spell grants match SRD levels, class list, and idempotent provenance', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('Life Domain always-prepared spell grants match SRD levels, class list, and idempotent provenance', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const heading = '### Cleric Subclass: Life Domain';
   const start = source.indexOf(heading);
   assert.notEqual(start, -1);
@@ -3143,8 +3144,8 @@ test('Life Domain always-prepared spell grants match SRD levels, class list, and
   assert.equal(planSubclassSpellGrantWrites(resolved.grants, reconciled).length, 0, 'repeating the grant does not duplicate or rewrite items');
 });
 
-test('Oath of Devotion always-prepared grants match the Paladin SRD table and use Paladin provenance', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('Oath of Devotion always-prepared grants match the Paladin SRD table and use Paladin provenance', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const heading = '### Paladin Subclass: Oath of Devotion';
   const start = source.indexOf(heading);
   assert.notEqual(start, -1);
@@ -3176,8 +3177,8 @@ test('Oath of Devotion always-prepared grants match the Paladin SRD table and us
   assert.ok(subclassSpellGrantItemData(resolved.grants[0]).subclassSpellGrantId.startsWith('oath-of-devotion:'));
 });
 
-test('Circle of the Land Long Rest terrain tables match SRD and resolve granted cantrips/spells', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('Circle of the Land Long Rest terrain tables match SRD and resolve granted cantrips/spells', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const expectedByTerrain = {};
   for (const terrain of ['arid', 'polar', 'temperate', 'tropical']) {
     const title = `**${terrain[0].toUpperCase()}${terrain.slice(1)} Land**`;
@@ -3236,8 +3237,8 @@ test('Circle of the Land terrain replacement restores independent spell state an
   assert.ok(writes.some((write) => write.kind === 'create' && write.name === 'Burning Hands'));
 });
 
-test('Ray of Sickness is present with its SRD 5.2 spell data for the Tropical Land grant', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/spells.md', import.meta.url), 'utf8');
+test('Ray of Sickness is present with its SRD 5.2 spell data for the Tropical Land grant', { skip: srdSkip('spells.md') }, () => {
+  const source = readFileSync(srdReferencePath('spells.md'), 'utf8');
   const start = source.indexOf('#### Ray of Sickness');
   const end = source.indexOf('\n#### ', start + 1);
   const section = source.slice(start, end < 0 ? undefined : end);
@@ -3262,8 +3263,8 @@ test('Ray of Sickness is present with its SRD 5.2 spell data for the Tropical La
   assert.match(spell.description, /higher-level spell slot/i);
 });
 
-test('Multiclass spells use the casting ability of their recorded class', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('Multiclass spells use the casting ability of their recorded class', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const abilityNames = { int: 'Intelligence', wis: 'Wisdom', cha: 'Charisma' };
   for (const [classIdentifier, ability] of Object.entries(SPELLCASTING_ABILITY_BY_CLASS)) {
     const heading = `### ${classIdentifier[0].toUpperCase()}${classIdentifier.slice(1)} Class Features`;
@@ -3301,8 +3302,8 @@ test('Warlock Level Up validates recorded preparation provenance and table delta
   assert.equal(inspectPreparedSpellState('warlock', 1, prepared, cantrips.map((item) => ({ ...item, data: { ...item.data, sourceClassIdentifier: 'wizard' } })), true).valid, false);
 });
 
-test('Paladin and Ranger prepared choices and half-caster slots match their SRD 5.2 tables', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('Paladin and Ranger prepared choices and half-caster slots match their SRD 5.2 tables', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const sampleEntries = [
     { id: 'half-1a', data: { classes: ['paladin', 'ranger'], spellLevel: 1 } },
     { id: 'half-1b', data: { classes: ['paladin', 'ranger'], spellLevel: 1 } },
@@ -3336,8 +3337,8 @@ test('Paladin and Ranger prepared choices and half-caster slots match their SRD 
   }
 });
 
-test('Wizard level-one creation keeps spellbook ownership separate from its four prepared spells', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('Wizard level-one creation keeps spellbook ownership separate from its four prepared spells', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const start = source.indexOf('### Wizard Class Features');
   const tableStart = source.indexOf('<table>', start);
   const tableEnd = source.indexOf('</table>', tableStart);
@@ -3378,8 +3379,8 @@ test('Wizard level-one creation keeps spellbook ownership separate from its four
   } finally { db.close(); }
 });
 
-test('Wizard Level Up separates two new spellbook spells from prepared capacity and cantrip table gains', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+test('Wizard Level Up separates two new spellbook spells from prepared capacity and cantrip table gains', { skip: srdSkip('classes.md') }, () => {
+  const source = readFileSync(srdReferencePath('classes.md'), 'utf8');
   const start = source.indexOf('### Wizard Class Features');
   const tableStart = source.indexOf('<table>', start);
   const tableEnd = source.indexOf('</table>', tableStart);
@@ -3432,8 +3433,8 @@ test('Wizard high-level creation preserves each learned-at-level spell-slot limi
   } finally { db.close(); }
 });
 
-test('Skilled tool options are grounded in the local SRD 5.2 equipment source', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/equipment.md', import.meta.url), 'utf8').toLocaleLowerCase();
+test('Skilled tool options are grounded in the local SRD 5.2 equipment source', { skip: srdSkip('equipment.md') }, () => {
+  const source = readFileSync(srdReferencePath('equipment.md'), 'utf8').toLocaleLowerCase();
   for (const tool of TOOL_PROFICIENCY_OPTIONS) {
     const documentedName = tool.includes(': ') ? tool.split(': ').at(-1) : tool;
     assert.ok(source.includes(documentedName.toLocaleLowerCase()), `tool choice missing from SRD source: ${tool}`);

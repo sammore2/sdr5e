@@ -1,11 +1,12 @@
 import test from 'node:test';
+import { hasSrdReference, srdReferencePath, srdSkip } from './_srd-reference.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { WARLOCK_LEVEL_ONE_INVOCATIONS, resolveWarlockLevelOneInvocation } from '../scripts/warlock-invocations.mjs';
 
-const source = readFileSync(new URL('../.dev/srd5.2_markdown/classes.md', import.meta.url), 'utf8');
+const source = hasSrdReference('classes.md') ? readFileSync(srdReferencePath('classes.md'), 'utf8') : '';
 
-test('Warlock level-one choices are source-backed invocation options without prerequisites', () => {
+test('Warlock level-one choices are source-backed invocation options without prerequisites', { skip: srdSkip('classes.md') }, () => {
   assert.equal(WARLOCK_LEVEL_ONE_INVOCATIONS.length, 5);
   for (const option of WARLOCK_LEVEL_ONE_INVOCATIONS) {
     const escapedName = option.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
