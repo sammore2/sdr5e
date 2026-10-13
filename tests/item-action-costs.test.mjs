@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { hasSrdReference, srdReferencePath, srdSkip } from './_srd-reference.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
@@ -29,8 +30,8 @@ test('item action-cost metadata defaults to unclassified and rejects unknown enu
   assert.deepEqual(new Set(ITEM_ACTION_COST_OPTIONS.map((entry) => entry.value)), new Set(Object.values(ITEM_ACTION_COSTS)));
 });
 
-test('the two reference items have distinct verified costs supported by literal local SRD passages', () => {
-  const source = readFileSync(new URL('../.dev/srd5.2_markdown/equipment.md', import.meta.url), 'utf8');
+test('the two reference items have distinct verified costs supported by literal local SRD passages', { skip: srdSkip('equipment.md') }, () => {
+  const source = readFileSync(srdReferencePath('equipment.md'), 'utf8');
   assert.match(source, /Healer's Kit[\s\S]{0,300}As a Utilize action[\s\S]{0,180}stabilize an Unconscious creature that has 0 Hit Points/);
   assert.match(source, /Potion of Healing[\s\S]{0,500}As a Bonus Action[\s\S]{0,200}regains 2d4 \+ 2 Hit Points/);
   assert.equal(VERIFIED_SRD_ITEM_ACTION_COSTS["healer's kit"], ITEM_ACTION_COSTS.UTILIZE);

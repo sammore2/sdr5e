@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
+import { hasSrdReference, srdReferencePath, srdSkip } from './_srd-reference.mjs';
 import { POST_LEVEL_20_BONUS_FEAT_BASE_XP, POST_LEVEL_20_BONUS_FEAT_INTERVAL, resolveLevelUpEligibility, resolvePostLevel20FeatProgress, resolveXpProgress, startingExperiencePoints, SRD_XP_LEVEL_THRESHOLDS } from '../scripts/xp-progression.mjs';
 
-test('XP thresholds match all twenty rows in the local SRD advancement table', async () => {
-  const source = await readFile(new URL('../.dev/srd5.2_markdown/character-creation.md', import.meta.url), 'utf8');
+test('XP thresholds match all twenty rows in the local SRD advancement table', { skip: srdSkip('character-creation.md') }, async () => {
+  const source = await readFile(srdReferencePath('character-creation.md'), 'utf8');
   const section = source.match(/## Level Advancement([\s\S]*?)(?=\n## |$)/)?.[1] || '';
   const rows = [...section.matchAll(/<tr>\s*<td>(\d+)<\/td>\s*<td>([\d,]+)<\/td>/g)]
     .map(([, level, xp]) => [Number(level), Number(xp.replaceAll(',', ''))]);
@@ -53,8 +54,8 @@ test('level-up eligibility follows the world milestone setting and XP threshold'
   assert.equal(resolveLevelUpEligibility(355_000, 20, true).reason, 'level-cap');
 });
 
-test('optional level-20 bonus-feat milestones match the SRD rule and remain claimable once each', async () => {
-  const source = await readFile(new URL('../.dev/srd5.2_markdown/character-creation.md', import.meta.url), 'utf8');
+test('optional level-20 bonus-feat milestones match the SRD rule and remain claimable once each', { skip: srdSkip('character-creation.md') }, async () => {
+  const source = await readFile(srdReferencePath('character-creation.md'), 'utf8');
   const rule = source.match(/\*\*Bonus Feats at Level 20\*\*([\s\S]*?)(?=\n### |$)/)?.[1] || '';
   assert.match(rule, /30,000 XP.*above 355,000 XP/s);
   assert.equal(POST_LEVEL_20_BONUS_FEAT_BASE_XP, 355_000);
