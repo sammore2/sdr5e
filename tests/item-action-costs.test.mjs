@@ -3,6 +3,7 @@ import { hasSrdReference, srdReferencePath, srdSkip } from './_srd-reference.mjs
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
+import { fileURLToPath } from 'node:url';
 import { getDefaultData } from '../scripts/schema.mjs';
 import { ITEM_ACTION_COSTS, ITEM_ACTION_COST_OPTIONS, itemActionCostNoticeKey, itemActionReminderKey, normalizeItemActionCost, VERIFIED_SRD_ITEM_ACTION_COSTS } from '../scripts/item-action-costs.mjs';
 import { ITEM_SHEET_SCHEMAS } from '../scripts/sheet-schemas.mjs';
@@ -40,7 +41,7 @@ test('the two reference items have distinct verified costs supported by literal 
 });
 
 test('Potion of Healing pack row is source-classified for Bonus Action without changing its SRD healing formula', () => {
-  const db = new DatabaseSync(new URL('../packs/magic-items.sqlite', import.meta.url), { readOnly: true });
+  const db = new DatabaseSync(fileURLToPath(new URL('../packs/magic-items.sqlite', import.meta.url)), { readOnly: true });
   try {
     const rows = db.prepare('SELECT name, type, data FROM entries WHERE id = ?').all('ec1f7637-4232-4970-9db8-942232f24b8b');
     assert.equal(rows.length, 1);
