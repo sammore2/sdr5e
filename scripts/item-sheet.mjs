@@ -10,7 +10,7 @@
 // turned into a real usability complaint).
 // ══════════════════════════════════════════════════════════════════════════
 
-import { LoomHandlebarsMixin, LoomItemSheet, api } from '/_loom/sdk/index.js';
+import { LoomHandlebarsMixin, LoomItemSheet, api, effects } from '/_loom/sdk/index.js';
 import { ITEM_TYPE_ICON } from './config.mjs';
 import { setPathValue } from './utils.mjs';
 import { ITEM_SHEET_SCHEMAS } from './sheet-schemas.mjs';
@@ -78,7 +78,104 @@ export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
       void this._pickIcon();
       return;
     }
+    if (action === 'open-effect-config') {
+      void this._onOpenEffectConfig(target);
+      return;
+    }
+    if (action === 'create-effect') {
+      void this._onCreateEffect();
+      return;
+    }
+    if (action === 'delete-effect') {
+      void this._onDeleteEffect(target);
+      return;
+    }
     if (typeof super.onAction === 'function') super.onAction(action, id, target);
+  }
+
+  async _onOpenEffectConfig(target) {
+    let buffId = target.dataset.id;
+    const index = Number(target.dataset.index);
+    if (!buffId && this.document?.id && Array.isArray(this.document.data?.effects) && this.document.data.effects[index]) {
+      const effectDef = this.document.data.effects[index];
+      if (typeof effects?.create === 'function') {
+        try {
+          const created = await effects.create({
+            itemId: this.document.id,
+            name: effectDef.name || 'New Effect',
+            icon: effectDef.icon || this.document.imgUrl || '',
+            description: effectDef.description || '',
+            durationUnit: effectDef.durationUnit || 'rounds',
+            duration: effectDef.duration ?? 1,
+            conditionId: effectDef.conditionId,
+            removeOnCombatEnd: effectDef.removeOnCombatEnd ?? false,
+            changes: effectDef.changes || [],
+            visual: effectDef.visual,
+          });
+          if (created?.id) {
+            buffId = created.id;
+            effectDef.id = buffId;
+            await api.put(`${this.apiRoute}/${this.document.id}`, { data: this.document.data });
+          }
+        } catch (err) {
+          console.warn('[srd5e] Failed to create buff template on demand:', err);
+        }
+      }
+    }
+    if (buffId && typeof effects?.openConfig === 'function') {
+      void effects.openConfig(buffId);
+    }
+  }
+
+  async _onCreateEffect() {
+    if (!this.document) return;
+    const effectDef = {
+      name: `${this.document.name || 'Item'} Effect`,
+      icon: this.document.imgUrl || '',
+      description: 'Active Effect description.',
+      durationUnit: 'rounds',
+      duration: 1,
+      changes: [],
+    };
+    if (this.document.id && typeof effects?.create === 'function') {
+      try {
+        const created = await effects.create({
+          itemId: this.document.id,
+          ...effectDef,
+        });
+        if (created?.id) {
+          effectDef.id = created.id;
+          if (typeof effects?.openConfig === 'function') {
+            void effects.openConfig(created.id);
+          }
+        }
+      } catch (err) {
+        console.warn('[srd5e] Failed to create buff via Loom effects API:', err);
+      }
+    }
+    const data = this.document.data || {};
+    data.effects = Array.isArray(data.effects) ? [...data.effects, effectDef] : [effectDef];
+    await api.put(`${this.apiRoute}/${this.document.id}`, { data });
+    await this._reloadDocument();
+  }
+
+  async _onDeleteEffect(target) {
+    if (!this.document) return;
+    const buffId = target.dataset.id;
+    const index = Number(target.dataset.index);
+    if (buffId && typeof effects?.delete === 'function') {
+      try {
+        await effects.delete(buffId);
+      } catch (err) {
+        console.warn('[srd5e] Failed to delete buff:', err);
+      }
+    }
+    const data = this.document.data || {};
+    if (Array.isArray(data.effects) && !Number.isNaN(index) && index >= 0) {
+      data.effects.splice(index, 1);
+      await api.put(`${this.apiRoute}/${this.document.id}`, { data });
+      await this._reloadDocument();
+    }
   }
 
   /**
@@ -187,6 +284,33 @@ export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
       if (values.school) tags.push(values.school);
     }
 
+    let rawEffects = [];
+    if (this.document?.id && typeof effects?.forItem === 'function') {
+      try {
+        rawEffects = await effects.forItem(this.document.id);
+      } catch {
+        // Unpersisted item or preview
+      }
+    }
+    if ((!rawEffects || !rawEffects.length) && Array.isArray(values.effects)) {
+      rawEffects = values.effects;
+    }
+
+    const itemEffects = (rawEffects || []).map((e) => {
+      let durationLabel = 'Permanent';
+      if (e.durationUnit && e.durationUnit !== 'permanent') {
+        durationLabel = `${e.duration} ${e.durationUnit}`;
+      } else if (typeof e.duration === 'number' && e.duration > 0) {
+        durationLabel = `${e.duration} round${e.duration === 1 ? '' : 's'}`;
+      }
+      const changesSummary = Array.isArray(e.changes) ? e.changes.map((c) => `${c.key}: ${c.mode} ${c.value}`).join(' • ') : '';
+      return {
+        ...e,
+        durationLabel,
+        changesSummary,
+      };
+    });
+
     return {
       ...context,
       name: (this.document?.name && this.document.name !== 'undefined') ? this.document.name : '',
@@ -200,6 +324,8 @@ export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
       description: values.description || '',
       tags,
       fields,
+      effects: itemEffects,
+      effectsCount: itemEffects.length,
     };
   }
 }

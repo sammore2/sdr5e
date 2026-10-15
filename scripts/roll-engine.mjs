@@ -17,7 +17,7 @@
 import { currentAdvantageMode, isCriticalHeld } from './utils.mjs';
 import { exhaustionD20Penalty } from './progression.mjs';
 import { getSetting } from './settings.mjs';
-import { bonusesToChanges, applyTemporaryEffect, removeItemEffects } from './effects.mjs';
+import { bonusesToChanges, applyTemporaryEffect, removeItemEffects, applySpellOrItemEffects } from './effects.mjs';
 import { ITEM_TYPE_SINGULAR } from './config.mjs';
 import { spellcastingStats } from './magic-initiate.mjs';
 import { canUseWizardSignatureSpell } from './wizard-spell-mechanics.mjs';
@@ -3418,6 +3418,13 @@ export async function castSpell(actor, item, options = {}) {
       'system.resources.concentrationSaveAttemptId': '',
       'system.resources.concentrationSaveAttemptIds': [],
     });
+  }
+
+  // Apply Active Effects declared on the spell (Loom.effects.apply native architecture)
+  if (Array.isArray(idata.effects) && idata.effects.length) {
+    const targetCastId = options.targetCastId || window.Loom?.canvas?.activeTarget?.id || null;
+    const targetActorId = targetCastId ? null : (options.targetActorId || (String(idata.range || '').toLowerCase() === 'self' ? actor.id : null));
+    await applySpellOrItemEffects(actor, item, { targetCastId, targetActorId });
   }
 
   const castKey = `${actor.id}:${item.id}`;

@@ -2989,13 +2989,15 @@
     },
     {
       "name": "folders",
-      "schema": "CREATE TABLE `folders` (`id` varchar(255), `name` varchar(255) not null, `parent` varchar(255) not null default '', `color` varchar(255) not null default '', `sorting` varchar(255) not null default 'm', primary key (`id`))",
+      "schema": "CREATE TABLE `folders` (`id` varchar(255), `name` varchar(255) not null, `parent` varchar(255) not null default '', `color` varchar(255) not null default '', `sorting` varchar(255) not null default 'm', `hubLogoUrl` varchar(255) not null default '', `hubBackground` varchar(255) not null default '', primary key (`id`))",
       "columns": [
         "id",
         "name",
         "parent",
         "color",
-        "sorting"
+        "sorting",
+        "hubLogoUrl",
+        "hubBackground"
       ],
       "rows": []
     },

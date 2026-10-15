@@ -3037,3 +3037,122 @@ html .sdrn-npc-root .sdrn-npc-vital-chip .sdrn-vital-input::-webkit-inner-spin-b
 html .sdrn-npc-root .sdrn-status-pill-lbl {
   font-size: 10px !important;
 }
+.sdrn-item-tabs {
+  display: flex;
+  gap: 16px;
+  margin: 12px 0 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.sdrn-item-tabs .sdrn-item-tab-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8 !important;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  padding: 6px 4px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.15s ease, text-shadow 0.15s ease;
+}
+.sdrn-item-tabs .sdrn-item-tab-btn:hover {
+  color: #f3e3ba !important;
+  text-shadow: 0 0 8px rgba(226, 185, 96, 0.5);
+}
+.sdrn-item-tabs .sdrn-item-tab-btn.active {
+  color: #ffd700 !important;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+.sdrn-item-tabs .sdrn-item-tab-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ffd700;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+}
+.sdrn-item-header-v3 .sdrn-item-name-input {
+  color: #f8fafc !important;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.sdrn-item-header-v3 .sdrn-item-name-input:hover,
+.sdrn-item-header-v3 .sdrn-item-name-input:focus {
+  border-bottom-color: #ffd700 !important;
+  color: #ffffff !important;
+}
+.sdrn-item-name-btn {
+  color: #e2e8f0 !important;
+  transition: color 0.15s ease, text-shadow 0.15s ease;
+}
+.sdrn-item-name-btn:hover {
+  color: #ffd700 !important;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.35);
+  text-decoration: none;
+}
+.sdrn-metric-chip {
+  background: #14171f !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.sdrn-metric-chip:hover {
+  border-color: rgba(226, 185, 96, 0.6) !important;
+  background-color: #1a1e29 !important;
+}
+.sdrn-metric-chip .sdrn-chip-input {
+  color: #f1f5f9 !important;
+}
+.sdrn-metric-chip .sdrn-chip-input:hover,
+.sdrn-metric-chip .sdrn-chip-input:focus {
+  color: #ffffff !important;
+}
+.sdrn-item-root input:not([type="checkbox"]):not([type="radio"]),
+.sdrn-item-root textarea,
+.sdrn-item-root select {
+  background-color: #12141a !important;
+  color: #f1f5f9 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+.sdrn-item-root input:not([type="checkbox"]):not([type="radio"]):hover,
+.sdrn-item-root textarea:hover,
+.sdrn-item-root select:hover {
+  border-color: rgba(226, 185, 96, 0.5) !important;
+  background-color: #161822 !important;
+  color: #ffffff !important;
+}
+.sdrn-item-root input:not([type="checkbox"]):not([type="radio"]):focus,
+.sdrn-item-root textarea:focus,
+.sdrn-item-root select:focus {
+  border-color: #ffd700 !important;
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2) !important;
+  color: #ffffff !important;
+}
+.sdrn-item-root .sdrn-item-roll-btn {
+  transition: all 0.15s ease;
+}
+.sdrn-item-root .sdrn-item-roll-btn:hover {
+  background: linear-gradient(135deg, #a56f25, #d5a64c) !important;
+  border-color: #ffd700 !important;
+  color: #17120b !important;
+  box-shadow: 0 0 8px rgba(213, 166, 76, 0.5) !important;
+}
+.sdrn-item-root .sdrn-item-tag {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  transition: all 0.15s ease;
+}
+.sdrn-item-root .sdrn-item-tag:hover {
+  background: #2a2d38 !important;
+  border-color: #ffd700 !important;
+  color: #ffffff !important;
+}
+.sdrn-item-root .sdrn-effect-row {
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.sdrn-item-root .sdrn-effect-row:hover {
+  background: #221f19 !important;
+  border-color: rgba(226, 185, 96, 0.5) !important;
+}

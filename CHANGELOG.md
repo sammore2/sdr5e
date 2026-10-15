@@ -5,6 +5,25 @@ Each release tag `vX.Y.Z` publishes the section headed `## [X.Y.Z]` as its relea
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-15
+
+### Added
+- Native LoomVTT Active Effects integration across Spells and Items (`Loom.effects.create`, `apply`, `openConfig`, `delete`).
+- Item Sheet Effects tab (`EFFECTS`) with live buff listing, duration badges, and action buttons (`Add Effect`, `Config`, `Delete`).
+- High-resolution illustrated icon artwork catalog (CC0 1.0 Universal) across spells, magic items, weapons, armor, and equipment.
+- Arcane circle tier icons (`spell1.webp` - `spell9.webp`) for spell compendiums.
+- Automated pack enrichment script (`scripts/enrich-packs.mjs`) for deterministic icon and effect mapping across all 11 SQLite packs.
+
+### Changed
+- Replaced flat unstyled monochrome SVGs with themed illustrated icons with backgrounds for all spells and items.
+- Upgraded item sheet tab styles with tactical high-contrast gold hover states and subtle glow in both `srd5e.css` and `dark-tactical-sheets.css`.
+- Rebuilt all 11 SQLite compendium packs from versioned JSON sources.
+
+### Fixed
+- Fixed unclosed container markup in `templates/item-sheet.hbs` that caused the Effects tab content to remain hidden.
+- Fixed `pack-sources.mjs` rebuild resilience against locked SQLite handles on Windows.
+- Removed third-party non-free assets and updated `LICENSE` with explicit open-source attributions (CC0 1.0, CC-BY 3.0, CC-BY 4.0, MIT).
+
 ## [0.2.0] - 2026-10-12
 
 ### Added
