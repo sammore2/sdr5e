@@ -1,5 +1,5 @@
 import { DatabaseSync } from 'node:sqlite';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -53,10 +53,19 @@ async function buildSources(outputDirectory) {
       throw new Error(`Unsupported or mismatched pack source: ${sourcePath}`);
     }
     const outputPath = path.join(outputRoot, path.basename(pack));
+    try {
+      await rm(outputPath, { force: true });
+    } catch {
+      // File may be locked for deletion by a concurrent reader on Windows; open in place
+    }
     const db = new DatabaseSync(outputPath);
     try {
       db.exec('PRAGMA journal_mode = DELETE;');
       db.exec('BEGIN IMMEDIATE;');
+      const existing = db.prepare("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'").all();
+      for (const t of existing) {
+        db.exec(`DROP TABLE IF EXISTS ${quoteIdentifier(t.name)};`);
+      }
       for (const table of source.tables) {
         const tableName = quoteIdentifier(table.name);
         const columns = table.columns.map(quoteIdentifier);

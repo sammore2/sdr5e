@@ -4,7 +4,7 @@
   "type": "ruleset",
   "name": "srd5e",
   "title": "SDR5E (Modern SRD)",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Rob Sammore",
   "license": "MIT AND CC-BY-4.0",
   "description": "Independent free ruleset for LoomVTT. Code is licensed under MIT; SRD-derived content is licensed under CC-BY-4.0.",

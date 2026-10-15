@@ -55,6 +55,9 @@
       <button type="button" class="sdrn-item-tab-btn" data-action="item-tab" data-tab="details">
         <i class="fas fa-sliders-h"></i> PROPERTIES &amp; DETAILS
       </button>
+      <button type="button" class="sdrn-item-tab-btn" data-action="item-tab" data-tab="effects">
+        <i class="fas fa-sparkles"></i> EFFECTS ({{effectsCount}})
+      </button>
     </nav>
 
     <!-- Conteúdo das Abas -->
@@ -105,6 +108,46 @@
                 <input class="sdrn-reui-input" type="text" name="sd:{{key}}" value="{{value}}" />
                 {{/if}}
               </div>
+            </div>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba 3: Efeitos Ativos (Active Effects) -->
+      <div data-item-tab-content="effects" class="sdrn-item-tab-panel" style="display:none">
+        <div class="sdrn-card-block">
+          <div class="sdrn-box-title" style="display:flex; justify-content:space-between; align-items:center;">
+            <span><i class="fas fa-magic"></i> ACTIVE EFFECTS &amp; BUFFS</span>
+            <button type="button" class="sdrn-item-roll-btn" data-action="create-effect" title="Add a new Active Effect to this item">
+              <i class="fas fa-plus"></i> Add Effect
+            </button>
+          </div>
+          <div class="sdrn-item-effects-list">
+            {{#each effects}}
+            <div class="sdrn-effect-row" style="display:flex; align-items:center; justify-content:space-between; padding:8px; margin-bottom:6px; background:#1b1915; border:1px solid #332d24; border-radius:4px;">
+              <div class="sdrn-effect-info" style="display:flex; align-items:center; gap:8px;">
+                {{#if icon}}<img src="{{icon}}" alt="" style="width:28px; height:28px; border-radius:3px; object-fit:contain; background:#111;" />{{/if}}
+                <div>
+                  <div style="font-weight:700; color:#e0c068;">{{name}}</div>
+                  <div style="font-size:11px; color:#a09880;">{{durationLabel}}{{#if changesSummary}} • {{changesSummary}}{{/if}}</div>
+                </div>
+              </div>
+              <div class="sdrn-effect-actions" style="display:flex; gap:6px;">
+                <button type="button" class="sdrn-item-roll-btn" data-action="open-effect-config" data-id="{{id}}" data-index="{{@index}}" title="Open Loom Advanced Effect Config">
+                  <i class="fas fa-sliders-h"></i> Config
+                </button>
+                <button type="button" class="sdrn-item-roll-btn" data-action="delete-effect" data-id="{{id}}" data-index="{{@index}}" title="Remove this effect" style="color:#d9534f; border-color:#d9534f40;">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            {{else}}
+            <div class="sdrn-empty" style="padding:16px; text-align:center; color:#888;">
+              <p>No active effects configured for this item.</p>
+              <button type="button" class="sdrn-item-roll-btn" data-action="create-effect" style="margin-top:8px;">
+                <i class="fas fa-plus"></i> Create Effect
+              </button>
             </div>
             {{/each}}
           </div>

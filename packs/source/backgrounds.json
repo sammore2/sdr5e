@@ -20,8 +20,8 @@
           "name": "Acolyte",
           "type": "background",
           "sortOrder": 0,
-          "imgUrl": "",
-          "data": "{\"identifier\":\"acolyte\",\"description\":\"Ability Scores: Intelligence, Wisdom, Charisma\\nFeat: Magic Initiate (Cleric) (see \\\"Feats\\\")\\nSkill Proficiencies: Insight and Religion\\nTool Proficiency: Calligrapher's Supplies\\nEquipment: Choose A or B: (A) Calligrapher's Supplies, Book (prayers), Holy Symbol, Parchment (10 sheets), Robe, 8 GP; or (B) 50 GP\",\"weight\":0,\"quantity\":1,\"rarity\":\"common\",\"isBindOnEquip\":false,\"attunement\":\"none\",\"source\":\"SRD 5.2 (CC-BY-4.0)\",\"price\":{\"gp\":0,\"sp\":0,\"cp\":0}}",
+          "imgUrl": "/marketplace/rulesets/srd5e/assets/icons/backgrounds/acolyte.webp",
+          "data": "{\"identifier\":\"acolyte\",\"description\":\"Ability Scores: Intelligence, Wisdom, Charisma\\nFeat: Magic Initiate (Cleric) (see \\\"Feats\\\")\\nSkill Proficiencies: Insight and Religion\\nTool Proficiency: Calligrapher's Supplies\\nEquipment: Choose A or B: (A) Calligrapher's Supplies, Book (prayers), Holy Symbol, Parchment (10 sheets), Robe, 8 GP; or (B) 50 GP\",\"weight\":0,\"quantity\":1,\"rarity\":\"common\",\"isBindOnEquip\":false,\"attunement\":\"none\",\"source\":\"SRD 5.2 (CC-BY-4.0)\",\"price\":{\"gp\":0,\"sp\":0,\"cp\":0},\"imgUrl\":\"/marketplace/rulesets/srd5e/assets/icons/backgrounds/acolyte.webp\"}",
           "folderId": ""
         },
         {
@@ -29,8 +29,8 @@
           "name": "Criminal",
           "type": "background",
           "sortOrder": 1,
-          "imgUrl": "",
-          "data": "{\"identifier\":\"criminal\",\"description\":\"Ability Scores: Dexterity, Constitution, Intelligence\\nFeat: Alert (see \\\"Feats\\\")\\nSkill Proficiencies: Sleight of Hand and Stealth\\nTool Proficiency: Thieves' Tools\\nEquipment: Choose A or B: (A) 2 Daggers, Thieves' Tools, Crowbar, 2 Pouches, Traveler's Clothes, 16 GP; or (B) 50 GP\",\"weight\":0,\"quantity\":1,\"rarity\":\"common\",\"isBindOnEquip\":false,\"attunement\":\"none\",\"source\":\"SRD 5.2 (CC-BY-4.0)\",\"price\":{\"gp\":0,\"sp\":0,\"cp\":0}}",
+          "imgUrl": "/marketplace/rulesets/srd5e/assets/icons/backgrounds/criminal.webp",
+          "data": "{\"identifier\":\"criminal\",\"description\":\"Ability Scores: Dexterity, Constitution, Intelligence\\nFeat: Alert (see \\\"Feats\\\")\\nSkill Proficiencies: Sleight of Hand and Stealth\\nTool Proficiency: Thieves' Tools\\nEquipment: Choose A or B: (A) 2 Daggers, Thieves' Tools, Crowbar, 2 Pouches, Traveler's Clothes, 16 GP; or (B) 50 GP\",\"weight\":0,\"quantity\":1,\"rarity\":\"common\",\"isBindOnEquip\":false,\"attunement\":\"none\",\"source\":\"SRD 5.2 (CC-BY-4.0)\",\"price\":{\"gp\":0,\"sp\":0,\"cp\":0},\"imgUrl\":\"/marketplace/rulesets/srd5e/assets/icons/backgrounds/criminal.webp\"}",
           "folderId": ""
         },
         {
@@ -38,8 +38,8 @@
           "name": "Sage",
           "type": "background",
           "sortOrder": 2,
-          "imgUrl": "",
-          "data": "{\"identifier\":\"sage\",\"description\":\"Ability Scores: Constitution, Intelligence, Wisdom\\nFeat: Magic Initiate (Wizard) (see \\\"Feats\\\")\\nSkill Proficiencies: Arcana and History\\nTool Proficiency: Calligrapher's Supplies\\nEquipment: Choose A or B: (A) Quarterstaff, Calligrapher's Supplies, Book (history), Parchment (8 sheets), Robe, 8 GP; or (B) 50 GP\",\"weight\":0,\"quantity\":1,\"rarity\":\"common\",\"isBindOnEquip\":false,\"attunement\":\"none\",\"source\":\"SRD 5.2 (CC-BY-4.0)\",\"price\":{\"gp\":0,\"sp\":0,\"cp\":0}}",
+          "imgUrl": "/marketplace/rulesets/srd5e/assets/icons/backgrounds/sage.webp",
+          "data": "{\"identifier\":\"sage\",\"description\":\"Ability Scores: Constitution, Intelligence, Wisdom\\nFeat: Magic Initiate (Wizard) (see \\\"Feats\\\")\\nSkill Proficiencies: Arcana and History\\nTool Proficiency: Calligrapher's Supplies\\nEquipment: Choose A or B: (A) Quarterstaff, Calligrapher's Supplies, Book (history), Parchment (8 sheets), Robe, 8 GP; or (B) 50 GP\",\"weight\":0,\"quantity\":1,\"rarity\":\"common\",\"isBindOnEquip\":false,\"attunement\":\"none\",\"source\":\"SRD 5.2 (CC-BY-4.0)\",\"price\":{\"gp\":0,\"sp\":0,\"cp\":0},\"imgUrl\":\"/marketplace/rulesets/srd5e/assets/icons/backgrounds/sage.webp\"}",
           "folderId": ""
         },
         {
@@ -47,8 +47,8 @@
           "name": "Soldier",
           "type": "background",
           "sortOrder": 3,
-          "imgUrl": "",
-          "data": "{\"identifier\":\"soldier\",\"description\":\"Ability Scores: Strength, Dexterity, Constitution\\nFeat: Savage Attacker (see \\\"Feats\\\")\\nSkill Proficiencies: Athletics and Intimidation\\nTool Proficiency: Choose one kind of Gaming Set (see \\\"Equipment\\\")\\nEquipment: Choose A or B: (A) Spear, Shortbow, 20 Arrows, Gaming Set (same as above), Healer's Kit, Quiver, Traveler's Clothes, 14 GP; or (B) 50 GP\",\"weight\":0,\"quantity\":1,\"rarity\":\"common\",\"isBindOnEquip\":false,\"attunement\":\"none\",\"source\":\"SRD 5.2 (CC-BY-4.0)\",\"price\":{\"gp\":0,\"sp\":0,\"cp\":0}}",
+          "imgUrl": "/marketplace/rulesets/srd5e/assets/icons/backgrounds/soldier.webp",
+          "data": "{\"identifier\":\"soldier\",\"description\":\"Ability Scores: Strength, Dexterity, Constitution\\nFeat: Savage Attacker (see \\\"Feats\\\")\\nSkill Proficiencies: Athletics and Intimidation\\nTool Proficiency: Choose one kind of Gaming Set (see \\\"Equipment\\\")\\nEquipment: Choose A or B: (A) Spear, Shortbow, 20 Arrows, Gaming Set (same as above), Healer's Kit, Quiver, Traveler's Clothes, 14 GP; or (B) 50 GP\",\"weight\":0,\"quantity\":1,\"rarity\":\"common\",\"isBindOnEquip\":false,\"attunement\":\"none\",\"source\":\"SRD 5.2 (CC-BY-4.0)\",\"price\":{\"gp\":0,\"sp\":0,\"cp\":0},\"imgUrl\":\"/marketplace/rulesets/srd5e/assets/icons/backgrounds/soldier.webp\"}",
           "folderId": ""
         }
       ]

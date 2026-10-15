@@ -133,3 +133,85 @@ export async function syncPermanentBonusEffect(item) {
 
   await applyItemEffect({ id: item.actorId }, item);
 }
+
+/** Sincroniza os templates declarados em `item.data.effects` criando os buffs de modelo (sem actorId). */
+export async function syncItemEffectTemplates(item) {
+  if (!item?.id) return [];
+  const idata = item.system || item.data || {};
+  const effectDefs = Array.isArray(idata.effects) ? idata.effects : [];
+  if (!effectDefs.length) return [];
+
+  let existing = [];
+  try {
+    existing = await effects.forItem(item.id);
+  } catch {
+    existing = [];
+  }
+
+  const createdOrExisting = [];
+  for (const def of effectDefs) {
+    const found = (existing || []).find((b) => b.name === def.name || (def.conditionId && b.conditionId === def.conditionId));
+    if (found) {
+      createdOrExisting.push(found);
+    } else {
+      try {
+        const buff = await effects.create({
+          itemId: item.id,
+          name: def.name,
+          icon: def.icon || item.imgUrl || '',
+          description: def.description || '',
+          durationUnit: def.durationUnit || 'permanent',
+          duration: typeof def.duration === 'number' ? def.duration : -1,
+          expireOn: def.expireOn || 'turn-end',
+          conditionId: def.conditionId || '',
+          removeOnCombatEnd: !!def.removeOnCombatEnd,
+          transfer: !!def.transfer,
+          changes: Array.isArray(def.changes) ? def.changes : [],
+          visual: def.visual || {},
+        });
+        createdOrExisting.push(buff);
+      } catch (err) {
+        console.warn(`[srd5e] Failed to create effect template "${def.name}" for item ${item.id}:`, err);
+      }
+    }
+  }
+  return createdOrExisting;
+}
+
+/** Aplica os templates de efeito de uma magia ou item nos alvos designados ou no conjurador. */
+export async function applySpellOrItemEffects(actor, item, { targetCastId, targetActorId } = {}) {
+  if (!item?.id) return [];
+  const templates = await syncItemEffectTemplates(item);
+  if (!templates.length) return [];
+
+  const results = [];
+  const targetPayload = {};
+  if (targetCastId) targetPayload.targetCastId = targetCastId;
+  else if (targetActorId) targetPayload.targetActorId = targetActorId;
+  else if (actor?.id) targetPayload.targetActorId = actor.id;
+
+  for (const template of templates) {
+    if (template.disabled) continue;
+    try {
+      const res = await effects.apply({
+        templateId: template.id,
+        ...targetPayload,
+      });
+      results.push({ template, res });
+
+      if (res.status === 'applied') {
+        globalThis.Loom?.showToast?.(`Efeito "${template.name}" aplicado!`, 'success');
+      } else if (res.status === 'pending') {
+        globalThis.Loom?.showToast?.(`Efeito "${template.name}" aguardando aprovação do Mestre.`, 'info');
+      } else if (res.status === 'blocked') {
+        globalThis.Loom?.showToast?.(`Efeito "${template.name}" já está ativo no alvo.`, 'warning');
+      } else if (res.status === 'error') {
+        console.warn(`[srd5e] Error applying effect "${template.name}":`, res.error);
+      }
+    } catch (err) {
+      console.warn(`[srd5e] Exception applying effect "${template.name}":`, err);
+    }
+  }
+  return results;
+}
+
