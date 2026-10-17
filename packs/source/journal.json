@@ -51,7 +51,7 @@
       "rows": [
         {
           "name": "Regras & Referência (SRD 5.2)",
-          "type": "Journal",
+          "type": "JournalEntry",
           "locked": 0
         }
       ]

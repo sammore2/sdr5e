@@ -796,6 +796,13 @@ function getItemIcon(name, type, data = {}) {
   return `${ASSET_PREFIX}/40.png`;
 }
 
+function setPackMetaType(json, expectedType) {
+  const packMetaTable = json.tables?.find((t) => t.name === 'pack_meta');
+  if (packMetaTable && packMetaTable.rows?.length) {
+    packMetaTable.rows[0].type = expectedType;
+  }
+}
+
 export async function enrichPacks() {
   console.log('--- Starting Pack Enrichment ---');
 
@@ -803,11 +810,15 @@ export async function enrichPacks() {
   {
     const filePath = path.join(sourceRoot, 'classes.json');
     const json = JSON.parse(await readFile(filePath, 'utf8'));
+    setPackMetaType(json, 'Item');
     for (const row of json.tables[0].rows) {
       const data = JSON.parse(row.data || '{}');
       const id = data.classIdentifier || row.name.toLowerCase();
       row.imgUrl = `${ASSET_PREFIX}/classes/${id}.webp`;
       data.imgUrl = row.imgUrl;
+      data.type = 'class';
+      data.itemType = 'class';
+      row.type = 'class';
       row.data = JSON.stringify(data);
     }
     await writeFile(filePath, `${JSON.stringify(json, null, 2)}\n`, 'utf8');
@@ -818,12 +829,16 @@ export async function enrichPacks() {
   {
     const filePath = path.join(sourceRoot, 'subclasses.json');
     const json = JSON.parse(await readFile(filePath, 'utf8'));
+    setPackMetaType(json, 'Item');
     for (const row of json.tables[0].rows) {
       const data = JSON.parse(row.data || '{}');
       const nameKey = row.name.toLowerCase();
       const icon = SUBCLASS_ICON_MAP[nameKey] || `${ASSET_PREFIX}/classes/${data.classIdentifier || 'fighter'}.webp`;
       row.imgUrl = icon;
       data.imgUrl = icon;
+      data.type = 'subclass';
+      data.itemType = 'subclass';
+      row.type = 'subclass';
       row.data = JSON.stringify(data);
     }
     await writeFile(filePath, `${JSON.stringify(json, null, 2)}\n`, 'utf8');
@@ -834,12 +849,16 @@ export async function enrichPacks() {
   {
     const filePath = path.join(sourceRoot, 'races.json');
     const json = JSON.parse(await readFile(filePath, 'utf8'));
+    setPackMetaType(json, 'Item');
     for (const row of json.tables[0].rows) {
       const data = JSON.parse(row.data || '{}');
       const nameKey = row.name.toLowerCase();
       const icon = SPECIES_ICON_MAP[nameKey] || `${ASSET_PREFIX}/species/human.webp`;
       row.imgUrl = icon;
       data.imgUrl = icon;
+      data.type = 'race';
+      data.itemType = 'race';
+      row.type = 'race';
       row.data = JSON.stringify(data);
     }
     await writeFile(filePath, `${JSON.stringify(json, null, 2)}\n`, 'utf8');
@@ -850,12 +869,16 @@ export async function enrichPacks() {
   {
     const filePath = path.join(sourceRoot, 'backgrounds.json');
     const json = JSON.parse(await readFile(filePath, 'utf8'));
+    setPackMetaType(json, 'Item');
     for (const row of json.tables[0].rows) {
       const data = JSON.parse(row.data || '{}');
       const nameKey = row.name.toLowerCase();
       const icon = `${ASSET_PREFIX}/backgrounds/${nameKey}.webp`;
       row.imgUrl = icon;
       data.imgUrl = icon;
+      data.type = 'background';
+      data.itemType = 'background';
+      row.type = 'background';
       row.data = JSON.stringify(data);
     }
     await writeFile(filePath, `${JSON.stringify(json, null, 2)}\n`, 'utf8');
@@ -866,12 +889,16 @@ export async function enrichPacks() {
   {
     const filePath = path.join(sourceRoot, 'feats.json');
     const json = JSON.parse(await readFile(filePath, 'utf8'));
+    setPackMetaType(json, 'Item');
     for (const row of json.tables[0].rows) {
       const data = JSON.parse(row.data || '{}');
       const isAsi = row.name.toLowerCase().includes('ability score');
       const icon = isAsi ? `${ASSET_PREFIX}/svg/ability-score-improvement.svg` : `/10.png`;
       row.imgUrl = icon;
       data.imgUrl = icon;
+      data.type = 'feat';
+      data.itemType = 'feat';
+      row.type = 'feat';
       row.data = JSON.stringify(data);
     }
     await writeFile(filePath, `${JSON.stringify(json, null, 2)}\n`, 'utf8');
@@ -882,12 +909,16 @@ export async function enrichPacks() {
   {
     const filePath = path.join(sourceRoot, 'features.json');
     const json = JSON.parse(await readFile(filePath, 'utf8'));
+    setPackMetaType(json, 'Item');
     for (const row of json.tables[0].rows) {
       const data = JSON.parse(row.data || '{}');
       const classId = data.classIdentifier;
       const icon = classId ? `${ASSET_PREFIX}/classes/${classId}.webp` : `${ASSET_PREFIX}/10.png`;
       row.imgUrl = icon;
       data.imgUrl = icon;
+      data.type = 'feature';
+      data.itemType = 'feature';
+      row.type = 'feature';
       row.data = JSON.stringify(data);
     }
     await writeFile(filePath, `${JSON.stringify(json, null, 2)}\n`, 'utf8');
@@ -898,6 +929,7 @@ export async function enrichPacks() {
   {
     const filePath = path.join(sourceRoot, 'spells.json');
     const json = JSON.parse(await readFile(filePath, 'utf8'));
+    setPackMetaType(json, 'Item');
     let spellEffectsAdded = 0;
 
     for (const row of json.tables[0].rows) {
@@ -905,6 +937,9 @@ export async function enrichPacks() {
       const school = (data.school || '').toLowerCase();
       row.imgUrl = getSpellIcon(row.name, school, data.level);
       data.imgUrl = row.imgUrl;
+      data.type = 'spell';
+      data.itemType = 'spell';
+      row.type = 'spell';
 
       // Active Effects injection
       const effectDef = SPELL_EFFECTS[row.name];
@@ -926,16 +961,20 @@ export async function enrichPacks() {
   {
     const filePath = path.join(sourceRoot, 'magic-items.json');
     const json = JSON.parse(await readFile(filePath, 'utf8'));
+    setPackMetaType(json, 'Item');
     let itemEffectsAdded = 0;
 
     for (const row of json.tables[0].rows) {
       const data = JSON.parse(row.data || '{}');
-      const type = (row.type || data.type || '').toLowerCase();
+      const subType = (data.type || row.type || 'item').toLowerCase();
       const name = row.name;
 
-      const icon = getItemIcon(name, type, data);
+      const icon = getItemIcon(name, subType, data);
       row.imgUrl = icon;
       data.imgUrl = icon;
+      data.type = subType;
+      data.itemType = subType;
+      row.type = subType;
 
       // Active Effects injection
       const effectDef = MAGIC_ITEM_EFFECTS[name];
@@ -948,7 +987,7 @@ export async function enrichPacks() {
       } else if (name.includes('+1') || name.includes('+2') || name.includes('+3')) {
         const bonusMatch = name.match(/\+([123])/);
         const bonus = bonusMatch ? Number(bonusMatch[1]) : 1;
-        if (type === 'weapon') {
+        if (subType === 'weapon') {
           data.effects = [{
             name: `${name} Bonus`,
             icon,
@@ -963,7 +1002,7 @@ export async function enrichPacks() {
             ]
           }];
           itemEffectsAdded++;
-        } else if (type === 'armor' || name.toLowerCase().includes('shield') || name.toLowerCase().includes('armor')) {
+        } else if (subType === 'armor' || name.toLowerCase().includes('shield') || name.toLowerCase().includes('armor')) {
           data.effects = [{
             name: `${name} Bonus`,
             icon,
@@ -984,6 +1023,50 @@ export async function enrichPacks() {
     }
     await writeFile(filePath, `${JSON.stringify(json, null, 2)}\n`, 'utf8');
     console.log(`✓ Enriched magic-items.json (${json.tables[0].rows.length} rows, ${itemEffectsAdded} Active Effects assigned)`);
+  }
+
+  // 9. Monsters / NPCs
+  {
+    const filePath = path.join(sourceRoot, 'monsters.json');
+    const json = JSON.parse(await readFile(filePath, 'utf8'));
+    setPackMetaType(json, 'Actor');
+    for (const row of json.tables[0].rows) {
+      const data = JSON.parse(row.data || '{}');
+      data.type = 'npc';
+      data.actorType = 'npc';
+      row.type = 'npc';
+      row.data = JSON.stringify(data);
+    }
+    await writeFile(filePath, `${JSON.stringify(json, null, 2)}\n`, 'utf8');
+    console.log(`✓ Enriched monsters.json (${json.tables[0].rows.length} rows)`);
+  }
+
+  // 10. Vehicles
+  {
+    const filePath = path.join(sourceRoot, 'vehicles.json');
+    const json = JSON.parse(await readFile(filePath, 'utf8'));
+    setPackMetaType(json, 'Actor');
+    for (const row of json.tables[0].rows) {
+      const data = JSON.parse(row.data || '{}');
+      data.type = 'vehicle';
+      data.actorType = 'vehicle';
+      row.type = 'vehicle';
+      row.data = JSON.stringify(data);
+    }
+    await writeFile(filePath, `${JSON.stringify(json, null, 2)}\n`, 'utf8');
+    console.log(`✓ Enriched vehicles.json (${json.tables[0].rows.length} rows)`);
+  }
+
+  // 11. Journal / Rules
+  {
+    const filePath = path.join(sourceRoot, 'journal.json');
+    const json = JSON.parse(await readFile(filePath, 'utf8'));
+    setPackMetaType(json, 'JournalEntry');
+    for (const row of json.tables[0].rows) {
+      row.type = 'JournalEntry';
+    }
+    await writeFile(filePath, `${JSON.stringify(json, null, 2)}\n`, 'utf8');
+    console.log(`✓ Enriched journal.json (${json.tables[0].rows.length} rows)`);
   }
 
   console.log('--- Pack Enrichment Complete ---');
