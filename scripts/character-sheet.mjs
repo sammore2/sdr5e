@@ -13,7 +13,7 @@
 
 import { LoomHandlebarsMixin, LoomActorSheet, effects, api, windowManager, showToast, LoomDialog } from '/_loom/sdk/index.js';
 import { ABILITY_KEYS, ABILITY_LABELS, SKILL_LABELS, ITEM_TYPE_ICON, ITEM_TYPE_LABEL, ITEM_TYPE_SINGULAR, SIZE_LABELS, SIZE_CARRY_MULTIPLIER, WEAPON_CATEGORY_CODES, WEAPON_CATEGORY_LABELS, DAMAGE_TYPES, DAMAGE_TYPE_LABELS, MULTICLASS_PREREQS } from './config.mjs';
-import { fmtMod, setPathValue, currentAdvantageMode, passiveScore } from './utils.mjs';
+import { fmtMod, setPathValue, currentAdvantageMode, passiveScore, getItemType } from './utils.mjs';
 import { initiativeBaseSources } from './initiative-mechanics.mjs';
 import { getSetting } from './settings.mjs';
 import { resolveLevelUpEligibility, resolveXpProgress } from './xp-progression.mjs';
@@ -419,11 +419,11 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       }
       if (!source) return;
 
-      const itemType = source.type || 'item';
+      const itemType = getItemType(source);
 
       if (itemType === 'class') {
         const classIdentifier = (source.system || source.data || {}).classIdentifier;
-        const existingClass = (this.document.items || []).find((i) => i.type === 'class'
+        const existingClass = (this.document.items || []).find((i) => getItemType(i) === 'class'
           && (i.system?.classIdentifier || i.data?.classIdentifier) === classIdentifier);
         if (existingClass) {
           showToast?.(`Esta ficha já possui a classe ${source.name}. Use o Level Up para subir de nível.`, 'warning');
@@ -431,12 +431,13 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         }
       }
 
+      const itemData = { ...(source.system || source.data || getDefaultData(itemType)), type: itemType };
       await api.post('/items', {
         worldId: window.Loom?.world?.id || this.document.worldId,
         name: source.name,
         type: itemType,
         imgUrl: source.imgUrl || source.img || '',
-        data: source.system || source.data || getDefaultData(itemType),
+        data: itemData,
         actorId: this.document.id,
       });
 
@@ -610,7 +611,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       const cid = (it.system || it.data || {}).container;
       return !cid || !items.some((x) => x.id === cid);
     };
-    const byType = (type) => items.filter((i) => i.type === type && isRoot(i)).map((i) => {
+    const byType = (type) => items.filter((i) => getItemType(i) === type && isRoot(i)).map((i) => {
       const idata = i.system || i.data || {};
       const isContainer = type === 'container';
       const load = isContainer ? containerLoad(items, i.id) : null;
@@ -619,21 +620,22 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         const direct = getContents(items, containerId);
         for(const c of direct){
           const cdata = c.system || c.data || {};
-          const isCont = c.type === 'container';
+          const cType = getItemType(c);
+          const isCont = cType === 'container';
           out.push({
             ...c,
-            icon: ITEM_TYPE_ICON[c.type] || '📦',
-            hasQuantity: c.type !== 'container',
+            icon: ITEM_TYPE_ICON[cType] || '📦',
+            hasQuantity: cType !== 'container',
             quantity: cdata.quantity ?? 1,
-            isWeapon: c.type === 'weapon',
-            isHealersKit: c.type === 'item' && cdata.identifier === 'healers-kit',
-            isConsumable: c.type === 'consumable',
-            isTool: c.type === 'tool',
+            isWeapon: cType === 'weapon',
+            isHealersKit: cType === 'item' && cdata.identifier === 'healers-kit',
+            isConsumable: cType === 'consumable',
+            isTool: cType === 'tool',
             isContainer: isCont,
-            proficient: c.type === 'tool' ? isToolProficient(sd, c) : false,
-            showEquip: c.type === 'weapon' || c.type === 'armor',
+            proficient: cType === 'tool' ? isToolProficient(sd, c) : false,
+            showEquip: cType === 'weapon' || cType === 'armor',
             usesLabel: cdata.uses?.max > 1 ? `${cdata.uses.value ?? 0}/${cdata.uses.max}` : '',
-            isMovable: ['weapon','armor','item','consumable','tool','loot','container'].includes(c.type),
+            isMovable: ['weapon','armor','item','consumable','tool','loot','container'].includes(cType),
             depth,
             containerOpen: isCont ? this._openContainers.has(c.id) : false,
             containerLoad: isCont ? containerLoad(items, c.id) : null,
@@ -796,13 +798,13 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     // Race/Class/Background — 1 item of each expected per actor (the first
     // one found "wins"; the sheet doesn't prevent multiples, but that's not
     // the intended use case).
-    const findFirst = (type) => items.find((i) => i.type === type) || null;
+    const findFirst = (type) => items.find((i) => getItemType(i) === type) || null;
     const raceItem = findFirst('race');
     const classItem = findFirst('class');
     const backgroundItem = findFirst('background');
     const subclassItem = findFirst('subclass');
     const getItemImage = (i) => i ? (i.imgUrl || i.img || i.avatarUrl || i.systemData?.imgUrl || i.systemData?.img || i.data?.imgUrl || i.data?.img || i.system?.img || '') : '';
-    const getItemIcon = (i) => i ? (i.icon || ITEM_TYPE_ICON[i.type] || '') : '';
+    const getItemIcon = (i) => i ? (i.icon || ITEM_TYPE_ICON[getItemType(i)] || '') : '';
 
     const _identity = {
       race: raceItem ? {

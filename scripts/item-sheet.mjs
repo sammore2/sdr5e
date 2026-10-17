@@ -12,12 +12,16 @@
 
 import { LoomHandlebarsMixin, LoomItemSheet, api, effects } from '/_loom/sdk/index.js';
 import { ITEM_TYPE_ICON } from './config.mjs';
-import { setPathValue } from './utils.mjs';
+import { setPathValue, getItemType } from './utils.mjs';
 import { ITEM_SHEET_SCHEMAS } from './sheet-schemas.mjs';
 
 export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
   static DEFAULT_OPTIONS = { position: { width: 380, height: 460 } };
   _formSaveTimer;
+
+  get itemType() {
+    return getItemType(this.document);
+  }
 
   constructor(props) {
     super({
@@ -218,7 +222,7 @@ export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
    * only knows plain scalars, so an array-shaped field doesn't need its own
    * DOM input `type` to round-trip correctly. */
   _csvFieldKeys() {
-    const schema = ITEM_SHEET_SCHEMAS[this.document?.type];
+    const schema = ITEM_SHEET_SCHEMAS[this.itemType];
     const fields = schema?.tabs?.[0]?.fields || [];
     return new Set(fields.filter((f) => f.type === 'csv').map((f) => f.key));
   }
@@ -246,7 +250,7 @@ export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
 
   async _prepareContext() {
     const context = await super._prepareContext();
-    const type = this.document?.type;
+    const type = this.itemType;
     const schema = ITEM_SHEET_SCHEMAS[type] || { tabs: [{ fields: [] }] };
     const values = this.document?.data || {};
     const getVal = (key) => key.split('.').reduce((o, k) => (o == null ? o : o[k]), values);

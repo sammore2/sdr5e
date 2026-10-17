@@ -67,6 +67,36 @@ export function setItemSystemData(item, nextData) {
   }
 }
 
+/**
+ * Resolves the specific item subtype for an item document or record.
+ * Supports both direct typing (e.g. `item.type === 'spell'`) and normalized
+ * primary typing where the core provides `item.type === 'Item'` (or `'item'`)
+ * and stores the subtype in `item.data.type`, `item.system.type`, or `item.data.itemType`.
+ */
+export function getItemType(item) {
+  if (!item) return 'item';
+  const rawType = (item.type || '').toLowerCase();
+  if (rawType && rawType !== 'item') return rawType;
+  const subType = item.data?.type || item.system?.type || item.systemData?.type || item.data?.itemType || item.system?.itemType;
+  if (subType && String(subType).toLowerCase() !== 'item') return String(subType).toLowerCase();
+  return rawType || 'item';
+}
+
+/**
+ * Resolves the specific actor subtype for an actor document or record.
+ * Supports both direct typing (e.g. `actor.type === 'npc'`) and normalized
+ * primary typing where the core provides `actor.type === 'Actor'` (or `'actor'`)
+ * and stores the subtype in `actor.data.type`, `actor.system.type`, or `actor.systemData.type`.
+ */
+export function getActorType(actor) {
+  if (!actor) return 'character';
+  const rawType = (actor.type || '').toLowerCase();
+  if (rawType && rawType !== 'actor') return rawType;
+  const subType = actor.data?.type || actor.system?.type || actor.systemData?.type || actor.data?.actorType || actor.system?.actorType;
+  if (subType && String(subType).toLowerCase() !== 'actor') return String(subType).toLowerCase();
+  return rawType || 'character';
+}
+
 // Advantage/disadvantage on d20 rolls (`sdr5eRoll`'s `advantage` param) was
 // wired into the roll engine from the start but nothing ever actually
 // triggered it — every ability/skill/save/attack roll call site passed 0

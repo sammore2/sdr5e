@@ -17,7 +17,7 @@ import {
   ITEM_TYPE_ICON, ITEM_TYPE_SINGULAR, DAMAGE_TYPES, DAMAGE_TYPE_LABELS,
   CONDITIONS, SENSE_TYPES, SENSE_LABELS
 } from './config.mjs';
-import { fmtMod, setPathValue, currentAdvantageMode, passiveScore } from './utils.mjs';
+import { fmtMod, setPathValue, currentAdvantageMode, passiveScore, getItemType } from './utils.mjs';
 import { initiativeBaseSources } from './initiative-mechanics.mjs';
 import { sdr5eRoll, rollDeathSave, applyHeal, applyDamage, getActorConditions, applyAbilityCheckConditionModifiers, applyPoisonedDisadvantage, getSaveConditionOutcome, getSaveCoverBonus, getSkillConditionOutcome, evaluateDamageFormula, postItemToChat, rollWeaponAttack, rollWeaponDamage } from './roll-engine.mjs';
 import { getDefaultData } from './schema.mjs';
@@ -186,13 +186,14 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       }
       if (!source) return;
 
-      const itemType = source.type || 'item';
+      const itemType = getItemType(source);
+      const itemData = { ...(source.system || source.data || getDefaultData(itemType)), type: itemType };
       await api.post('/items', {
         worldId: window.Loom?.world?.id || this.document.worldId,
         name: source.name,
         type: itemType,
         imgUrl: source.imgUrl || source.img || '',
-        data: source.system || source.data || getDefaultData(itemType),
+        data: itemData,
         actorId: this.document.id,
       });
 
@@ -340,35 +341,36 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const _inventoryList = [];
     const _gearChips = [];
 
-    const _actions = items.filter((i) => i.type !== 'language').map((i) => {
+    const _actions = items.filter((i) => getItemType(i) !== 'language').map((i) => {
+      const iType = getItemType(i);
       const idata = i.system || i.data || {};
       const formula = idata.damage?.formula || '';
       const uses = idata.uses?.max ? `${idata.uses.value ?? 0}/${idata.uses.max}` : '—';
       const attackBonus = (idata.attackBonus !== undefined && idata.attackBonus !== null && idata.attackBonus !== '')
         ? fmtMod(idata.attackBonus)
-        : (i.type === 'weapon' ? fmtMod((attrs.prof?.value ?? 2) + (sd.abilities?.str?.modifier ?? 0)) : '—');
+        : (iType === 'weapon' ? fmtMod((attrs.prof?.value ?? 2) + (sd.abilities?.str?.modifier ?? 0)) : '—');
       const enriched = {
         ...i,
         imgUrl: i.imgUrl || i.img || i.avatarUrl || '',
-        icon: ITEM_TYPE_ICON[i.type] || '⭐',
-        isWeapon: i.type === 'weapon',
-        isSpell: i.type === 'spell',
-        isFeature: i.type === 'feature',
+        icon: ITEM_TYPE_ICON[iType] || '⭐',
+        isWeapon: iType === 'weapon',
+        isSpell: iType === 'spell',
+        isFeature: iType === 'feature',
         hasDamage: !!formula,
         usesText: uses,
         rollText: attackBonus,
         formulaText: formula || '—',
-        subtitle: idata.actionType || (i.type === 'weapon' ? 'Ação' : (i.type || 'Característica')),
+        subtitle: idata.actionType || (iType === 'weapon' ? 'Ação' : (iType || 'Característica')),
       };
 
-      if (i.type === 'weapon') {
+      if (iType === 'weapon') {
         _attacksList.push(enriched);
         _gearChips.push(i.name);
-      } else if (i.type === 'spell') {
+      } else if (iType === 'spell') {
         _spellsList.push(enriched);
-      } else if (['armor', 'consumable', 'tool', 'loot', 'container'].includes(i.type)) {
+      } else if (['armor', 'consumable', 'tool', 'loot', 'container'].includes(iType)) {
         _inventoryList.push(enriched);
-        if (i.type === 'armor' && idata.equipped) _gearChips.push(i.name);
+        if (iType === 'armor' && idata.equipped) _gearChips.push(i.name);
       } else {
         _featuresList.push(enriched);
       }
@@ -376,7 +378,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       return enriched;
     });
 
-    const langItems = items.filter((i) => i.type === 'language').map((i) => ({ id: i.id, name: i.name }));
+    const langItems = items.filter((i) => getItemType(i) === 'language').map((i) => ({ id: i.id, name: i.name }));
     const langValues = (details.languages?.value || []).map((v) => ({ name: v }));
     const seenLangs = new Set();
     const _languages = [];

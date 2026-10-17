@@ -808,7 +808,7 @@ test('Wizard Signature Spells requires two distinct level-3 book spells and trac
 
 test('Wizard spellcasting features use exact SRD feature text and levels without spilling into the spell list', { skip: srdSkip('classes.md') }, () => {
   const db = new DatabaseSync(fileURLToPath(new URL('../packs/features.sqlite', import.meta.url)), { readOnly: true });
-  const rows = db.prepare("SELECT name, data FROM entries WHERE type='feature' AND json_extract(data, '$.classIdentifier')='wizard' AND json_extract(data, '$.identifier') IN ('ritual-adept','scholar','memorize-spell','spell-mastery','signature-spells')").all();
+  const rows = db.prepare("SELECT name, data FROM entries WHERE type = 'feature' AND json_extract(data, '$.classIdentifier')='wizard' AND json_extract(data, '$.identifier') IN ('ritual-adept','scholar','memorize-spell','spell-mastery','signature-spells')").all();
   db.close();
   const features = new Map(rows.map((row) => [JSON.parse(row.data).identifier, { name: row.name, data: JSON.parse(row.data) }]));
   assert.deepEqual([...features.keys()].sort(), ['memorize-spell', 'ritual-adept', 'scholar', 'signature-spells', 'spell-mastery']);

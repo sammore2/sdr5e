@@ -48,6 +48,7 @@ test('Potion of Healing pack row is source-classified for Bonus Action without c
     const item = JSON.parse(rows[0].data);
     assert.equal(rows[0].name, 'Potion of Healing');
     assert.equal(rows[0].type, 'consumable');
+    assert.equal(item.type, 'consumable');
     assert.equal(item.identifier, 'potion-of-healing');
     assert.equal(item.actionCost, ITEM_ACTION_COSTS.BONUS_ACTION);
     assert.equal(item.healing.formula, '2d4+2');

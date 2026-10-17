@@ -19,6 +19,7 @@ import { Sdr5eGroupSheet } from './scripts/group-sheet.mjs';
 import { Sdr5eVehicleSheet } from './scripts/vehicle-sheet.mjs';
 import { Sdr5eEncounterSheet } from './scripts/encounter-sheet.mjs';
 import { Sdr5eItemSheet } from './scripts/item-sheet.mjs';
+import { getItemType } from './scripts/utils.mjs';
 import { SDR5EApi } from './scripts/api.mjs';
 import { registerSettings } from './scripts/settings.mjs';
 import { registerCombatInitiative } from './scripts/combat-initiative.mjs';
@@ -165,7 +166,8 @@ async function useItem(actorId, itemId) {
   if (!actor) return;
   const item = await window.Loom.api.get(`/items/${itemId}`);
   if (!item) return;
-  switch (item.type) {
+  const itemType = getItemType(item);
+  switch (itemType) {
     case 'weapon':
       await rollWeaponAttack(actor, item);
       break;
