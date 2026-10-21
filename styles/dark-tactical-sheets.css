@@ -115,6 +115,10 @@
   box-shadow: 0 0 0 2px var(--sdrn-gold-glow), inset 0 1px 2px rgba(0, 0, 0, 0.5) !important;
 }
 /* INPUTS TRANSPARENTES (Títulos, Nomes, Subtítulos, Medallions, Coins, Shields) */
+.sdrn-sheet input.sdrn-ac-circle,
+.sdrn-root input.sdrn-ac-circle,
+.loom-window-body .sdrn-root input.sdrn-ac-circle,
+.sdrn-col-portrait input.sdrn-ac-circle,
 .sdrn-sheet input.sdrn-name-input,
 .sdrn-sheet input.sdrn-encounter-name-input,
 .sdrn-sheet input.sdrn-vehicle-name-input,

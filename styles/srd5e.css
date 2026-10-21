@@ -11517,8 +11517,8 @@ form.npc-2024-sheet {
   position: relative;
   isolation: isolate;
   width: 100%;
-  max-width: 62px;
-  height: 52px;
+  max-width: 56px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11549,7 +11549,7 @@ form.npc-2024-sheet {
 }
 .sdrn-ability-shield b {
   font-family: 'Cinzel', serif;
-  font-size: 19px;
+  font-size: 21px;
   font-weight: 800;
   color: #f7e6b5;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95), 0 0 8px rgba(212, 175, 55, 0.35);
@@ -11708,7 +11708,7 @@ form.npc-2024-sheet {
   position: relative;
   isolation: isolate;
   width: 58px;
-  height: 66px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11726,7 +11726,8 @@ form.npc-2024-sheet {
   clip-path: var(--shield-shape);
   background: linear-gradient(180deg, #24212a 0%, #131217 60%, #0a090d 100%);
 }
-.sdrn-col-portrait input.sdrn-ac-circle {
+.sdrn-col-portrait input.sdrn-ac-circle,
+.sdrn-ac-shield-wrap input.sdrn-ac-circle {
   width: 44px !important;
   height: 38px !important;
   flex: none;
@@ -22063,11 +22064,11 @@ html .sdrn-npc-root.sdrn-npc-root .sdrn-npc-main-content {
   border-bottom-color: #ffd700 !important;
   color: #ffffff !important;
 }
-.sdrn-item-name-btn {
+.sdrn-item-root .sdrn-item-name-btn {
   color: #e2e8f0 !important;
   transition: color 0.15s ease, text-shadow 0.15s ease;
 }
-.sdrn-item-name-btn:hover {
+.sdrn-item-root .sdrn-item-name-btn:hover {
   color: #ffd700 !important;
   text-shadow: 0 0 6px rgba(255, 215, 0, 0.35);
   text-decoration: none;
@@ -22136,4 +22137,18 @@ html .sdrn-npc-root.sdrn-npc-root .sdrn-npc-main-content {
 .sdrn-item-root .sdrn-effect-row:hover {
   background: #221f19 !important;
   border-color: rgba(226, 185, 96, 0.5) !important;
+}
+
+/* Feature and item buttons on parchment: strong dark ink with hover red */
+.sdrn-root .sdrn-feature-row .sdrn-item-name-btn,
+.sdrn-root .sdrn-item-row .sdrn-item-name-btn,
+.sdrn-feature-group .sdrn-item-name-btn {
+  color: #1a1410 !important;
+  font-weight: 700 !important;
+}
+.sdrn-root .sdrn-feature-row .sdrn-item-name-btn:hover,
+.sdrn-root .sdrn-item-row .sdrn-item-name-btn:hover,
+.sdrn-feature-group .sdrn-item-name-btn:hover {
+  color: #8b1515 !important;
+  text-decoration: underline !important;
 }
