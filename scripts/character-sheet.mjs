@@ -18,7 +18,7 @@ import { initiativeBaseSources } from './initiative-mechanics.mjs';
 import { getSetting } from './settings.mjs';
 import { resolveLevelUpEligibility, resolveXpProgress } from './xp-progression.mjs';
 import { computeCarriedWeight } from './prepare-data.mjs';
-import { sdr5eRoll, rollDeathSave, toggleInspiration, setExhaustion, rollWeaponAttack, rollWeaponDamage, rollUnarmedStrike, rollUnarmedDamage, rollUnarmedGrapple, rollUnarmedShove, castSpell, rollSpellAttack, rollSpellDamage, spendHitDie, postItemToChat, getActorConditions, applyAbilityCheckConditionModifiers, getSaveConditionOutcome, getSaveCoverBonus, getSkillConditionOutcome, activateFeature, toggleRage, extendRage, useConsumable, useHealersKit, isToolProficient, rollToolCheck } from './roll-engine.mjs';
+import { sdr5eRoll, rollDeathSave, toggleInspiration, setExhaustion, rollWeaponAttack, rollWeaponDamage, rollUnarmedStrike, rollUnarmedDamage, rollUnarmedGrapple, rollUnarmedShove, castSpell, rollSpellAttack, rollSpellDamage, rollSpellHealing, spendHitDie, postItemToChat, getActorConditions, applyAbilityCheckConditionModifiers, getSaveConditionOutcome, getSaveCoverBonus, getSkillConditionOutcome, activateFeature, toggleRage, extendRage, useConsumable, useHealersKit, isToolProficient, rollToolCheck } from './roll-engine.mjs';
 import { takeRest } from './rest.mjs';
 import { rageStrengthAdvantage } from './rage-mechanics.mjs';
 import { resolveArcaneRecovery } from './arcane-recovery.mjs';

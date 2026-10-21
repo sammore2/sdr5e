@@ -17,8 +17,8 @@
 
 import { windowManager } from '/_loom/sdk/index.js';
 import {
-  sdr5eRoll, applyHeal, applyDamage, applyTempHp, rollConcentrationSave, applyDamageToTargets,
-  rollWeaponAttack, rollWeaponDamage, rollSpellAttack, rollSpellDamage, castSpell,
+  sdr5eRoll, applyHeal, applyDamage, applyTempHp, rollConcentrationSave, applyDamageToTargets, applyHealToTargets,
+  rollWeaponAttack, rollWeaponDamage, rollSpellAttack, rollSpellDamage, rollSpellHealing, rollSpellSave, castSpell,
   rollDeathSave, spendHitDie, spendClassResource, activateFeature, consumeUse, rollRecharge,
   toggleInspiration, setExhaustion, getActorConditions, getSaveConditionOutcome,
   applyAbilityCheckConditionModifiers, applyWeaponAttackConditionModifiers,
@@ -31,10 +31,10 @@ import { Sdr5eCharacterWizard } from './character-wizard.mjs';
 export const SDR5EApi = {
   // Rolls
   roll: sdr5eRoll,
-  rollWeaponAttack, rollWeaponDamage, rollSpellAttack, rollSpellDamage, castSpell,
+  rollWeaponAttack, rollWeaponDamage, rollSpellAttack, rollSpellDamage, rollSpellHealing, rollSpellSave, castSpell,
   rollDeathSave, rollConcentrationSave,
   // Damage / healing
-  applyHeal, applyDamage, applyTempHp, applyDamageToTargets,
+  applyHeal, applyDamage, applyTempHp, applyDamageToTargets, applyHealToTargets,
   // Resources (Hit Dice, the generic class-resource pool ported from the
   // original's "Route D: Flow Modifiers (Agnostic Pools)" — codex-api.mjs:651)
   spendHitDie, spendClassResource, activateFeature, consumeUse, rollRecharge,

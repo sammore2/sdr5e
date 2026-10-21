@@ -11,7 +11,7 @@ import { SystemRegistry, defineSystem, sheets, statusEffects, api, LoomHooks } f
 import { prepareActorRow } from './scripts/prepare-data.mjs';
 import { getSheetSchema, getItemSheetSchema } from './scripts/sheet-schemas.mjs';
 import { getDefaultData } from './scripts/schema.mjs';
-import { applyDamageToTargets, applyWeaponSap, applyWeaponSlow, applyWeaponVex, consumeCombatEffectsAfterRoll, processCombatEffectsTurn, clearCombatEffectsOnEnd, rollWeaponAttack, rollWeaponNick, rollWeaponDamage, rollWeaponGraze, rollWeaponPush, rollWeaponTopple, rollWeaponCleave, resolveConcentrationSaveMessage, rollSpellAttack, rollSpellDamage, rollSpellTriggeredDamage, rollWishStress, splitSpellDamageComponents, rollUnarmedDamage, castSpell, activateFeature, postItemToChat, useConsumable, rollToolCheck, endRageForHeavyArmor, endRageForIncapacitatedCast, endConcentrationForIncapacitatedCast, processRageCombatTurn, clearRageCombatTrackingOnEnd } from './scripts/roll-engine.mjs';
+import { applyDamageToTargets, applyHealToTargets, rollSpellHealing, rollSpellSave, applyWeaponSap, applyWeaponSlow, applyWeaponVex, consumeCombatEffectsAfterRoll, processCombatEffectsTurn, clearCombatEffectsOnEnd, rollWeaponAttack, rollWeaponNick, rollWeaponDamage, rollWeaponGraze, rollWeaponPush, rollWeaponTopple, rollWeaponCleave, resolveConcentrationSaveMessage, rollSpellAttack, rollSpellDamage, rollSpellTriggeredDamage, rollWishStress, splitSpellDamageComponents, rollUnarmedDamage, castSpell, activateFeature, postItemToChat, useConsumable, rollToolCheck, endRageForHeavyArmor, endRageForIncapacitatedCast, endConcentrationForIncapacitatedCast, processRageCombatTurn, clearRageCombatTrackingOnEnd } from './scripts/roll-engine.mjs';
 import { syncEquippedEffect, syncPermanentBonusEffect, removeItemEffects } from './scripts/effects.mjs';
 import { Sdr5eCharacterSheet } from './scripts/character-sheet.mjs';
 import { Sdr5eNpcSheet } from './scripts/npc-sheet.mjs';
@@ -278,6 +278,24 @@ document.addEventListener('click', async (event) => {
 });
 
 document.addEventListener('click', async (event) => {
+  const btn = event.target instanceof Element ? event.target.closest('[data-srd5e-action="apply-heal"]') : null;
+  if (!btn) return;
+  const amount = Number(btn.dataset.amount) || 0;
+  const targetIds = btn.hasAttribute('data-target-id') && btn.dataset.targetId ? [btn.dataset.targetId] : undefined;
+  btn.disabled = true;
+  try {
+    const results = await applyHealToTargets(amount, targetIds);
+    if (!results || !results.length) {
+      window.Loom?.showToast?.(localizeCardOr('SDR5E.Combat.SelectTargetToHeal', 'Select a target token on the canvas to apply healing.'), 'info');
+    }
+  } catch (error) {
+    console.error('[srd5e] Healing application did not complete:', error);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+document.addEventListener('click', async (event) => {
   const btn = event.target instanceof Element ? event.target.closest('[data-srd5e-action="indomitable-might"]') : null;
   if (!btn) return;
   btn.disabled = true;
@@ -309,7 +327,7 @@ document.addEventListener('click', async (event) => {
 // QUALQUER cliente vendo a mensagem no chat, não só quem tem a ficha aberta.
 document.addEventListener('click', async (event) => {
   const target = event.target instanceof Element ? event.target : null;
-  const btn = target?.closest('[data-srd5e-action="resolve-concentration-save"], [data-srd5e-action="card-attack"], [data-srd5e-action="card-damage"], [data-srd5e-action="card-cleave-damage"], [data-srd5e-action="card-spell-attack"], [data-srd5e-action="card-spell-damage"], [data-srd5e-action="card-unarmed-damage"], [data-srd5e-action="card-weapon-topple"], [data-srd5e-action="card-weapon-graze"], [data-srd5e-action="card-weapon-push"], [data-srd5e-action="card-weapon-cleave"], [data-srd5e-action="card-weapon-nick"], [data-srd5e-action="card-weapon-sap"], [data-srd5e-action="card-weapon-vex"], [data-srd5e-action="card-weapon-slow"], [data-srd5e-action="card-wish-stress"]');
+  const btn = target?.closest('[data-srd5e-action="resolve-concentration-save"], [data-srd5e-action="card-attack"], [data-srd5e-action="card-damage"], [data-srd5e-action="card-cleave-damage"], [data-srd5e-action="card-spell-attack"], [data-srd5e-action="card-spell-damage"], [data-srd5e-action="card-spell-heal"], [data-srd5e-action="card-spell-save"], [data-srd5e-action="card-unarmed-damage"], [data-srd5e-action="card-weapon-topple"], [data-srd5e-action="card-weapon-graze"], [data-srd5e-action="card-weapon-push"], [data-srd5e-action="card-weapon-cleave"], [data-srd5e-action="card-weapon-nick"], [data-srd5e-action="card-weapon-sap"], [data-srd5e-action="card-weapon-vex"], [data-srd5e-action="card-weapon-slow"], [data-srd5e-action="card-wish-stress"]');
   if (!btn) return;
   const action = btn.dataset.srd5eAction;
   if (action === 'resolve-concentration-save') {
@@ -462,12 +480,24 @@ document.addEventListener('click', async (event) => {
         window.Loom?.showToast?.(localizeCard('SDR5E.WeaponMastery.SlowFailed'), 'warning');
       }
     }
-    else if (action === 'card-spell-attack') await rollSpellAttack(actor, item);
+    else if (action === 'card-spell-attack') await rollSpellAttack(actor, item, {
+      ...(btn.hasAttribute('data-cast-at-level') ? { castAtLevel: Number(btn.dataset.castAtLevel) } : {}),
+    });
     else if (action === 'card-spell-damage') await rollSpellDamage(actor, item, {
       ...damageOptions,
       ...(btn.hasAttribute('data-cast-at-level') ? { castAtLevel: Number(btn.dataset.castAtLevel) } : {}),
       ...(btn.dataset.fromCard === 'true' ? { fromCard: true } : {}),
+      ...(btn.dataset.halfOnSave === 'true' ? { halfOnSave: true } : {}),
     });
+    else if (action === 'card-spell-heal') await rollSpellHealing(actor, item, {
+      ...(btn.hasAttribute('data-cast-at-level') ? { castAtLevel: Number(btn.dataset.castAtLevel) } : {}),
+      ...(btn.dataset.fromCard === 'true' ? { fromCard: true } : {}),
+    });
+    else if (action === 'card-spell-save') {
+      const ability = btn.dataset.ability;
+      const dc = Number(btn.dataset.dc);
+      await rollSpellSave(ability, dc);
+    }
     else if (action === 'card-spell-triggered') await rollSpellTriggeredDamage(actor, item, Number(btn.dataset.triggerIndex), {
       ...damageOptions,
       ...(btn.hasAttribute('data-cast-at-level') ? { castAtLevel: Number(btn.dataset.castAtLevel) } : {}),
@@ -803,7 +833,9 @@ window.Loom.wraps.renderRollCard.addWrapper((wrapped, roll, esc) => {
 
   const dmg = displayRoll.meta?.srd5eDamage;
   const damageAmount = dmg && Number.isFinite(Number(dmg.amount)) ? Number(dmg.amount) : Number(displayRoll.total) || 0;
-  const label = esc(String(displayRoll.meta?.label || displayRoll.flavor || 'Roll'));
+  const attackerPrefix = displayRoll.meta?.attackerName && !String(displayRoll.meta?.label || '').includes(displayRoll.meta.attackerName)
+    ? `${esc(displayRoll.meta.attackerName)}: ` : '';
+  const label = `${attackerPrefix}${esc(String(displayRoll.meta?.label || displayRoll.flavor || 'Roll'))}`;
   const modeTag = displayRoll.mode !== 'public' ? `<span class="status-badge">${esc(displayRoll.mode)}</span>` : '';
 
   // Handout 31: nat 20 / nat 1 em d20 (ataque, save, ability check,
@@ -876,7 +908,7 @@ window.Loom.wraps.renderRollCard.addWrapper((wrapped, roll, esc) => {
       ? ` data-rage-eligible="true" data-attack-ability="str" data-target-count="1"` : '';
     inlineDamageBtn = displayRoll.meta?.srd5eCleaveAttack
       ? `<div class="activation-card-buttons"><button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-cleave-damage" data-actor-id="${esc(displayRoll.meta.actorId)}" data-item-id="${esc(displayRoll.meta.itemId)}" data-critical="${criticalAttack}" data-cleave-attack="true"${boundAttackAttributes}><i class="fas fa-burst"></i> ${esc(localizeCard('SDR5E.WeaponMastery.CleaveDamageButton'))}</button></div>`
-      : `<div class="activation-card-buttons"><button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="${isSpell ? 'card-spell-damage' : 'card-damage'}" data-actor-id="${esc(displayRoll.meta.actorId)}" data-item-id="${esc(displayRoll.meta.itemId)}" data-critical="${criticalAttack}"${boundAttackAttributes}${rageContext}${vexContext}${slowContext}${cleaveContext}><i class="fas fa-burst"></i> Roll Damage${criticalAttack ? ' (Critical)' : ''}</button></div>`;
+      : `<div class="activation-card-buttons"><button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="${isSpell ? 'card-spell-damage' : 'card-damage'}" data-actor-id="${esc(displayRoll.meta.actorId)}" data-item-id="${esc(displayRoll.meta.itemId)}" data-critical="${criticalAttack}"${boundAttackAttributes}${rageContext}${vexContext}${slowContext}${cleaveContext}${displayRoll.meta.castSlotLevel != null ? ` data-cast-at-level="${esc(String(displayRoll.meta.castSlotLevel))}"` : ''}><i class="fas fa-burst"></i> Roll Damage${criticalAttack ? ' (Critical)' : ''}</button></div>`;
   } else if (!inspirationRequest && canRollAttackDamage && displayRoll.meta?.isUnarmed && displayRoll.meta?.actorId) {
     const rageContext = targetsList.length === 1 && anyHit && displayRoll.meta.srd5eAttackAbility === 'str'
       ? ` data-rage-eligible="true" data-attack-ability="str" data-target-count="1"` : '';
@@ -902,12 +934,19 @@ window.Loom.wraps.renderRollCard.addWrapper((wrapped, roll, esc) => {
     : '';
 
   const targetCount = window.Loom?.user?.targets?.length || 0;
-  const damageBound = dmg?.targetBound === true;
+  const damageBound = dmg?.targetBound === true && !!dmg.targetId;
   const applyTargetId = damageBound ? dmg.targetId : '';
-  const canApplyDamage = damageBound ? !!applyTargetId : targetCount > 0;
+  const canApplyDamage = true;
   // A multi-type spell whose rolled dice cannot be split per component gets no Apply button rather than a guessed split.
   const applyBtnSection = (dmg && canApplyDamage && !inspirationRequest && (!dmg.components?.length || dmgComponentAmounts))
-    ? `<div class="damage-button-section">${halfOnSaveToggleHtml(displayRoll.meta)}${knockOutToggleHtml(displayRoll.meta)}<button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="apply-damage" data-half-on-save="false" data-knock-out="false" data-melee="${dmg.melee === true}" data-amount="${damageAmount}" data-type="${dmg.type || ''}"${dmgComponentAmounts ? ` data-components="${esc(JSON.stringify(dmgComponentAmounts))}"` : ''} data-critical="${dmg.critical === true}"${damageBound ? ` data-target-id="${esc(applyTargetId)}"` : ''}${dmg.vexRequest ? ` data-vex-request="${esc(encodeURIComponent(JSON.stringify(dmg.vexRequest)))}"` : ''}${dmg.slowRequest ? ` data-slow-request="${esc(encodeURIComponent(JSON.stringify(dmg.slowRequest)))}"` : ''}>Apply ${damageAmount} damage to ${damageBound ? 'target' : `${targetCount} target${targetCount === 1 ? '' : 's'}`}</button></div>`
+    ? `<div class="damage-button-section">${halfOnSaveToggleHtml(displayRoll.meta)}${knockOutToggleHtml(displayRoll.meta)}<button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="apply-damage" data-half-on-save="${displayRoll.meta?.isHalfOnSave ? 'true' : 'false'}" data-knock-out="false" data-melee="${dmg.melee === true}" data-amount="${damageAmount}" data-type="${dmg.type || ''}"${dmgComponentAmounts ? ` data-components="${esc(JSON.stringify(dmgComponentAmounts))}"` : ''} data-critical="${dmg.critical === true}"${damageBound ? ` data-target-id="${esc(applyTargetId)}"` : ''}${dmg.vexRequest ? ` data-vex-request="${esc(encodeURIComponent(JSON.stringify(dmg.vexRequest)))}"` : ''}${dmg.slowRequest ? ` data-slow-request="${esc(encodeURIComponent(JSON.stringify(dmg.slowRequest)))}"` : ''}>Apply ${damageAmount} damage to ${damageBound ? 'target' : `${targetCount > 0 ? `${targetCount} target${targetCount === 1 ? '' : 's'}` : 'target'}`}</button></div>`
+    : '';
+
+  const heal = displayRoll.meta?.srd5eHeal;
+  const healAmount = heal ? Math.max(0, Number(displayRoll.total) || 0) : 0;
+  const healTargetId = heal?.targetId || '';
+  const healBtnSection = (heal && !inspirationRequest)
+    ? `<div class="damage-button-section"><button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="apply-heal" data-amount="${healAmount}"${healTargetId ? ` data-target-id="${esc(healTargetId)}"` : ''}>Apply ${healAmount} healing to target</button></div>`
     : '';
 
   const inspirationNotice = inspirationResolution
@@ -945,6 +984,7 @@ window.Loom.wraps.renderRollCard.addWrapper((wrapped, roll, esc) => {
     ${indomitableMightSection}
     ${damageSection}
     ${applyBtnSection}
+    ${healBtnSection}
   </div>`;
 });
 
@@ -984,14 +1024,33 @@ window.Loom.wraps.renderMessage.addWrapper((wrapped, msg, ctx) => {
       </div>
     </div>`;
   } else if (flags.isSpellCast) {
+    const buttons = [];
+    if (flags.hasAttack !== false) {
+      buttons.push(`<button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-spell-attack" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}"${flags.castSlotLevel != null ? ` data-cast-at-level="${esc(String(flags.castSlotLevel))}"` : ''}><i class="fas fa-sword"></i> Attack</button>`);
+    }
+    if (flags.saveAbility) {
+      const abl = flags.saveAbility.toUpperCase();
+      buttons.push(`<button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-spell-save" data-ability="${esc(flags.saveAbility)}" data-dc="${esc(String(flags.saveDC))}"><i class="fas fa-shield"></i> Save (${abl} DC ${flags.saveDC})</button>`);
+    }
+    if (flags.hasDamage !== false) {
+      buttons.push(`<button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-spell-damage" data-from-card="true" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}"${flags.castSlotLevel != null && Number.isFinite(Number(flags.castSlotLevel)) ? ` data-cast-at-level="${esc(String(Number(flags.castSlotLevel)))}"` : ''}${flags.isHalfOnSave ? ' data-half-on-save="true"' : ''}><i class="fas fa-burst"></i> Damage</button>`);
+    }
+    if (flags.hasHealing) {
+      buttons.push(`<button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-spell-heal" data-from-card="true" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}"${flags.castSlotLevel != null && Number.isFinite(Number(flags.castSlotLevel)) ? ` data-cast-at-level="${esc(String(Number(flags.castSlotLevel)))}"` : ''}><i class="fas fa-heart"></i> Heal</button>`);
+    }
+    if (flags.hasWishStress === true) {
+      buttons.push(`<button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-wish-stress" data-from-card="true" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}"${flags.castSlotLevel != null && Number.isFinite(Number(flags.castSlotLevel)) ? ` data-cast-at-level="${esc(String(Number(flags.castSlotLevel)))}"` : ''}><i class="fas fa-skull"></i> ${esc(localizeCardOr('SDR5E.Spell.WishStressButton', 'Roll stress (1d10 Necrotic per spell level)'))}</button>`);
+    }
+    for (let index = 0; index < (Array.isArray(flags.triggeredDamage) ? flags.triggeredDamage.length : 0); index++) {
+      const label = flags.triggeredDamage[index];
+      buttons.push(`<button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-spell-triggered" data-from-card="true" data-trigger-index="${index}" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}"${flags.castSlotLevel != null && Number.isFinite(Number(flags.castSlotLevel)) ? ` data-cast-at-level="${esc(String(Number(flags.castSlotLevel)))}"` : ''}><i class="fas fa-burst"></i> ${esc(localizeCardOr('SDR5E.Spell.TriggeredDamageButton', 'Roll {label}').replace('{label}', String(label)))}</button>`);
+    }
     cardHtml = `<div class="codex-roll-card-v13 codex-info-card-v13">
       <div class="card-header"><span><i class="fas fa-wand-sparkles"></i> ${esc(flags.name || '')}</span></div>
       ${flags.description ? `<div class="damage-section">${flags.description}</div>` : ''}
       <div class="activation-card-buttons">
-        <button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-spell-attack" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}"><i class="fas fa-sword"></i> Attack</button>
-        <button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-spell-damage" data-from-card="true" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}"${flags.castSlotLevel != null && Number.isFinite(Number(flags.castSlotLevel)) ?` data-cast-at-level="${esc(String(Number(flags.castSlotLevel)))}"` : ''}><i class="fas fa-burst"></i> Damage</button>
-        ${flags.hasWishStress === true ? `<button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-wish-stress" data-from-card="true" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}"${flags.castSlotLevel != null && Number.isFinite(Number(flags.castSlotLevel)) ?` data-cast-at-level="${esc(String(Number(flags.castSlotLevel)))}"` : ''}><i class="fas fa-skull"></i> ${esc(localizeCardOr('SDR5E.Spell.WishStressButton', 'Roll stress (1d10 Necrotic per spell level)'))}</button>` : ''}
-        ${(Array.isArray(flags.triggeredDamage) ? flags.triggeredDamage : []).map((label, index) => `<button type="button" class="sdr5e-apply-dmg-btn" data-srd5e-action="card-spell-triggered" data-from-card="true" data-trigger-index="${index}" data-actor-id="${esc(flags.actorId)}" data-item-id="${esc(flags.itemId)}"${flags.castSlotLevel != null && Number.isFinite(Number(flags.castSlotLevel)) ?` data-cast-at-level="${esc(String(Number(flags.castSlotLevel)))}"` : ''}><i class="fas fa-burst"></i> ${esc(localizeCardOr('SDR5E.Spell.TriggeredDamageButton', 'Roll {label}').replace('{label}', String(label)))}</button>`).join('')}
+        ${buttons.join('
+        ')}
       </div>
     </div>`;
   } else {

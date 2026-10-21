@@ -45,6 +45,8 @@ import { wizardSpellCastOptions } from './wizard-spell-mechanics.mjs';
 import { activeSpellSlotTurn, sameSpellSlotTurn, spellSlotTurnSpendRecord } from './spell-slot-turn.mjs';
 import { advanceCombatEffectRecords, appendCombatEffectRecord, clearAllCombatEffectRecords, combatEffectContextForActor, combatEffectRecordsForActiveCombat, combatEffectsForAttack, consumeCombatEffectRecords, createCombatEffectRecord, normalizeCombatEffectRecords } from './combat-effects.mjs';
 import { executeFeatureResourceCosts } from './feature-resource-costs.mjs';
+import { SPELL_HEALING_PRESETS, resolveSpellHealingFormula, isSpellAttackItem, isSpellHealingItem, getSpellSaveInfo } from './spell-action-mechanics.mjs';
+export { SPELL_HEALING_PRESETS, resolveSpellHealingFormula, isSpellAttackItem, isSpellHealingItem, getSpellSaveInfo };
 
 function localizeSpell(key) {
   return window.Loom?.i18n?.localize?.(`SDR5E.Spellcasting.${key}`);
@@ -297,7 +299,7 @@ async function getTargetAcInfo() {
       if (!sd.abilities) continue;
       if (record.type === 'npc') prepNpc(sd);
       else prepCharacter(sd, record.items || []);
-      const ac = Number(sd.attributes?.da?.value);
+      const ac = Number(sd.attributes?.da?.value ?? sd.attributes?.ac?.value ?? sd.attributes?.ac ?? 10);
       if (!Number.isFinite(ac)) continue;
       const markerConditions = new Set([...(cast.statusMarkers || []), ...(isLinked && cast.actorId ? await getActorConditions(cast.actorId) : [])]);
       const markedCover = strongestMarkedCover([...markerConditions]);
@@ -763,7 +765,7 @@ export async function sdr5eRoll({ label, parts = [], bonus = 0, actor, advantage
   const die = choice.advantage === 1 ? '2d20kh1' : choice.advantage === -1 ? '2d20kl1' : '1d20';
   const formula = totalBonus !== 0 ? `${die} + ${totalBonus}` : die;
 
-  const meta = { label, ...(actor?.id ? { actorId: actor.id } : {}), ...extraMeta };
+  const meta = { label, ...(actor?.id ? { actorId: actor.id } : {}), ...(actor?.name ? { attackerName: actor.name } : {}), ...extraMeta };
   if (dc !== null && dc !== undefined) meta.dc = dc;
   if (choice.situational) meta.situational = choice.situational;
   if (choice.surprised) meta.surprised = true;
@@ -1377,6 +1379,60 @@ export async function applyHeal(actor, amount, options = {}) {
  * receive more, you decide whether to keep the ones you have or gain the new
  * ones. Returns 'keep', 'gain', or null (cancelled, grant aborted).
  */
+export async function applyHealToTargets(amount, targetIds, options = {}) {
+  const targets = Array.isArray(targetIds) && targetIds.length
+    ? targetIds.map((id) => ({ id: String(id) }))
+    : (window.Loom?.user?.targets?.length ? window.Loom.user.targets : (options.actor ? [{ id: options.actor.id, isActor: true }] : []));
+  if (!targets.length || amount <= 0) return [];
+  const results = [];
+  for (const t of targets) {
+    const castId = typeof t === 'string' ? t : t?.id;
+    if (!castId) continue;
+    try {
+      let isLinked = false;
+      let record = null;
+      let cast = null;
+      if (t.isActor) {
+        record = await window.Loom.api.get(`/actors/${castId}`);
+      } else {
+        cast = await window.Loom.api.get(`/cast/${castId}`);
+        if (!cast) continue;
+        isLinked = cast.isLinked === true;
+        record = isLinked && cast.actorId ? await window.Loom.api.get(`/actors/${cast.actorId}`) : cast;
+      }
+      if (!record) continue;
+      const sd = record.systemData || {};
+      const hp = getHealthPool(sd, record.type || 'character');
+      if (!hp) continue;
+      const { newValue, actualHealing } = cappedHealingResult(hp.value, hp.effectiveMax ?? hp.max, amount);
+      const healUpdate = { 'system.resources.health.value': newValue, 'system.resources.knockedOut': false };
+      let nextResources = { ...(sd.resources || {}), health: { ...hp, value: newValue }, knockedOut: false };
+      if (newValue > 0 && (Number(hp.value) || 0) <= 0) {
+        healUpdate['system.resources.deathState'] = 'alive';
+        healUpdate['system.resources.deathSaves.successes'] = 0;
+        healUpdate['system.resources.deathSaves.failures'] = 0;
+        nextResources = { ...nextResources, deathState: 'alive', deathSaves: { successes: 0, failures: 0 } };
+      }
+      const savePath = (isLinked && cast?.actorId) || t.isActor ? `/actors/${cast?.actorId || castId}` : `/cast/${castId}`;
+      await window.Loom.api.put(savePath, { systemData: { ...sd, resources: nextResources } });
+      await syncUnconsciousConditionMarkers(
+        (isLinked && cast?.actorId) || castId,
+        { ...sd, resources: nextResources },
+        null,
+        isLinked || t.isActor ? null : cast,
+        record.type,
+      );
+      if (actualHealing > 0) {
+        showFloatingDamageOrHeal(castId, actualHealing, true);
+      }
+      results.push({ castId, actualHealing, newValue });
+    } catch (e) {
+      console.error(`[srd5e] applyHealToTargets failed for ${castId}:`, e);
+    }
+  }
+  return results;
+}
+
 async function askTempHpChoice(current, incoming) {
   const content = document.createElement('p');
   content.textContent = attackRuleText('TempHpChoose', 'You already have {current} Temporary Hit Points. Keep them or gain the new {incoming}?')
@@ -2502,7 +2558,7 @@ export async function rollWeaponDamage(actor, item, options = {}) {
     meta: { label: `Damage: ${item.name}${rageBonus ? ` (${localizeClassFeature('RageDamageBonus').replace('{amount}', String(rageBonus))})` : ''}${critical ? ' (Critical!)' : ''}${typeSuffix}`, ...(rageBonus ? { rageDamageBonus: rageBonus } : {}), srd5eDamage: {
       type, critical,
       melee: idata.rangeType !== 'ranged',
-      ...(options.targetBound === true ? { targetBound: true, ...(options.targetId ? { targetId: String(options.targetId) } : {}) } : {}),
+      ...(options.targetBound === true && options.targetId ? { targetBound: true, targetId: String(options.targetId) } : {}),
       ...(options.vexRequest && typeof options.vexRequest === 'object' ? { vexRequest: options.vexRequest } : {}),
       ...(options.slowRequest && typeof options.slowRequest === 'object' ? { slowRequest: options.slowRequest } : {}),
     } },
@@ -2842,7 +2898,7 @@ export async function rollUnarmedDamage(actor, options = {}) {
     mode: 'public',
     meta: { label: `Damage: Unarmed Strike${rageBonus ? ` (${localizeClassFeature('RageDamageBonus').replace('{amount}', String(rageBonus))})` : ''}${options.critical ? ' (Critical!)' : ''} (bludgeoning)`, ...(rageBonus ? { rageDamageBonus: rageBonus } : {}), srd5eDamage: {
       amount: total, type: 'bludgeoning', melee: true,
-      ...(options.targetBound === true ? { targetBound: true, ...(options.targetId ? { targetId: String(options.targetId) } : {}) } : {}),
+      ...(options.targetBound === true && options.targetId ? { targetBound: true, targetId: String(options.targetId) } : {}),
     } },
   });
   return total;
@@ -2904,7 +2960,7 @@ export async function spendHitDie(actor, poolId = '') {
   return { healAmount, newValue };
 }
 
-export async function rollSpellAttack(actor, item) {
+export async function rollSpellAttack(actor, item, options = {}) {
   if (!actor || !item) return null;
   if (!canRollAtMostOneAttackTarget()) return null;
   const idata = item.system || item.data || {};
@@ -2921,8 +2977,10 @@ export async function rollSpellAttack(actor, item) {
   if (situation === null) return null;
   const advantage = applyWeaponAttackConditionModifiers(currentAdvantageMode(), conditions, false,
     actor.systemData?.resources?.exhaustion ?? 0, false, sapCount, vexCount, situation);
+  const castSlotLevel = options.castAtLevel ?? options.slotLevel;
   return sdr5eRoll({ label: `Spell Attack: ${item.name}`, parts, actor, advantage, extraMeta: {
     isAttack: true, ...(targets.length ? { targets } : {}), actorId: actor.id, itemId: item.id, isSpell: true,
+    ...(castSlotLevel != null ? { castSlotLevel: Number(castSlotLevel) } : {}),
     ...combatEffectConsumptionMeta(effectState.source, effectState.effects),
   } });
 }
@@ -3140,7 +3198,7 @@ export async function rollSpellDamage(actor, item, options = {}) {
     meta: { label: `Spell Damage: ${item.name}${critical ? ' (Critical!)' : ''}${typeSuffix}`, srd5eDamage: {
       type, critical,
       ...(components ? { components } : {}),
-      ...(options.targetBound === true ? { targetBound: true, ...(options.targetId ? { targetId: String(options.targetId) } : {}) } : {}),
+      ...(options.targetBound === true && options.targetId ? { targetBound: true, targetId: String(options.targetId) } : {}),
     } },
   });
   return { pending: true, formula: finalFormula };
@@ -3182,7 +3240,7 @@ export async function rollSpellTriggeredDamage(actor, item, index, options = {})
     mode: 'public',
     meta: { label: `Triggered Damage: ${item.name} — ${entry.label || 'effect'}${modifierNote}${type ? ` (${type})` : ''}`, srd5eDamage: {
       type, critical: false,
-      ...(options.targetBound === true ? { targetBound: true, ...(options.targetId ? { targetId: String(options.targetId) } : {}) } : {}),
+      ...(options.targetBound === true && options.targetId ? { targetBound: true, targetId: String(options.targetId) } : {}),
     } },
   });
   return { pending: true, formula: finalFormula };
@@ -3227,6 +3285,159 @@ export async function rollWishStress(actor, item, options = {}) {
  * ("cast at a higher level") aren't modeled yet — always consumes at the
  * spell's own level.
  */
+export const SPELL_HEALING_PRESETS = Object.freeze({
+  'Cure Wounds': { formula: '2d8', scaling: { perLevel: '2d8', fromLevel: 1 }, addAbility: true },
+  'Healing Word': { formula: '2d4', scaling: { perLevel: '2d4', fromLevel: 1 }, addAbility: true },
+  'Mass Cure Wounds': { formula: '5d8', scaling: { perLevel: '1d8', fromLevel: 5 }, addAbility: true },
+  'Mass Healing Word': { formula: '2d4', scaling: { perLevel: '1d4', fromLevel: 3 }, addAbility: true },
+  'Prayer of Healing': { formula: '2d8', scaling: { perLevel: '1d8', fromLevel: 2 }, addAbility: true },
+  'Heal': { fixed: 70, scalingFixed: 10, fromLevel: 6 },
+  'Power Word Heal': { fixed: 700 },
+});
+
+export function resolveSpellHealingFormula(idata = {}, { slotLevel = 1, abilityMod = 0 } = {}) {
+  const name = idata.name || '';
+  const preset = SPELL_HEALING_PRESETS[name] || (idata.identifier ? SPELL_HEALING_PRESETS[idata.identifier] : null);
+  if (idata.healing?.formula) {
+    let f = idata.healing.formula;
+    if (idata.healing.scaling && slotLevel > (idata.healing.scaling.fromLevel ?? 1)) {
+      const extra = slotLevel - (idata.healing.scaling.fromLevel ?? 1);
+      f = `${f} + ${extra} * (${idata.healing.scaling.perLevel})`;
+    }
+    return f;
+  }
+  if (!preset) return null;
+  if (preset.fixed) {
+    const extra = preset.scalingFixed ? Math.max(0, slotLevel - preset.fromLevel) * preset.scalingFixed : 0;
+    return String(preset.fixed + extra);
+  }
+  let formula = preset.formula;
+  if (preset.scaling && slotLevel > preset.scaling.fromLevel) {
+    const extraLevels = slotLevel - preset.scaling.fromLevel;
+    const extraMatch = preset.scaling.perLevel.match(/^(\d+)d(\d+)$/);
+    const baseMatch = formula.match(/^(\d+)d(\d+)$/);
+    if (extraMatch && baseMatch && extraMatch[2] === baseMatch[2]) {
+      const totalDice = Number(baseMatch[1]) + (Number(extraMatch[1]) * extraLevels);
+      formula = `${totalDice}d${baseMatch[2]}`;
+    } else {
+      formula = `${formula} + ${extraLevels} * (${preset.scaling.perLevel})`;
+    }
+  }
+  if (preset.addAbility && abilityMod) {
+    formula = `${formula} ${abilityMod > 0 ? '+' : '-'} ${Math.abs(abilityMod)}`;
+  }
+  return formula;
+}
+
+export function isSpellAttackItem(idata = {}) {
+  const at = String(idata.actionType || '').toLowerCase();
+  if (at === 'rsak' || at === 'msak') return true;
+  return /spell attack/i.test(idata.description || '');
+}
+
+export function isSpellHealingItem(idata = {}, name = '') {
+  if (idata.healing?.formula) return true;
+  if (name && SPELL_HEALING_PRESETS[name]) return true;
+  if (idata.identifier && SPELL_HEALING_PRESETS[idata.identifier]) return true;
+  return /regains?\s+(?:a number of\s+)?hit points/i.test(idata.description || '');
+}
+
+export function getSpellSaveInfo(idata = {}, spellStats = {}) {
+  const dc = spellStats?.dc ?? 10;
+  let ability = (idata.save?.type && idata.save.type !== 'none') ? idata.save.type.toLowerCase() : null;
+  if (!ability && idata.saveAbility) {
+    ability = String(idata.saveAbility).toLowerCase();
+  }
+  if (!ability && idata.description) {
+    const m = idata.description.match(/(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma)\s+saving throw/i);
+    if (m) {
+      const map = { strength: 'str', dexterity: 'dex', constitution: 'con', intelligence: 'int', wisdom: 'wis', charisma: 'cha' };
+      ability = map[m[1].toLowerCase()] || null;
+    }
+  }
+  if (!ability) return null;
+  const isHalfOnSave = /half as much damage on a successful/i.test(idata.description || '')
+    || idata.save?.effect === 'half';
+  return { dc, ability, isHalfOnSave };
+}
+
+export async function rollSpellHealing(actor, item, options = {}) {
+  if (!actor || !item) return null;
+  const idata = item.system || item.data || {};
+  const slotLevel = resolveSpellSlotLevel(actor, item, options);
+  const sd = actor.systemData || {};
+  const spellStats = spellcastingStats(sd, idata, actor.items || []);
+  const abilityData = sd.abilities?.[spellStats.ability] || {};
+  const abilityMod = Number.isFinite(Number(abilityData.modifier))
+    ? Number(abilityData.modifier)
+    : Math.floor(((Number(abilityData.value) || 10) - 10) / 2);
+  const formula = resolveSpellHealingFormula({ ...idata, name: item.name }, { slotLevel, abilityMod });
+  if (!formula) {
+    globalThis.Loom?.showToast?.(`No healing formula configured for ${item.name || 'this spell'}.`, 'info');
+    return null;
+  }
+  const targets = window.Loom?.user?.targets || [];
+  const boundTargetId = options.targetId || (targets.length === 1 ? (targets[0].castId || targets[0].id) : '');
+  window.Loom.dispatchRoll({
+    formula,
+    actorId: actor.id,
+    mode: 'public',
+    meta: {
+      label: `Healing: ${item.name}`,
+      srd5eHeal: {
+        targetBound: !!boundTargetId,
+        ...(boundTargetId ? { targetId: String(boundTargetId) } : {}),
+      },
+    },
+  });
+  return { pending: true, formula };
+}
+
+export async function rollActorSave(record, ability, dc, targetName = '') {
+  const sd = record.systemData || {};
+  const save = sd.saves?.[ability];
+  const mod = Number(save?.total ?? sd.abilities?.[ability]?.modifier ?? 0);
+  const name = targetName || record.name || 'Target';
+  const ablLabel = ABILITY_LABELS[ability] || ability.toUpperCase();
+  const formula = mod !== 0 ? `1d20 ${mod > 0 ? '+' : '-'} ${Math.abs(mod)}` : '1d20';
+  return window.Loom.dispatchRoll({
+    formula,
+    actorId: record.id,
+    mode: 'public',
+    meta: {
+      label: `${name} \u2014 Save: ${ablLabel}`,
+      srd5eSave: { ability, dc },
+      dc,
+    },
+  });
+}
+
+export async function rollSpellSave(ability, dc) {
+  const targets = window.Loom?.user?.targets || [];
+  if (!targets.length) {
+    const char = window.Loom?.user?.character;
+    if (char) {
+      return rollActorSave(char, ability, dc);
+    }
+    window.Loom?.showToast?.('Select target tokens to roll saving throw.', 'info');
+    return null;
+  }
+  for (const t of targets) {
+    const castId = typeof t === 'string' ? t : t?.id;
+    if (!castId) continue;
+    try {
+      const cast = await window.Loom.api.get(`/cast/${castId}`);
+      if (!cast) continue;
+      const isLinked = cast.isLinked === true;
+      const record = isLinked && cast.actorId ? await window.Loom.api.get(`/actors/${cast.actorId}`) : cast;
+      if (!record) continue;
+      await rollActorSave(record, ability, dc, cast.name || record.name);
+    } catch (e) {
+      console.error('[srd5e] rollSpellSave failed for cast:', e);
+    }
+  }
+}
+
 export async function castSpell(actor, item, options = {}) {
   if (!actor || !item) return null;
   const sd = actor.systemData;
@@ -3451,6 +3662,18 @@ export async function castSpell(actor, item, options = {}) {
         // Slot level spent by this cast, persisted on the card so the damage roll survives a reload
         // or a roll from another client. Free casts store the spell's own level (no upcast).
         castSlotLevel: selectedSlot ? Number(selectedSlot.level) : Number(level) || 0,
+
+        saveDC: saveInfo?.dc ?? dc,
+
+        saveAbility: saveInfo?.ability ?? '',
+
+        isHalfOnSave: saveInfo?.isHalfOnSave ?? false,
+
+        hasAttack: isSpellAttackItem(idata),
+
+        hasDamage: !!(idata.damage?.formula || (Array.isArray(idata.damage?.parts) && idata.damage.parts.length)),
+
+        hasHealing: isSpellHealingItem(idata, item.name),
         ...(spellSlotTurnOverride ? { spellSlotTurnOverride: {
           combatId: spellSlotTurn.combatId, round: spellSlotTurn.round, castId: spellSlotTurn.castId,
           userId: String(window.Loom?.user?.id || ''), spellId: String(item.id),
