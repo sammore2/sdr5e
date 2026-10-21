@@ -2,7 +2,11 @@
   <img src="assets/ui/readme-banner.png" alt="SDR5E Banner" width="100%">
 </div>
 
-# SDR5E
+# SDR5E
+
+[![Loom VTT](https://img.shields.io/badge/Loom%20VTT-2.0.5--alpha-blueviolet)](https://loomvtt.com)
+[![License](https://img.shields.io/badge/license-MIT%20AND%20CC--BY--4.0-blue)](LICENSE)
+[![Downloads](https://img.shields.io/github/downloads/sammore2/sdr5e/latest/srd5e.zip?label=downloads)](https://github.com/sammore2/sdr5e/releases/latest)
 
 A visceral, fantasy tabletop roleplaying system built on the mathematical foundation of the SRD.
 Native ruleset for **LoomVTT** (no VTT legado runtime dependency).
