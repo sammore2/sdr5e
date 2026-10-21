@@ -11480,140 +11480,108 @@ form.npc-2024-sheet {
   gap: 8px 12px;
   align-items: start;
 }
+/* Ability scores: evenly distributed 6-column grid with Daggerheart-inspired heater shields */
 .sdrn-header-abilities {
-  display: flex;
-  justify-content: flex-start;
-  gap: 10px;
-  margin-top: -38px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: -36px;
   margin-bottom: 12px;
   position: relative;
   z-index: 5;
   width: 100%;
 }
 .sdrn-mini-ability {
-  width: 58px;
-  flex: none;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 3px;
+  min-width: 0;
+  width: 100%;
   background: transparent;
   border: none;
   padding: 0;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
-}
-/* Top card pennant in ivory with vector SVG */
-.sdrn-ability-pennant-top {
-  width: 58px;
-  height: 52px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  box-sizing: border-box;
-}
-.sdrn-pennant-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.sdrn-ability-pennant-inner {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-top: 2px;
 }
 .sdrn-mini-abbr {
   font-size: 10px;
   font-weight: 800;
-  color: #7d6032;
-  letter-spacing: 0.8px;
+  color: #dfcaa2;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  font-family: 'Cinzel', 'Roboto Condensed', serif;
+  font-family: 'Cinzel', serif;
   line-height: 1;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
 }
-.sdrn-mini-mod {
-  font-size: 20px;
-  font-weight: 800;
-  color: #1a1410;
-  line-height: 1.1;
-  padding: 0;
-  background: transparent;
-  border: none;
+.sdrn-ability-shield {
+  --shield-shape: polygon(50% 0, 100% 10%, 100% 66%, 50% 100%, 0 66%, 0 10%);
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 62px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  clip-path: var(--shield-shape);
+  background: linear-gradient(180deg, #f3d98a 0%, #aa853c 50%, #68501e 100%);
+  border: none !important;
   cursor: pointer;
-  width: 100%;
-  text-align: center;
-  margin-top: 1px;
-}
-.sdrn-mini-mod:hover {
-  color: #8b1515;
-}
-/* Bottom tab black trapezoidal with vector SVG */
-.sdrn-ability-tab-bottom {
-  width: 46px;
-  height: 20px;
-  margin: -2px auto 0;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent !important;
-  border: none !important;
-  box-sizing: border-box;
-  z-index: 2;
-}
-.sdrn-pennant-tab-svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.sdrn-ability-tab-inner {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.sdrn-mini-score {
-  width: 28px !important;
-  background: transparent !important;
-  border: none !important;
-  color: #ffffff !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
-  text-align: center !important;
-  padding: 0 !important;
-  outline: none !important;
-  line-height: 1;
-  margin-top: -1px;
-}
-.sdrn-mini-ability input.sdrn-mini-score {
-  font-size: 11px !important;
-  font-weight: 800 !important;
-  color: #ffffff !important;
-  background: transparent !important;
-  border: none !important;
-  text-align: center !important;
-  width: 100% !important;
   padding: 0 !important;
   margin: 0 !important;
-  margin-top: -2px !important;
-  box-shadow: none !important;
+  transition: transform 0.15s ease, filter 0.15s ease;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.65));
 }
-.sdrn-mini-score:focus {
+.sdrn-ability-shield::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  z-index: -1;
+  clip-path: var(--shield-shape);
+  background: linear-gradient(180deg, #24212b 0%, #14131a 60%, #0d0c11 100%);
+  transition: background 0.15s ease;
+}
+.sdrn-ability-shield:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 4px 8px rgba(212, 175, 55, 0.5));
+}
+.sdrn-ability-shield:hover::before {
+  background: linear-gradient(180deg, #2e2a38 0%, #1c1a25 60%, #111018 100%);
+}
+.sdrn-ability-shield b {
+  font-family: 'Cinzel', serif;
+  font-size: 19px;
+  font-weight: 800;
+  color: #f7e6b5;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95), 0 0 8px rgba(212, 175, 55, 0.35);
+  line-height: 1;
+}
+.sdrn-mini-score-wrap {
+  background: rgba(18, 16, 22, 0.85);
+  border: 1px solid rgba(201, 161, 90, 0.35);
+  border-radius: 4px;
+  padding: 1px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  width: 38px;
+}
+.sdrn-mini-score-wrap input.sdrn-mini-score {
+  width: 100% !important;
+  background: transparent !important;
+  border: none !important;
+  color: #e8dcc4 !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  line-height: 1;
+}
+.sdrn-mini-score-wrap input.sdrn-mini-score:focus {
+  color: #ffd700 !important;
   outline: none !important;
 }
 .sdrn-col-mid {
@@ -11734,33 +11702,46 @@ form.npc-2024-sheet {
   border-color: #ef4444 !important;
   box-shadow: 0 0 5px rgba(239, 68, 68, 0.85) !important;
 }
-/* Shield widened for AC to prevent numbers from overlapping */
+/* Armor Class heater shield: gold rim, tactical dark core (Daggerheart-inspired) */
 .sdrn-ac-shield-wrap {
+  --shield-shape: polygon(50% 0, 100% 10%, 100% 66%, 50% 100%, 0 66%, 0 10%);
+  position: relative;
+  isolation: isolate;
   width: 58px;
   height: 66px;
-  background: url('/marketplace/rulesets/srd5e/assets/ui/ui-ac.png') no-repeat center center / contain;
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.8));
-  position: relative;
+  clip-path: var(--shield-shape);
+  background: linear-gradient(180deg, #f3d98a 0%, #aa853c 50%, #68501e 100%);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.85));
+  margin: 0 auto;
   flex: none;
 }
+.sdrn-ac-shield-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 2.5px;
+  z-index: -1;
+  clip-path: var(--shield-shape);
+  background: linear-gradient(180deg, #24212a 0%, #131217 60%, #0a090d 100%);
+}
 .sdrn-col-portrait input.sdrn-ac-circle {
-  width: 38px !important;
-  height: 34px !important;
+  width: 44px !important;
+  height: 38px !important;
   flex: none;
   border: none !important;
   background: transparent !important;
-  color: #ffffff !important;
+  color: #f7e6b5 !important;
   text-align: center !important;
-  font-size: 20px !important;
-  font-weight: 800 !important;
-  font-family: 'Cinzel', 'Roboto Condensed', serif !important;
-  margin-top: -6px !important;
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  font-family: 'Cinzel', serif !important;
+  margin: 0 !important;
   box-shadow: none !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95) !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95), 0 0 10px rgba(212, 175, 55, 0.4) !important;
   padding: 0 !important;
+  outline: none !important;
 }
 .sdrn-ac-circle:focus {
   outline: none !important;

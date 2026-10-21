@@ -3082,16 +3082,16 @@ html .sdrn-npc-root .sdrn-status-pill-lbl {
   border-bottom-color: #ffd700 !important;
   color: #ffffff !important;
 }
-.sdrn-item-name-btn {
+.sdrn-item-root .sdrn-item-name-btn {
   color: #e2e8f0 !important;
   transition: color 0.15s ease, text-shadow 0.15s ease;
 }
-.sdrn-item-name-btn:hover {
+.sdrn-item-root .sdrn-item-name-btn:hover {
   color: #ffd700 !important;
   text-shadow: 0 0 6px rgba(255, 215, 0, 0.35);
   text-decoration: none;
 }
-.sdrn-metric-chip {
+.sdrn-item-root .sdrn-metric-chip {
   background: #14171f !important;
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
   transition: border-color 0.15s ease, background-color 0.15s ease;

@@ -217,22 +217,12 @@
         <div class="sdrn-header-abilities">
           {{#each _abilities}}
           <div class="sdrn-mini-ability" title="{{label}}">
-            <div class="sdrn-ability-pennant-top">
-              <svg class="sdrn-pennant-svg" viewBox="0 0 58 52">
-                <polygon points="12,1 46,1 57,12 57,51 1,51 1,12" class="sdrn-pennant-top-poly" />
-              </svg>
-              <div class="sdrn-ability-pennant-inner">
-                <span class="sdrn-mini-abbr">{{abbr}}</span>
-                <button type="button" class="sdrn-mini-mod" data-action="roll-ability" data-key="{{key}}" data-mode="test" title="Roll {{label}}">{{mod}}</button>
-              </div>
-            </div>
-            <div class="sdrn-ability-tab-bottom">
-              <svg class="sdrn-pennant-tab-svg" viewBox="0 0 46 20">
-                <polygon points="1,1 45,1 38,19 8,19" class="sdrn-pennant-bot-poly" />
-              </svg>
-              <div class="sdrn-ability-tab-inner">
-                <input class="sdrn-mini-score" type="number" name="sd:abilities.{{key}}.value" value="{{score}}" min="1" max="30" />
-              </div>
+            <span class="sdrn-mini-abbr">{{abbr}}</span>
+            <button type="button" class="sdrn-mini-mod sdrn-ability-shield" data-action="roll-ability" data-key="{{key}}" data-mode="test" title="Roll {{label}} ({{mod}})">
+              <b>{{mod}}</b>
+            </button>
+            <div class="sdrn-mini-score-wrap">
+              <input class="sdrn-mini-score" type="number" name="sd:abilities.{{key}}.value" value="{{score}}" min="1" max="30" title="Score: {{score}}" />
             </div>
           </div>
           {{/each}}
