@@ -124,10 +124,10 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
 
   async _toggleWeaponProficiency(code) {
     if (!code || !this.document) return;
-    const sd = this.document.systemData;
+    const sd = this.document.systemData || {};
     const current = sd.proficiencies?.weapons || [];
     const next = current.includes(code) ? current.filter((w) => w !== code) : [...current, code];
-    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, proficiencies: { ...sd.proficiencies, weapons: next } } });
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { proficiencies: { weapons: next } } });
     await this._reloadDocument();
   }
 
@@ -135,7 +135,7 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     if (!itemId || !this.document) return;
     const item = (this.document.items || []).find((i) => i.id === itemId);
     if (!item) return;
-    const sd = this.document.systemData;
+    const sd = this.document.systemData || {};
     const name = String(item.name || '').trim();
     const id = String(item.system?.identifier || item.data?.identifier || '').trim();
     const tools = sd.proficiencies?.tools || [];
@@ -149,33 +149,31 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     } else {
       next = [...tools, name];
     }
-    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, proficiencies: { ...sd.proficiencies, tools: next } } });
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { proficiencies: { tools: next } } });
     await this._reloadDocument();
   }
 
   async _toggleDamageTrait(cat, type) {
     if (!cat || !type || !this.document) return;
-    const sd = this.document.systemData;
+    const sd = this.document.systemData || {};
     const current = sd.traits?.[cat] || [];
     const next = current.includes(type) ? current.filter((t) => t !== type) : [...current, type];
-    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, traits: { ...sd.traits, [cat]: next } } });
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { traits: { [cat]: next } } });
     await this._reloadDocument();
   }
 
   async _toggleConcentration() {
     if (!this.document) return;
-    const sd = this.document.systemData;
+    const sd = this.document.systemData || {};
     const next = !sd.resources?.concentrating;
     const concentratingOn = sd.resources?.concentratingOn;
-    // Manually ending concentration is the same as failing the save (Passo
-    // 4): drop whatever temporary effect it was holding up, same as
-    // rollConcentrationSave does on a failed roll.
-    if (!next && concentratingOn) await removeItemEffects({ id: concentratingOn });
+    // Manually ending concentration drops whatever temporary effect it was holding up
+    if (!next && concentratingOn) await removeItemEffects({ id: concentratingOn }, this.document.id);
     const concentrationId = next
       ? String(sd.resources?.concentrationId || globalThis.crypto?.randomUUID?.() || `concentration-${Date.now().toString(36)}`)
       : '';
-    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, resources: {
-      ...sd.resources, concentrating: next, concentratingOn: next ? concentratingOn : '', concentrationId,
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { resources: {
+      concentrating: next, concentratingOn: next ? concentratingOn : '', concentrationId,
       concentrationSaveAttemptId: next ? String(sd.resources?.concentrationSaveAttemptId || '') : '',
       concentrationSaveAttemptIds: next ? (sd.resources?.concentrationSaveAttemptIds || []) : [],
     } } });
@@ -303,21 +301,21 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const pending = this._pendingFields;
     this._pendingFields = new Map();
 
-    const sd = this.document.systemData || {};
+    const delta = {};
     let name;
     for (const [key, value] of pending) {
       if (key === 'name') name = value;
-      else setPathValue(sd, key.slice(3), value);
+      else setPathValue(delta, key.slice(3), value);
     }
-    if (sd.resources?.health) {
-      if (!sd.attributes) sd.attributes = {};
-      sd.attributes.hp = {
-        value: Number(sd.resources.health.value) || 0,
-        max: Number(sd.resources.health.max) || 0,
-        temp: Number(sd.resources.health.temp) || 0,
+    if (delta.resources?.health) {
+      delta.attributes = delta.attributes || {};
+      delta.attributes.hp = {
+        value: Number(delta.resources.health.value) || 0,
+        max: Number(delta.resources.health.max) || 0,
+        temp: Number(delta.resources.health.temp) || 0,
       };
     }
-    const submitData = { systemData: sd };
+    const submitData = { systemData: delta };
     if (name !== undefined) submitData.name = name;
 
     await api.put(`${this.apiRoute}/${this.document.id}`, submitData);

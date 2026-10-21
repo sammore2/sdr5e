@@ -8,20 +8,21 @@
 import { effects, api, LoomDialog, showToast } from '/_loom/sdk/index.js';
 
 export const ALL_CONDITIONS_LIST = [
-  { id: 'blinded', label: 'Blinded', icon: 'fas fa-eye-slash', color: '#888888', description: 'Ataques contra têm vantagem; ataques próprios têm desvantagem. Falha em testes de visão.' },
-  { id: 'charmed', label: 'Charmed', icon: 'fas fa-heart', color: '#e91e8c', description: 'Não pode ferir quem enfeitiçou. Quem enfeitiçou tem vantagem em testes sociais.' },
-  { id: 'deafened', label: 'Deafened', icon: 'fas fa-ear-deaf', color: '#8a8a8a', description: 'Não ouve nada. Falha automática em testes que exigem audição.' },
-  { id: 'frightened', label: 'Frightened', icon: 'fas fa-ghost', color: '#9b59b6', description: 'Desvantagem em testes e ataques enquanto a fonte do medo estiver visível. Não pode se aproximar.' },
-  { id: 'grappled', label: 'Grappled', icon: 'fas fa-hand-rock', color: '#a0522d', description: 'Velocidade cai para 0 e não se beneficia de bônus de deslocamento.' },
-  { id: 'incapacitated', label: 'Incapacitated', icon: 'fas fa-bolt', color: '#607d8b', description: 'Não pode realizar ações nem reações. Concentração é interrompida.' },
-  { id: 'invisible', label: 'Invisible', icon: 'fas fa-eye', color: '#00bcd4', description: 'Impossível de ver sem sentidos especiais. Ataques próprios têm vantagem; contra têm desvantagem.' },
-  { id: 'paralyzed', label: 'Paralyzed', icon: 'fas fa-hand', color: '#ffc107', description: 'Incapacitado e não pode se mover. Falha em salvaguardas de For/Des. Ataques a 1,5m são críticos.' },
-  { id: 'petrified', label: 'Petrified', icon: 'fas fa-monument', color: '#9e9e9e', description: 'Transformado em pedra. Incapacitado, resistência a todo dano, imune a veneno.' },
-  { id: 'poisoned', label: 'Poisoned', icon: 'fas fa-biohazard', color: '#4caf50', description: 'Desvantagem em jogadas de ataque e testes de habilidade.' },
-  { id: 'prone', label: 'Prone', icon: 'fas fa-person-falling', color: '#ff5722', description: 'Caído no chão. Ataques próprios têm desvantagem. Ataques a 1,5m têm vantagem; à distância têm desvantagem.' },
-  { id: 'restrained', label: 'Restrained', icon: 'fas fa-link', color: '#8b4513', description: 'Velocidade 0. Ataques contra têm vantagem; ataques próprios têm desvantagem. Desvantagem em salvaguardas de Des.' },
-  { id: 'stunned', label: 'Stunned', icon: 'fas fa-dizzy', color: '#ff9800', description: 'Incapacitado, fala com dificuldade. Falha em salvaguardas de For/Des. Ataques contra têm vantagem.' },
-  { id: 'unconscious', label: 'Unconscious', icon: 'fas fa-bed', color: '#1a1614', description: 'Incapacitado, cai no chão. Falha em salvaguardas de For/Des. Ataques a 1,5m são críticos.' },
+  { id: 'blinded', label: 'Blinded', icon: 'fas fa-eye-slash', color: '#888888', description: 'Ataques contra têm vantagem; ataques próprios têm desvantagem. Falha em testes de visão. Tira a visão do token.' },
+  { id: 'poisoned', label: 'Poisoned', icon: 'fas fa-biohazard', color: '#4caf50', description: 'Desvantagem em jogadas de ataque e testes de habilidade. Emite fumaça verde.' },
+  { id: 'stunned', label: 'Stunned', icon: 'fas fa-dizzy', color: '#ffd23f', description: 'Incapacitado, fala com dificuldade. Falha em salvaguardas de For/Des. Ataques contra têm vantagem. Faíscas amarelas.' },
+  { id: 'prone', label: 'Prone', icon: 'fas fa-person-falling', color: '#8b4513', description: 'Caído no chão. Ataques próprios têm desvantagem. Ataques a 1,5m têm vantagem; à distância têm desvantagem.' },
+  { id: 'invisible', label: 'Invisible', icon: 'fas fa-eye', color: '#9370db', description: 'Impossível de ver sem sentidos especiais. Ataques próprios têm vantagem; contra têm desvantagem. Aura translúcida.' },
+  { id: 'restrained', label: 'Restrained', icon: 'fas fa-link', color: '#8b93a1', description: 'Velocidade 0. Ataques contra têm vantagem; ataques próprios têm desvantagem. Desvantagem em salvaguardas de Des.' },
+  { id: 'frightened', label: 'Frightened', icon: 'fas fa-ghost', color: '#8e44ad', description: 'Desvantagem em testes e ataques enquanto a fonte do medo estiver visível. Não pode se aproximar. Gotas roxas.' },
+  { id: 'grappled', label: 'Grappled', icon: 'fas fa-hand-rock', color: '#c0392b', description: 'Velocidade cai para 0 e não se beneficia de bônus de deslocamento. Brilho avermelhado.' },
+  { id: 'unconscious', label: 'Unconscious', icon: 'fas fa-bed', color: '#8fb3ff', description: 'Incapacitado, cai no chão. Falha em salvaguardas de For/Des. Ataques a 1,5m são críticos. Letras Z subindo.' },
+  { id: 'burning', label: 'Burning', icon: 'fas fa-fire', color: '#ff7a1a', description: 'Em chamas: sofre dano de fogo recorrente. Partículas de brasas ardentes.' },
+  { id: 'paralyzed', label: 'Paralyzed', icon: 'fas fa-hand', color: '#2c8fbf', description: 'Incapacitado e não pode se mover. Falha em salvaguardas de For/Des. Ataques a 1,5m são críticos. Faíscas azuis.' },
+  { id: 'deafened', label: 'Deafened', icon: 'fas fa-ear-deaf', color: '#aab7b8', description: 'Não ouve nada. Falha automática em testes que exigem audição. Bolhas prateadas.' },
+  { id: 'charmed', label: 'Charmed', icon: 'fas fa-heart', color: '#ff5fa2', description: 'Não pode ferir quem enfeitiçou. Quem enfeitiçou tem vantagem em testes sociais. Corações flutuantes.' },
+  { id: 'incapacitated', label: 'Incapacitated', icon: 'fas fa-bolt', color: '#95a5a6', description: 'Não pode realizar ações nem reações. Concentração é interrompida.' },
+  { id: 'dead', label: 'Dead', icon: 'fas fa-skull', color: '#222222', description: 'Morto: personagem sem vida. Silhueta escurecida.' },
   { id: 'exhaustion', label: 'Exhaustion', icon: 'fas fa-battery-quarter', color: '#b22222', description: 'Penalidade cumulativa em testes d20 e redução de velocidade de movimento.' },
   { id: 'concentrating', label: 'Concentrating', icon: 'fas fa-brain', color: '#3f51b5', description: 'Mantendo concentração em magia ou efeito mágico ativo.' },
   { id: 'cover-half', label: 'Half Cover', icon: 'fas fa-shield-alt', color: '#4a90d9', description: 'Bônus de +2 na Classe de Armadura e em salvaguardas de Destreza.' },
@@ -33,7 +34,8 @@ export const BUFF_PRESETS = [
     id: 'bless',
     name: 'Bless',
     icon: 'fas fa-magic',
-    duration: 10,
+    durationUnit: 'minutes',
+    duration: 1,
     description: '+1d4 em jogadas de ataque e salvaguardas',
     changes: [
       { key: 'attributes.attackBonus', mode: 'add', value: 2.5 },
@@ -44,12 +46,14 @@ export const BUFF_PRESETS = [
       { key: 'saves.wis.misc', mode: 'add', value: 2.5 },
       { key: 'saves.cha.misc', mode: 'add', value: 2.5 },
     ],
+    visual: { kind: 'aura', color: '#ffd700', intensity: 0.8, speed: 1.2, size: 1.3 },
   },
   {
     id: 'bane',
     name: 'Bane',
     icon: 'fas fa-skull',
-    duration: 10,
+    durationUnit: 'minutes',
+    duration: 1,
     description: '-1d4 em jogadas de ataque e salvaguardas',
     changes: [
       { key: 'attributes.attackBonus', mode: 'add', value: -2.5 },
@@ -60,56 +64,68 @@ export const BUFF_PRESETS = [
       { key: 'saves.wis.misc', mode: 'add', value: -2.5 },
       { key: 'saves.cha.misc', mode: 'add', value: -2.5 },
     ],
+    visual: { kind: 'aura', color: '#8e44ad', intensity: 0.7, speed: 0.8, size: 1.2 },
   },
   {
     id: 'shield',
     name: 'Shield',
     icon: 'fas fa-shield-alt',
+    durationUnit: 'rounds',
     duration: 1,
+    expireOn: 'turn-start',
     description: '+5 de Classe de Armadura (AC)',
     changes: [
       { key: 'attributes.da.bonus', mode: 'add', value: 5 },
     ],
+    visual: { kind: 'glow', color: '#3498db', intensity: 0.9, speed: 1, size: 1.2 },
   },
   {
     id: 'haste',
     name: 'Haste',
     icon: 'fas fa-bolt',
-    duration: 10,
+    durationUnit: 'minutes',
+    duration: 1,
     description: '+2 AC, vantagem em Des, dobro de movimento',
     changes: [
       { key: 'attributes.da.bonus', mode: 'add', value: 2 },
     ],
+    visual: { kind: 'particles', style: 'sparkles', color: '#f39c12', intensity: 0.9, speed: 2, size: 1.2 },
   },
   {
     id: 'heroism',
     name: 'Heroism',
     icon: 'fas fa-heart-pulse',
-    duration: 10,
+    durationUnit: 'minutes',
+    duration: 1,
     description: 'Pontos de Vida Temporários adicionais',
     changes: [
       { key: 'resources.health.temp', mode: 'add', value: 5 },
     ],
+    visual: { kind: 'particles', style: 'hearts', color: '#e74c3c', intensity: 0.8, speed: 1, size: 1 },
   },
   {
     id: 'mage-armor',
     name: 'Mage Armor',
     icon: 'fas fa-vest',
-    duration: 480,
+    durationUnit: 'hours',
+    duration: 8,
     description: 'Armadura Arcana base AC 13 + Mod de Destreza',
     changes: [
       { key: 'attributes.da.base', mode: 'add', value: 3 },
     ],
+    visual: { kind: 'glow', color: '#1abc9c', intensity: 0.6, speed: 0.5, size: 1.1 },
   },
   {
     id: 'guidance',
     name: 'Guidance',
     icon: 'fas fa-compass',
-    duration: 10,
+    durationUnit: 'minutes',
+    duration: 1,
     description: '+1d4 em um teste de perícia/habilidade',
     changes: [
       { key: 'attributes.prof.bonus', mode: 'add', value: 2.5 },
     ],
+    visual: { kind: 'particles', style: 'sparkles', color: '#f1c40f', intensity: 0.7, speed: 1, size: 1 },
   },
 ];
 
@@ -141,32 +157,72 @@ export function formatChangesSummary(changes) {
   }).join(' • ');
 }
 
+/** Obtém as condições ativas no ator (a partir dos efeitos aplicados ou de systemData) */
+export async function getActorConditions(actorId) {
+  if (!actorId) return [];
+  const fx = globalThis.Loom?.effects || effects;
+  if (typeof fx?.list === 'function') {
+    try {
+      const res = await fx.list({ actorId });
+      if (res?.ok && Array.isArray(res.effects)) {
+        return res.effects
+          .filter((e) => !e.disabled && e.conditionId)
+          .map((e) => e.conditionId);
+      }
+    } catch { /* ignore */ }
+  }
+  try {
+    const raw = await fx.forActor(actorId);
+    if (Array.isArray(raw)) {
+      return raw.filter((e) => !e.disabled && e.conditionId).map((e) => e.conditionId);
+    }
+  } catch { /* ignore */ }
+  return [];
+}
+
 /** Prepara a lista de efeitos e condições para qualquer ficha */
 export async function getEffectsSheetData(actor) {
   if (!actor?.id) return { _allConditions: ALL_CONDITIONS_LIST, _activeConditions: [], _buffPresets: BUFF_PRESETS, _effects: [] };
 
   const sd = actor.systemData || {};
-  const currentConditions = Array.isArray(sd.conditions) ? sd.conditions : [];
+  const fallbackConditions = Array.isArray(sd.conditions) ? sd.conditions : [];
+  const activeConditionIds = new Set([...(await getActorConditions(actor.id)), ...fallbackConditions]);
 
   const _allConditions = ALL_CONDITIONS_LIST.map((c) => ({
     ...c,
-    active: currentConditions.includes(c.id),
+    active: activeConditionIds.has(c.id),
   }));
 
   const _activeConditions = _allConditions.filter((c) => c.active);
 
+  const fx = globalThis.Loom?.effects || effects;
   let rawEffects = [];
   try {
-    rawEffects = await effects.forActor(actor.id);
+    if (typeof fx?.list === 'function') {
+      const res = await fx.list({ actorId: actor.id });
+      if (res?.ok && Array.isArray(res.effects)) rawEffects = res.effects;
+    }
+    if (!rawEffects.length) {
+      rawEffects = await fx.forActor(actor.id);
+    }
   } catch (e) {
     console.error('[srd5e] Error fetching actor effects:', e);
   }
 
-  const _effects = (rawEffects || []).map((e) => ({
-    ...e,
-    durationLabel: e.duration === undefined || e.duration < 0 ? 'Permanente' : `${e.duration} rodada${e.duration === 1 ? '' : 's'}`,
-    changesSummary: formatChangesSummary(e.changes),
-  }));
+  const _effects = (rawEffects || []).map((e) => {
+    let durationLabel = 'Permanente';
+    if (e.durationUnit === 'rounds') durationLabel = `${e.duration} rodada${e.duration === 1 ? '' : 's'}`;
+    else if (e.durationUnit === 'turns') durationLabel = `${e.duration} turno${e.duration === 1 ? '' : 's'}`;
+    else if (e.durationUnit === 'minutes') durationLabel = `${e.duration} min`;
+    else if (e.durationUnit === 'hours') durationLabel = `${e.duration} hora${e.duration === 1 ? '' : 's'}`;
+    else if (e.duration !== undefined && e.duration >= 0) durationLabel = `${e.duration} ${e.durationUnit || 'rodadas'}`;
+
+    return {
+      ...e,
+      durationLabel,
+      changesSummary: formatChangesSummary(e.changes),
+    };
+  });
 
   return {
     _allConditions,
@@ -176,69 +232,56 @@ export async function getEffectsSheetData(actor) {
   };
 }
 
-/** Alterna uma condição no ator e sincroniza com tokens do mundo */
+/** Alterna uma condição no ator usando Loom.effects.condition */
 export async function toggleActorCondition(actor, conditionId) {
   if (!actor?.id || !conditionId) return;
+  const fx = globalThis.Loom?.effects || effects;
+  const currentConditions = await getActorConditions(actor.id);
+  const willBeOn = !currentConditions.includes(conditionId);
+
+  if (typeof fx?.condition === 'function') {
+    try {
+      const res = await fx.condition({
+        targetActorId: actor.id,
+        conditionId,
+        on: willBeOn,
+      });
+      if (res?.ok) return;
+    } catch (err) {
+      console.warn(`[srd5e] Loom.effects.condition failed for ${conditionId}:`, err);
+    }
+  }
+
+  // Fallback se condition() não estiver disponível
   const sd = actor.systemData || {};
   const current = new Set(Array.isArray(sd.conditions) ? sd.conditions : []);
-
-  if (current.has(conditionId)) {
-    current.delete(conditionId);
-  } else {
-    current.add(conditionId);
-  }
-
-  const updatedConditions = Array.from(current);
-  await api.put(`/actors/${actor.id}`, {
-    systemData: {
-      ...sd,
-      conditions: updatedConditions,
-    },
-  });
-
-  // Sincroniza tokens no mapa
-  try {
-    const worldId = window.Loom?.world?.id;
-    if (worldId) {
-      const casts = await api.get(`/cast?worldId=${worldId}`);
-      if (Array.isArray(casts)) {
-        for (const cast of casts) {
-          if (cast.actorId === actor.id) {
-            await api.put(`/cast/${cast.id}`, { statusMarkers: updatedConditions });
-          }
-        }
-      }
-    }
-  } catch (e) {
-    console.error('[srd5e] Failed to sync token status markers:', e);
-  }
+  if (willBeOn) current.add(conditionId);
+  else current.delete(conditionId);
+  await api.put(`/actors/${actor.id}`, { systemData: { conditions: Array.from(current) } });
 }
 
 /** Limpa todas as condições ativas do ator */
 export async function clearAllActorConditions(actor) {
   if (!actor?.id) return;
-  const sd = actor.systemData || {};
-  await api.put(`/actors/${actor.id}`, {
-    systemData: {
-      ...sd,
-      conditions: [],
-    },
-  });
+  const fx = globalThis.Loom?.effects || effects;
 
-  try {
-    const worldId = window.Loom?.world?.id;
-    if (worldId) {
-      const casts = await api.get(`/cast?worldId=${worldId}`);
-      if (Array.isArray(casts)) {
-        for (const cast of casts) {
-          if (cast.actorId === actor.id) {
-            await api.put(`/cast/${cast.id}`, { statusMarkers: [] });
-          }
-        }
-      }
+  if (typeof fx?.clear === 'function') {
+    try {
+      const res = await fx.clear({
+        targetActorId: actor.id,
+        filter: { all: true },
+      });
+      if (res?.ok) return;
+    } catch (err) {
+      console.warn('[srd5e] Loom.effects.clear failed:', err);
     }
-  } catch (e) {
-    console.error('[srd5e] Failed to clear token status markers:', e);
+  }
+
+  const current = await getActorConditions(actor.id);
+  for (const cond of current) {
+    if (typeof fx?.condition === 'function') {
+      await fx.condition({ targetActorId: actor.id, conditionId: cond, on: false });
+    }
   }
 }
 
@@ -248,12 +291,16 @@ export async function applyBuffPresetToActor(actor, presetId) {
   const preset = BUFF_PRESETS.find((p) => p.id === presetId);
   if (!preset) return;
 
-  await effects.create({
+  const fx = globalThis.Loom?.effects || effects;
+  await fx.create({
     actorId: actor.id,
     name: preset.name,
     origin: preset.id,
+    durationUnit: preset.durationUnit || 'rounds',
     duration: preset.duration,
+    expireOn: preset.expireOn || 'turn-end',
     changes: preset.changes,
+    visual: preset.visual || {},
   });
 
   showToast?.(`Efeito "${preset.name}" aplicado!`, { type: 'success' });
@@ -262,13 +309,24 @@ export async function applyBuffPresetToActor(actor, presetId) {
 /** Exclui um efeito ativo */
 export async function deleteActiveEffect(effectId) {
   if (!effectId) return;
-  await effects.delete(effectId);
+  const fx = globalThis.Loom?.effects || effects;
+  await fx.delete(effectId);
 }
 
 /** Pausa ou despausa um efeito ativo */
 export async function toggleEffectDisabled(effectId, currentDisabled) {
   if (!effectId) return;
-  await effects.update(effectId, { disabled: !currentDisabled });
+  const fx = globalThis.Loom?.effects || effects;
+  await fx.update(effectId, { disabled: !currentDisabled });
+}
+
+/** Abre a janela de configuração avançada nativa do LoomVTT para um efeito */
+export async function openAdvancedEffectConfig(buffId) {
+  if (!buffId) return;
+  const fx = globalThis.Loom?.effects || effects;
+  if (typeof fx?.openConfig === 'function') {
+    await fx.openConfig(buffId);
+  }
 }
 
 /** Abre diálogo para criar um efeito personalizado */

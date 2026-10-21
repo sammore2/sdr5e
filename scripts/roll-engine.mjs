@@ -3687,6 +3687,10 @@ export async function activateFeature(actor, item) {
     await applyHeal(actor, amount, { label: item.name });
   }
 
+  if (Array.isArray(idata.effects) && idata.effects.length) {
+    await applySpellOrItemEffects(actor, item, { targetActorId: actor.id });
+  }
+
   await postItemToChat(actor, item);
   return true;
 }
@@ -3743,6 +3747,12 @@ export async function useConsumable(actor, item) {
       await castSpell(actor, spellItem, { free: true });
     }
   }
+
+  // Active Effects declared on consumable (potions, scrolls, wondrous items)
+  if (Array.isArray(idata.effects) && idata.effects.length) {
+    await applySpellOrItemEffects(actor, item, { targetActorId: actor.id });
+  }
+
   // 5-6) quantity / destroy and post card (post before delete so card has data)
   await postItemToChat(actor, item);
   // Determine if empty: uses reached 0 or no uses at all (always consumes quantity)

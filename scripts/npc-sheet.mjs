@@ -243,21 +243,21 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const pending = this._pendingFields;
     this._pendingFields = new Map();
 
-    const sd = this.document.systemData || {};
+    const delta = {};
     let name;
     for (const [key, value] of pending) {
       if (key === 'name') name = value;
-      else setPathValue(sd, key.slice(3), value);
+      else setPathValue(delta, key.slice(3), value);
     }
-    if (sd.resources?.health) {
-      if (!sd.attributes) sd.attributes = {};
-      sd.attributes.hp = {
-        value: Number(sd.resources.health.value) || 0,
-        max: Number(sd.resources.health.max) || 0,
-        temp: Number(sd.resources.health.temp) || 0,
+    if (delta.resources?.health) {
+      delta.attributes = delta.attributes || {};
+      delta.attributes.hp = {
+        value: Number(delta.resources.health.value) || 0,
+        max: Number(delta.resources.health.max) || 0,
+        temp: Number(delta.resources.health.temp) || 0,
       };
     }
-    const submitData = { systemData: sd };
+    const submitData = { systemData: delta };
     if (name !== undefined) submitData.name = name;
 
     await api.put(`${this.apiRoute}/${this.document.id}`, submitData);
@@ -571,7 +571,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         proficient: true,
         total: ablMod + prof,
       };
-      await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, saves } });
+      await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { saves } });
       await this._reloadDocument();
       return;
     }
@@ -587,7 +587,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         proficient: true,
         total: ablMod + prof,
       };
-      await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, skills } });
+      await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { skills } });
       await this._reloadDocument();
       return;
     }
@@ -644,7 +644,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       if (!list.includes(trait)) {
         traits[type] = [...list, trait];
         await api.put(`${this.apiRoute}/${this.document.id}`, {
-          systemData: { ...sd, details: { ...details, traits } },
+          systemData: { details: { traits } },
         });
         await this._reloadDocument();
       }
@@ -681,7 +681,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const prof = sd.attributes?.prof?.value ?? 2;
     const proficient = !current.proficient;
     saves[key] = { ...current, proficient, total: ablMod + (proficient ? prof : 0) };
-    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, saves } });
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { saves } });
     await this._reloadDocument();
   }
 
@@ -690,7 +690,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
     const input = this.element?.querySelector('[data-quick-hp]');
     const amount = Math.max(0, Math.floor(Number(input?.value) || 0));
     if (!amount || !this.document?.id) return;
-    const sd = this.document.systemData;
+    const sd = this.document.systemData || {};
     const health = { ...(sd.resources?.health || {}) };
     let value = Number(health.value) || 0;
     const max = Number(health.max) || 0;
@@ -702,15 +702,14 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       temp -= fromTemp;
       value = Math.max(0, value - (amount - fromTemp));
     }
-    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, resources: { ...sd.resources, health: { ...health, value, temp } } } });
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { resources: { health: { ...health, value, temp, max } } } });
     await this._reloadDocument();
   }
 
   // Portrait source per actor: 'art' uses the actor picture, 'token' uses the prototype token image.
   async _setPortraitSource(source) {
     if (!this.document?.id) return;
-    const sd = this.document.systemData;
-    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, portrait: { ...(sd.portrait || {}), source } } });
+    await api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { portrait: { source } } });
     await this._reloadDocument();
   }
 
@@ -920,7 +919,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         if (saves[key]) {
           const ablMod = sd.abilities?.[key]?.modifier ?? 0;
           saves[key] = { ...saves[key], proficient: false, total: ablMod };
-          void api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, saves } })
+          void api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { saves } })
             .then(() => this._reloadDocument());
         }
       }
@@ -936,7 +935,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
           const ablKey = skills[key].ability || SKILL_ABILITIES[key] || 'int';
           const ablMod = sd.abilities?.[ablKey]?.modifier ?? 0;
           skills[key] = { ...skills[key], proficient: false, total: ablMod };
-          void api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { ...sd, skills } })
+          void api.put(`${this.apiRoute}/${this.document.id}`, { systemData: { skills } })
             .then(() => this._reloadDocument());
         }
       }
@@ -956,7 +955,6 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         const langs = (details.languages?.value || []).filter((l) => l.toLowerCase() !== name.toLowerCase());
         promises.push(api.put(`${this.apiRoute}/${this.document.id}`, {
           systemData: {
-            ...sd,
             details: {
               ...details,
               languages: { ...(details.languages || {}), value: langs },
@@ -976,7 +974,6 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         const senses = (details.senses?.value || []).filter((s) => s !== val);
         void api.put(`${this.apiRoute}/${this.document.id}`, {
           systemData: {
-            ...sd,
             details: {
               ...details,
               senses: { ...(details.senses || {}), value: senses },
@@ -996,7 +993,7 @@ export class Sdr5eNpcSheet extends LoomHandlebarsMixin(LoomActorSheet) {
         const traits = { ...(details.traits || { di: [], dr: [], dv: [], ci: [] }) };
         traits[type] = (traits[type] || []).filter((t) => t !== val);
         void api.put(`${this.apiRoute}/${this.document.id}`, {
-          systemData: { ...sd, details: { ...details, traits } },
+          systemData: { details: { traits } },
         }).then(() => this._reloadDocument());
       }
       return;

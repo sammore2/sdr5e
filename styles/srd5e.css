@@ -11202,7 +11202,7 @@ form.npc-2024-sheet {
   flex: none;
   position: relative;
   z-index: 2;
-  background: transparent !important;
+  background: linear-gradient(180deg, rgba(14, 12, 10, 0.25) 0%, rgba(14, 12, 10, 0.55) 60%, rgba(14, 12, 10, 0.9) 100%), url('/marketplace/rulesets/srd5e/assets/images/banner-character.png') center top / cover no-repeat !important;
 }
 .sdrn-header .sdrn-subtitle,
 .sdrn-header .sdrn-identity input.sdrn-name-input {

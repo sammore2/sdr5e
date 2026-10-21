@@ -98,23 +98,26 @@ export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
   }
 
   async _onOpenEffectConfig(target) {
+    const fx = window.Loom?.effects || effects;
     let buffId = target.dataset.id;
     const index = Number(target.dataset.index);
     if (!buffId && this.document?.id && Array.isArray(this.document.data?.effects) && this.document.data.effects[index]) {
       const effectDef = this.document.data.effects[index];
-      if (typeof effects?.create === 'function') {
+      if (typeof fx?.create === 'function') {
         try {
-          const created = await effects.create({
+          const created = await fx.create({
             itemId: this.document.id,
             name: effectDef.name || 'New Effect',
             icon: effectDef.icon || this.document.imgUrl || '',
             description: effectDef.description || '',
             durationUnit: effectDef.durationUnit || 'rounds',
-            duration: effectDef.duration ?? 1,
-            conditionId: effectDef.conditionId,
-            removeOnCombatEnd: effectDef.removeOnCombatEnd ?? false,
+            duration: typeof effectDef.duration === 'number' ? effectDef.duration : 1,
+            expireOn: effectDef.expireOn || 'turn-end',
+            conditionId: effectDef.conditionId || '',
+            tags: Array.isArray(effectDef.tags) ? effectDef.tags : [],
+            removeOnCombatEnd: !!effectDef.removeOnCombatEnd,
             changes: effectDef.changes || [],
-            visual: effectDef.visual,
+            visual: effectDef.visual || {},
           });
           if (created?.id) {
             buffId = created.id;
@@ -126,31 +129,37 @@ export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
         }
       }
     }
-    if (buffId && typeof effects?.openConfig === 'function') {
-      void effects.openConfig(buffId);
+    if (buffId && typeof fx?.openConfig === 'function') {
+      void fx.openConfig(buffId);
     }
   }
 
   async _onCreateEffect() {
     if (!this.document) return;
+    const fx = window.Loom?.effects || effects;
     const effectDef = {
       name: `${this.document.name || 'Item'} Effect`,
       icon: this.document.imgUrl || '',
       description: 'Active Effect description.',
       durationUnit: 'rounds',
       duration: 1,
+      expireOn: 'turn-end',
+      conditionId: '',
+      tags: [],
+      removeOnCombatEnd: false,
       changes: [],
+      visual: {},
     };
-    if (this.document.id && typeof effects?.create === 'function') {
+    if (this.document.id && typeof fx?.create === 'function') {
       try {
-        const created = await effects.create({
+        const created = await fx.create({
           itemId: this.document.id,
           ...effectDef,
         });
         if (created?.id) {
           effectDef.id = created.id;
-          if (typeof effects?.openConfig === 'function') {
-            void effects.openConfig(created.id);
+          if (typeof fx?.openConfig === 'function') {
+            void fx.openConfig(created.id);
           }
         }
       } catch (err) {
@@ -165,11 +174,12 @@ export class Sdr5eItemSheet extends LoomHandlebarsMixin(LoomItemSheet) {
 
   async _onDeleteEffect(target) {
     if (!this.document) return;
+    const fx = window.Loom?.effects || effects;
     const buffId = target.dataset.id;
     const index = Number(target.dataset.index);
-    if (buffId && typeof effects?.delete === 'function') {
+    if (buffId && typeof fx?.delete === 'function') {
       try {
-        await effects.delete(buffId);
+        await fx.delete(buffId);
       } catch (err) {
         console.warn('[srd5e] Failed to delete buff:', err);
       }
