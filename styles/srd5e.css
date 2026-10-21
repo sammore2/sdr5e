@@ -22152,3 +22152,78 @@ html .sdrn-npc-root.sdrn-npc-root .sdrn-npc-main-content {
   color: #8b1515 !important;
   text-decoration: underline !important;
 }
+
+/* Actions tab combat layout */
+.sdrn-actions-overview {
+  margin-bottom: 8px;
+  padding: 8px 12px;
+}
+.sdrn-actions-overview-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.sdrn-overview-pill {
+  font-size: 11px;
+  color: #5c4524;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sdrn-overview-pill b {
+  color: #1a1410;
+  font-size: 13px;
+}
+.sdrn-combat-attack-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+}
+.sdrn-combat-attack-row .sdrn-item-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.sdrn-combat-attack-row .sdrn-item-sub {
+  font-size: 10px;
+  color: #7d6032;
+  margin-top: 1px;
+}
+.sdrn-badge-equipped {
+  display: inline-block;
+  padding: 1px 5px;
+  background: rgba(46, 125, 50, 0.15);
+  color: #2e7d32;
+  border: 1px solid rgba(46, 125, 50, 0.35);
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.sdrn-combat-attack-row .sdrn-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.sdrn-btn-atk {
+  background: #1e3a5f !important;
+  color: #e0f2fe !important;
+  border-color: #3b82f6 !important;
+}
+.sdrn-btn-atk:hover {
+  background: #2563eb !important;
+}
+.sdrn-btn-dmg {
+  background: #7f1d1d !important;
+  color: #fee2e2 !important;
+  border-color: #ef4444 !important;
+}
+.sdrn-btn-dmg:hover {
+  background: #dc2626 !important;
+}

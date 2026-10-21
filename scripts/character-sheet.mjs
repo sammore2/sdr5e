@@ -907,6 +907,8 @@ export class Sdr5eCharacterSheet extends LoomHandlebarsMixin(LoomActorSheet) {
       _saves,
       _skills,
       _inventory,
+      _weapons: byType('weapon'),
+      _actionFeatures: _features.filter((f) => f.usesLabel || f.isRage || f.isMonkFocusPool || f.isUncannyMetabolism || f.resourceCost),
       _features,
       _featureGroups,
       _classResource: {

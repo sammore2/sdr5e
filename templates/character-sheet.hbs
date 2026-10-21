@@ -366,22 +366,87 @@
       </div>
     </div>
     <div data-tab-content="actions" class="sdrn-tab-panel" style="display:none">
-        <details open class="sdrn-movement-ledger" data-movement-ledger>
-          <summary>{{_movementLedger.title}}{{#if _movementSlowPenalty}} · {{_movementLedger.slowPenalty}}{{/if}}{{#if _movementLedger}} · {{_movementLedger.remaining}} m {{_movementLedger.remainingLabel}}{{/if}}</summary>
-          {{#if _movementNeedsCastSelection}}
-          <label>{{_movementLedger.castSelect}} <select data-movement-cast-select><option value="">—</option>{{#each _movementCastChoices}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></label>
-          {{else if _movementCastUnavailable}}
-          <p>{{_movementLedger.castUnavailable}}</p>
-          {{else if _movementLedger}}
-          <div class="sdrn-movement-ledger-total"><span>{{_movementLedger.spentLabel}}: {{_movementLedger.spent}} m</span><span>{{_movementLedger.remainingLabel}}: {{_movementLedger.remaining}} m</span></div>
-          <div class="sdrn-movement-ledger-inputs"><label>{{_movementLedger.distanceLabel}}<input type="number" min="0.1" step="0.1" data-movement-distance></label><label>{{_movementLedger.modeFieldLabel}}<select data-movement-mode>{{#each _movementLedger.modes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><label class="sdrn-movement-difficult"><input type="checkbox" data-movement-difficult> {{_movementLedger.difficultLabel}}</label><button type="button" data-action="movement-ledger-add">{{_movementLedger.addLabel}}</button></div>
-          {{#each _movementLedger.segments}}<div class="sdrn-movement-ledger-segment {{#unless valid}}invalid{{/unless}}"><span>{{modeLabel}} · {{distanceText}}</span><button type="button" data-action="movement-ledger-remove" data-segment-index="{{index}}">{{../_movementLedger.removeLabel}}</button></div>{{/each}}
-          {{#if _movementLedger.dashModes.length}}<div class="sdrn-movement-dash-control"><label>{{_movementLedger.dashLabel}}<select data-dash-speed>{{#each _movementLedger.dashModes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><button type="button" data-action="movement-ledger-add-dash">{{_movementLedger.addDashLabel}}</button></div>{{/if}}
-          {{#each _movementLedger.dashBonuses}}<div class="sdrn-movement-ledger-segment"><span>{{modeLabel}} · +{{amountText}}</span><button type="button" data-action="movement-ledger-remove-dash" data-dash-index="{{index}}">{{../_movementLedger.removeDashLabel}}</button></div>{{/each}}
-          <button type="button" data-action="movement-ledger-reset">{{_movementLedger.resetLabel}}</button>
-          {{/if}}
-        </details>
-        <details open class="sdrn-core-actions">
+
+        <!-- Resumo de Deslocamento & Ação -->
+        <div class="sdrn-box sdrn-actions-overview">
+          <div class="sdrn-actions-overview-row">
+            <span class="sdrn-overview-pill"><i class="fas fa-shoe-prints"></i> Speed: <b>{{_speed}}</b></span>
+            <span class="sdrn-overview-pill"><i class="fas fa-bolt"></i> Initiative: <b>{{_initiative}}</b></span>
+            <span class="sdrn-overview-pill"><i class="fas fa-award"></i> Proficiency: <b>{{_prof}}</b></span>
+          </div>
+        </div>
+
+        <!-- Seção: Armas & Ataques -->
+        <div class="sdrn-box sdrn-actions-weapons">
+          <div class="sdrn-box-title">⚔️ Weapons &amp; Attacks</div>
+          
+          <!-- Ataque Desarmado sempre disponível -->
+          <div class="sdrn-item-row sdrn-combat-attack-row">
+            <span class="sdrn-item-icon">🥊</span>
+            <div class="sdrn-item-details">
+              <span class="sdrn-item-name">Unarmed Strike</span>
+              <span class="sdrn-item-sub">1 + STR · Bludgeoning</span>
+            </div>
+            <div class="sdrn-item-actions">
+              <button type="button" class="sdrn-item-roll-btn sdrn-btn-atk" data-action="unarmed-attack" title="Roll Attack"><i class="fas fa-sword"></i> Atk</button>
+              <button type="button" class="sdrn-item-roll-btn sdrn-btn-dmg" data-action="unarmed-damage" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
+              <button type="button" class="sdrn-item-roll-btn" data-action="unarmed-grapple" title="{{_grappleButton}}">{{_grappleButton}}</button>
+              <button type="button" class="sdrn-item-roll-btn" data-action="unarmed-shove" title="{{_shoveButton}}">{{_shoveButton}}</button>
+            </div>
+          </div>
+
+          <!-- Lista de Armas do Personagem -->
+          {{#each _weapons}}
+          <div class="sdrn-item-row sdrn-combat-attack-row" draggable="true" data-drag-item-id="{{id}}" data-drag-item-name="{{name}}" data-drag-item-img="{{imgUrl}}">
+            <button type="button" class="sdrn-item-icon sdrn-item-icon-btn" data-action="post-item-chat" data-id="{{id}}" title="Post to Chat">
+              {{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}🗡️{{/if}}
+            </button>
+            <div class="sdrn-item-details">
+              <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
+              <span class="sdrn-item-sub">{{#if equipped}}<span class="sdrn-badge-equipped">Equipped</span>{{else}}Inventory{{/if}}</span>
+            </div>
+            <div class="sdrn-item-actions">
+              <button type="button" class="sdrn-item-roll-btn sdrn-btn-atk" data-action="roll-attack" data-id="{{id}}" title="Roll Attack"><i class="fas fa-sword"></i> Atk</button>
+              <button type="button" class="sdrn-item-roll-btn sdrn-btn-dmg" data-action="roll-damage" data-id="{{id}}" title="Roll Damage"><i class="fas fa-burst"></i> Dmg</button>
+              <button type="button" class="sdrn-item-equip {{#if equipped}}active{{/if}}" data-action="toggle-equip" data-id="{{id}}" title="Equip / Unequip">
+                {{#if equipped}}Equipped{{else}}Equip{{/if}}
+              </button>
+            </div>
+          </div>
+          {{/each}}
+          {{#unless _weapons.length}}
+          <div class="sdrn-empty-row">No weapons equipped or in inventory.</div>
+          {{/unless}}
+        </div>
+
+        <!-- Seção: Recursos Rápidos / Ações de Combate (Second Wind, Action Surge, Rage, etc.) -->
+        {{#if _actionFeatures.length}}
+        <div class="sdrn-box sdrn-actions-features">
+          <div class="sdrn-box-title">⚡ Quick Combat Features</div>
+          {{#each _actionFeatures}}
+          <div class="sdrn-item-row" draggable="true" data-drag-item-id="{{id}}" data-drag-item-name="{{name}}" data-drag-item-img="{{imgUrl}}">
+            <button type="button" class="sdrn-item-icon sdrn-item-icon-btn" data-action="post-item-chat" data-id="{{id}}" title="Post to Chat">
+              {{#if imgUrl}}<img src="{{imgUrl}}" alt="" />{{else}}⭐{{/if}}
+            </button>
+            <button type="button" class="sdrn-item-name sdrn-item-name-btn" data-action="open-item" data-id="{{id}}">{{name}}</button>
+            {{#if isRage}}
+            <button type="button" class="sdrn-item-roll-btn" data-action="activate-feature" data-id="{{id}}">{{#if rageActive}}{{localize "SDR5E.ClassFeatures.EndRage"}}{{else}}{{localize "SDR5E.ClassFeatures.StartRage"}}{{/if}}</button>
+            {{#if rageCanExtend}}<button type="button" class="sdrn-item-roll-btn" data-action="extend-rage" data-id="{{id}}" title="{{localize 'SDR5E.ClassFeatures.RageExtensionPrompt'}}">{{localize "SDR5E.ClassFeatures.MaintainRage"}}</button>{{/if}}
+            {{/if}}
+            {{#if isMonkFocusPool}}<button type="button" class="sdrn-item-roll-btn" data-action="activate-feature" data-id="{{id}}" title="{{localize 'SDR5E.ClassFeatures.SpendFocusPoint'}}">{{localize "SDR5E.ClassFeatures.SpendFocusPoint"}}</button>{{/if}}
+            {{#if isUncannyMetabolism}}<button type="button" class="sdrn-item-roll-btn" data-action="activate-feature" data-id="{{id}}" title="{{localize 'SDR5E.ClassFeatures.UncannyMetabolismManual'}}">{{localize "SDR5E.ClassFeatures.UseUncannyMetabolism"}}</button>{{/if}}
+            {{#if resourceCost}}
+            <button type="button" class="sdrn-item-roll-btn" data-action="activate-feature" data-id="{{id}}" title="Spend {{resourceCost}} from the class resource pool">Activate ({{resourceCost}})</button>
+            {{/if}}
+            {{#if usesLabel}}<span class="sdrn-feature-col-uses">{{usesLabel}}</span>{{/if}}
+            {{#if recoveryLabel}}<span class="sdrn-feature-col-recovery">{{recoveryLabel}}</span>{{/if}}
+          </div>
+          {{/each}}
+        </div>
+        {{/if}}
+
+        <!-- Ações do Sistema (SRD Core Actions: Hide, Search, Study, Help...) -->
+        <details class="sdrn-core-actions">
           <summary class="sdrn-core-actions-summary" aria-label="{{_coreActionActivitiesTitle}}. {{_coreActionActivitiesNote}}" data-tooltip="{{_coreActionActivitiesNote}}">
             <span>{{_coreActionActivitiesTitle}}</span><span class="sdrn-core-actions-help" aria-hidden="true">?</span>
           </summary>
@@ -400,7 +465,23 @@
             {{/each}}
           </div>
         </details>
-    </div>
+
+        <!-- Registro de Movimento Avançado (Recolhido por padrão) -->
+        <details class="sdrn-movement-ledger" data-movement-ledger>
+          <summary>{{_movementLedger.title}}{{#if _movementSlowPenalty}} · {{_movementLedger.slowPenalty}}{{/if}}{{#if _movementLedger}} · {{_movementLedger.remaining}} m {{_movementLedger.remainingLabel}}{{/if}}</summary>
+          {{#if _movementNeedsCastSelection}}
+          <label>{{_movementLedger.castSelect}} <select data-movement-cast-select><option value="">—</option>{{#each _movementCastChoices}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></label>
+          {{else if _movementCastUnavailable}}
+          <p>{{_movementLedger.castUnavailable}}</p>
+          {{else if _movementLedger}}
+          <div class="sdrn-movement-ledger-total"><span>{{_movementLedger.spentLabel}}: {{_movementLedger.spent}} m</span><span>{{_movementLedger.remainingLabel}}: {{_movementLedger.remaining}} m</span></div>
+          <div class="sdrn-movement-ledger-inputs"><label>{{_movementLedger.distanceLabel}}<input type="number" min="0.1" step="0.1" data-movement-distance></label><label>{{_movementLedger.modeFieldLabel}}<select data-movement-mode>{{#each _movementLedger.modes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><label class="sdrn-movement-difficult"><input type="checkbox" data-movement-difficult> {{_movementLedger.difficultLabel}}</label><button type="button" data-action="movement-ledger-add">{{_movementLedger.addLabel}}</button></div>
+          {{#each _movementLedger.segments}}<div class="sdrn-movement-ledger-segment {{#unless valid}}invalid{{/unless}}"><span>{{modeLabel}} · {{distanceText}}</span><button type="button" data-action="movement-ledger-remove" data-segment-index="{{index}}">{{../_movementLedger.removeLabel}}</button></div>{{/each}}
+          {{#if _movementLedger.dashModes.length}}<div class="sdrn-movement-dash-control"><label>{{_movementLedger.dashLabel}}<select data-dash-speed>{{#each _movementLedger.dashModes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><button type="button" data-action="movement-ledger-add-dash">{{_movementLedger.addDashLabel}}</button></div>{{/if}}
+          {{#each _movementLedger.dashBonuses}}<div class="sdrn-movement-ledger-segment"><span>{{modeLabel}} · +{{amountText}}</span><button type="button" data-action="movement-ledger-remove-dash" data-dash-index="{{index}}">{{../_movementLedger.removeDashLabel}}</button></div>{{/each}}
+          <button type="button" data-action="movement-ledger-reset">{{_movementLedger.resetLabel}}</button>
+          {{/if}}
+        </details>    </div>
 
     <div data-tab-content="inventory" class="sdrn-tab-panel" style="display:none">
       <div class="sdrn-box sdrn-carrying-box">
