@@ -26,7 +26,7 @@ npm run verify
 The SQLite files in `packs/` are the distributed artifacts. This repository does not yet have a versioned pipeline that regenerates them from structured sources, nor an installed LESS step. Do not bulk-edit these artifacts without first establishing and verifying a reproducible source.
 
 <details>
-<summary>PortuguÃªs (pt-BR)</summary>
+<summary>Português (pt-BR)</summary>
 
 # Contribuindo com o SDR5E
 

@@ -40,19 +40,18 @@ Loom rulesets).
 
 ## 🛠️ Development
 
-Para desenvolvedores trabalhando no sistema:
+For developers working on the system:
 
-| Comando             | Função                                                       |
-| :------------------ | :------------------------------------------------------------- |
-| `npm test` | Executa as regressões determinísticas do ruleset. |
-| `npm run verify` | Verifica sintaxe JS, referências do manifesto, idiomas e integridade dos compêndios SQLite. |
+| Command            | Purpose                                                                                       |
+| :----------------- | :-------------------------------------------------------------------------------------------- |
+| `npm test`         | Runs the ruleset's deterministic regression tests.                                            |
+| `npm run verify`   | Checks JS syntax, manifest references, languages and the integrity of the SQLite compendiums. |
 
-O repositório não contém atualmente uma fonte versionada de packs em JSON nem um pipeline de compilação LESS/SQLite. Por isso, estes comandos validam os artefatos presentes; não recompilam nem publicam pacotes.
+The repository does not currently contain a versioned JSON source for the packs or a LESS/SQLite build pipeline. For that reason, these commands validate the artifacts that are present; they do not rebuild or publish packages.
 
-### Cobertura e limitações
+### Coverage and limitations
 
-SDR5E ainda está em implementação. A progressão, parte dos recursos e os descansos possuem cobertura automatizada, mas criação em nível alto, várias features, atividades, magias, permissões e fluxos completos de encontro ainda exigem implementação e validação no Loom. Presença de uma entrada no compêndio não significa que seu efeito seja automatizado.
-
+SDR5E is still being implemented. Progression, part of the class features and rests have automated coverage, but high-level character creation, several features, activities, spells, permissions and complete encounter flows still need implementation and validation in Loom. The presence of an entry in the compendium does not mean its effect is automated.
 ---
 
 ## 📜 License and attribution
