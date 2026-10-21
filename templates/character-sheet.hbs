@@ -445,43 +445,7 @@
         </div>
         {{/if}}
 
-        <!-- Ações do Sistema (SRD Core Actions: Hide, Search, Study, Help...) -->
-        <details class="sdrn-core-actions">
-          <summary class="sdrn-core-actions-summary" aria-label="{{_coreActionActivitiesTitle}}. {{_coreActionActivitiesNote}}" data-tooltip="{{_coreActionActivitiesNote}}">
-            <span>{{_coreActionActivitiesTitle}}</span><span class="sdrn-core-actions-help" aria-hidden="true">?</span>
-          </summary>
-          <div class="sdrn-core-actions-list">
-            {{#each _coreActionActivities}}
-            <div class="sdrn-core-action-row" data-core-action-row="{{action}}">
-              <label for="sdrn-core-action-skill-{{action}}">{{label}}</label>
-              {{#if contextLabel}}<label>{{contextLabel}}<input type="text" maxlength="160" placeholder="{{contextPlaceholder}}" data-core-action-context></label>{{/if}}
-              <select id="sdrn-core-action-skill-{{action}}" aria-label="{{label}} skill">
-                {{#each skillOptions}}
-                <option value="{{key}}" {{#if selected}}selected{{/if}} {{#unless available}}disabled{{/unless}}>{{label}}</option>
-                {{/each}}
-              </select>
-              <button type="button" class="sdrn-core-roll-d20" data-action="roll-core-action" data-activity="{{action}}" title="{{rollLabel}}" aria-label="{{rollLabel}}" {{#if disabled}}disabled{{/if}}><i class="fas fa-dice-d20" aria-hidden="true"></i></button>
-            </div>
-            {{/each}}
-          </div>
-        </details>
-
-        <!-- Registro de Movimento Avançado (Recolhido por padrão) -->
-        <details class="sdrn-movement-ledger" data-movement-ledger>
-          <summary>{{_movementLedger.title}}{{#if _movementSlowPenalty}} · {{_movementLedger.slowPenalty}}{{/if}}{{#if _movementLedger}} · {{_movementLedger.remaining}} m {{_movementLedger.remainingLabel}}{{/if}}</summary>
-          {{#if _movementNeedsCastSelection}}
-          <label>{{_movementLedger.castSelect}} <select data-movement-cast-select><option value="">—</option>{{#each _movementCastChoices}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></label>
-          {{else if _movementCastUnavailable}}
-          <p>{{_movementLedger.castUnavailable}}</p>
-          {{else if _movementLedger}}
-          <div class="sdrn-movement-ledger-total"><span>{{_movementLedger.spentLabel}}: {{_movementLedger.spent}} m</span><span>{{_movementLedger.remainingLabel}}: {{_movementLedger.remaining}} m</span></div>
-          <div class="sdrn-movement-ledger-inputs"><label>{{_movementLedger.distanceLabel}}<input type="number" min="0.1" step="0.1" data-movement-distance></label><label>{{_movementLedger.modeFieldLabel}}<select data-movement-mode>{{#each _movementLedger.modes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><label class="sdrn-movement-difficult"><input type="checkbox" data-movement-difficult> {{_movementLedger.difficultLabel}}</label><button type="button" data-action="movement-ledger-add">{{_movementLedger.addLabel}}</button></div>
-          {{#each _movementLedger.segments}}<div class="sdrn-movement-ledger-segment {{#unless valid}}invalid{{/unless}}"><span>{{modeLabel}} · {{distanceText}}</span><button type="button" data-action="movement-ledger-remove" data-segment-index="{{index}}">{{../_movementLedger.removeLabel}}</button></div>{{/each}}
-          {{#if _movementLedger.dashModes.length}}<div class="sdrn-movement-dash-control"><label>{{_movementLedger.dashLabel}}<select data-dash-speed>{{#each _movementLedger.dashModes}}<option value="{{key}}">{{label}}</option>{{/each}}</select></label><button type="button" data-action="movement-ledger-add-dash">{{_movementLedger.addDashLabel}}</button></div>{{/if}}
-          {{#each _movementLedger.dashBonuses}}<div class="sdrn-movement-ledger-segment"><span>{{modeLabel}} · +{{amountText}}</span><button type="button" data-action="movement-ledger-remove-dash" data-dash-index="{{index}}">{{../_movementLedger.removeDashLabel}}</button></div>{{/each}}
-          <button type="button" data-action="movement-ledger-reset">{{_movementLedger.resetLabel}}</button>
-          {{/if}}
-        </details>    </div>
+    </div>
 
     <div data-tab-content="inventory" class="sdrn-tab-panel" style="display:none">
       <div class="sdrn-box sdrn-carrying-box">
