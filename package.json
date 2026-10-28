@@ -1,6 +1,6 @@
 {
   "name": "srd5e",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "SDR5E — D20 fantasy ruleset for LoomVTT built on SRD mechanics (CC-BY-4.0)",
   "scripts": {
     "verify": "node scripts/verify.mjs",

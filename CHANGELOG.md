@@ -5,6 +5,11 @@ Each release tag `vX.Y.Z` publishes the section headed `## [X.Y.Z]` as its relea
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-28
+
+### Fixed
+- NPC sheet: the proficiency field showed up empty and the browser logged "The specified value "+3" cannot be parsed" for NPCs with proficiency 3 or more. The field now receives the plain number.
+
 ## [0.4.0] - 2026-10-28
 
 ### Added
