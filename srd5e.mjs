@@ -1049,8 +1049,7 @@ window.Loom.wraps.renderMessage.addWrapper((wrapped, msg, ctx) => {
       <div class="card-header"><span><i class="fas fa-wand-sparkles"></i> ${esc(flags.name || '')}</span></div>
       ${flags.description ? `<div class="damage-section">${flags.description}</div>` : ''}
       <div class="activation-card-buttons">
-        ${buttons.join('
-        ')}
+        ${buttons.join('\n')}
       </div>
     </div>`;
   } else {
