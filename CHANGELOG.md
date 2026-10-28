@@ -5,6 +5,23 @@ Each release tag `vX.Y.Z` publishes the section headed `## [X.Y.Z]` as its relea
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-28
+
+### Added
+- Combat actions tab on the character sheet, with weapons, attacks and quick features.
+- Spell automation: attack and damage rolls bound to the targeted token, saving throws, and healing spells.
+- Ability and AC shields on the sheet header.
+
+### Changed
+- Sheet header now carries a banner; the Active Effects integration and the character wizard were reworked.
+- Item and actor type helpers (`getItemType` / `getActorType`) are kept and used by the sheets.
+- Removed the movement ledger and the core action tests from the actions tab.
+
+### Fixed
+- The ruleset failed to load because of two syntax errors (a broken string in `srd5e.mjs` and a duplicated declaration in `scripts/roll-engine.mjs`), so character sheets would not open.
+- Compendium entries keep their subtypes and primary types again.
+- Transparent AC input, elongated ability shields and dark feature text.
+
 ## [0.3.0] - 2026-10-15
 
 ### Added
